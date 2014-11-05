@@ -1,0 +1,26 @@
+/* XPM */
+static const char *spinRightRed_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"20 16 4 1",
+"  c black",
+". c #aaff00",
+"X c #FFFFFF",
+"o c #ff0000",
+/* pixels */
+"oooooooo     oooo oo",
+"oooooo  ooooo  oo oo",
+"ooooo ooooooooo o oo",
+"oooo ooooooooooo  oo",
+"oooo oooooo       oo",
+"ooo oooooooooooooooo",
+"ooo ooooXXXoooXXXooo",
+"ooo oooooX.XoX.Xoooo",
+"ooo ooooooX.X.Xooooo",
+"ooo oooooooX.Xoooooo",
+"ooo ooooooX.X.Xooooo",
+"ooo  ooooX.XoX.Xoooo",
+"oooo oooXXXoooXXXooo",
+"ooooo oooooooooooooo",
+"oooooooooooooooooooo",
+"oooooooooooooooooooo"
+};

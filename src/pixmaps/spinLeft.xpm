@@ -1,0 +1,23 @@
+/* XPM */
+static const char * spinLeft_xpm[] = {
+"20 16 4 1",
+" 	c None",
+".	c #000000",
+"g	c #FFFFFF",
+"X	c #aaff00",
+"  .    .....        ",
+"  .  ..     ..      ",
+"  . .         .     ",
+"  ..           .    ",
+"  .......      .    ",
+"                .   ",
+"   ggg   ggg    .   ",
+"    gXg gXg     .   ",
+"     gXgXg      .   ",
+"      gXg       .   ",
+"     gXgXg      .   ",
+"    gXg gXg    ..   ",
+"   ggg   ggg   .    ",
+"              .     ",
+"                    ",
+"                    "};

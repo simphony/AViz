@@ -1,0 +1,50 @@
+
+-----------------------------------
+11/01/01
+----------------------------------
+
+1. parameter file + default option. and make default small squares, or dots.
+2. clipping is forgotten when changing sphere to cube or colors...
+3. lighting.
+4. xyz and material properties,
+
+
+** Want a possiblity to change color with depth so that some atoms appear
+   almost dark...
+
+** Should have possibility to 'show only atoms of type...'
+
+** The angles should be floats, with the possibility to input for example, phi=16.5 deg.
+
+** reset view angle.
+
+**  kill parent window?? what does this mean??.
+
+** Add a whole separate panel for Modelling/View parameters, which include only the following:
+
+	1. lighting: Intensity (positions and number for later develop.)
+	2. fixed number of fixed lights, such as in the corners of a box, or 
+	   at centers of factes of bounding boxes (moved away a reasonable factor)
+	for the GUI this means:  radio button to trigger one or more of the lights. + a spinner box for the intensity (0-->100)%
+
+	3. The Perspictive arguments of OpenGL. ---> meaning the fovy.
+
+
+** The xyz filter should be completed. which means add correct radius for Al, O, ....
+
+
+** Different rotation modes, like vis. + the trackball
+
+** separate pan panel.
+
+** pan: move object and eye, or just move object
+
+** bonds both lines then cylinders
+
+** marking atoms (select.)
+
+** BUG: changing colors looses clip information.
+
+** change znear and zfar to check if the sample is out of bounds.
+
+** more intelligent spin boxes for the clipping.

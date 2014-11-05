@@ -1,0 +1,76 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(src/aviz.pro)
+
+dnl Checks for programs.
+dnl AC_PROG_CXX	! this does not always work reliable
+dnl AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
+
+dnl Checks for more programs: pod2man
+AC_PATH_PROG(POD2MAN, pod2man, pod2man,
+       $PATH:/bin:/usr/bin:/usr/local:/usr/local/bin:/usr/sbin:/usr/etc:etc)
+
+if ! test -e "$POD2MAN"; then 
+  AC_MSG_WARN([pod2man is not installed -- man page will not be installed.])
+fi
+
+dnl Checks for tmake utility
+AC_PATH_PROG(TMAKE, tmake, tmake,
+       $PATH:$QTDIR/bin:/bin:/usr/bin:/usr/lib/qt/bin:/usr/lib/qt2/bin:/usr/local:/usr/local/bin:/usr/local/qt/bin:/usr/sbin:/usr/local/share/:/usr/local/share/bin:/local/tmake/bin:/usr/local/tmake/bin:/usr/etc:etc)
+
+if ! test -e "$TMAKE"; then 
+  AC_MSG_ERROR([Qt makefile utility (tmake) is not installed -- abort.])
+fi
+
+dnl Checks for concert utility
+AC_PATH_PROG(CONVERT, convert, convert,
+       $PATH:/bin:/usr/bin:/usr/local:/usr/local/bin:/usr/X11R6/bin/:/usr/sbin:/usr/local/share/:/usr/local/share/bin::/usr/etc:etc)
+
+if ! test -e "$CONVERT"; then
+  AC_MSG_WARN([convert utility is not installed -- GIF animation generation won't work.])
+fi
+
+dnl Checks for libraries.
+dnl Checks for libraries.
+AC_CHECK_LIB(GL, main,have_lib=yes,have_lib=no)
+dnl if test "$have_lib" = "no"; then
+dnl AC_MSG_ERROR([OpenGL library (GL) is not installed -- abort.])
+dnl fi
+
+AC_CHECK_LIB(GLU, main, have_lib=yes,have_lib=no)
+dnl if test "$have_lib" = "no"; then
+dnl AC_MSG_ERROR([OpenGL Utility library (GLU) is not installed -- abort.])
+dnl fi
+
+AC_CHECK_LIB(X11, main)
+AC_CHECK_LIB(Xext, main)
+AC_CHECK_LIB(Xt, main)
+AC_CHECK_LIB(Xmu, main,have_lib=yes,have_lib=no)
+
+AC_CHECK_LIB(m, main,have_lib=yes,have_lib=no)
+if test "$have_lib" = "no"; then
+  AC_MSG_ERROR([Math library is not installed -- abort.])
+fi
+
+AC_MSG_CHECKING([for Qt library in $QTDIR/lib])
+if ! test -r "$QTDIR/lib/libqt.so" && ! test -r "$QTDIR/lib/libqt-mt.so" ; then 
+  AC_MSG_ERROR([Qt library is not installed under $QTDIR/lib, or environment variable $QTDIR is not set correctly -- abort.])
+else
+  AC_MSG_RESULT([found Qt library])
+fi
+
+AC_CHECK_LIB(z, main) 
+AC_CHECK_LIB(png, main) 
+
+dnl Checks for header files.
+AC_HEADER_STDC
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+
+dnl Creates Makefiles (src/Makefile is created by tmake utility)
+AC_OUTPUT(Makefile man/Makefile doc/Makefile)

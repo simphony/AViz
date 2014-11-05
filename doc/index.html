@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2K.1beta (1.47)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>AViz Atomic Visualization User's Guide</TITLE>
+<META NAME="description" CONTENT="AViz Atomic Visualization User's Guide">
+<META NAME="keywords" CONTENT="aviz">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="aviz.css">
+
+<LINK REL="next" HREF="node1.html">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF">
+<!--Navigation Panel-->
+<A NAME="tex2html4"
+  HREF="node1.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev_g.png"> 
+<A NAME="tex2html2"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html5"
+  HREF="node1.html">Contents</A>
+ &nbsp <B>  <A NAME="tex2html3"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<P>
+
+<P>
+
+<H1 ALIGN="CENTER">AViz Atomic Visualization User's Guide</H1>
+<P ALIGN="CENTER"><STRONG>Anastasia Sorkin and Geri Wagner</STRONG></P>
+<P ALIGN="CENTER"><STRONG>January 5, 2003</STRONG></P>
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"></A>
+
+<UL>
+<LI><A NAME="tex2html6"
+  HREF="node1.html">Contents</A>
+<LI><A NAME="tex2html7"
+  HREF="node2.html">What Can AViz Be Used For?</A>
+<UL>
+<LI><A NAME="tex2html8"
+  HREF="node3.html">License and Distribution</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html9"
+  HREF="node4.html">Obtaining and Installing AViz</A>
+<LI><A NAME="tex2html10"
+  HREF="node5.html">Starting AViz</A>
+<UL>
+<LI><A NAME="tex2html11"
+  HREF="node6.html">Command Line Arguments</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html12"
+  HREF="node7.html">Data File Formats</A>
+<UL>
+<LI><A NAME="tex2html13"
+  HREF="node8.html">Coordinate Data Files</A>
+<LI><A NAME="tex2html14"
+  HREF="node9.html">Lists of Coordinate Data Files</A>
+<LI><A NAME="tex2html15"
+  HREF="node10.html">View Parameter File</A>
+<LI><A NAME="tex2html16"
+  HREF="node11.html">Particle Parameter File</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html17"
+  HREF="node12.html">AViz Main Window</A>
+<UL>
+<LI><A NAME="tex2html18"
+  HREF="node13.html">File Menu</A>
+<UL>
+<LI><A NAME="tex2html19"
+  HREF="node14.html">Open...</A>
+<LI><A NAME="tex2html20"
+  HREF="node15.html">Save ViewParam File...</A>
+<LI><A NAME="tex2html21"
+  HREF="node16.html">File List...</A>
+<LI><A NAME="tex2html22"
+  HREF="node17.html">Animation...</A>
+<LI><A NAME="tex2html23"
+  HREF="node18.html">Watch XYZ File</A>
+<LI><A NAME="tex2html24"
+  HREF="node19.html">Snap PNG File...</A>
+<LI><A NAME="tex2html25"
+  HREF="node20.html">Set Default View Param...</A>
+<LI><A NAME="tex2html26"
+  HREF="node21.html">Exit</A>
+</UL>
+<LI><A NAME="tex2html27"
+  HREF="node22.html">Elements Menu</A>
+<UL>
+<LI><A NAME="tex2html28"
+  HREF="node23.html">Atoms...</A>
+<LI><A NAME="tex2html29"
+  HREF="node24.html">Spins...</A>
+<LI><A NAME="tex2html30"
+  HREF="node25.html">Liquid Crystals...</A>
+<LI><A NAME="tex2html31"
+  HREF="node26.html">Polymers...</A>
+<LI><A NAME="tex2html32"
+  HREF="node27.html">Pores...</A>
+<LI><A NAME="tex2html33"
+  HREF="node28.html">Lights...</A>
+<LI><A NAME="tex2html34"
+  HREF="node29.html">Annotation...</A>
+</UL>
+<LI><A NAME="tex2html35"
+  HREF="node30.html">View Menu</A>
+<UL>
+<LI><A NAME="tex2html36"
+  HREF="node31.html">Set Viewpoint...</A>
+<LI><A NAME="tex2html37"
+  HREF="node32.html">Clipping...</A>
+<LI><A NAME="tex2html38"
+  HREF="node33.html">Slicing...</A>
+</UL>
+<LI><A NAME="tex2html39"
+  HREF="node34.html">Settings Menu</A>
+<UL>
+<LI><A NAME="tex2html40"
+  HREF="node35.html">Hide Axis</A>
+<LI><A NAME="tex2html41"
+  HREF="node36.html">Hide Contour</A>
+<LI><A NAME="tex2html42"
+  HREF="node37.html">Only Contour</A>
+</UL>
+<LI><A NAME="tex2html43"
+  HREF="node38.html">Data Menu</A>
+<UL>
+<LI><A NAME="tex2html44"
+  HREF="node39.html">Translate...</A>
+<LI><A NAME="tex2html45"
+  HREF="node40.html">Swap</A>
+<LI><A NAME="tex2html46"
+  HREF="node41.html">Mirror</A>
+<LI><A NAME="tex2html47"
+  HREF="node42.html">Stretch...</A>
+</UL>
+<LI><A NAME="tex2html48"
+  HREF="node43.html">Help Menu</A>
+<UL>
+<LI><A NAME="tex2html49"
+  HREF="node44.html">About...</A>
+<LI><A NAME="tex2html50"
+  HREF="node45.html">License</A>
+<LI><A NAME="tex2html51"
+  HREF="node46.html">Distribution</A>
+</UL>
+</UL>
+<BR>
+<LI><A NAME="tex2html52"
+  HREF="node47.html">AViz Graphics Window</A>
+<LI><A NAME="tex2html53"
+  HREF="node48.html">File Lists</A>
+<UL>
+<LI><A NAME="tex2html54"
+  HREF="node49.html">File List Dialog</A>
+<LI><A NAME="tex2html55"
+  HREF="node50.html">Track Dialog</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html56"
+  HREF="node51.html">Creating Animations</A>
+<UL>
+<LI><A NAME="tex2html57"
+  HREF="node52.html">Watching a File</A>
+<LI><A NAME="tex2html58"
+  HREF="node53.html">View Parameters in Animations</A>
+<LI><A NAME="tex2html59"
+  HREF="node54.html">Creating AnimatedGIF Files</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html60"
+  HREF="node55.html">Frequently Asked Questions</A>
+<LI><A NAME="tex2html61"
+  HREF="node56.html">About this document ...</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR><HR>
+<ADDRESS>
+Geri Wagner
+2003-01-05
+</ADDRESS>
+</BODY>
+</HTML>

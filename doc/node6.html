@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2K.1beta (1.47)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Command Line Arguments</TITLE>
+<META NAME="description" CONTENT="Command Line Arguments">
+<META NAME="keywords" CONTENT="aviz">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="aviz.css">
+
+<LINK REL="previous" HREF="node5.html">
+<LINK REL="up" HREF="node5.html">
+<LINK REL="next" HREF="node7.html">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF">
+<!--Navigation Panel-->
+<A NAME="tex2html155"
+  HREF="node7.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html151"
+  HREF="node5.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html147"
+  HREF="node5.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html153"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html156"
+  HREF="node7.html">Data File Formats</A>
+<B> Up:</B> <A NAME="tex2html152"
+  HREF="node5.html">Starting AViz</A>
+<B> Previous:</B> <A NAME="tex2html148"
+  HREF="node5.html">Starting AViz</A>
+ &nbsp <B>  <A NAME="tex2html154"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00041000000000000000">
+Command Line Arguments</A>
+</H2>
+
+<P>
+AViz accepts standard X11 command line arguments.  In addition, the 
+following command line arguments given in table <A HREF="node6.html#tab1">3.1</A> are defined.
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER"><A NAME="61"></A>
+<TABLE>
+<CAPTION><STRONG>Table 1:</STRONG>
+AViz Command line arguments</CAPTION>
+<TR><TD><TABLE CELLPADDING=3 BORDER="1">
+<TR><TD ALIGN="LEFT"><TT>-ar</TT></TD>
+<TD ALIGN="LEFT">Start auto rotation</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-as</TT></TD>
+<TD ALIGN="LEFT">Start auto spinning</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-at</TT></TD>
+<TD ALIGN="LEFT">Start auto tilting</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-az</TT></TD>
+<TD ALIGN="LEFT">Start auto zooming</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-asm</TT></TD>
+<TD ALIGN="LEFT">Start in auto snap mode</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-fl [listfile]</TT></TD>
+<TD ALIGN="LEFT">Start using specified file list</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-rm [atom|spin|liquidcrystal|polymer|pore]</TT></TD>
+<TD ALIGN="LEFT">Set render mode</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-rs [dots|lines|cubes|cones|cylinders|spheres]</TT></TD>
+<TD ALIGN="LEFT">Set render style</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-rq [low|high|final]    </TT></TD>
+<TD ALIGN="LEFT">Set render quality</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-si [percentage]              </TT></TD>
+<TD ALIGN="LEFT">Set render size in percentage</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-snap 		           </TT></TD>
+<TD ALIGN="LEFT">Take a screen shot of the</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT">rendering at startup</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-snapq 		           </TT></TD>
+<TD ALIGN="LEFT">Take a screen shot of the</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT">rendering at startup and exit</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-v(ersion)                    </TT></TD>
+<TD ALIGN="LEFT">Print version number and exit</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-vpm [viewParamfile]          </TT></TD>
+<TD ALIGN="LEFT">Use view parameters in specified</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT">file at startup</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-watch [XYZfile]</TT></TD>
+<TD ALIGN="LEFT">Update rendering upon changes in</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT">specifed coordinate file</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-license</TT></TD>
+<TD ALIGN="LEFT">Print GNU license applying to this</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT">software</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-distribution</TT></TD>
+<TD ALIGN="LEFT">Print GNU regulations under applying</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&nbsp;</TD>
+<TD ALIGN="LEFT">to this software</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>-usage|-h(elp)</TT></TD>
+<TD ALIGN="LEFT">Print this message and exit</TD>
+</TR>
+</TABLE>
+<A NAME="tab1"></A></TD></TR>
+</TABLE>
+</DIV><P></P>
+<BR>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html155"
+  HREF="node7.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html151"
+  HREF="node5.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html147"
+  HREF="node5.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html153"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html156"
+  HREF="node7.html">Data File Formats</A>
+<B> Up:</B> <A NAME="tex2html152"
+  HREF="node5.html">Starting AViz</A>
+<B> Previous:</B> <A NAME="tex2html148"
+  HREF="node5.html">Starting AViz</A>
+ &nbsp <B>  <A NAME="tex2html154"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Geri Wagner
+2003-01-05
+</ADDRESS>
+</BODY>
+</HTML>

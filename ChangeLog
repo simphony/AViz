@@ -1,0 +1,98 @@
+Version 0.6.0.0
+---------------
+21/04/2010 Added command-line annotation option.
+12/12/2010 Added bond thickness variation options to bond board.
+
+Version 0.5.6.1
+---------------
+03/08/2005 Added "Sequential Bonding" option to Bonds board.
+
+Version 0.5.6
+-------------
+
+(Missing)
+
+Version 0.4.7
+-------------
+29/09/2001	Added option to switch between rotation about Euler angles and 
+		Cartesian axes
+29/09/2001	Added pore style rendering board
+28/09/2001	Improved the spin and liquid crystal boards
+14/09/2001	Added possibilities to render spins as cones
+12/09/2001	Added a color indicator label to the various boards (atoms,
+		spins, ...) plus a button to pop up the color setting board; 
+		removed the separate color menu entry 
+10/09/2001	Removed some toggle switches and created menu entries instead;
+		added 'Mode' combo box to choose between atom, spin, 
+		liquid crystal, and pore render mode
+10/09/2001	Removed 'Live update' toggle and 'Render' button
+09/09/2001	Added entry in 'File' menu to create screenshot files with
+		user-defined names
+09/09/2001	Divided 'View' menu into 'Elements' and 'View'
+08/09/2001	Comprehensive changes of names of variables and data structures
+		to adapt to a wider use
+08/09/2001	Removed 'Draft' rendering option since it does not work anyway
+
+Version 0.4.4
+-------------
+06/06/2001	Changed spin rendering so that normalization is not done
+		automatically; now a spin wave can be rendered properly
+
+04/06/2001	Fixed the problem of badly illuminated bond lines in 
+		high-quality drawing mode
+
+		Fixed problems with reading of .aviz files
+
+03/06/2001	Fixed a memory allocation problem for atomData structure
+		Fixed problems in connection with reading of outdated 
+		.aviz files
+
+31/05/2001	Removed an error in the rendering of bonds that produced
+		ugly shading
+		Changed coding of the boards that involve combo boxes
+		(bondBoard, colorBoard, atomBoard)
+
+Version 0.4.3
+-------------
+27/05/2001	Started to used 'configure' scripts
+		Modified the manual; added a doc directory to the distribution
+		Wrote a man page and added a man directory to the distribtion
+
+26/05/2001	Check for version when reading view parameter files
+
+25/05/2001	Added 'Annotation...' board; added file list facilities
+
+17/05/2001	Added 'AutoSnap' button
+
+12/05/2001 	changed file renderBox.cpp
+		added possibility to remove all control panels and use the entire
+                	window for rendering
+		added 'draw dots' option
+		changed the 'Render Quality' control element (now it is a combo box)
+		implemented the 'Draft' render quality mode in a rough manner
+		added a rendering of the coordinate system, with axis labels, that
+			is used; added also a toggle switch to switch off the rendering
+		changed name from 'mdview' to 'aviz'
+
+12/01/2001 	changed file renderBox.cpp
+		changed file mainForm.cpp
+		changed file mainForm.h
+		changed file defaultColors.h
+		changed file defaultColors.cpp
+		changed file colorBoard.cpp
+		changed file colorBoard.h
+		changed file mdview.cpp
+		changed file mdview.h
+		changed file main.cpp
+		changed file glCanvasFrame.cpp
+		changed file glCanvasFrame.h
+		changed file glCanvasArea.cpp :
+				''Panic if ..'' 2 times, 
+				setMoleculeData changed, 
+				new function completeColorData, 
+				getColorData
+		changed file glCanvasArea.h :
+				new function completeColorData, 
+				getColorData
+		changed Makefile
+		new file defaults.h

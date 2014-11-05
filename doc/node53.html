@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2K.1beta (1.47)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>View Parameters in Animations</TITLE>
+<META NAME="description" CONTENT="View Parameters in Animations">
+<META NAME="keywords" CONTENT="aviz">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="aviz.css">
+
+<LINK REL="next" HREF="node54.html">
+<LINK REL="previous" HREF="node52.html">
+<LINK REL="up" HREF="node51.html">
+<LINK REL="next" HREF="node54.html">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF">
+<!--Navigation Panel-->
+<A NAME="tex2html772"
+  HREF="node54.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html768"
+  HREF="node51.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html762"
+  HREF="node52.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html770"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html773"
+  HREF="node54.html">Creating AnimatedGIF Files</A>
+<B> Up:</B> <A NAME="tex2html769"
+  HREF="node51.html">Creating Animations</A>
+<B> Previous:</B> <A NAME="tex2html763"
+  HREF="node52.html">Watching a File</A>
+ &nbsp <B>  <A NAME="tex2html771"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00092000000000000000"></A>
+<A NAME="viewParamAnimation"></A>
+<BR>
+View Parameters in Animations
+</H2>
+Note that the view parameters do not completely specify how a data set is 
+rendered - it also depends on the extension of the data set.  If you try 
+to animate a sequence of sets with differing extensions, you will end up 
+with an uneven and jumpy animation.  The solution is to add ''dummy'' atoms
+at fixed positions, sufficiently remote from the main set.  These dummy 
+atoms will then define a constant outline of the set.  They must not be 
+rendered, of course.  
+
+<P>
+If your animation is based on a file list, you may also inhibit view parameter 
+updates by using the <B>Keep ViewScale</B> button in the file list dialog 
+(see section <A HREF="node49.html#fileListDialog">7.1</A>).
+
+<P>
+<BR><HR>
+<ADDRESS>
+Geri Wagner
+2003-01-05
+</ADDRESS>
+</BODY>
+</HTML>

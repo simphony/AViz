@@ -1,0 +1,848 @@
+\documentclass[11pt]{article}
+\usepackage{palatino}
+\usepackage{html}
+
+\bodytext{BGCOLOR="#FFFFFF"}	% this is ignored by latex 
+
+\setlength{\parskip}{0.2cm}
+\begin{document}
+
+\title{AViz Atomic Visualization User's Guide}
+
+\author{Anastasia Sorkin and Geri Wagner}
+\date{\today}
+\maketitle
+
+\tableofcontents
+
+\section{What Can AViz Be Used For?}
+
+AViz is a program to visualize data sets generated in atomistic 
+simulations.  In such simulations, one usually operates with 
+a number of particles, each of which representing a particle.  The 
+result of the simulation typically consists of data files containing
+the coordinates of all the simulated particles.  
+
+You can use AViz to render the simulated particles as little spheres, cubes, or 
+dots.  It can also be used to render atomistic spins, or any other kind of 
+vector.    Several different shapes and qualities can be used, and 
+colors can be assigned to the rendered objects in many different ways.
+
+\subsection{License and Distribution}
+
+AViz is distributed under the GNU General Public License.  
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MER\-CHANTABI\-LITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+A full version of the license and distribution regulations is printed 
+if you start AViz by typing {\tt aviz -license} and {\tt aviz -distribution}.
+
+\section{Obtaining and Installing AViz}
+
+To download the AViz software, go to the AViz home page at 
+\begin{center}
+{\tt http://phycomp.technion.ac.il/~aviz} 
+\end{center}
+and find the section labeled 
+''Download''.  You will obtain a compressed archive file.  
+
+Uncompress and unpack the archive.  Move into the {\tt aviz} directory 
+and execute the following steps:
+
+\begin{verbatim}
+./configure
+make
+make install
+\end{verbatim}
+
+If all went well, you should now have your copy of AViz installed.  
+
+If not, one likely reason is that some of the software required to compile
+and run AViz is missing on your system.  
+
+Software that may be missing includes:
+\begin{itemize}
+\item The Qt development library -- you may obtain it 
+at 
+\begin{center}
+{\tt http://www.trolltech.com} 
+\end{center}
+(Linux Users may download and install as 
+a RPM file)
+\item The {\tt tmake} Qt makefile utility -- you may obtain it 
+at 
+\begin{center}
+{\tt http://www.trolltech.com} 
+\end{center}
+(Linux Users may download and install 
+as a RPM file)
+\item The OpenGL graphics library -- you may obtain a free clone called 
+{\tt Mesa} from numerous sites on the web (Linux Users may download and install as a RPM file)
+\end{itemize}
+
+
+\section{Starting AViz}
+
+AViz is started by typing {\tt aviz}.  If a data file name is added, AViz 
+will automatically read the file and render the data.
+
+\subsection{Command Line Arguments}
+
+AViz accepts standard X11 command line arguments.  In addition, the 
+following command line arguments given in table \ref{tab1} are defined.
+
+\begin{table}[h]
+\begin{tabular}{|ll|}
+\hline
+{\tt -ar}   &  Start auto rotation \\
+{\tt -as}   &  Start auto spinning \\
+{\tt -at}   &  Start auto tilting \\
+{\tt -az}   &  Start auto zooming \\
+{\tt -asm}   & Start in auto snap mode\\
+{\tt -fl [listfile]}   		& Start using specified file list \\
+{\tt -rm [atom|spin|liquidcrystal|polymer|pore]} & Set render mode\\
+{\tt -rs [dots|lines|cubes|cones|cylinders|spheres]} & Set render style \\
+{\tt -rq [low|high|final]    } & Set render quality \\
+{\tt -si [percentage]              } & Set render size in percentage \\
+{\tt -snap 		           } & Take a screen shot of the \\
+{                                  } & rendering at startup \\
+{\tt -snapq 		           } & Take a screen shot of the \\
+{                                  } & rendering at startup and exit\\
+{\tt -v(ersion)                    } & Print version number and exit \\
+{\tt -vpm [viewParamfile]          } & Use view parameters in specified \\
+				     & file at startup \\
+{\tt -watch [XYZfile]} 		     & Update rendering upon changes in \\
+                                     & specifed coordinate file \\
+{\tt -license} 				& Print GNU license applying to this \\
+				     & software \\
+{\tt -distribution} 		& Print GNU regulations under applying \\
+				     & to this software \\
+{\tt -usage|-h(elp)} 		& Print this message and exit \\
+\hline
+\end{tabular}
+\label{tab1}
+\caption{AViz Command line arguments}
+\end{table}
+
+\section{Data File Formats}
+
+AViz can read three different kinds of files: coordinate data files, 
+lists of coordinate data files, and view parameter files.
+
+\subsection{Coordinate Data Files}
+The format for the coordinate data files (''XYZ files'') is as follows: 
+
+\indent
+  1. line: an integer indicating the number of data points \newline
+\indent
+  2. line: an arbitrary string identifying the data  \newline
+\indent
+  following lines: all of the form XX float1 float2 float3 ..... 
+
+Each of the lines corresponds to one particle. A one- or two-character string 
+is used to label the particle, as in 'O' or 'Si'.  You may choose any 
+combination of characters you like.  The following three 
+floating point numbers represent the x-, y-, and z-coordinate of the particle. 
+Up to eight additional floating point numbers can be provided. These 
+additional numbers can be used to visualize properties such as velocity, 
+energy, etc. 
+
+AViz recognizes some particular labels such as 'Al' and 'Au'.  For these 
+atom types, a default color is defined.  For many other elements, and 
+for atom types such as 'X3', no default color is defined.  AViz will 
+use a blue color to render particles of ''unknown'' type.
+
+Here is a short example data file of the most simple form, containing 
+only the three coordinate columns:
+\begin{verbatim}
+8
+## Cube
+C  1.0 0.0 0.0
+C  1.0 1.0 0.0
+C  0.0 1.0 0.0
+C  0.0 1.0 0.0
+C  1.0 0.0 1.0
+C  1.0 1.0 1.0
+C  0.0 1.0 1.0
+C  0.0 1.0 1.0
+\end{verbatim}
+
+Here is a short example data file with one additional column of data: 
+\begin{verbatim}
+6
+## Aluminum oxide
+O  -0.083333 0.250000 0.583333 0.433013
+O  0.083333 -0.250000 -0.583333 -0.433013
+O  0.250000 0.583333 -0.083333 0.433013
+O  -0.250000 -0.583333 0.083333 -0.433013
+Al 0.583333 0.583333 0.583333 1.010363
+Al -0.583333 -0.583333 -0.583333 -1.010363
+\end{verbatim}
+
+If the data points should be rendered as vectors, each vector is defined by 
+six coordinates.  The first three give the location of the vector, and the 
+second three give the spin magnitude and direction.  A sample data file might 
+look like this:
+
+\begin{verbatim}
+3
+## Spins pointing in z-direction
+Sp 0.0 0.0 0.0 0.0 0.0 1.0
+Sp 1.0 0.0 0.0 0.0 0.0 0.5
+Sp 2.0 0.0 0.0 0.0 0.0 0.25
+\end{verbatim}
+
+\subsection{Lists of Coordinate Data Files}
+\label{fileList}
+
+A list of data files is exactly what you would expect, and may look 
+as follows:
+
+\begin{verbatim}
+aluOx1.xyz
+aluOx2.xyz
+aluOx3.xyz
+aluOx4.xyz
+\end{verbatim}
+
+When opening such a file, a small control board will pop up that lets you 
+cycle through these files, in single steps or continuously; see section
+\ref{fileListDialog}.  
+
+\subsection{View Parameter File}
+
+AViz can create binary files that contain all view parameters, such as 
+viewing angles, atom colors, annotation, etc.  These files can be saved
+explicitely (using the {\bf File/Save} menu entry) or implicitely (using the 
+{\bf File/Set Defaults} menu entry). 
+
+
+\subsection{Particle Parameter File}
+\label{particleParameterFile}
+AViz creates a binary file called {\em aviz.particle} in a hidden directory 
+{\tt .aviz} in your home directory.  This file contains information about 
+settings that apply to a given particle type -- which color should be used 
+in the rendering, for instance.  
+
+The particle parameter file is updated automatically each time you 
+change particle type settings.
+
+\section{AViz Main Window}
+
+AViz starts up with two windows, a main window and a graphics window.
+
+The main window includes a menu bar, switches to change the rendering 
+stye, buttons to create snapshots of the current rendering, and a status 
+line.
+
+The menu bar entries are discussed in the following sections.  In this section
+the rendering controls are discussed.
+
+The {\bf Mode} combo bar is used to define the nature of your particles.  
+The current range of possible modes includes atom, spin, liquid crystal, 
+polymer, and pore.  The effect of changing modes is mainly that it gives
+you different options when it comes to choosing render style and color 
+assignment.
+
+Depending on the setting of the combo box labeled {\bf Style}, particles are
+rendered either as dots, squares, spheres, cones, cylinders, or pins.  Note
+that not all selections are accessible at all times -- it depends on the render
+mode setting.  A text field labeled {\bf Size} is used to adjust the size of
+each object globally.   
+
+The {\bf Quality} combo box is used to control render quality.  The idea is to
+find a good viewing position using low quality, and switch to high or even
+final only then. 
+
+At any stage, an image file representing the current rendering can be created,
+by pressing the {\bf Snap} button.  The image file is saved in the current
+directory.  The image is encoded in the PNG format and
+is called {\tt file.NNNN.png}, where {\tt file} is the filename of the data file
+containing the atom positions, and NNNN is a four-digit number which 
+increments.  The idea is to prevent overwriting of existing image files.
+
+When the adjacent {\bf Auto Snap} button is depressed, AViz will take a
+snapshot whenever the rendering was updated. 
+
+\subsection{File Menu}
+
+\subsubsection{Open...}
+\label{fileOpen}
+Click on {\bf Open} to open either a coordinate data file in XYZ-format, a list
+of coordinate data files,  or a view parameter file.   
+
+When opening a coordinate data file, the file browser will sport an extra 
+button labeled {\bf Generate File List}.  The button is associated with 
+a convenience function that wil create a file list (see section \ref{fileList})
+including all coordinate files in the current directories.  Coordinate files 
+are recognized if their filename contains the suffix {\tt .xyz}.
+
+\subsubsection{Save ViewParam File...}
+
+Click on {\bf Save ViewParam File...} to save the current view parameters in a
+view parameter file.   
+
+\subsubsection{File List...}
+
+Click on {\bf File List...} to pop up a dialog window that lets you leave
+through the files in the current file list (see section \ref{fileListDialog}).
+
+\subsubsection{Animation...}
+
+Click on {\bf Animation...} to pop up a dialog window that lets you generate an
+AnimatedGIF file based on image files in PNG-format; see section
+\ref{creatingAnimatedGIF}.  This is a convenience function of experimental
+character.  It relies on the image processing program {\tt convert} which is
+quite common on Linux systems.
+
+\subsubsection{Watch XYZ File}
+
+The {\bf Watch XYZ File} button causes watching of the currently rendered
+coordinate file: whenever the file changes, the graphics display is updated, 
+showing the current data.  File changes are checked every 10 seconds.  
+
+If the {\bf AutoSnap} button is depressed, you will obtain a PNG snapshot
+upon every update.  This may be a convenient way to generate a visualization
+of the dynamics in your simulation; see also section \ref{watching}.
+
+\subsubsection{Snap PNG File...}
+
+Click on {\bf Snap PNG File...} to launch a file browser and create a 
+PNG image file of the current rendering in a specific directory. 
+
+Alternatively, you may simply press then {\bf Snap} button to generate a 
+PNG file in the current directory.
+
+\subsubsection{Set Default View Param...}
+
+Click on {\bf Set Default View Param } to save the current view parameters in a
+view parameter file called {\tt aviz.vpm} in a hidden directory {\tt .aviz} in
+your home directory. If this file is present in the directory in which AViz is
+started the next time, AViz will automatically read and set these parameter
+values.    
+
+The view parameters include parameters such as view point, lighting, and 
+annotation.  They do not include parameters related to the rendering of 
+a class of particles, such as the color of the 'Al' atoms.  The idea is that
+while you may want to change the view point frequently, you may not
+want to change particle colors.
+
+\subsubsection{Exit}
+
+Click on {\bf Exit} to exit.
+
+\subsection{Elements Menu}
+
+\subsubsection{Atoms...}
+
+This menu entry is active if the render mode is set to ''Atom''.  
+
+Click on {\bf Atoms/Molecules...} to open the atom type dialog window to set
+some properties that affect the rendering of atoms of a given type, such
+as {\tt Al}.   
+
+A selector is used to select the atom type to which the settings apply.
+
+A toggle button labeled {\bf Show Atoms} can be used to switch off the 
+rendering of all atoms of the selected atom type.
+
+A color bar shows the color, or spectrum of colors, that is currently used 
+to render atoms of the given type.
+
+If rendering is not disabled, you can adjust the size of the atoms of this 
+type, relative to the default size.  This is done using three radio buttons
+labeled {\bf Regular}, {\bf Smaller} and {\bf Larger}.
+
+The coloring of the atoms of the selected atom type can be controlled using the
+radio buttons labeled {\bf Type}, {\bf Position}, {\bf Property}, and 
+{\bf ColorCode}. 
+
+If ''Type'' is chosen, all atoms of the selected type are colored the 
+same color (which is set using the {\bf Set Color...} button). 
+
+If ''Position'' is chosen, the atoms of the selected type are colored according
+to their coordinate values.  Radio buttons labeled {\bf X}, {\bf Y}, and {\bf
+Z} are used to select the reference coordinate axis.  (The color scale that is
+used is set using the {\bf Set Color...} button.)
+
+If ''Property'' is chosen, the atoms of the selected type are colored according
+to their property values given in the input data file in addition to their
+coordinate values.  Radio buttons labeled {\bf 1}, {\bf 2}, etc.  are used to
+select the reference property.  (The color scale that is used is set using the
+{\bf Set Color...} button.)  This feature can be used to visualize scalar 
+particle properties such as kinetic energy that are given together with the 
+particle position in the coordinate file.
+
+If ''ColorCode'' is chosen, you assume complete control over the coloring 
+by specifying property colums that are interpteted as red--green--blue color 
+values, ranging from 0.0 to 1.0.  By default, the first three property 
+values are taken as red, green, and blue values, respectively.   For instance, 
+if the default settings are chosen and the entry of the first particle is
+\begin{verbatim}
+Al  3.57.0 24.34 0.249		0.0	1.0	0.0
+\end{verbatim}
+that particle is rendered using a strong green color.
+
+The settings are effective after {\bf Apply} or {\bf Done} is pressed.
+
+Click on the {\bf Bonds...} button in the atom type dialog, or select the {\bf
+Bonds...} submenu entry to open the bond dialog window.  This window is used to
+control the rendering of bonds between atoms of given atom types, such as {\tt
+Al} and {\tt O}.  
+
+Two selectors, {\bf From Particle Type} and {\bf To Particle Type}, are used to 
+select the atom types to which the settings apply. 
+
+Radio buttons labeled {\bf Present} and {\bf Absent} are used to enable and
+disable the rendering of bonds between the atoms of the specified types.
+
+If bond drawing is enabled, the color of the bond can be set using the radio
+buttons in the {\bf Color} box.  
+
+The thickness can be set using the radio buttons in the {\bf Thickness} box.
+If {\bf Line} is chosen, the bonds will be rendered as lines; this is the
+fastest rendering mode.  Other thicknesses, in combination with high render
+quality, will give you bonds that are rendered as cylinders.  
+
+Depending on the view point, the rendering can be improved by activating
+anti-aliasing.  Use the checkbox labeled {\bf AntiAliasing} to control 
+this feature.
+
+A text window labeled {\bf Emission} is provided to set the emission light
+quality of the bond.  In certain circumstances bond light emission can improve
+the visual appearance of the rendering.
+
+Most important are the minimum length and maximum length parameters, to be
+entered in text windows labeled {\bf Min Length} and {\bf Max Length}.  The
+lengths are given in the same units as the particle coordinates.  Only
+those bonds will be rendered whose length is within the limits specified.
+
+The setting is effective after {\bf Apply} or {\bf Done} is pressed.
+
+\subsubsection{Spins...}
+
+This menu entry is active if the render mode is set to ''Spin''.
+
+Click on {\bf Spins...} to open a small dialog window to set the properties
+that affect the rendering of spins or other types of vectors.  The vectors
+are rendered as lines or cylinders with a sphere at the end.
+
+The dialog operates similar to the atom property dialog.  In addition,
+you may set some settings that affect the rendering of the spin foots.
+
+The thickness can be set using the radio buttons in the {\bf Thickness} box.
+If {\bf Line} is chosen, the spins will be rendered as lines; this is the
+fastest rendering mode.  In combination with high rendering quality, the
+other options will give you cylinders rather than simple lines.
+
+A text window labeled {\bf Emission} is provided to set the emission light
+quality of the spin foot.  In certain circumstances light emission can improve
+the visual appearance of the rendering.
+
+The setting is effective after {\bf Apply} or {\bf Done} is pressed.
+
+\subsubsection{Liquid Crystals...}
+
+This menu entry is active if the render mode is set to ''LiquidCrystal''.
+
+Click on {\bf Liquid Crystals...} to open a small dialog window to set the
+properties that affect the rendering of liquid crystal molecules of a 
+given type.  The liquid crystal molecules are rendered as lines, cones, 
+or cylinders, with the startpoint and endpoint given by six columns of 
+numbers.  
+
+The dialog operates similar to the spin property dialog.  For liquid crystals,
+you can assign up to three colors to a given molecule type.  For instance, 
+if you assign red and blue to a type and choose the ''cylinder'' rendering
+style, half of the cylinder is rendered in red, and the other half in blue. 
+In this way, you can visualize orientation patterns.
+
+The setting is effective after {\bf Apply} or {\bf Done} is pressed.
+
+\subsubsection{Polymers...}
+
+The ''Polymer'' rendering mode is almost identical to the ''Atom'' rendering
+mode.  The polymer type dialog that comes up when you choose the 
+{\bf Polymers...} submenu entry produces a dialog that is identical to the 
+atom type dialog.  The polymer bond dialog, popping up when you select the 
+{\bf Bonds...} submenu entry is also identical with the atom bond dialog. 
+
+The difference is that polymer bonds are only drawn between particles that 
+belong to the same molecule.  The fourth column in the coordinate file is 
+expected to contain an integer value indicating, for each particle, the 
+molecule to which it belongs.  For instance, two atoms belonging to the 
+first molecule may be entered as follows:
+\begin{verbatim}
+C  0.0 0.0 0.0 1
+H  0.5 0.0 0.0 1
+\end{verbatim}
+
+\subsubsection{Pores...}
+
+The ''Pore'' rendering mode operates similar to the liquid crystal 
+rendering mode.  You may draw lines or cylinders from starting point to 
+end point.  If coloring is according to particle type, up to two colors 
+can be assigned to each particle type.   
+
+\subsubsection{Lights...}
+
+Click on the {\bf Lights...} menu entry to open a small dialog window to
+control the lighting of the rendering.   Eight spotlights can be activated
+independently, shining from different positions such as ''Top'', ''Bottom
+Right'' etc.  This is done using toggle buttons labeled accordingly.
+
+The distance from which a given light source shines is set by means of the 
+slider labeled {\bf Depth}.  A combo box is used to specify light sources 
+for which the setting applies.  The greater the depth, the sharper the 
+distinction between bright and dark regions.
+
+A slider labeled {\bf Global Ambient Light} is used to set the level of 
+ambient light.  A high level lightens up the shadows in the rendering. 
+
+The shininess of the rendered atoms is set using a second slider labeled 
+{\bf Surface Shininess}.  A high level results in a small bright spot on 
+each of the atoms.  Note that this effect is most prominent in ''Final'' 
+rendering mode.
+
+The setting is effective after {\bf Apply} or {\bf Done} is pressed.
+
+\subsubsection{Annotation...}
+
+Click on the {\bf Annotation...} menu entry to open a small dialog window to
+specify an annotation to the rendering.  The annotation string is entered in a
+one-line text window.  
+
+A toggle button is used to switch on or off annotation display.
+
+A spin box is used to set the size of the annotation -- currently between 1 and
+4.  (Note that the color is yellow by default).  Two other spin boxes are used
+to specify the location of the annotation.  The location is given in screen
+coordinates (pixels).  (If you specify a location that is off the screen, you
+won't see your annotation.)
+
+\subsection{View Menu}
+
+\subsubsection{Set Viewpoint...}
+
+The {\bf Set Viewpoint...} menu entry opens a submenu pane.  Select 
+{\bf Explicit...} to open a dialog that lets you specify the view point
+in great detail.
+
+In the dialog are given four text fields, labeled ''{\bf Phi}'', ''{\bf
+Theta}'', ''{\bf Chi}'', and ''{\bf Eye}'' The first three fields show anglular
+values (in deg) that are used to rotate the set of atoms to be rendered.  The
+rotation is based on Euler angles phi, theta, chi: First the set is rotated
+about its z-axis by phi degrees.  Then the set is rotated about its new y-axis
+by theta degrees.  Then the set is rotated about its new z-axis by chi degrees.
+
+The text field labeled ''{\bf Eye}'' is used to adjust the distance from the
+view point to the set.
+
+The setting is effective after {\bf Apply} or {\bf Done} is pressed.
+
+Choose {\bf Default View} to assume the view parameters defined as default.
+Alternatively, choose {\bf View XY+} to view along the positive $z$-axis, {View
+XY-} to view along the negative $z$-axis, and so on.
+
+\subsubsection{Clipping...}
+
+Click on {\bf Clipping...} to open a small dialog window that allows the manual
+setting of the near clip plane and the far clip plane.  Clip planes restrict
+the volume that is rendered in the direction into the screen.  
+
+The quality of the shading in the rendering is lowered if the clip planes are
+chosen very far apart.  By default, the clip planes are set automatically so as
+to encompass all the atoms.  
+
+The setting is effective after {\bf Apply} or {\bf Done} is pressed.
+
+\subsubsection{Slicing...}
+
+Click on {\bf Slicing...} to open a small dialog window that allows the manual
+setting of pairs of planes parallel to the coordinate axes.  If slicing is
+activated by the toggle button labeled ''Slicing On'', only those atoms are
+rendered that are located between pairs of slice planes. 
+
+Slicing works independently for all three coordinate axis.   To adjust the
+position of the planes, slicing can be switched off temporarily, and instead
+the planes can be rendered along with the atoms.  This is done using the toggle
+buttons ''Indicate Only''.    
+
+At this stage, slicing along directions not parallel to the coordinate axes is
+not supported.
+
+The setting is effective after {\bf Apply} or {\bf Done} is pressed.
+ 
+\subsection{Settings Menu}
+
+\subsubsection{Hide Axis}
+
+Click on {\bf Hide Axis} to inhibit the rendering of the yellow coordinate
+system indicating directions. 
+
+Click on {\bf Show Axis} to get back to the original state.  
+
+\subsubsection{Hide Contour}
+
+Click on {\bf Hide Contour} to remove the red contour outline that is 
+drawn in the rendering.
+
+Click on {\bf Show Contour} to get back to the original state.  
+
+\subsubsection{Only Contour}
+
+Click on {\bf Only Contour} to render only the red outline, and none 
+of the particles.  This is useful to find suitable view parameters for a 
+very large set of particles.
+
+Click on {\bf Contour And Particles} to get back to the original state.  
+
+\subsection{Data Menu}
+
+\subsubsection{Translate...}
+
+Click on {\bf Translate...} to open a small dialog window to translate 
+the data set in space.  The translation vector is given in the text windows
+labeled {\bf Translate X}, {\bf Translate Y}, and {\bf Translate Z}.  
+Alternatively, translations can be specified as {\bf Translate Right}, 
+{\bf Translate Top}, and {\bf Translate Forward}.  
+
+The translation is effective after {\bf Apply} or {\bf Done} is pressed.
+
+A button labeled {\bf Reset Button} is used to translate the data set 
+back to the origin.
+
+\subsubsection{Swap}
+
+The entries {\bf Swap XY}, {\bf Swap XZ}, and {\bf Swap YZ} are used 
+to internally swap the coordinate values with each other, so that for 
+instance a particle at the position ($x_0$, $y_0$, $z_0$) is moved to 
+the position ($y_0$, $x_0$, $z_0$). 
+
+\subsubsection{Mirror}
+
+The entries {\bf Mirror X}, {\bf Mirror Y}, and {\bf Mirror Z} are used 
+to internall change the sign of the coordinate values, so that for 
+instance a particle at the position ($x_0$, $y_0$, $z_0$) is moved to 
+the position ($-x_0$, $y_0$, $z_0$). 
+
+\subsubsection{Stretch...}
+
+This entry pops up a window with three text windows, one for each 
+coordinate.  In each window a factor can be specified with which 
+all coordinates are multiplied during rendering.  A factor greater
+then 1 means that the rendered structure is extended in the direction
+at hand. 
+
+Buttons next to the text windows can be used to reset the entries
+to their default values of 1.
+
+The setting is active after {\bf Apply} or {\bf Done} is pressed.
+
+\subsection{Help Menu}
+
+\subsubsection{About...}
+
+The entry {\bf About...} produces a small window with copyright information.
+
+\subsubsection{License}
+
+The entry {\bf About...} produces a small window with licensing information.
+The full GNU license text is printed in the window from which AViz was started.
+
+\subsubsection{Distribution}
+
+The entry {\bf About...} produces a small window with information on 
+distributing the software.  The full GNU distribution conditions are 
+printed in the window from which AViz was started.
+
+\section{AViz Graphics Window}
+
+The graphics window is surrounded by a frame with controls to set view 
+parameters such as viewing distance and rotation angle.  
+
+You can also set view angles completely without controls, by left-clicking
+and dragging the mouse.  Right-clicking changes the viewing distance, and 
+center-clicking lets you translate the particles.
+
+The frame sports three spin wheels by which you can rotate the rendering about 
+the three axis of the fixed screen frame.  You can also rotate in small 
+steps by using tool buttons adjacent to the wheels. 
+
+A fourth spin wheel, with adjacent buttons, is used to adjust the viewing
+distance.
+
+An extra button labeled {\bf Auto} can be used to increment viewing parameters
+continuously.  In combination with one or several of the tool buttons and the
+{\bf AutoSnap} button, the {\bf Auto} button provides a very simple way to
+create an animation showing a given structure from a continuously changing view
+point.
+
+The remaining tool buttons in graphics frame are used to assume the default
+view parameters ({\bf Home}), to designate the current view parameters as
+defaults ({\bf Set Home}), and to use {\bf perspective rendering} or {\bf
+orthogonal rendering}.  Perspective view provides a more realistic rendering.
+In orthogonal view, particles farther apart from the viewer do not appear
+smaller in the rendering, and parallel lines are rendered as parallel lines.   
+
+Finally, there are two tool buttons to select either {\bf black background} 
+or {\bf white background}.
+
+\section{File Lists}
+
+File lists (see section \ref{fileList}) give you the possibility to leave
+through a set of coordinate files, and in this way visualize the dynamics
+in your simulation.  
+
+\subsection{File List Dialog}
+\label{fileListDialog}
+
+The file list dialog pops up when you press the {\bf File List...} entry in the
+{\bf File} menu.  
+
+The current file list is indicated in a text window.  You may view the files in
+the list in steps of 1, 10, or continously, by using the {\bf SingleStep}, {\bf
+FastStep}, and {\bf Cycle} buttons, respectively.  Additional convenience
+buttons let you jump to the beginning or end of the sequence.  Radio buttons
+can be used to set the direction of the cycling.  
+
+When you like the cycle, you may press the {\bf Auto Snap} button and wait for
+your sequence of PNG files to be created.
+
+As you render subsequent frames, the rendering parameters may be slightly
+different from frame to frame.  The reason is that the rendering parameters
+depend on the dimensions of the data set.  You can switch off repeated 
+udpateds of the view parameter settings by clicking the {\bf Keep ViewScale} 
+check box (see also section \ref{viewParamAnimation}).
+
+You may also render tracks that show the motion of single particles during
+the sequence; see section \ref{trackDialog}.
+
+\subsection{Track Dialog}
+\label{trackDialog}
+You open the track dialog by pressing the {\bf Tracks...} button in the 
+file list dialog. 
+
+A selector is used to select the particle type to which the settings apply.
+For each particle type, you can choose whether or not to render motion
+tracks.  You may either render, at any stage, the complete track within
+your sequence of data files, or the track covered up to the current
+stage, starting from the first file.  
+
+The tracks can be rendered with or without periodic boundary conditions
+applied.  The minimum and maximum extensions of the data set are taken to be
+the boundaries if periodic boundary conditions are valid.
+
+The setting is active after {\bf Apply} or {\bf Done} is pressed.
+
+\section{Creating Animations}
+
+AViz offers several possibilities to facilitate the 
+creation of animations.  
+
+Here is a very simple way to create an animation in which a three-dimensional
+structure is visualized by rotating it slowly: Set up a good view point and
+decent atom colors, then press {\bf Auto Snap} and one of the rotation tool
+buttons in the graphics frame, and let AViz do its work.  When the rotation is
+completed, you will end up with a sequence of PNG image files that can be
+turned into an animation, using MPEG-encoding software. 
+
+If you have a sequence of XYZ coordinate data files and want to turn 
+them into an animation, using the same view point all the time, you 
+may create a file list as follows:
+
+\begin{verbatim}
+ls -1 *.xyz |sort -n > filelist.dat
+\end{verbatim}
+
+A similar file list is created by using the convenience button labeled {\bf
+Generate File List} in the file browser (see section \ref{fileOpen}).
+
+Then, use the {\bf File/Open/Open XYZ File List} menu entry to read in the file
+{\tt filelist.dat}.  Use the file list dialog to control the rendering of a
+sequence of frames.  In combination with the {\bf Auto Snap} button, you then
+create a sequence of PNG image files that can be turned into an animation. 
+
+Alternatively, you may create a simple shell script that consists of repeated
+entries of the form:
+\begin{verbatim}
+aviz -snapq aluOx1.xyz -geometry 902x305+0+0
+aviz -snapq aluOx2.xyz -geometry 902x305+0+0
+aviz -snapq aluOx3.xyz -geometry 902x305+0+0
+aviz -snapq aluOx4.xyz -geometry 902x305+0+0
+\end{verbatim}
+
+When this script is running, it will start up AViz repeatedly.  AViz 
+will render the specified coordinate file, take a PNG snaphot of the 
+rendering, and kill itself.  (Note: Offscreen rendering is not yet 
+implemented....)
+
+\subsection{Watching a File}
+\label{watching}
+In some situations one would like to monitor an on-going simulation.  Here
+the {\bf -watch} option may be of use.  When AViz is started up as in 
+
+\begin{verbatim}
+aviz -watch wedgeSim.xyz 
+\end{verbatim}
+
+it will render the data set in the specified file.  Every 10 seconds or so, 
+AViz will re-examine the file.  If it has been modified in the mean time, 
+AViz will automatically re-read the file and udpate the rendering.  If 
+the {\bf Auto Snap} button is depressed, a sequence of PNG images is generated
+as a byproduct.
+
+\subsection{View Parameters in Animations}
+\label{viewParamAnimation}
+Note that the view parameters do not completely specify how a data set is 
+rendered -- it also depends on the extension of the data set.  If you try 
+to animate a sequence of sets with differing extensions, you will end up 
+with an uneven and jumpy animation.  The solution is to add ''dummy'' atoms
+at fixed positions, sufficiently remote from the main set.  These dummy 
+atoms will then define a constant outline of the set.  They must not be 
+rendered, of course.  
+
+If your animation is based on a file list, you may also inhibit view parameter 
+updates by using the {\bf Keep ViewScale} button in the file list dialog 
+(see section \ref{fileListDialog}).
+
+\subsection{Creating AnimatedGIF Files}
+\label{creatingAnimatedGIF}
+The menu entry {\bf Animation...} produces a convenience dialog window that 
+lets you generate an AnimatedGIF file based on image files in PNG-format.  
+The dialog window contains a text field in which the directory containing
+image files must be given.  You can use the {\bf Browse} button to select
+the directory.  
+
+Once the directory is entered, you press {\bf Create AnimatedGIF}, and let AViz
+do the rest.  
+
+This is a convenience function of experimental character.  It relies on the
+image processing program {\tt convert} which is quite common on Linux systems
+
+\section{Frequently Asked Questions}
+
+{\em Why does AViz produce PNG image files and not GIF files, which are much 
+more common?}
+
+There appears to be a legal problem with using the GIF image file format.  
+For this reason, there is a tendency in the Linux community to move over 
+to the PNG format.  It may be expected that the PNG format will rise 
+quickly in popularity, as more and more software is supporting it.  In the 
+mean time, there exists a lot of excellent image format conversion software, 
+most notably the {\bf convert}, which is part of the freely-available 
+ImageMagick package.
+
+\end{document}
