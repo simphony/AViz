@@ -1,11 +1,8 @@
-TMAKE_CFLAGS    = -O2
-TMAKE_CXXFLAGS  = -O2
-TMAKE_LFLAGS    = -Wl,-rpath,$(QTDIR)/lib
+TEMPLATE        = app
 TARGET          = aviz
-TEMPLATE	= app
-TMAKE_LIBS_QT   = -lqt-mt
-CONFIG		= qt warn_on release
-LIBS		= -lGL -lGLU
+CONFIG          += qt opengl warn_on release thread
+
+QMAKE_CXXFLAGS  = -O2
 HEADERS		= SoAnyThumbWheel.h \
 		  SoQtThumbWheel.h \
 		  animationBoard.h \
@@ -90,4 +87,3 @@ SOURCES         = SoAnyThumbWheel.cpp \
 		  trackBoard.cpp \
 		  translationBoard.cpp \
 		  typeColorNumberBox.cpp
-INTERFACES	= 
