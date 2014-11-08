@@ -8,6 +8,9 @@
 *.gch
 *.pch
 
+# Qt 
+moc_*.cpp
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
