@@ -27,7 +27,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef VERSION_H
 #define VERSION_H
 
-#define THIS_VERSION "AViz AtomicVizualization version 5.6 Dec 24 2002\n"
+#define THIS_VERSION "AViz AtomicVizualization version 6.1\n"
 
 #define START_STRING \
 THIS_VERSION\
