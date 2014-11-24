@@ -35,9 +35,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define PHI 250.0
 #define THETA 0.0
 #define CHI 0.0
-#define X 70.0
-#define Y 0.0
-#define Z 50.0
 #define DOLLY 1.0
 #define SIZE 1.0
 #define BOND_MINLENGTH 0.0
