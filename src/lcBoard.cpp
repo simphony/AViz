@@ -26,14 +26,17 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "lcBoard.h"
 
+#include <Q3GridLayout>
+#include <QLabel>
+
 // Make a popup dialog box 
 LcBoard::LcBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Set Liquid Crystals" );
 
 	// Create a hboxlayout that will fill the first row
-	hb1 = new QHBox( this, "hb1" );
+	hb1 = new Q3HBox( this, "hb1" );
 
 	// Create a label 
 	QLabel * lcL = new QLabel( hb1, "lcL" );
@@ -60,7 +63,7 @@ LcBoard::LcBoard( QWidget * parent, const char * name )
 	connect( showLcCb, SIGNAL(clicked()), this, SLOT(adjustLc()) );
 
         // Create a hboxlayout that will fill the next row
-        hb2 = new QHBox( this, "hb2" );
+        hb2 = new Q3HBox( this, "hb2" );
 
         // Add a label and color labels
         colorL = new QLabel( hb2, "colorL" );
@@ -96,13 +99,13 @@ LcBoard::LcBoard( QWidget * parent, const char * name )
         sizeBox = new SizeBox( this, "sizeBox" );
 
 	// Create a hboxlayout that will fill the next row
-	hb4 = new QHBox( this, "hb4" );
+	hb4 = new Q3HBox( this, "hb4" );
 
 	// Add radiobuttons and a label
         modeL = new QLabel( hb4, "modeL" );
 	modeL->setText( " Color Criterion: " ); 
 
-	colorMode = new QButtonGroup( 4, QGroupBox::Horizontal, hb4, "colorMode" );
+	colorMode = new Q3ButtonGroup( 4, Qt::Horizontal, hb4, "colorMode" );
 	colorMode0 = new QRadioButton( colorMode, "type" );
 	colorMode0->setText( "Type" );
 	colorMode1 = new QRadioButton( colorMode, "position" );
@@ -130,7 +133,7 @@ LcBoard::LcBoard( QWidget * parent, const char * name )
         lineTypeBox = new LineTypeBox( this, "lineTypeBox" );
 
 	// Create a hboxlayout that will fill the lowest row
-	hb5 = new QHBox( this, "hb5" );
+	hb5 = new Q3HBox( this, "hb5" );
 	
 	// Create a placeholder 
 	QLabel * emptyL1 = new QLabel( hb5, "emptyL1" );
@@ -196,7 +199,7 @@ void LcBoard::buildLayout( colorCriterion crit )
 
         // Destroy existing layout
         if (lcBox) {
-                lcBox->~QGridLayout();
+                lcBox->~Q3GridLayout();
         }
 
         // Destroy existing layout
@@ -204,7 +207,7 @@ void LcBoard::buildLayout( colorCriterion crit )
         this->setFixedHeight( numRows*ROW_HEIGHT );
 
         // Insert a grid that will hold control buttons
-        lcBox = new QGridLayout( this, numRows, numCols, SPACE, SPACE, "lcBox" );
+        lcBox = new Q3GridLayout( this, numRows, numCols, SPACE, SPACE, "lcBox" );
 
         // Add components that are always needed
         lcBox->addMultiCellWidget( hb1, 0, 0, 0, -1);

@@ -25,7 +25,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ***********************************************************************/
 
 #include "glCanvasArea.h"
-
 #include "./bitmaps/hand2.xbm"
 #include "./bitmaps/hand2Shift.xbm"
 #include "./bitmaps/hand2Zoom.xbm"
@@ -400,17 +399,17 @@ void GLCanvasArea::mousePressEvent( QMouseEvent * qme )
 
 	// Assign a hand cursor
 	switch (mouseButton) {
-		case LeftButton:
+        case Qt::LeftButton:
 			// Show standard hand icon and rotate/tilt
 			// if the left or right mouse button is pressed
 		        grabMouse( handCursor );
 		break;
-		case MidButton: 
+        case Qt::MidButton:
 			// Show pan hand icon and pan
 			// if the middle mouse button is pressed
 		        grabMouse( handShiftCursor );
 		break;	
-		case RightButton: 
+        case Qt::RightButton:
 			// Show zoom hand icon and zoom
 			// if the middle mouse button is pressed
 		        grabMouse( handZoomCursor );
@@ -533,7 +532,7 @@ void GLCanvasArea::mouseMoveEvent( QMouseEvent * qme )
 	// is either rotating/tilting or panning or zooming
 	if (mouseOn) {
 		switch (mouseButton) {
-			case LeftButton: 
+            case Qt::LeftButton:
 				// Rotate or tilt here (components must be 
 				// swapped and signs changed)
 				if (mainForm && norm2 > 0.0) {
@@ -549,7 +548,7 @@ void GLCanvasArea::mouseMoveEvent( QMouseEvent * qme )
 				}
 
 			break;
-			case MidButton: 
+            case Qt::MidButton:
 				// Pan here
 				if (dx > 0) {
 					for (int ix=0;ix<dx;ix++) {
@@ -573,7 +572,7 @@ void GLCanvasArea::mouseMoveEvent( QMouseEvent * qme )
 					}
 				}
 			break;
-			case RightButton: 
+            case Qt::RightButton:
 				// Zoom here (it's really panning into the 
 				// image)
 				if (dy > 0) {

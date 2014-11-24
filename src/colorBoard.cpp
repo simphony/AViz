@@ -44,7 +44,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // buildLayout.  The argument indicates how many 
 // colors should be specified (1, 2, or 3)	
 ColorBoard::ColorBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Set Colors" );
 
@@ -52,8 +52,8 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	// set of color sliders
 	numCols = 6;
 	canvCol = 5;
-	hb0 = new QHBox( this, "hb0" );
-	hb0->setFrameStyle( QFrame::Box | QFrame::Sunken );
+	hb0 = new Q3HBox( this, "hb0" );
+	hb0->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
 	hb0->setMargin( SPACE );
 	hb0->setSpacing( SPACE );
 	hb0->setMinimumWidth( COLOR_MIN_WIDTH );
@@ -61,8 +61,8 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 		
 	// Create a hboxlayout that will contain the center 
 	// set of color sliders
-	hb1 = new QHBox( this, "hb1" );
-	hb1->setFrameStyle( QFrame::Box | QFrame::Sunken );
+	hb1 = new Q3HBox( this, "hb1" );
+	hb1->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
 	hb1->setMargin( SPACE );
 	hb1->setSpacing( SPACE );
 	hb1->setMinimumWidth( COLOR_MIN_WIDTH );
@@ -70,8 +70,8 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	
 	// Create a hboxlayout that will contain the center 
 	// set of color sliders
-	hb2 = new QHBox( this, "hb2" );
-	hb2->setFrameStyle( QFrame::Box | QFrame::Sunken );
+	hb2 = new Q3HBox( this, "hb2" );
+	hb2->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
 	hb2->setMargin( SPACE );
 	hb2->setSpacing( SPACE );
 	hb2->setMinimumWidth( COLOR_MIN_WIDTH );
@@ -85,15 +85,15 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 
 	// Create a vertical box to contain the top set of 
 	// slider labels
-	QVBox * vb0 = new QVBox( hb0, "vb0" );
+	Q3VBox * vb0 = new Q3VBox( hb0, "vb0" );
 	
 	// Create a vertical box to contain the center set of 
 	// slider labels
-	QVBox * vb3 = new QVBox( hb1, "vb3" );
+	Q3VBox * vb3 = new Q3VBox( hb1, "vb3" );
 	
 	// Create a vertical box to contain the bottom set of 
 	// slider labels
-	QVBox * vb6 = new QVBox( hb2, "vb6" );
+	Q3VBox * vb6 = new Q3VBox( hb2, "vb6" );
 	
 	// Create three labels in the next column
 	QLabel * redL0 = new QLabel( vb0, "redL0" );
@@ -127,40 +127,40 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	
 	// Create a vertical box to contain the top set of color
 	// sliders 
-	QVBox * vb1 = new QVBox( hb0, "vb1" );
+	Q3VBox * vb1 = new Q3VBox( hb0, "vb1" );
 
 	// Create a vertical box to contain the center set of color
 	// sliders
-	QVBox * vb4 = new QVBox( hb1, "vb4" );
+	Q3VBox * vb4 = new Q3VBox( hb1, "vb4" );
 
 	// Create a vertical box to contain the bottom set of color
 	// sliders
-	QVBox * vb7 = new QVBox( hb2, "vb7" );\
+	Q3VBox * vb7 = new Q3VBox( hb2, "vb7" );\
 
 	// Create three sliders
-	redS0 = new QSlider( QSlider::Horizontal, vb1, "redS" );
+	redS0 = new QSlider( Qt::Horizontal, vb1, "redS" );
 	redS0->setMinValue( COLOR_MIN );
         redS0->setMaxValue( COLOR_MAX );
         redS0->setTickInterval( 10 );
-        redS0->setTickmarks( QSlider::Above );
+        redS0->setTickmarks( QSlider::TicksAbove );
 	redS0->setValue( COLOR_MAX );
 	redS0->setFixedWidth( SLIDER_WIDTH );
         redS0->setFixedHeight( SLIDER_HEIGHT );
 
-	greenS0 = new QSlider(  QSlider::Horizontal, vb1, "greenS" );
+	greenS0 = new QSlider(  Qt::Horizontal, vb1, "greenS" );
 	greenS0->setMinValue( COLOR_MIN );
         greenS0->setMaxValue( COLOR_MAX );
         greenS0->setTickInterval( 10 );
-        greenS0->setTickmarks( QSlider::Above );
+        greenS0->setTickmarks( QSlider::TicksAbove );
 	greenS0->setValue( COLOR_MAX );
 	greenS0->setFixedWidth( SLIDER_WIDTH );
         greenS0->setFixedHeight( SLIDER_HEIGHT );
 
-	blueS0 = new QSlider( QSlider::Horizontal, vb1, "blueS" );
+	blueS0 = new QSlider( Qt::Horizontal, vb1, "blueS" );
 	blueS0->setMinValue( COLOR_MIN );
         blueS0->setMaxValue( COLOR_MAX );
         blueS0->setTickInterval( 10 );
-        blueS0->setTickmarks( QSlider::Above );
+        blueS0->setTickmarks( QSlider::TicksAbove );
 	blueS0->setValue( COLOR_MAX );
 	blueS0->setFixedWidth( SLIDER_WIDTH );
         blueS0->setFixedHeight( SLIDER_HEIGHT );
@@ -171,29 +171,29 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	connect( blueS0, SIGNAL(valueChanged(int)), this, SLOT(adjustColor0( )) );
 
 	// Create again three sliders
-	redS1 = new QSlider( QSlider::Horizontal, vb4, "redS" );
+	redS1 = new QSlider( Qt::Horizontal, vb4, "redS" );
 	redS1->setMinValue( COLOR_MIN );
         redS1->setMaxValue( COLOR_MAX );
         redS1->setTickInterval( 10 );
-        redS1->setTickmarks( QSlider::Above );
+        redS1->setTickmarks( QSlider::TicksAbove );
 	redS1->setValue( COLOR_MAX );
 	redS1->setFixedWidth( SLIDER_WIDTH );
         redS1->setFixedHeight( SLIDER_HEIGHT );
 
-	greenS1 = new QSlider(  QSlider::Horizontal, vb4, "greenS" );
+	greenS1 = new QSlider(  Qt::Horizontal, vb4, "greenS" );
 	greenS1->setMinValue( COLOR_MIN );
         greenS1->setMaxValue( COLOR_MAX );
         greenS1->setTickInterval( 10 );
-        greenS1->setTickmarks( QSlider::Above );
+        greenS1->setTickmarks( QSlider::TicksAbove );
 	greenS1->setValue( COLOR_MAX );
 	greenS1->setFixedWidth( SLIDER_WIDTH );
         greenS1->setFixedHeight( SLIDER_HEIGHT );
 
-	blueS1 = new QSlider( QSlider::Horizontal, vb4, "blueS" );
+	blueS1 = new QSlider( Qt::Horizontal, vb4, "blueS" );
 	blueS1->setMinValue( COLOR_MIN );
         blueS1->setMaxValue( COLOR_MAX );
         blueS1->setTickInterval( 10 );
-        blueS1->setTickmarks( QSlider::Above );
+        blueS1->setTickmarks( QSlider::TicksAbove );
 	blueS1->setValue( COLOR_MAX );
 	blueS1->setFixedWidth( SLIDER_WIDTH );
         blueS1->setFixedHeight( SLIDER_HEIGHT );
@@ -204,29 +204,29 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	connect( blueS1, SIGNAL(valueChanged(int)), this, SLOT(adjustColor1( )) );
 
 	// Create again three sliders
-	redS2 = new QSlider( QSlider::Horizontal, vb7, "redS" );
+	redS2 = new QSlider( Qt::Horizontal, vb7, "redS" );
 	redS2->setMinValue( COLOR_MIN );
         redS2->setMaxValue( COLOR_MAX );
         redS2->setTickInterval( 10 );
-        redS2->setTickmarks( QSlider::Above );
+        redS2->setTickmarks( QSlider::TicksAbove );
 	redS2->setValue( COLOR_MAX );
 	redS2->setFixedWidth( SLIDER_WIDTH );
         redS2->setFixedHeight( SLIDER_HEIGHT );
 
-	greenS2 = new QSlider(  QSlider::Horizontal, vb7, "greenS" );
+	greenS2 = new QSlider(  Qt::Horizontal, vb7, "greenS" );
 	greenS2->setMinValue( COLOR_MIN );
         greenS2->setMaxValue( COLOR_MAX );
         greenS2->setTickInterval( 10 );
-        greenS2->setTickmarks( QSlider::Above );
+        greenS2->setTickmarks( QSlider::TicksAbove );
 	greenS2->setValue( COLOR_MAX );
 	greenS2->setFixedWidth( SLIDER_WIDTH );
         greenS2->setFixedHeight( SLIDER_HEIGHT );
 
-	blueS2 = new QSlider( QSlider::Horizontal, vb7, "blueS" );
+	blueS2 = new QSlider( Qt::Horizontal, vb7, "blueS" );
 	blueS2->setMinValue( COLOR_MIN );
         blueS2->setMaxValue( COLOR_MAX );
         blueS2->setTickInterval( 10 );
-        blueS2->setTickmarks( QSlider::Above );
+        blueS2->setTickmarks( QSlider::TicksAbove );
 	blueS2->setValue( COLOR_MAX );
 	blueS2->setFixedWidth( SLIDER_WIDTH );
         blueS2->setFixedHeight( SLIDER_HEIGHT );
@@ -237,16 +237,16 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	connect( blueS2, SIGNAL(valueChanged(int)), this, SLOT(adjustColor2( )) );
 
 	// Create a vertical box to contain the top color canvas
-	QVBox * vb2 = new QVBox( hb0, "vb2" );
-	vb2->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+	Q3VBox * vb2 = new Q3VBox( hb0, "vb2" );
+	vb2->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
 
 	// Create a vertical box to contain the bottom color canvas
-	QVBox * vb5 = new QVBox( hb1, "vb5" );
-	vb5->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+	Q3VBox * vb5 = new Q3VBox( hb1, "vb5" );
+	vb5->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
 
 	// Create a vertical box to contain the bottom color canvas
-	QVBox * vb8 = new QVBox( hb2, "vb8" );
-	vb5->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+	Q3VBox * vb8 = new Q3VBox( hb2, "vb8" );
+	vb5->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
 
 	// Create the top color label canvas 
 	colorLabel0 = new ColorLabel( vb2, "colorLabel0" );	
@@ -261,7 +261,7 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	colorLabel2->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
 
 	// Create a hboxlayout that will fill the lowest row
-	hb9 = new QHBox( this, "hb9" );
+	hb9 = new Q3HBox( this, "hb9" );
 
 	// Create a placeholder 
 	QLabel * emptyL = new QLabel( hb9, "emptyL" );
@@ -341,14 +341,14 @@ void ColorBoard::buildLayout( char colors )
 
 	switch (colors) {
 		case 1:
-	        	colorBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "colorBox" );
+	        	colorBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "colorBox" );
 
 			colorBox->addMultiCellWidget( hb0, 0, 0, 1, -1);
 			hb1->hide();
 			hb2->hide();
 		break;
 		case 2:
-	        	colorBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "colorBox" );
+	        	colorBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "colorBox" );
 
 			colorBox->addMultiCellWidget( hb0, 0, 0, 1, -1);
 			colorBox->addMultiCellWidget( hb1, 1, 1, 1, -1);
@@ -356,7 +356,7 @@ void ColorBoard::buildLayout( char colors )
 			hb2->hide();
 		break;
 		case 3:
-	        	colorBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "colorBox" );
+	        	colorBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "colorBox" );
 
 			colorBox->addMultiCellWidget( hb0, 0, 0, 1, -1);
 			colorBox->addMultiCellWidget( hb1, 1, 1, 1, -1);

@@ -29,19 +29,19 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "data.h"
 
-#include <qbuttongroup.h>
-#include <qhbox.h>
+#include <q3buttongroup.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
 
 #include <stdio.h>
 #include <math.h>
 
 // Line type box widget
-class LineTypeBox: public QHBox
+class LineTypeBox: public Q3HBox
 {
 	Q_OBJECT
 public:
@@ -57,7 +57,7 @@ private slots:
 
 private:
 	QLabel * thickL;
-	QButtonGroup * footThickness;
+	Q3ButtonGroup * footThickness;
         QRadioButton * footThickness0;
         QRadioButton * footThickness1;
         QRadioButton * footThickness2;

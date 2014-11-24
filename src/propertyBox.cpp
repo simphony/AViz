@@ -28,16 +28,16 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Make a box 
 PropertyBox::PropertyBox( QWidget * parent, const char * name )
-    : QHBox( parent, name )
+    : Q3HBox( parent, name )
 {
 	// Create hboxlayouts that will fill the next row; these
 	// are shown only when appropriate
-	QHBox * propertyBox = new QHBox( this, "propertyBox" );
+	Q3HBox * propertyBox = new Q3HBox( this, "propertyBox" );
 
         QLabel * propL = new QLabel( propertyBox, "propL" );
         propL->setText( "  Property: " );
 
-        property = new QButtonGroup( 8, QGroupBox::Horizontal, propertyBox, "property" );
+        property = new Q3ButtonGroup( 8, Qt::Horizontal, propertyBox, "property" );
         prop1 = new QRadioButton( property, "1" );
         prop1->setText( "1" );
         prop2 = new QRadioButton( property, "1" );

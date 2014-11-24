@@ -28,11 +28,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Make a box 
 TypeColorNumberBox::TypeColorNumberBox( QWidget * parent, const char * name, int thisMaxNumberOfColors )
-    : QHBox( parent, name )
+    : Q3HBox( parent, name )
 {
 	// Create hboxlayouts that will fill the next row; these
 	// are shown only when appropriate
-	QHBox * typeColorNumberBox = new QHBox( this, "typeColorNumberBox" );
+	Q3HBox * typeColorNumberBox = new Q3HBox( this, "typeColorNumberBox" );
         QLabel * numberL = new QLabel( typeColorNumberBox, "number" );
 	numberL->setText( " Type Colors: " ); 
 
@@ -40,7 +40,7 @@ TypeColorNumberBox::TypeColorNumberBox( QWidget * parent, const char * name, int
 	maxNumberOfColors = thisMaxNumberOfColors;
 
 	// Create radio box
-	number = new QButtonGroup( maxNumberOfColors, QGroupBox::Horizontal, typeColorNumberBox, "coordinate" );
+	number = new Q3ButtonGroup( maxNumberOfColors, Qt::Horizontal, typeColorNumberBox, "coordinate" );
 	one= new QRadioButton( number, "one" );
 	one->setText( "One" );
 	if (maxNumberOfColors > 1) {

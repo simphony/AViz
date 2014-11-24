@@ -47,20 +47,21 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qdialog.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qsizepolicy.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
 
+class Q3GridLayout;
 
 // Atom board dialog widget
 class AtomBoard: public QDialog
@@ -104,18 +105,18 @@ private:
 	PositionBox * positionBox;
 	PropertyBox * propertyBox;
 	SizeBox * sizeBox;
-	QGridLayout * atomBox;
-	QHBox * hb1;
-	QHBox * hb2;
-	QHBox * hb3;
-	QHBox * hb4;
-	QHBox * hb5;
+	Q3GridLayout * atomBox;
+	Q3HBox * hb1;
+	Q3HBox * hb2;
+	Q3HBox * hb3;
+	Q3HBox * hb4;
+	Q3HBox * hb5;
 	QComboBox * atomCob;
 	QComboBox * styleCob;
 	QCheckBox * showAtomCb;
 	QLabel * modeL;
 	QLabel * colorL;
-        QButtonGroup * colorMode;
+        Q3ButtonGroup * colorMode;
         QRadioButton * colorMode0;
         QRadioButton * colorMode1;
         QRadioButton * colorMode2;

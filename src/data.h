@@ -237,9 +237,9 @@ typedef struct {
 // Definition of a color structure, associated with a given 
 // particle type
 typedef struct{
-	float red;	// Used if coloring according to particle type
-	float green;	
-	float blue;	
+    float red;	// Used if coloring according to particle type
+    float green;
+    float blue;
 	float redMin; 	// Used if coloring according to particle position/property
 	float greenMin;
 	float blueMin;

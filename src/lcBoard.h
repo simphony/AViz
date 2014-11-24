@@ -42,19 +42,21 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "sizeBox.h"
 #include "typeColorNumberBox.h"
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qdialog.h>
-#include <qhbox.h>
-#include <qlabel.h>
+#include <q3hbox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qsizepolicy.h>
 #include <qspinbox.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
+
+class QLabel;
+class Q3GridLayout;
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -106,11 +108,11 @@ private:
         PropertyBox * propertyBox;
         SizeBox * sizeBox;
 	TypeColorNumberBox * typeColorNumberBox;
-	QHBox * hb1;
-	QHBox * hb2;
-	QHBox * hb4;
-	QHBox * hb5;
-	QGridLayout * lcBox;
+	Q3HBox * hb1;
+	Q3HBox * hb2;
+	Q3HBox * hb4;
+	Q3HBox * hb5;
+	Q3GridLayout * lcBox;
 	QComboBox * lcCob;
 	QCheckBox * showLcCb;
         QLabel * modeL;
@@ -122,8 +124,8 @@ private:
         ColorLabel * colorLabel4;
         ColorLabel * colorLabel5;
 	QPushButton * colorButton;
-        QButtonGroup * tipStyle;
-        QButtonGroup * colorMode;
+        Q3ButtonGroup * tipStyle;
+        Q3ButtonGroup * colorMode;
 	QRadioButton * colorMode0;
         QRadioButton * colorMode1;
         QRadioButton * colorMode2;

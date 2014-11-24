@@ -26,16 +26,26 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "trackBoard.h"
 
+#include "mainForm.h"
+
+#include <Q3ButtonGroup>
+#include <QComboBox>
+#include <QRadioButton>
+#include <QCheckBox>
+#include <QPushButton>
+#include <Q3GridLayout>
+#include <QLabel>
+
 // Make a popup dialog box 
 TrackBoard::TrackBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Track Rendering Control" );
 
 	// Insert a grid that will hold control buttons
 	const int numCols = 4;
         const int numRows = 3;
-        QGridLayout * trackBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "trackListBox" );
+        Q3GridLayout * trackBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "trackListBox" );
 
 
 	// Create a label 
@@ -64,7 +74,7 @@ TrackBoard::TrackBoard( QWidget * parent, const char * name )
 	trackBox->addWidget( trackRenderModeL, 1, 0);
 
 	// Create radio buttons to choose track render mode
-	stages = new QButtonGroup( 2, QGroupBox::Horizontal, this, "stages" );
+	stages = new Q3ButtonGroup( 2, Qt::Horizontal, this, "stages" );
 	trackBox->addMultiCellWidget( stages, 1, 1, 1, 2 );
 	allStagesRb = new QRadioButton( stages, "allStages" );
 	allStagesRb->setText( "All Stages" );
@@ -90,7 +100,7 @@ TrackBoard::TrackBoard( QWidget * parent, const char * name )
         connect( showTracksPb, SIGNAL(clicked()), SLOT(showTracks()) );
 
 	// Create a horizontal box 
-	QHBox * hb0 = new QHBox( this, "hb0" );
+	Q3HBox * hb0 = new Q3HBox( this, "hb0" );
 	trackBox->addMultiCellWidget( hb0, 2, 2, 1, 3 );
 
 	// Create a placeholder 

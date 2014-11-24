@@ -26,12 +26,12 @@ static const char rcsid[] =
 #include <assert.h>
 #include <stdio.h>
 
-#include <qpainter.h>
-#include <qdrawutil.h>
-#include <qimage.h>
-#include <qpixmap.h>
+#include <QPainter>
+#include <QImage>
+#include <QPaintEvent>
+#include <QPixmap>
+#include <QMouseEvent>
 
-#include "soqtdefs.h"
 #include "SoAnyThumbWheel.h"
 #include "SoQtThumbWheel.h"
 
@@ -148,11 +148,11 @@ SoQtThumbWheel::paintEvent(
   // wheelrect is now wheel-only
 
   if ( this->orient == Vertical )
-    bitBlt( this, wheelrect.left(), wheelrect.top(), this->pixmaps[pixmap],
-            0, 0, w, d, CopyROP );
+    p.drawPixmap(wheelrect.left(), wheelrect.top(), *this->pixmaps[pixmap],
+            0, 0, w, d);
   else
-    bitBlt( this, wheelrect.left(), wheelrect.top(), this->pixmaps[pixmap],
-            0, 0, d, w, CopyROP );
+    p.drawPixmap(wheelrect.left(), wheelrect.top(), *this->pixmaps[pixmap],
+            0, 0, d, w);
   this->currentPixmap = pixmap;
 } // paintEvent()
 
@@ -167,7 +167,7 @@ SoQtThumbWheel::mousePressEvent(
   if ( this->state != SoQtThumbWheel::Idle )
     return;
 
-  if ( event->button() != LeftButton )
+  if ( event->button() != Qt::LeftButton )
     return;
 
   QRect wheel;
@@ -234,7 +234,7 @@ SoQtThumbWheel::mouseReleaseEvent(
   if ( this->state != SoQtThumbWheel::Dragging )
     return;
 
-  if ( event->button() != LeftButton )
+  if ( event->button() != Qt::LeftButton )
     return;
 
   this->wheelValue = this->tempWheelValue;

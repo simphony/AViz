@@ -28,24 +28,10 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define STRETCHB_H 
 
 #include "data.h"
-#include "floatSpin.h"
-#include "mainForm.h"
-#include "parameterLimits.h"
+#include <QDialog>
 
-#include <qbuttongroup.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qsizepolicy.h>
-#include <qwidget.h>
-
-#include <stdio.h>
-#include <math.h>
+class QFSpinBox;
+class MainForm;
 
 // Stretch board dialog widget
 class StretchBoard: public QDialog

@@ -54,36 +54,39 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "./pixmaps/eyeSeparationPlus.xpm"
 #include "./pixmaps/eyeSeparationMinus.xpm"
 
+#include <QLabel>
+#include <Q3Frame>
+
 //  Framed canvas widget constructor and destructor
 GLCanvasFrame::GLCanvasFrame( QWidget* parent, const char* name )
-    : QVBox( parent, name )
+    : Q3VBox( parent, name )
 {
 	// Draw a frame in a new window
-	drawFrame = new QVBox( NULL, "drawFrame" );
+	drawFrame = new Q3VBox( NULL, "drawFrame" );
 
-        drawFrame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+        drawFrame->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
         drawFrame->setLineWidth( 2 );
 
 	// Construct a horizontal box to contain the 
 	// drawing area and some controls
-	QHBox * hb0 = new QHBox( drawFrame, "hb0" );
+	Q3HBox * hb0 = new Q3HBox( drawFrame, "hb0" );
 	// Construct a vertical box to contain controls	
-	QVBox * vb0 = new QVBox( hb0, "vb0" );
+	Q3VBox * vb0 = new Q3VBox( hb0, "vb0" );
 	vb0->setFixedWidth( FRAME_WIDTH );
 
 	// Construct a drawing area widget; decorate it with a frame 
-	QVBox * vb0Frame = new QVBox( hb0, "vb0Frame" );
-        vb0Frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+	Q3VBox * vb0Frame = new Q3VBox( hb0, "vb0Frame" );
+        vb0Frame->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
         vb0Frame->setLineWidth( 2 );
 	drawArea = NULL;
 	drawArea = new GLCanvasArea( vb0Frame, "glCanvasArea" );
 
 	// Construct a vertical box to contain controls	
-	QVBox * vb1 = new QVBox( hb0, "vb1" );
+	Q3VBox * vb1 = new Q3VBox( hb0, "vb1" );
 	vb1->setFixedWidth( FRAME_WIDTH );
 
 	// Now construct a horizontal box to contain more controls
-	QHBox * hb1 = new QHBox( drawFrame, "hb1" );
+	Q3HBox * hb1 = new Q3HBox( drawFrame, "hb1" );
 	hb1->setFixedHeight( FRAME_WIDTH );
 
 	// Add a control button that also serves as a label

@@ -29,13 +29,13 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "data.h"
 
-#include <qbuttongroup.h>
-#include <qhbox.h>
+#include <q3buttongroup.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
 
 // Position box widget
-class PositionBox: public QHBox
+class PositionBox: public Q3HBox
 {
 	Q_OBJECT
 public:
@@ -48,7 +48,7 @@ public slots:
 private slots:
 
 private:
-	QButtonGroup * coordinate;
+	Q3ButtonGroup * coordinate;
 	QRadioButton * xcoord;
 	QRadioButton * ycoord;
 	QRadioButton * zcoord;

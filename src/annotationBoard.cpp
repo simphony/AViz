@@ -26,9 +26,12 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "annotationBoard.h"
 
+#include <Q3GridLayout>
+#include <QLabel>
+
 // Make a popup dialog box that will hold a vertical row of buttons
 AnnotationBoard::AnnotationBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Set Annotation" );
 
@@ -36,7 +39,7 @@ AnnotationBoard::AnnotationBoard( QWidget * parent, const char * name )
 	// plus a row of control buttons
 	const int numCols = 7;
         const int numRows = 3;
-        QGridLayout * annotBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "annotBox" );
+        Q3GridLayout * annotBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "annotBox" );
 	
 	// Create a label
 	QLabel * textL = new QLabel( this, "textL" );
@@ -83,7 +86,7 @@ AnnotationBoard::AnnotationBoard( QWidget * parent, const char * name )
 	annotationYSb->setLineStep( 10 );
 	annotBox->addWidget( annotationYSb, 1, 6);
 
-	QHBox * hb = new QHBox( this, "hb" );
+	Q3HBox * hb = new Q3HBox( this, "hb" );
 	annotBox->addMultiCellWidget( hb, numRows-1, numRows-1, 0, -1);
 	
 	// Create a placeholder 

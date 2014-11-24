@@ -29,12 +29,14 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "defaults.h"
  
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qslider.h>
 #include <qwidget.h>
+
+class QPaintEvent;
 
 #include <stdio.h>
 #include <math.h>

@@ -36,16 +36,17 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <qcombobox.h>
 #include <qdialog.h>
-#include <qframe.h>
-#include <qhbox.h>
+#include <q3frame.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qsizepolicy.h>
 #include <qslider.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
+#include <q3gridlayout.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -92,8 +93,8 @@ private:
 	QWidget * lcb;
 	QWidget * pob;
 	QWidget * pb;
-	QGridLayout * colorBox;
-	QHBox * hb0, * hb1, * hb2, *hb9;
+	Q3GridLayout * colorBox;
+	Q3HBox * hb0, * hb1, * hb2, *hb9;
 	QLabel *atomL; 
 	QLabel * topL, * centerL, * bottomL;
 	ColorLabel * colorLabel0;

@@ -32,13 +32,14 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "fileFunctions.h"
 #include "parameterLimits.h"
 
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qsize.h>
 #include <qsizepolicy.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
+#include <Q3GridLayout>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -147,7 +148,7 @@ private:
 	QWidget * stb;
 	QWidget * tb;
 	QWidget * trab;
-	QGridLayout * mainBox;
+	Q3GridLayout * mainBox;
 	QLabel * status;
 	fileList fl;
 	fileType ft;

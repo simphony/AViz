@@ -34,12 +34,12 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "parameterLimits.h"
 #include "SoQtThumbWheel.h"
 
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qgl.h>
 #include <qpixmap.h>
 #include <qtoolbutton.h>
 #include <qtimer.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,7 +49,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 
 // Frame widget containing the Open GL drawing area
-class GLCanvasFrame: public QVBox
+class GLCanvasFrame: public Q3VBox
 {
 	Q_OBJECT
 
@@ -133,7 +133,7 @@ private slots:
 private:
 	MainForm * mainForm;
 	GLCanvasArea * drawArea;
-	QVBox * drawFrame;
+	Q3VBox * drawFrame;
 	SoQtThumbWheel * tiltWheel;
 	SoQtThumbWheel * rotWheel;
 	SoQtThumbWheel * spinWheel;

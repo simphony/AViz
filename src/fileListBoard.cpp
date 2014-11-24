@@ -26,16 +26,18 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "fileListBoard.h"
 
+#include <Q3GridLayout>
+
 // Make a popup dialog box 
 FileListBoard::FileListBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: File List Control" );
 
 	// Insert a grid that will hold control buttons
 	const int numCols = 5;
         const int numRows = 4;
-        QGridLayout * fileListBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "fileListBox" );
+        Q3GridLayout * fileListBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "fileListBox" );
 
 	// Create buttons
 	QPushButton * singleStepPb = new QPushButton( this, "singleStep" );
@@ -60,7 +62,7 @@ FileListBoard::FileListBoard( QWidget * parent, const char * name )
         connect( cyclePb, SIGNAL(clicked()), SLOT(bcycle()) );
 
 	// Create radio buttons to choose direction
-	direction = new QButtonGroup( 2, QGroupBox::Horizontal, this, "direction" );
+	direction = new Q3ButtonGroup( 2, Qt::Horizontal, this, "direction" );
 	fileListBox->addMultiCellWidget( direction, 0, 0, 3, 4 );
 	forwardRb = new QRadioButton( direction, "forward" );
 	forwardRb->setText( "Forward" );

@@ -29,13 +29,13 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "data.h"
 
-#include <qbuttongroup.h>
-#include <qhbox.h>
+#include <q3buttongroup.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
 
 // TypeColorNumberBox box widget
-class TypeColorNumberBox: public QHBox
+class TypeColorNumberBox: public Q3HBox
 {
 	Q_OBJECT
 public:
@@ -48,7 +48,7 @@ public slots:
 private slots:
 
 private:
-	QButtonGroup * number;
+	Q3ButtonGroup * number;
 	QRadioButton * one;
 	QRadioButton * two;
 	QRadioButton * three;

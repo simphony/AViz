@@ -26,6 +26,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "colorLabel.h"
 
+#include <QPaintEvent>
+
 // Construct the color label
 ColorLabel::ColorLabel( QWidget *parent, const char *name )
         : QWidget( parent, name )
@@ -37,9 +39,9 @@ ColorLabel::ColorLabel( QWidget *parent, const char *name )
 // Set the label color
 void ColorLabel::setColor( float red, float green, float blue )
 {
-	int redi = (int)floor( (double)red*255.0 );
-	int greeni = (int)floor( (double)green*255.0 );
-	int bluei = (int)floor( (double)blue*255.0 );
+	int redi = (int)floor( (double)Qt::red*255.0 );
+	int greeni = (int)floor( (double)Qt::green*255.0 );
+	int bluei = (int)floor( (double)Qt::blue*255.0 );
 
 	setPalette( QPalette( QColor( redi, greeni, bluei) ) );
 }

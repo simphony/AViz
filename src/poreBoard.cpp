@@ -26,14 +26,16 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "poreBoard.h"
 
+#include <Q3GridLayout>
+
 // Make a popup dialog box 
 PoreBoard::PoreBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Set Pores" );
 
 	// Create a hboxlayout that will fill the first row
-	hb1 = new QHBox( this, "hb1" );
+	hb1 = new Q3HBox( this, "hb1" );
 
 	// Create a label 
 	QLabel * poreL = new QLabel( hb1, "poreL" );
@@ -60,7 +62,7 @@ PoreBoard::PoreBoard( QWidget * parent, const char * name )
 	connect( showPoreCb, SIGNAL(clicked()), this, SLOT(adjustPore()) );
 
         // Create a hboxlayout that will fill the next row
-        hb2 = new QHBox( this, "hb2" );
+        hb2 = new Q3HBox( this, "hb2" );
 
         // Add a label and color labels
         colorL = new QLabel( hb2, "colorL" );
@@ -96,13 +98,13 @@ PoreBoard::PoreBoard( QWidget * parent, const char * name )
 	sizeBox = new SizeBox( this, "sizeBox" );
 
 	// Create a hboxlayout that will fill the next row
-	hb4 = new QHBox( this, "hb4" );
+	hb4 = new Q3HBox( this, "hb4" );
 	
 	// Add radiobuttons and a label
         modeL = new QLabel( hb4, "modeL" );
 	modeL->setText( " Color Criterion: " ); 
 
-	colorMode = new QButtonGroup( 3, QGroupBox::Horizontal, hb4, "colorMode" );
+	colorMode = new Q3ButtonGroup( 3, Qt::Horizontal, hb4, "colorMode" );
 	colorMode0 = new QRadioButton( colorMode, "type" );
 	colorMode0->setText( "Type" );
 	colorMode1 = new QRadioButton( colorMode, "position" );
@@ -130,7 +132,7 @@ PoreBoard::PoreBoard( QWidget * parent, const char * name )
 	lineTypeBox = new LineTypeBox( this, "lineTypeBox" );
 	
 	// Create a hboxlayout that will fill the lowest row
-	hb5 = new QHBox( this, "hb5" );
+	hb5 = new Q3HBox( this, "hb5" );
         
 	// Create a placeholder 
 	QLabel * emptyL1 = new QLabel( hb5, "emptyL1" );
@@ -197,7 +199,7 @@ void PoreBoard::buildLayout( colorCriterion crit )
 
         // Destroy existing layout
         if (poreBox) {
-                poreBox->~QGridLayout();
+                poreBox->~Q3GridLayout();
         }
 
         // Destroy existing layout
@@ -205,7 +207,7 @@ void PoreBoard::buildLayout( colorCriterion crit )
         this->setFixedHeight( numRows*ROW_HEIGHT );
 
         // Insert a grid that will hold control buttons
-        poreBox = new QGridLayout( this, numRows, numCols, SPACE, SPACE, "poreBox" );
+        poreBox = new Q3GridLayout( this, numRows, numCols, SPACE, SPACE, "poreBox" );
 
         // Add components that are always needed
         poreBox->addMultiCellWidget( hb1, 0, 0, 0, -1);

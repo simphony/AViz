@@ -28,7 +28,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Make a popup dialog box 
 SliceBoard::SliceBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Set Clipping" );
 
@@ -36,7 +36,7 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
 	// plus a row of control buttons
 	const int numCols = 5;
         const int numRows = 5;
-        QGridLayout * sliceBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "sliceBox" );
+        Q3GridLayout * sliceBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "sliceBox" );
 
 	// Create a check box
 	sliceCb = new QCheckBox( this, "sliceCb" );
@@ -133,7 +133,7 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
         QObject::connect( indicateZCb, SIGNAL(clicked()), this, SLOT(sliceChangedZ()) );
 
 	// Create a hboxlayout that will fill the lowest row
-	QHBox * hb = new QHBox( this, "hb" );
+	Q3HBox * hb = new Q3HBox( this, "hb" );
 	sliceBox->addMultiCellWidget( hb, numRows-1, numRows-1, 0, -1);
 	
 	// Create a placeholder 

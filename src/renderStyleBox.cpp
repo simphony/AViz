@@ -28,10 +28,10 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Make a hbox that will hold the render quality elements
 RenderBox::RenderBox( QWidget * parent, const char * name )
-    : QVBox( parent, name)
+    : Q3VBox( parent, name)
 {
 	// Create a horizontal box 
-	QHBox * hb0 = new QHBox( this, "hb0" );
+	Q3HBox * hb0 = new Q3HBox( this, "hb0" );
 	hb0->setMargin( SPACE );
 
 	// Add labels and combo boxes

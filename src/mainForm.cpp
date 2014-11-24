@@ -62,7 +62,7 @@ MainForm::MainForm( QWidget *parent, const char *name )
 	// Make a grid layout that will hold all elements
 	numCols = 1;
 	numRows = 4;
-	mainBox = new QGridLayout( this, numCols, numRows, 0 );
+	mainBox = new Q3GridLayout( this, numCols, numRows, 0 );
 
 	// Create the OpenGL widget
 	glCanvasFrame = NULL;
@@ -92,9 +92,9 @@ MainForm::MainForm( QWidget *parent, const char *name )
 	status = NULL;
 	status = new QLabel( this );
 	if (status) {
-		status->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+		status->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
 		status->setFixedHeight( status->sizeHint().height() );
-		status->setAlignment( AlignVCenter | AlignLeft );
+		status->setAlignment( Qt::AlignVCenter | Qt::AlignLeft );
 		mainBox->addMultiCellWidget( status, numRows-1, numRows-1, 0, numCols-1 );
 	}
 

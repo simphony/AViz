@@ -40,7 +40,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <qcursor.h>
 #include <qevent.h>
 #include <qgl.h>
-#include <qhbox.h>
+#include <q3hbox.h>
+#include <QMouseEvent>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,6 +50,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <unistd.h>
 #include <X11/Xlib.h>
 #include <GL/glx.h>
+#include <GL/glu.h>
 
 //  Open GL drawing area
 class GLCanvasArea: public QGLWidget

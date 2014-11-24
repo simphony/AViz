@@ -26,16 +26,24 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "stretchBoard.h"
 
+#include "floatSpin.h"
+#include "mainForm.h"
+
+#include <Q3GridLayout>
+#include <QPushButton>
+#include <QLabel>
+
+
 // Make a popup dialog box 
 StretchBoard::StretchBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Set Data Stretching" );
 
 	// Insert a grid that will hold control buttons
 	const int numCols = 3;
         const int numRows = 4;
-        QGridLayout * stretchBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "stretchBox" );
+        Q3GridLayout * stretchBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "stretchBox" );
 
 	// Create labels and spin boxes
 	QLabel * labelx = new QLabel( this, "labelx" );
@@ -84,7 +92,7 @@ StretchBoard::StretchBoard( QWidget * parent, const char * name )
         connect( resetz, SIGNAL(clicked()), SLOT(doResetZ()) );
 
 	// Create a hboxlayout that will fill the lowest row
-	QHBox * hb = new QHBox( this, "hb" );
+	Q3HBox * hb = new Q3HBox( this, "hb" );
 	stretchBox->addMultiCellWidget( hb, numRows-1, numRows-1, 0, -1);
 	
 	// Create a placeholder 

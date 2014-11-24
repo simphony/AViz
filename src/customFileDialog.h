@@ -27,14 +27,14 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef CFILEDI_H
 #define CFILEDI_H 
 
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qpushbutton.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 
 // Define floating-point spin box
-class CustomFileDialog: public QFileDialog
+class CustomFileDialog: public Q3FileDialog
 { 
 	Q_OBJECT
 public:

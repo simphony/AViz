@@ -26,14 +26,17 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "polymerBoard.h"
 
+#include <Q3GridLayout>
+#include <QLabel>
+
 // Make a popup dialog box 
 PolymerBoard::PolymerBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Set Polymer Atom Types" );
 
 	// Create a hboxlayout that will fill the first row
-	hb1 = new QHBox( this, "hb1" );
+	hb1 = new Q3HBox( this, "hb1" );
 
 	// Create a label 
 	QLabel * atomL = new QLabel( hb1, "atomL" );
@@ -60,7 +63,7 @@ PolymerBoard::PolymerBoard( QWidget * parent, const char * name )
 	connect( showPolymerAtomCb, SIGNAL(clicked()), this, SLOT(adjustPolymer()) );
 
 	// Create a hboxlayout that will fill the next row
-	hb2 = new QHBox( this, "hb2" );
+	hb2 = new Q3HBox( this, "hb2" );
 
 	// Add a label and color labels
         colorL = new QLabel( hb2, "colorL" );
@@ -95,13 +98,13 @@ PolymerBoard::PolymerBoard( QWidget * parent, const char * name )
 	sizeBox = new SizeBox( this, "sizeBox" );
 
 	// Create a hboxlayout that will fill the next row
-        hb4 = new QHBox( this, "hb4" );
+        hb4 = new Q3HBox( this, "hb4" );
 
         // Add radiobuttons and a label
         modeL = new QLabel( hb4, "modeL" );
         modeL->setText( " Color Criterion: " );
 
-        colorMode = new QButtonGroup( 4, QGroupBox::Horizontal, hb4, "colorMode"
+        colorMode = new Q3ButtonGroup( 4, Qt::Horizontal, hb4, "colorMode"
  );
         colorMode0 = new QRadioButton( colorMode, "type" );
         colorMode0->setText( "Type" );
@@ -126,7 +129,7 @@ PolymerBoard::PolymerBoard( QWidget * parent, const char * name )
 	codeBox = new CodeBox( this, "codeBox" );
 
 	// Create a hboxlayout that will fill the lowest row
-	hb5 = new QHBox( this, "hb5" );
+	hb5 = new Q3HBox( this, "hb5" );
 	
 	// Create pushbuttons that will go into the lowest row
 	QPushButton * bonds = new QPushButton( hb5, "bonds" );
@@ -209,7 +212,7 @@ void PolymerBoard::buildLayout( colorCriterion crit )
 	this->setFixedHeight( numRows*ROW_HEIGHT );
 
 	// Insert a grid that will hold control buttons
-        polymerBox = new QGridLayout( this, numRows, numCols, SPACE, SPACE, "polymerBox" );
+        polymerBox = new Q3GridLayout( this, numRows, numCols, SPACE, SPACE, "polymerBox" );
 
 	// Add components that are always needed
 	polymerBox->addMultiCellWidget( hb1, 0, 0, 0, -1);

@@ -28,14 +28,14 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Make a box
 LineTypeBox::LineTypeBox( QWidget * parent, const char * name )
-    : QHBox( parent, name )
+    : Q3HBox( parent, name )
 {
 	// Add radiobuttons and a label
 	thickL = new QLabel( this, "thickL" );
 	thickL->setText( "  Thickness: " );
 
         // Create radiobuttons to set the thickness
-        footThickness = new QButtonGroup( 2, QGroupBox::Horizontal, this, "footThickness");
+        footThickness = new Q3ButtonGroup( 2, Qt::Horizontal, this, "footThickness");
 
         footThickness0 = new QRadioButton( footThickness, "thin" );
         footThickness0->setText( "Thin" );

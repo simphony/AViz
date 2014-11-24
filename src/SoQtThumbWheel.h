@@ -23,16 +23,18 @@
 #define SOQT_THUMBWHEEL_H
 
 #include <qwidget.h>
-#include <qrangecontrol.h>
+#include <q3rangecontrol.h>
 
 #include "SoQtBasic.h"
 
 class QPixmap;
+class QPaintEvent;
+class QMouseEvent;
 class SoAnyThumbWheel;
 
 // *************************************************************************
 
-class SOQT_DLL_EXPORT SoQtThumbWheel : public QWidget, public QRangeControl
+class SOQT_DLL_EXPORT SoQtThumbWheel : public QWidget, public Q3RangeControl
 {
   Q_OBJECT
 

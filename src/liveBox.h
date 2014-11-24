@@ -30,17 +30,16 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "data.h"
 #include "mainForm.h"
 
-#include <qbutton.h>
 #include <qcheckbox.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qpushbutton.h>
 #include <qsizepolicy.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
 #include <stdio.h>
 
 // Live box in main form
-class LiveBox: public QHBox
+class LiveBox: public Q3HBox
 {
 	Q_OBJECT
 public:

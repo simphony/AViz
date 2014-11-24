@@ -34,12 +34,12 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "fileFunctions.h"
 #include "floatSpin.h"
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qdialog.h>
-#include <qgrid.h>
-#include <qhbox.h>
+#include <q3grid.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -79,9 +79,9 @@ private:
 	MainForm * mainForm;
 	QComboBox * fParticleCob;
 	QComboBox * tParticleCob;
-	QButtonGroup * bondMode;
-	QButtonGroup * bondColor;
-	QButtonGroup * bondThickness;
+	Q3ButtonGroup * bondMode;
+	Q3ButtonGroup * bondColor;
+	Q3ButtonGroup * bondThickness;
 	QRadioButton * bondMode0;
 	QRadioButton * bondMode1;
 	QRadioButton * bondColor0;

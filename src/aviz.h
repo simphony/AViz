@@ -40,13 +40,13 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "version.h"
 
 #include <qapplication.h>
-#include <qfiledialog.h>
-#include <qmainwindow.h>
+#include <q3filedialog.h>
+#include <q3mainwindow.h>
 #include <qmessagebox.h>
 #include <qmenubar.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qstatusbar.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qtimer.h>
 
 #include <stdio.h>
@@ -55,7 +55,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <unistd.h>
 #include <time.h>
 
-class AViz: public QMainWindow 
+class AViz: public Q3MainWindow 
 {
 	Q_OBJECT
 public:
@@ -139,18 +139,18 @@ private slots:
 
 private:
 	MainForm * mf;
-	QPopupMenu * file;
-	QPopupMenu * elements;
-	QPopupMenu * view;
-	QPopupMenu * settings;
-	QPopupMenu * data;
-	QPopupMenu * help;
-	QPopupMenu * openfile;
-	QPopupMenu * elementsAtoms;
-	QPopupMenu * elementsPolymers;
-	QPopupMenu * viewpoint;
-	QPopupMenu * viewmode;
-	QPopupMenu * background;
+	Q3PopupMenu * file;
+	Q3PopupMenu * elements;
+	Q3PopupMenu * view;
+	Q3PopupMenu * settings;
+	Q3PopupMenu * data;
+	Q3PopupMenu * help;
+	Q3PopupMenu * openfile;
+	Q3PopupMenu * elementsAtoms;
+	Q3PopupMenu * elementsPolymers;
+	Q3PopupMenu * viewpoint;
+	Q3PopupMenu * viewmode;
+	Q3PopupMenu * background;
 	QTimer * watchTimer; 
 	int atomsId;
 	int spinsId;

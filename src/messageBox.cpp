@@ -26,9 +26,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "messageBox.h"
 
+#include <Q3GridLayout>
+
 // Make a popup dialog box 
 MessageBox::MessageBox( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Message" );
 
@@ -36,10 +38,10 @@ MessageBox::MessageBox( QWidget * parent, const char * name )
 	// and a button
 	const int numCols = 1;
         const int numRows = 2;
-        QGridLayout * messageBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "messageBox" );
+        Q3GridLayout * messageBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "messageBox" );
 
 	// Create a hbox that will contain a label 
-	QHBox * hb1 = new QHBox( this, "hb1" );
+	Q3HBox * hb1 = new Q3HBox( this, "hb1" );
 	hb1->setMargin( SPACE );
 	messageBox->addWidget( hb1, 0, 0 );
 
@@ -47,7 +49,7 @@ MessageBox::MessageBox( QWidget * parent, const char * name )
 	messageL = new QLabel( hb1, "messageL" );
 
 	// Create a hbox that will contain a button
-	QHBox * hb2 = new QHBox( this, "hb2" );
+	Q3HBox * hb2 = new Q3HBox( this, "hb2" );
 	hb2->setMargin( SPACE );
 	messageBox->addWidget( hb2, 1, 0 );
 

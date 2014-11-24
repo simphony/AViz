@@ -27,31 +27,18 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef TRACKB_H
 #define TRACKB_H 
 
-#include "data.h"
-#include "defaults.h"
 #include "defaultParticles.h"
-#include "fileFunctions.h"
-#include "mainForm.h"
 
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
 #include <qdialog.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qsizepolicy.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qwidget.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <unistd.h>
+class MainForm;
+
+class Q3ButtonGroup;
+class QComboBox;
+class QRadioButton;
+class QCheckBox;
+class QPushButton;
+class QLabel;
 
 // File list board dialog widget
 class TrackBoard: public QDialog
@@ -78,7 +65,7 @@ private:
 	MainForm * mainForm;
 	QComboBox * typeCob;
 	QLabel * trackRenderModeL;
-	QButtonGroup * stages;
+	Q3ButtonGroup * stages;
 	QRadioButton * allStagesRb;
 	QRadioButton * upToStagesRb;
 	QPushButton * showTracksPb;

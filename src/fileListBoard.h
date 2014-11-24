@@ -32,7 +32,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "fileFunctions.h"
 #include "mainForm.h"
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qdialog.h>
 #include <qlabel.h>
@@ -79,7 +79,7 @@ private slots:
 
 private:
 	MainForm * mainForm;
-	QButtonGroup * direction;
+	Q3ButtonGroup * direction;
 	QRadioButton * forwardRb;
 	QRadioButton * backwardRb;
 	QLineEdit * fileLine;

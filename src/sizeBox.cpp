@@ -28,7 +28,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Make a box
 SizeBox::SizeBox( QWidget * parent, const char * name )
-    : QHBox( parent, name )
+    : Q3HBox( parent, name )
 {
 	this->setMargin( SPACE );
 
@@ -36,7 +36,7 @@ SizeBox::SizeBox( QWidget * parent, const char * name )
 	sizeL = new QLabel( this, "sizeL" );
         sizeL->setText( " Rel. Render Size: " );
 
-        rSize = new QButtonGroup( 5, QGroupBox::Horizontal, this, "rSize" );
+        rSize = new Q3ButtonGroup( 5, Qt::Horizontal, this, "rSize" );
         rSize0 = new QRadioButton( rSize, "regular" );
         rSize0->setText( "Regular" );
         rSize1 = new QRadioButton( rSize, "tiny" );

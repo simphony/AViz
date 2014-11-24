@@ -25,16 +25,24 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ***********************************************************************/
 
 #include "translationBoard.h"
+#include "floatSpin.h"
+#include "mainForm.h"
+
+#include <Q3GridLayout>
+#include <QLabel>
+#include <QPushButton>
+
+#include <math.h>
 
 TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Set Data Translation" );
 
 	// Insert a grid that will hold control buttons
 	const int numCols = 4;
         const int numRows = 4;
-        QGridLayout * transBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "transBox" );
+        Q3GridLayout * transBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "transBox" );
 
 	// Create labels and spin boxes
 	QLabel * labelx = new QLabel( this, "labelx" );
@@ -87,7 +95,7 @@ TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
 	transBox->addWidget( panSBForward, 2, 3);
 
 	// Create a hboxlayout that will fill the lowest row
-	QHBox * hb = new QHBox( this, "hb" );
+	Q3HBox * hb = new Q3HBox( this, "hb" );
 	transBox->addMultiCellWidget( hb, numRows-1, numRows-1, 0, -1);
 	
 	// Create a pushbutton

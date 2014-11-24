@@ -28,7 +28,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Define a file dialog with a generate file list button
 CustomFileDialog::CustomFileDialog( )
-    : QFileDialog( 0, 0, TRUE )
+    : Q3FileDialog( 0, 0, TRUE )
 {
 	QPushButton * genFileListPb = new QPushButton( this );
 	genFileListPb->setText( "Generate File List" );

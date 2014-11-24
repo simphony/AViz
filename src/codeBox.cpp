@@ -26,11 +26,13 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "codeBox.h"
 
+#include <Q3Frame>
+
 // Make a box
 CodeBox::CodeBox( QWidget * parent, const char * name )
-    : QHBox( parent, name )
+    : Q3HBox( parent, name )
 {
-	this->setFrameStyle( QFrame::Box | QFrame::Sunken );
+	this->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
 	this->setMargin( SPACE );
 
         codeRedL = new QLabel( this, "codeRedL" );

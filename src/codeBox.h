@@ -29,16 +29,16 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "data.h"
 
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
 
 #include <stdio.h>
 
 // Code box widget
-class CodeBox: public QHBox
+class CodeBox: public Q3HBox
 {
 	Q_OBJECT
 public:

@@ -31,21 +31,17 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "defaults.h"
 #include "mainForm.h"
 
-#include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
 #include <qspinbox.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <q3vbox.h>
 
 #include <stdio.h>
 #include <math.h>
 
 // Render quality box in main form
-class RenderBox: public QVBox
+class RenderBox: public Q3VBox
 {
 	Q_OBJECT
 public:

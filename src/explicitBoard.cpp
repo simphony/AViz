@@ -32,9 +32,14 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "./pixmaps/dolly.xpm"
 #include "./pixmaps/fovy.xpm"
 
+#include <QPixmap>
+#include <Q3GridLayout>
+#include <QLabel>
+#include <QPushButton>
+
 // Make a popup dialog box
 ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Set Viewpoint" );
 
@@ -42,7 +47,7 @@ ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
 	// plus a row of control buttons
 	const int numCols = 3;
         const int numRows = 6;
-        QGridLayout * explicitBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "explicitBox" );
+        Q3GridLayout * explicitBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "explicitBox" );
 
         // Create a label and a spin box - PHI
         phiL = new QLabel( this, "phiL" );
@@ -140,7 +145,7 @@ ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
         QObject::connect( fovySb, SIGNAL(valueChanged(int)), this, SLOT(registerSettings()) );
 
 	// Create a hboxlayout that will fill the lowest row
-	QHBox * hb = new QHBox( this, "hb" );
+	Q3HBox * hb = new Q3HBox( this, "hb" );
 	explicitBox->addMultiCellWidget( hb, numRows-1, numRows-1, 0, -1);
 
 	// Create a placeholder

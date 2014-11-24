@@ -32,13 +32,13 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <qcheckbox.h>
 #include <qdialog.h>
-#include <qgrid.h>
+#include <q3grid.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
 
 

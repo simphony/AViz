@@ -33,15 +33,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "mainForm.h"
 #include "parameterLimits.h"
 
-#include <qdialog.h>
-#include <qgrid.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qwidget.h>
+#include <QDialog>
+class QLabel;
 
 #include <stdio.h>
 #include <stdlib.h>

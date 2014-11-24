@@ -29,8 +29,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "data.h"
 
-#include <qbuttongroup.h>
-#include <qhbox.h>
+#include <q3buttongroup.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
 #include <qwidget.h>
@@ -38,7 +38,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <stdio.h>
 
 // Size box widget
-class SizeBox: public QHBox
+class SizeBox: public Q3HBox
 {
 	Q_OBJECT
 public:
@@ -53,7 +53,7 @@ private slots:
 
 private:
 	QLabel * sizeL;
-	QButtonGroup * rSize;
+	Q3ButtonGroup * rSize;
         QRadioButton * rSize0;
         QRadioButton * rSize1;
         QRadioButton * rSize2;

@@ -28,15 +28,15 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Make a box 
 PositionBox::PositionBox( QWidget * parent, const char * name )
-    : QHBox( parent, name )
+    : Q3HBox( parent, name )
 {
 	// Create hboxlayouts that will fill the next row; these
 	// are shown only when appropriate
-	QHBox * positionBox = new QHBox( this, "positionBox" );
+	Q3HBox * positionBox = new Q3HBox( this, "positionBox" );
         QLabel * posL = new QLabel( positionBox, "posL" );
 	posL->setText( " Coordinate: " ); 
 
-	coordinate = new QButtonGroup( 3, QGroupBox::Horizontal, positionBox, "coordinate" );
+	coordinate = new Q3ButtonGroup( 3, Qt::Horizontal, positionBox, "coordinate" );
 	xcoord = new QRadioButton( coordinate, "x" );
 	xcoord->setText( "X" );
 	ycoord = new QRadioButton( coordinate, "y" );

@@ -31,7 +31,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "mainForm.h"
 
 #include <qdialog.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qwidget.h>

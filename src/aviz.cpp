@@ -26,19 +26,21 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "aviz.h"
 
+#include <Q3PopupMenu>
+
 // Constructor and deconstructor of main widget
 AViz::AViz() 
-    : QMainWindow( NULL, "aviz", WDestructiveClose )
+    : Q3MainWindow( NULL, "aviz", Qt::WDestructiveClose )
 {
 
 	// Make a cascade menu to read files
-	openfile = new QPopupMenu( this );
+	openfile = new Q3PopupMenu( this );
 	openfile->insertItem( "Open XYZ File...", this, SLOT(openXYZ()) );
 	openfile->insertItem( "Open File List...", this, SLOT(openList()) );
 	openfile->insertItem( "Open ViewParam File...", this, SLOT(openViewParam()) );
 
 	// Make a general file menu 
-	file = new QPopupMenu( this );
+	file = new Q3PopupMenu( this );
 	file->insertItem( "&Open", openfile);
 	file->insertItem( "Save ViewParam File...", this, SLOT(saveViewParam()) );
 	file->insertSeparator();
@@ -51,10 +53,10 @@ AViz::AViz()
 	file->insertSeparator();
 	file->insertItem( "Set Default View Param", this, SLOT(setDefaultView()));
 	file->insertSeparator();
-	file->insertItem( "E&xit",  qApp, SLOT(quit()), CTRL+Key_Q );
+	file->insertItem( "E&xit",  qApp, SLOT(quit()), Qt::CTRL+Qt::Key_Q );
 
 	// Make a cascade menu to set standard view points
-	viewpoint = new QPopupMenu( this );
+	viewpoint = new Q3PopupMenu( this );
 	viewpoint->insertItem( "Explicit...", this, SLOT(launchExplicit()) );
 	viewpoint->insertSeparator();
 	viewpoint->insertItem( "Default View", this, SLOT(setDefaults()) );
@@ -69,17 +71,17 @@ AViz::AViz()
 	viewpoint->insertItem( "View YZ -", this, SLOT(viewYZMinus()) );
 
 	// Make a submenu for atom specifications 
-	elementsAtoms = new QPopupMenu( this );
+	elementsAtoms = new Q3PopupMenu( this );
 	elementsAtoms->insertItem( "Atoms/Molecules...", this, SLOT(launchAtoms()) );
 	elementsAtoms->insertItem( "Bonds...", this, SLOT(launchBonds()) );
 
 	// Make a submenu for polymer specifications 
-	elementsPolymers = new QPopupMenu( this );
+	elementsPolymers = new Q3PopupMenu( this );
 	elementsPolymers->insertItem( "Polymers...", this, SLOT(launchPolymers()) );
 	elementsPolymers->insertItem( "Bonds...", this, SLOT(launchBonds()) );
 
 	// Make a general elements menu
-	elements = new QPopupMenu( this );
+	elements = new Q3PopupMenu( this );
 	atomsId = elements->insertItem( "Atoms...", elementsAtoms );
 	spinsId = elements->insertItem( "Spins...", this, SLOT(launchSpins()) );
 	liquidCrystalsId = elements->insertItem( "Liquid Crystals...", this, SLOT(launchLiquidCrystals()) );
@@ -89,19 +91,19 @@ AViz::AViz()
 	elements->insertItem( "Annotation...", this, SLOT(launchAnnotation()) );
 
 	// Make a general view menu 
-	view = new QPopupMenu( this );
+	view = new Q3PopupMenu( this );
 	view->insertItem( "Set &Viewpoint", viewpoint );
 	view->insertItem( "Clipping...", this, SLOT(launchClip()) );
 	view->insertItem( "Slicing...", this, SLOT(launchSlice()) );
 
 	// Make a general settings menu 
-	settings = new QPopupMenu( this );
+	settings = new Q3PopupMenu( this );
 	showHideAxesId = settings->insertItem( "Hide Axes", this, SLOT(showHideAxesCB()) );
 	showHideContourId = settings->insertItem( "Hide Contour", this, SLOT(showHideContourCB()) );
 	onlyContourId = settings->insertItem( "Only Contour", this, SLOT(onlyContourCB()) );
 
 	// Make a general data menu 
-	data = new QPopupMenu( this );
+	data = new Q3PopupMenu( this );
 	data->insertItem( "&Translate...", this, SLOT(launchTranslation()) );
 	data->insertSeparator();
 	data->insertItem( "Swap XY", this, SLOT(swapXY()) );
@@ -115,8 +117,8 @@ AViz::AViz()
 	data->insertItem( "Stretch XYZ...", this, SLOT(launchStretch()) );
 
 	// Make a general help menu 
-	help = new QPopupMenu( this );
-	help->insertItem( "&About", this, SLOT(about()), CTRL+Key_H );
+	help = new Q3PopupMenu( this );
+	help->insertItem( "&About", this, SLOT(about()), Qt::CTRL+Qt::Key_H );
 	help->insertItem( "License", this, SLOT(license()) );
 	help->insertItem( "Distribution", this, SLOT(distribute()) );
 
@@ -181,8 +183,8 @@ void AViz::openXYZ( void )
 	this->setFileType( XYZ_FILE );
 
 	// Launch a customized file selector (with generate file list button)
-	QFileDialog * fd = new CustomFileDialog();
-	fd->setMode( QFileDialog::ExistingFile );
+	Q3FileDialog * fd = new CustomFileDialog();
+	fd->setMode( Q3FileDialog::ExistingFile );
 	QString filter = "XYZ coordinate files (*.xyz)";
 	fd->setFilters( filter );
 
@@ -198,8 +200,8 @@ void AViz::openList( void )
         this->setFileType( ANIMATION);
 
         // Launch a standard file selector
-        QFileDialog * fd = new QFileDialog();
-        fd->setMode( QFileDialog::ExistingFile );
+        Q3FileDialog * fd = new Q3FileDialog();
+        fd->setMode( Q3FileDialog::ExistingFile );
         QString filter = "General (*)";
         fd->setFilters( filter );
 
@@ -216,8 +218,8 @@ void AViz::openViewParam( void )
 	this->setFileType( VP_FILE );
 
 	// Launch standard a file selector
-	QFileDialog * fd = new QFileDialog();
-	fd->setMode( QFileDialog::ExistingFile );
+	Q3FileDialog * fd = new Q3FileDialog();
+	fd->setMode( Q3FileDialog::ExistingFile );
 	QString filter = "AViz viewpoint files (*.vpm)";
 	fd->setFilters( filter );
 
@@ -233,8 +235,8 @@ void AViz::saveViewParam( void )
 	this->setFileType( VP_FILE );
 
 	// Launch a standard file selector
-	QFileDialog * fd = new QFileDialog();
-	fd->setMode( QFileDialog::AnyFile );
+	Q3FileDialog * fd = new Q3FileDialog();
+	fd->setMode( Q3FileDialog::AnyFile );
 	QString filter = "AViz viewpoint files (*.vpm)";
 	fd->setFilters( filter );
 
@@ -793,8 +795,8 @@ void AViz::savePNGFile( void )
 	this->setFileType( PNG_FILE );
 
 	// Launch a standard file selector
-	QFileDialog * fd = new QFileDialog();
-	fd->setMode( QFileDialog::AnyFile );
+	Q3FileDialog * fd = new Q3FileDialog();
+	fd->setMode( Q3FileDialog::AnyFile );
 	QString filter = "PNG image files (*.png)";
 	fd->setFilters( filter );
 

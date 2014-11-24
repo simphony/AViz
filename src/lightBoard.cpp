@@ -28,7 +28,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Make a popup dialog box that will hold a vertical row of buttons
 LightsBoard::LightsBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Set Lights" );
 
@@ -36,19 +36,19 @@ LightsBoard::LightsBoard( QWidget * parent, const char * name )
 	// check boxes, plus a row of control buttons
 	const int numCols = 2;
         const int numRows = 4;
-        QGridLayout * lightsBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "lightsBox" );
+        Q3GridLayout * lightsBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "lightsBox" );
 
 	// Create check boxes in the first row
-	QHBox * hb0 = new QHBox( this, "hb0" );
+	Q3HBox * hb0 = new Q3HBox( this, "hb0" );
 	lightsBox->addMultiCellWidget( hb0, 0, 0, 0, -1);
 
 	QLabel * spotL0 = new QLabel( hb0, "spotL0" );
 	spotL0->setText( " Spotlights:  ");	
 
 	// Create a vbox and a grid to hold the checkboxes
-	QVBox * vb0 = new QVBox( hb0, "vb0" );
+	Q3VBox * vb0 = new Q3VBox( hb0, "vb0" );
 	
-	QGrid * gr0 = new QGrid( 4, vb0, "gr0" );
+	Q3Grid * gr0 = new Q3Grid( 4, vb0, "gr0" );
         gr0->setSpacing( SPACE );
         gr0->setMargin( SPACE );
 
@@ -85,7 +85,7 @@ LightsBoard::LightsBoard( QWidget * parent, const char * name )
 	light7->setChecked( FALSE );
 
 	// Create another hbox below the checkboxes
-	QHBox * hb1 = new QHBox( vb0, "hb1" );
+	Q3HBox * hb1 = new Q3HBox( vb0, "hb1" );
 
 	// Create a combo box to set light position depth
 	lightCob = new QComboBox( FALSE, hb1, "lightSelection" );	
@@ -105,20 +105,20 @@ LightsBoard::LightsBoard( QWidget * parent, const char * name )
 	// Create a horizontal slider and some labels 
 	depthL0 = new QLabel( hb1, "depthL0" );
 	depthL0->setText( " Position Depth:  Near  ");	
-	depthS = new QSlider( QSlider::Horizontal, hb1, "depthS" );
+	depthS = new QSlider( Qt::Horizontal, hb1, "depthS" );
 	depthS->setMinValue( 0 );
 	depthS->setMaxValue( 100 );
 	depthS->setTickInterval( 10 );
-        depthS->setTickmarks( QSlider::Above );
+        depthS->setTickmarks( QSlider::TicksAbove );
         depthS->setFixedHeight( SLIDER_HEIGHT );
 	depthL1 = new QLabel( hb1, "depthL1" );
 	depthL1->setText( "  Far  ");	
 	
 	// Create a vertical box to hold two sliders and labels
-	QGrid * gr1 = new QGrid( 2, this, "gr1" );
+	Q3Grid * gr1 = new Q3Grid( 2, this, "gr1" );
 	gr1->setSpacing( SPACE );
 	gr1->setMargin( SPACE );
-	gr1->setFrameStyle( QFrame::Box | QFrame::Sunken );
+	gr1->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
 	lightsBox->addMultiCellWidget( gr1, 2, 2, 0, -1);
 
 	// Create a large label and slider that will go into the 
@@ -126,11 +126,11 @@ LightsBoard::LightsBoard( QWidget * parent, const char * name )
 	QLabel * ambientL = new QLabel( gr1, "ambientL" );
 	ambientL->setText( " Global Ambient Light:  ");	
 
-	ambientS = new QSlider( QSlider::Horizontal, gr1, "ambientS" );
+	ambientS = new QSlider( Qt::Horizontal, gr1, "ambientS" );
 	ambientS->setMinValue( LIGHT_MIN );
 	ambientS->setMaxValue( LIGHT_MAX );
 	ambientS->setTickInterval( 10 );
-        ambientS->setTickmarks( QSlider::Above );
+        ambientS->setTickmarks( QSlider::TicksAbove );
         ambientS->setFixedHeight( SLIDER_HEIGHT );
 
 	// Create a large label and slider that will go into the 
@@ -138,14 +138,14 @@ LightsBoard::LightsBoard( QWidget * parent, const char * name )
 	QLabel * shininessL = new QLabel( gr1, "shininessL" );
 	shininessL->setText( " Surface Shininess:  ");	
 
-	shininessS = new QSlider( QSlider::Horizontal, gr1, "shininessS" );
+	shininessS = new QSlider( Qt::Horizontal, gr1, "shininessS" );
 	shininessS->setMinValue( SHINE_MIN );
 	shininessS->setMaxValue( SHINE_MAX );
 	shininessS->setTickInterval( 10 );
-        shininessS->setTickmarks( QSlider::Above );
+        shininessS->setTickmarks( QSlider::TicksAbove );
         shininessS->setFixedHeight( SLIDER_HEIGHT );
 
-	QHBox * hb2 = new QHBox( this, "hb2" );
+	Q3HBox * hb2 = new Q3HBox( this, "hb2" );
 	lightsBox->addMultiCellWidget( hb2, numRows-1, numRows-1, 0, -1);
 	
 	// Create a placeholder 

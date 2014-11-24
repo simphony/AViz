@@ -87,3 +87,5 @@ SOURCES         = SoAnyThumbWheel.cpp \
 		  trackBoard.cpp \
 		  translationBoard.cpp \
 		  typeColorNumberBox.cpp
+#The following line was inserted by qt3to4
+QT +=  opengl qt3support 

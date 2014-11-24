@@ -29,7 +29,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // Make a box that will hold a horizontal row of buttons, used to 
 // take snapshots of the scene
 LiveBox::LiveBox( QWidget * parent, const char * name )
-    : QHBox( parent, name )
+    : Q3HBox( parent, name )
 {
 	// Create some space
 	this->setMargin( 0 );

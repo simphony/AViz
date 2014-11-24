@@ -26,9 +26,12 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "clipBoard.h"
 
+#include <Q3GridLayout>
+#include <QLabel>
+
 // Make a popup dialog box 
 ClipBoard::ClipBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Set Clipping" );
 
@@ -36,7 +39,7 @@ ClipBoard::ClipBoard( QWidget * parent, const char * name )
 	// plus a row of control buttons
 	const int numCols = 3;
         const int numRows = 3;
-        QGridLayout * clipBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "clipBox" );
+        Q3GridLayout * clipBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "clipBox" );
 
         // Create a label and a spin box
         clipNearL = new QLabel( this, "clipNearL" );
@@ -70,7 +73,7 @@ ClipBoard::ClipBoard( QWidget * parent, const char * name )
         QObject::connect( autoFarCb, SIGNAL(clicked()), this, SLOT(autoClip()) );
 
 	// Create a hboxlayout that will fill the lowest row
-	QHBox * hb = new QHBox( this, "hb" );
+	Q3HBox * hb = new Q3HBox( this, "hb" );
 	clipBox->addMultiCellWidget( hb, numRows-1, numRows-1, 0, -1);
 	
 	// Create a placeholder 

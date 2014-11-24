@@ -28,9 +28,9 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define ANIMB_H 
 
 #include <qdialog.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qlayout.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
@@ -38,7 +38,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <qsizepolicy.h>
 #include <qstring.h>
 #include <qtimer.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
 
 #include <stdio.h>

@@ -36,9 +36,13 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "./pixmaps/silverSquare2.xpm"
 #include "./pixmaps/bronzeSquare2.xpm"
 
+#include <Q3GridLayout>
+#include <QPixmap>
+#include <QLabel>
+
 // Make a popup dialog box 
 BondBoard::BondBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Set Bonds" );
 
@@ -46,10 +50,10 @@ BondBoard::BondBoard( QWidget * parent, const char * name )
 	// a spin box, plus a row of control buttons
 	const int numCols = 3;
         const int numRows = 3;
-        QGridLayout * bondBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "bondBox" );
+        Q3GridLayout * bondBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "bondBox" );
 
         // Create a hboxlayout that will fill the first row
-        QHBox * hb0 = new QHBox( this, "hb0" );
+        Q3HBox * hb0 = new Q3HBox( this, "hb0" );
         bondBox->addMultiCellWidget( hb0, 0, 0, 0, -1);
 
         // Create a label
@@ -80,7 +84,7 @@ BondBoard::BondBoard( QWidget * parent, const char * name )
         QLabel * bondL = new QLabel( hb0, "bondL" );
         bondL->setText( "   Bond: " );
 
-		bondMode = new QButtonGroup( 2, QGroupBox::Horizontal, hb0, "bondMode");
+        bondMode = new Q3ButtonGroup( 2, Qt::Horizontal, hb0, "bondMode");
         bondMode0 = new QRadioButton( bondMode, "on" );
         bondMode0->setText( "Present" );
         bondMode1 = new QRadioButton( bondMode, "off" );
@@ -90,7 +94,7 @@ BondBoard::BondBoard( QWidget * parent, const char * name )
         connect( bondMode, SIGNAL(clicked(int)), this, SLOT(setBond(int)) );
 
 	// Create a hbox that will contain various switches
-	QHBox * hb1 = new QHBox( this, "hb1" );
+	Q3HBox * hb1 = new Q3HBox( this, "hb1" );
 	hb1->setMargin( SPACE );
         bondBox->addMultiCellWidget( hb1, 1, 1, 0, -1);
 
@@ -99,7 +103,7 @@ BondBoard::BondBoard( QWidget * parent, const char * name )
 	colorL->setText( " Color: " );
 
 	// Create radiobuttons to set the color
-	bondColor = new QButtonGroup( 3, QGroupBox::Horizontal, hb1, "bondColor");
+    bondColor = new Q3ButtonGroup( 3, Qt::Horizontal, hb1, "bondColor");
 
         QPixmap blackIcon = QPixmap( blackSquare2 );
         QPixmap whiteIcon = QPixmap( whiteSquare2 );
@@ -145,7 +149,7 @@ BondBoard::BondBoard( QWidget * parent, const char * name )
 	thickL->setText( "  Thickness: " );
 
 	// Create radiobuttons to set the thickness 
-	bondThickness = new QButtonGroup( 2, QGroupBox::Horizontal, hb1, "bondThickness");
+    bondThickness = new Q3ButtonGroup( 2, Qt::Horizontal, hb1, "bondThickness");
 
         bondThickness0 = new QRadioButton( bondThickness, "line" );
         bondThickness0->setText( "Line" );
@@ -161,7 +165,7 @@ BondBoard::BondBoard( QWidget * parent, const char * name )
         bondThickness5->setText( "Quadratic Variation" );
 
 	// Create a grid to hold a check box and a spin box plus labels
-        QGrid * gr0 = new QGrid( 2, hb1, "gr0" );
+        Q3Grid * gr0 = new Q3Grid( 2, hb1, "gr0" );
         gr0->setMargin( SPACE );
         gr0->setSpacing( SPACE );
 
@@ -184,7 +188,7 @@ BondBoard::BondBoard( QWidget * parent, const char * name )
 
 
 	// Create a grid to hold two labels and spin boxes
-        QGrid * gr1 = new QGrid( 2, hb1, "gr1" );
+        Q3Grid * gr1 = new Q3Grid( 2, hb1, "gr1" );
         gr1->setMargin( SPACE );
         gr1->setSpacing( SPACE );
 
@@ -206,7 +210,7 @@ BondBoard::BondBoard( QWidget * parent, const char * name )
 	QLabel * emptyL0 = new QLabel( gr1, "emptyL1" );
 
 	// Create a hboxlayout that will fill the lowest row
-	QHBox * hb3 = new QHBox( this, "hb3" );
+	Q3HBox * hb3 = new Q3HBox( this, "hb3" );
 	bondBox->addMultiCellWidget( hb3, numRows-1, numRows-1, 0, -1);
 	
 

@@ -30,31 +30,34 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <Q3GridLayout>
+#include <QLabel>
+
 #define MIN_FILE_LINE_WIDTH 500
 #define MIN_FILE_LINE_HEIGHT 100
 
 // Make a popup dialog box 
 AnimationBoard::AnimationBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
 	this->setCaption( "AViz: Animation Generator" );
 
        // Insert a grid that will hold control buttons
 	const int numCols = 1;
 	const int numRows = 3;
-	QGridLayout * animationBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "animationBox" );
+	Q3GridLayout * animationBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "animationBox" );
 	
 
 	// Create and horizontal boxes
-        QHBox * hb0 = new QHBox( this, "hb0" );
+        Q3HBox * hb0 = new Q3HBox( this, "hb0" );
         hb0->setSpacing( SPACE );
         animationBox->addWidget( hb0, 0, 0 );
 
-        QHBox * hb1 = new QHBox( this, "hb1" );
+        Q3HBox * hb1 = new Q3HBox( this, "hb1" );
         hb1->setSpacing( SPACE );
         animationBox->addWidget( hb1, 1, 0 );
 
-        QHBox * hb2 = new QHBox( this, "hb1" );
+        Q3HBox * hb2 = new Q3HBox( this, "hb1" );
         hb1->setSpacing( SPACE );
         animationBox->addWidget( hb2, 2, 0 );
 
@@ -133,7 +136,7 @@ void AnimationBoard::browseCB()
 	char * filename = (char *)malloc(BUFSIZ);
 	char * buffer = (char *)malloc(BUFSIZ);
 
-	QString fn (QFileDialog::getExistingDirectory( QString::null, this, "./") );
+	QString fn (Q3FileDialog::getExistingDirectory( QString::null, this, "./") );
 	// Register the selection
 	if ( !fn.isEmpty() ) {
 		targetDir = fn;

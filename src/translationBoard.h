@@ -27,25 +27,13 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef TRANSB_H
 #define TRANSB_H 
 
-#include "data.h"
-#include "floatSpin.h"
-#include "mainForm.h"
+#include <QDialog>
+
 #include "parameterLimits.h"
+#include "data.h"
 
-#include <qbuttongroup.h>
-#include <qcombobox.h>
-#include <qdialog.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qsizepolicy.h>
-#include <qwidget.h>
-
-#include <stdio.h>
-#include <math.h>
-
+class MainForm;
+class QFSpinBox;
 
 // Translation board dialog widget
 class TranslationBoard: public QDialog
