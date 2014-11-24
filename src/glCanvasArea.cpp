@@ -20,8 +20,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 Contact address: Computational Physics Group, Dept. of Physics,
-                 Technion. 32000 Haifa Israel
-                 gery@tx.technion.ac.il
+                 Technion. 32000 Haifa Israel gery@tx.technion.ac.il
 ***********************************************************************/
 
 #include "glCanvasArea.h"
@@ -852,9 +851,8 @@ void GLCanvasArea::paintGL( void )
 // Init the canvas
 void GLCanvasArea::initializeGL( void )
 {
- 	if (this->isValid()) {
-		this->setBackgroundMode(QWidget::NoBackground); // Avoid unnecessary flicker.
 
+    if (this->isValid()) {
 		// Double-buffering is usually set already by default...
 		// this is just to be sure
 		QGLFormat format = this->format();
