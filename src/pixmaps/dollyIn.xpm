@@ -1,0 +1,26 @@
+/* XPM */
+static const char *dollyIn_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    16    16        3            1",
+/* colors */
+". c None",
+"f c #ffffff",
+"# c #000000",
+/* pixels */
+"................",
+".......#######..",
+"......#fffffff#.",
+".....#ffff#ffff#",
+".....#ffff#ffff#",
+".....#ffff#ffff#",
+".....#f#######f#",
+".....#ffff#ffff#",
+".....#ffff#ffff#",
+".....#ffff#ffff#",
+".....##fffffff#.",
+"....##########..",
+"...###..........",
+"..###...........",
+".###............",
+"###.............",
+};

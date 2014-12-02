@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2K.1beta (1.47)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Atoms...</TITLE>
+<META NAME="description" CONTENT="Atoms...">
+<META NAME="keywords" CONTENT="aviz">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="aviz.css">
+
+<LINK REL="next" HREF="node24.html">
+<LINK REL="previous" HREF="node22.html">
+<LINK REL="up" HREF="node22.html">
+<LINK REL="next" HREF="node24.html">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF">
+<!--Navigation Panel-->
+<A NAME="tex2html408"
+  HREF="node24.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html404"
+  HREF="node22.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html398"
+  HREF="node22.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html406"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html409"
+  HREF="node24.html">Spins...</A>
+<B> Up:</B> <A NAME="tex2html405"
+  HREF="node22.html">Elements Menu</A>
+<B> Previous:</B> <A NAME="tex2html399"
+  HREF="node22.html">Elements Menu</A>
+ &nbsp <B>  <A NAME="tex2html407"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00062100000000000000">
+Atoms...</A>
+</H3>
+
+<P>
+This menu entry is active if the render mode is set to ''Atom''.  
+
+<P>
+Click on <B>Atoms/Molecules...</B> to open the atom type dialog window to set
+some properties that affect the rendering of atoms of a given type, such
+as <TT>Al</TT>.   
+
+<P>
+A selector is used to select the atom type to which the settings apply.
+
+<P>
+A toggle button labeled <B>Show Atoms</B> can be used to switch off the 
+rendering of all atoms of the selected atom type.
+
+<P>
+A color bar shows the color, or spectrum of colors, that is currently used 
+to render atoms of the given type.
+
+<P>
+If rendering is not disabled, you can adjust the size of the atoms of this 
+type, relative to the default size.  This is done using three radio buttons
+labeled <B>Regular</B>, <B>Smaller</B> and <B>Larger</B>.
+
+<P>
+The coloring of the atoms of the selected atom type can be controlled using the
+radio buttons labeled <B>Type</B>, <B>Position</B>, <B>Property</B>, and 
+<B>ColorCode</B>. 
+
+<P>
+If ''Type'' is chosen, all atoms of the selected type are colored the 
+same color (which is set using the <B>Set Color...</B> button). 
+
+<P>
+If ''Position'' is chosen, the atoms of the selected type are colored according
+to their coordinate values.  Radio buttons labeled <B>X</B>, <B>Y</B>, and <B>Z</B> are used to select the reference coordinate axis.  (The color scale that is
+used is set using the <B>Set Color...</B> button.)
+
+<P>
+If ''Property'' is chosen, the atoms of the selected type are colored according
+to their property values given in the input data file in addition to their
+coordinate values.  Radio buttons labeled <B>1</B>, <B>2</B>, etc.  are used to
+select the reference property.  (The color scale that is used is set using the
+<B>Set Color...</B> button.)  This feature can be used to visualize scalar 
+particle properties such as kinetic energy that are given together with the 
+particle position in the coordinate file.
+
+<P>
+If ''ColorCode'' is chosen, you assume complete control over the coloring 
+by specifying property colums that are interpteted as red-green-blue color 
+values, ranging from 0.0 to 1.0.  By default, the first three property 
+values are taken as red, green, and blue values, respectively.   For instance, 
+if the default settings are chosen and the entry of the first particle is
+<PRE>
+Al  3.57.0 24.34 0.249		0.0	1.0	0.0
+</PRE>
+that particle is rendered using a strong green color.
+
+<P>
+The settings are effective after <B>Apply</B> or <B>Done</B> is pressed.
+
+<P>
+Click on the <B>Bonds...</B> button in the atom type dialog, or select the <B>Bonds...</B> submenu entry to open the bond dialog window.  This window is used to
+control the rendering of bonds between atoms of given atom types, such as <TT>Al</TT> and <TT>O</TT>.  
+
+<P>
+Two selectors, <B>From Particle Type</B> and <B>To Particle Type</B>, are used to 
+select the atom types to which the settings apply. 
+
+<P>
+Radio buttons labeled <B>Present</B> and <B>Absent</B> are used to enable and
+disable the rendering of bonds between the atoms of the specified types.
+
+<P>
+If bond drawing is enabled, the color of the bond can be set using the radio
+buttons in the <B>Color</B> box.  
+
+<P>
+The thickness can be set using the radio buttons in the <B>Thickness</B> box.
+If <B>Line</B> is chosen, the bonds will be rendered as lines; this is the
+fastest rendering mode.  Other thicknesses, in combination with high render
+quality, will give you bonds that are rendered as cylinders.  
+
+<P>
+Depending on the view point, the rendering can be improved by activating
+anti-aliasing.  Use the checkbox labeled <B>AntiAliasing</B> to control 
+this feature.
+
+<P>
+A text window labeled <B>Emission</B> is provided to set the emission light
+quality of the bond.  In certain circumstances bond light emission can improve
+the visual appearance of the rendering.
+
+<P>
+Most important are the minimum length and maximum length parameters, to be
+entered in text windows labeled <B>Min Length</B> and <B>Max Length</B>.  The
+lengths are given in the same units as the particle coordinates.  Only
+those bonds will be rendered whose length is within the limits specified.
+
+<P>
+The setting is effective after <B>Apply</B> or <B>Done</B> is pressed.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html408"
+  HREF="node24.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html404"
+  HREF="node22.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html398"
+  HREF="node22.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html406"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html409"
+  HREF="node24.html">Spins...</A>
+<B> Up:</B> <A NAME="tex2html405"
+  HREF="node22.html">Elements Menu</A>
+<B> Previous:</B> <A NAME="tex2html399"
+  HREF="node22.html">Elements Menu</A>
+ &nbsp <B>  <A NAME="tex2html407"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Geri Wagner
+2003-01-05
+</ADDRESS>
+</BODY>
+</HTML>

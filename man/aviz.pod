@@ -1,0 +1,219 @@
+=head1 NAME
+
+aviz - AViz Visualize results of atomistic simulations.
+
+
+=head1 SYNOPSIS
+
+B<aviz> [ -B<ar> ] [ -B<as> ] [ -B<at> ] [ -B<az> ] [ -B<asm> ]  
+[-B<fl> I<listfile> ] [-B<rm> I<rendermode> ] [ -B<rs> I<renderstyle> ] 
+[ -B<rq> I<renderquality> ] [ -B<si> I<rendersize> ] [ -B<snap> ] [ -B<snapq> ]
+[ -B<v> ] [ -B<version> ] [ -B<vpm> I<parameterfile> ] [ -B<watch> I<xyzfile> ] [ -B<license> ] [ -B<usage> ] [ -B<h> ] [ -B<help> ]  
+[ Qt options] [  X11 options ] [ I<xyzfile> ]
+
+=head1 DESCRIPTION
+
+AViz is a graphical user interface to visualize the results of atomistic
+simulations.  In such simulations, one usually operates with a number of 
+particles, each of which representing an atom. The result of the simulation 
+typically consists of data files containing the coordinates of all the 
+simulated atoms.
+
+AViz can be used to render the simulated particles as little spheres, cubes, or 
+dots. It can also be used to render atomistic spins, or any other kind of 
+vectors.   Several different shapes and qualities can be used, and 
+colors can be assigned to the rendered objects in many different ways.
+
+Command line options include:
+
+=over
+
+=item -B<ar>	Start in auto rotation mode	
+
+=item -B<as>	Start in auto spin mode	
+
+=item -B<at>	Start in auto tilt mode	
+
+=item -B<az>	Start in auto zoom mode	
+
+=item -B<asm>	Start in auto snap mode	
+
+=item -B<fl> I<listfile>	Start using file list I<listfile> 
+
+=item -B<rm> I<rendermode> 	Set rendering mode to I<rendermode> where 
+I<renderode> is one of the following: 'atom', 'spin', 'liquidcrystal', 'polymer' or 'pore'
+
+=item -B<rs> I<renderstyle> 	Set rendering style to I<renderstyle> where 
+I<renderstyle> is one of the following: 'dots', 'lines', 'cubes', 'cones', 'spheres'  or 'cylinders'
+
+=item -B<rq> I<renderquality>	Set rendering quality to I<renderquality> 
+where I<renderquality> is one of the following: 'low', 'high', or 'final'  
+
+=item -B<si> I<rendersize> 	Set size of rendered particles in percentage
+relative to AViz' notion of 'natural size', where I<rendersize> is an integer
+
+=item -B<snap> 	Take a screen shot of the rendering at startup
+
+=item -B<snapq>	Take a screen shot of the rendering at startup and exit
+
+=item -B<v(ersion)>	Print version string and exit
+
+=item -B<vpm> I<parameterfile>	Use view parameters specified in 
+I<parameterfile> 
+
+=item -B<watch> I<xyzfile>	Update the rendering whenever file I<xyzfile> 
+is modified
+
+=item -B<license>	Print the GPL GNU license conditions
+
+=item -B<usage>		Print a short usage information
+
+=item -B<h(elp)>	Print a short usage information
+
+=back
+
+AViz is built using the Qt toolkit and recoginizes most of the standard
+Qt and X11 command line options.  
+
+I<xyzfile> is a file that contains simulation data (particle positions, 
+velocity vectors, etc.) in a exceedingly simple format known as XYZ format. 
+The format for these files is as follows:
+
+=over
+
+=item   1st line: an integer indicating the number of data points
+
+=item 	2nd line: an arbitrary string identifying the data
+
+=item 	following lines: all of the form XX float1 float2 float3 .....
+
+=back
+
+Each of the lines corresponds to one particle. A one- or two-character
+string is used to label the particle, as in 'O' or 'Si'. 
+Any combination of characters may be chosen. The following three
+floating point numbers represent the x-, y-, and z-coordinate of the
+particle. Up to eight additional floating point numbers can be
+provided. These additional numbers can be used to visualize properties
+such as velocity, energy, etc.
+
+AViz recognizes some particular labels such as 'Al' and 'Au'. For
+these atom types, a default color is defined. For many other elements,
+and for atom types such as 'X3', no default color is defined. AViz
+will use a blue color to render particles of ''unknown'' type.
+
+I<parameterfile> is a binary file created by AViz during a previous 
+session.  
+
+=head1 NOTES
+
+The AViz interface offers buttons and spin boxes to change the view 
+point and various aspects of the rendering, such as colors of the atoms, 
+lighting, sizes, annotation, and so on.  The use of these interface 
+elements should be self-explanatory.
+
+=head2 File lists
+
+A list of I<xyzfiles>, a so-called I<listfile>,  can be read in, and AViz 
+then allows cycling through the list.   Such a list file simply contains 
+the name of all files that should be shown, with a new line for each entry.
+
+For convenience, the AViz file selector sports a toolbutton to produce 
+a file list including all I<xyzfiles> in the current directory.
+
+=head2 Snapshots and animations
+
+At each stage, a snapshot of the current rendering can be taken 
+by generating a PNG image file.   In combination with the command 
+line options, AViz offers several possiblities to painlessly generate
+a sequence of image files ready to be turned into an animation.
+
+
+=head1 EXAMPLE 
+
+Here is a short I<xyzfile> of the most simple form, containing
+only the three coordinate columns:
+
+	
+8
+## Cube
+C  1.0 0.0 0.0
+C  1.0 1.0 0.0
+C  0.0 1.0 0.0
+C  0.0 1.0 0.0
+C  1.0 0.0 1.0
+C  1.0 1.0 1.0
+C  0.0 1.0 1.0
+C  0.0 1.0 1.0
+
+To visualize this data set in file F<cube.xyz> with high-quality rendering 
+of spheres, use
+
+	aviz -rq high -rs spheres cube.xyz
+
+Here is a short I<xyzfile> with one additional column of data:
+
+	
+6
+## Aluminum oxide
+O  -0.083333 0.250000 0.583333 0.433013
+O  0.083333 -0.250000 -0.583333 -0.433013
+O  0.250000 0.583333 -0.083333 0.433013
+O  -0.250000 -0.583333 0.083333 -0.433013
+Al 0.583333 0.583333 0.583333 1.010363
+Al -0.583333 -0.583333 -0.583333 -1.010363
+
+To create a snapshot of this data set in file F<alox.xyz> with top-quality 
+rendering of spheres, use
+
+	aviz -snap -rq final -rs spheres cube.xyz
+
+If the data points should be rendered as spins or vectors, each entry 
+is defined by six numbers. The first three give the location of the spin, and
+the second three give the direction. A sample I<xyzfile> might
+look like this:
+
+	
+3
+## Spins pointing in z-direction
+Sp 0.0 0.0 0.0 0.0 0.0 1.0
+Sp 1.0 0.0 0.0 0.0 0.0 1.0
+Sp 2.0 0.0 0.0 0.0 0.0 1.0
+
+To render the spin data in file F<spin.xyz> as high-quality spins and 
+update the rendering whenever the file is modified, use
+
+	aviz -rs spins -rq high -watch spin.xyz
+
+
+=head1 BUGS
+
+Too numerous to list here.  Please send bug reports and comments to
+gery@tx.technion.ac.il 
+
+
+=head1 FILES
+
+=over
+
+=item F<./aviz/aviz.vpm>	If AViz finds the I<parameterfile> 
+F<./aviz/aviz.vpm> in the user's home directory, the view parameters stored 
+in that file are read and used as defaults  
+
+=item F<.aviz.atom> 	If AViz finds the file F<.aviz/aviz.particle> in 
+the user's home directory, the specific particle parameters (colors, color 
+criterion, bonding) are read and used as defaults
+
+=back
+
+=head1 RELATED INFORMATION
+
+This software is available under GNU General Public License from 
+B<http://phycomp.technion.ac.il/~aviz>.  More information and 
+a User's Manual can be found at the same location.
+
+=head1 AUTHORS
+
+Geri Wagner (gery@tx.technion.ac.il) 
+Adham Hashibon (phadham@aluf.technion.ac.il)
+Computational Physics Group, Technion Haifa Israel

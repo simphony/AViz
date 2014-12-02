@@ -1,0 +1,55 @@
+	AViz is a tool to graphically display results of atomistic simulations.
+These results typically consist of large data sets of coordinates,
+where the coordinates represent atoms or spins in three-dimensional space.
+
+	AViz lets you view the data sets, and you can easily produce stills and 
+sequences of stills ready to be turned into animations. 
+
+	AViz is coded using the Qt toolkit and the OpenGL graphics library.  It 
+runs on UNIX-systems on which Qt and OpenGL is installed.
+
+	AViz makes use of various SoQt widgets developed by Coin 
+(www.coin3d.org), but does not use Coin's alternative implementation of the 
+Inventor 3D graphics library.  
+
+	AViz is developed at the Computational Physics Group, Technion, 
+Haifa (Israel).
+
+-------------------------------------------------------------------------------
+Please read the INSTALL file for detailed installation instructions.
+-------------------------------------------------------------------------------
+
+Brief installation instructions:
+--------------------------------
+	For a successful installation, you will need to have the following
+software installed on your system:
+	- the Qt toolkit supplied by Trolltech at http://www.trolltech.com
+
+	- tmake (Makefile generator supplied by Trolltech at http://www.trolltec
+h.com)
+        - the OpenGl/Mesa graphics library 
+
+	Compiling and installing:
+	- ./configure
+	- make
+	- make install (if you like it)
+
+An executable binary called aviz will be installed in the /usr/local/bin
+directory.  
+
+Docs in HTML format and PostScript format will be installed in 
+/usr/local/share/aviz.
+
+A man page will be installed in /usr/local/man/man1.
+
+-------------------------------------------------------------------------------
+	This software is available under GNU General Public
+License from http://phycomp.technion.ac.il/aviz.  More information, updates, 
+and a User's Manual can be found at the same location.
+-------------------------------------------------------------------------------
+	AViz was developed by Geri Wagner (gery@tx.technion.ac.il) and 
+Adham Hashibon (phadham@aluf.technion.ac.il) at the Computational Physics 
+Group, Technion, Haifa Israel.  For questions and suggestions, and if 
+you would like to contribute to the development, please contact 
+gery@tx.technion.ac.il.
+-------------------------------------------------------------------------------
