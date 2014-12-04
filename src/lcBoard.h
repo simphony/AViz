@@ -28,116 +28,101 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define LCB_H 
 
 #include "data.h"
-#include "codeBox.h"
-#include "colorBoard.h"
-#include "colorLabel.h"
-#include "defaultParticles.h"
-#include "defaults.h"
-#include "floatSpin.h"
 #include "lineTypeBox.h"
-#include "mainForm.h"
-#include "memoryFunctions.h"
-#include "positionBox.h"
-#include "propertyBox.h"
-#include "sizeBox.h"
-#include "typeColorNumberBox.h"
 
+#include <QDialog>
 #include <q3buttongroup.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <q3hbox.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qsizepolicy.h>
-#include <qspinbox.h>
+#include <q3gridlayout.h>
 #include <q3vbox.h>
-#include <qwidget.h>
+
+class MainForm;
+class ColorLabel;
+class CodeBox;
+class ColorBoard;
+class PositionBox;
+class PropertyBox;
+class SizeBox;
+class TypeColorNumberBox ;
 
 class QLabel;
-class Q3GridLayout;
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <sys/stat.h>
-#include <unistd.h>
+class QPushButton;
+class QRadioButton;
+class QComboBox;
+class QCheckBox;
 
 // Liquid crystal board dialog widget
 class LcBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	LcBoard( QWidget * parent=0, const char * name=0 );
+    LcBoard( QWidget * parent=0, const char * name=0 );
 
 public slots:
-	void setMainFormAddress( MainForm * );
-	void setData();
-	void getColors( float, float, float, float, float, float, float, float, float );
-	void getColorBoardPos( int, int );
-	void setDotStyle();
-        void setLineStyle();
-        void setCubeStyle();
-        void setCylinderStyle();
-        void setConeStyle();
-        void setSphereStyle();
-        void setLowQuality();
-        void setHighQuality();
-        void setFinalQuality();
-	void closeColorBoard();
+    void setMainFormAddress( MainForm * );
+    void setData();
+    void getColors( float, float, float, float, float, float, float, float, float );
+    void getColorBoardPos( int, int );
+    void setDotStyle();
+    void setLineStyle();
+    void setCubeStyle();
+    void setCylinderStyle();
+    void setConeStyle();
+    void setSphereStyle();
+    void setLowQuality();
+    void setHighQuality();
+    void setFinalQuality();
+    void closeColorBoard();
 
 private slots:
-	void buildLayout( colorCriterion );
-	void setLc();
-        void adjustLc();
-        void adjustCriterion();
-	void setColorCb();
-	void setColors();
-	void readToggles();
-	void bdone();
-	void bapply();
-	void bcancel();
+    void buildLayout( colorCriterion );
+    void setLc();
+    void adjustLc();
+    void adjustCriterion();
+    void setColorCb();
+    void setColors();
+    void readToggles();
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	MainForm * mainForm;
-        CodeBox * codeBox;
-	LineTypeBox * lineTypeBox;
-        PositionBox * positionBox;
-        PropertyBox * propertyBox;
-        SizeBox * sizeBox;
-	TypeColorNumberBox * typeColorNumberBox;
-	Q3HBox * hb1;
-	Q3HBox * hb2;
-	Q3HBox * hb4;
-	Q3HBox * hb5;
-	Q3GridLayout * lcBox;
-	QComboBox * lcCob;
-	QCheckBox * showLcCb;
-        QLabel * modeL;
-	QLabel * colorL;
-	ColorLabel * colorLabel0;
-        ColorLabel * colorLabel1;
-        ColorLabel * colorLabel2;
-	ColorLabel * colorLabel3;
-        ColorLabel * colorLabel4;
-        ColorLabel * colorLabel5;
-	QPushButton * colorButton;
-        Q3ButtonGroup * tipStyle;
-        Q3ButtonGroup * colorMode;
-	QRadioButton * colorMode0;
-        QRadioButton * colorMode1;
-        QRadioButton * colorMode2;
-        QRadioButton * colorMode3;
-	ColorBoard * cb;
-        particleData * thisPd;
-        int thisLcIndex;
-	char colors;
-	int colorPosX, colorPosY;
-	bool showColorBoard;
-	lcRStyle lcRenderStyle;
-	quality renderQuality;
+    MainForm * mainForm;
+    CodeBox * codeBox;
+    LineTypeBox * lineTypeBox;
+    PositionBox * positionBox;
+    PropertyBox * propertyBox;
+    SizeBox * sizeBox;
+    TypeColorNumberBox * typeColorNumberBox;
+    Q3HBox * hb1;
+    Q3HBox * hb2;
+    Q3HBox * hb4;
+    Q3HBox * hb5;
+    Q3GridLayout * lcBox;
+    QComboBox * lcCob;
+    QCheckBox * showLcCb;
+    QLabel * modeL;
+    QLabel * colorL;
+    ColorLabel * colorLabel0;
+    ColorLabel * colorLabel1;
+    ColorLabel * colorLabel2;
+    ColorLabel * colorLabel3;
+    ColorLabel * colorLabel4;
+    ColorLabel * colorLabel5;
+    QPushButton * colorButton;
+    Q3ButtonGroup * tipStyle;
+    Q3ButtonGroup * colorMode;
+    QRadioButton * colorMode0;
+    QRadioButton * colorMode1;
+    QRadioButton * colorMode2;
+    QRadioButton * colorMode3;
+    ColorBoard * cb;
+    particleData * thisPd;
+    int thisLcIndex;
+    char colors;
+    int colorPosX, colorPosY;
+    bool showColorBoard;
+    lcRStyle lcRenderStyle;
+    quality renderQuality;
 };
 
 #endif // LCB_H

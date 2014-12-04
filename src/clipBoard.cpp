@@ -26,6 +26,13 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "clipBoard.h"
 
+#include "floatSpin.h"
+#include "mainForm.h"
+
+#include <QCheckBox>
+#include <q3hbox.h>
+#include <QPushButton>
+
 #include <Q3GridLayout>
 #include <QLabel>
 
@@ -46,7 +53,7 @@ ClipBoard::ClipBoard( QWidget * parent, const char * name )
         clipNearL->setText( " Near Clip Dist: ");
 	clipBox->addWidget( clipNearL, 0, 0 );
 
-	clipNearSb = new QFSpinBox( this, "nearDistSb" );
+    clipNearSb = new QFSpinBox( this );
 	clipNearSb->setMaxValue( MAXCLIP );
 	clipBox->addWidget( clipNearSb, 0, 1 );
 
@@ -55,7 +62,7 @@ ClipBoard::ClipBoard( QWidget * parent, const char * name )
         clipFarL->setText( " Far Clip Dist: ");
 	clipBox->addWidget( clipFarL, 1, 0 );
 
-	clipFarSb = new QFSpinBox( this, "farDistSb" );
+    clipFarSb = new QFSpinBox( this );
 	clipFarSb->setMaxValue( MAXCLIP );
 	clipBox->addWidget( clipFarSb, 1, 1 );
 

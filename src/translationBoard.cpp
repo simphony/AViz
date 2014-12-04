@@ -48,7 +48,7 @@ TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
 	QLabel * labelx = new QLabel( this, "labelx" );
 	labelx->setText( " Translate X: ");
 	transBox->addWidget( labelx, 0, 0);
-	panSBX = new QFSpinBox( this, "panx" );
+    panSBX = new QFSpinBox( this );
 	panSBX->setMaxValue( MAXPAN );
 	panSBX->setMinValue( MINPAN );
 	transBox->addWidget( panSBX, 0, 1);
@@ -56,7 +56,7 @@ TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
 	QLabel * labely = new QLabel( this, "labely" );
 	labely->setText( " Translate Y: ");
 	transBox->addWidget( labely, 1, 0);
-	panSBY = new QFSpinBox( this, "pany" );
+    panSBY = new QFSpinBox( this );
 	panSBY->setMaxValue( MAXPAN );
 	panSBY->setMinValue( MINPAN );
 	transBox->addWidget( panSBY, 1, 1);
@@ -64,7 +64,7 @@ TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
 	QLabel * labelz = new QLabel( this, "labelz" );
 	labelz->setText( " Translate Z: ");
 	transBox->addWidget( labelz, 2, 0);
-	panSBZ = new QFSpinBox( this, "panz" );
+    panSBZ = new QFSpinBox( this );
 	panSBZ->setMaxValue( MAXPAN );
 	panSBZ->setMinValue( MINPAN );
 	transBox->addWidget( panSBZ, 2, 1);
@@ -73,7 +73,7 @@ TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
 	QLabel * labelright = new QLabel( this, "labelright" );
 	labelright->setText( " Translate Right: ");
 	transBox->addWidget( labelright, 0, 2);
-	panSBRight = new QFSpinBox( this, "panright" );
+    panSBRight = new QFSpinBox( this );
 	panSBRight->setMaxValue( MAXPAN );
 	panSBRight->setMinValue( MINPAN );
 	transBox->addWidget( panSBRight, 0, 3);
@@ -81,7 +81,7 @@ TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
 	QLabel * labeltop = new QLabel( this, "labeltop" );
 	labeltop->setText( " Translate Top: ");
 	transBox->addWidget( labeltop, 1, 2);
-	panSBTop = new QFSpinBox( this, "pantop" );
+    panSBTop = new QFSpinBox( this );
 	panSBTop->setMaxValue( MAXPAN );
 	panSBTop->setMinValue( MINPAN );
 	transBox->addWidget( panSBTop, 1, 3);
@@ -89,7 +89,7 @@ TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
 	QLabel * labelforward = new QLabel( this, "labelforward" );
 	labelforward->setText( " Translate Forward: ");
 	transBox->addWidget( labelforward, 2, 2);
-	panSBForward = new QFSpinBox( this, "panforward" );
+    panSBForward = new QFSpinBox( this );
 	panSBForward->setMaxValue( MAXPAN );
 	panSBForward->setMinValue( MINPAN );
 	transBox->addWidget( panSBForward, 2, 3);

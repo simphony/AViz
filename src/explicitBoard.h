@@ -28,41 +28,35 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define EXPLICITB_H
 
 #include "data.h"
-#include "defaults.h"
-#include "floatSpin.h"
-#include "mainForm.h"
-#include "parameterLimits.h"
-
 #include <QDialog>
+
 class QLabel;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-
+class QFSpinBox;
+class MainForm;
 
 // Explicit view panel setting board dialog widget
 class ExplicitBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ExplicitBoard( QWidget * parent=0, const char * name=0 );
+    ExplicitBoard( QWidget * parent=0, const char * name=0 );
 
 public slots:
-	void setMainFormAddress( MainForm * );
-	void setExplicit( viewParam );
+    void setMainFormAddress( MainForm * );
+    void setExplicit( viewParam );
 
 private slots:
-	void registerSettings();
-	void bdone();
-	void bapply();
-	void bcancel();
+    void registerSettings();
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	MainForm * mainForm;
-        QFSpinBox * phiSb, * thetaSb, * chiSb, * dollySb, * fovySb;
-        QLabel * phiL, * thetaL, * chiL, * dollyL, * fovyL;
-        QLabel * phiRangeL, * thetaRangeL, * chiRangeL, * dollyRangeL, * fovyRangeL;
+    MainForm * mainForm;
+    QFSpinBox * phiSb, * thetaSb, * chiSb, * dollySb, * fovySb;
+    QLabel * phiL, * thetaL, * chiL, * dollyL, * fovyL;
+    QLabel * phiRangeL, * thetaRangeL, * chiRangeL, * dollyRangeL, * fovyRangeL;
 };
 
 #endif // EXPLICITB_H

@@ -28,23 +28,13 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define CLIPB_H 
 
 #include "data.h"
-#include "floatSpin.h"
-#include "mainForm.h"
-#include "parameterLimits.h"
 
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <q3grid.h>
-#include <q3hbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qwidget.h>
+#include <QDialog>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+class QFSpinBox;
+class QLabel;
+class MainForm;
+class QCheckBox;
 
 // Clip board dialog widget
 class ClipBoard: public QDialog
@@ -65,10 +55,10 @@ private slots:
 	void bcancel();
 
 private:
-	MainForm * mainForm;
-        QFSpinBox * clipNearSb, * clipFarSb;
-        QLabel * clipNearL, * clipFarL;
-	QCheckBox * autoNearCb, *autoFarCb;
+    MainForm * mainForm;
+    QFSpinBox * clipNearSb, * clipFarSb;
+    QLabel * clipNearL, * clipFarL;
+    QCheckBox * autoNearCb, *autoFarCb;
 };
 
 #endif // CLIPB_H

@@ -26,6 +26,21 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "spinBoard.h"
 
+#include "mainForm.h"
+#include "positionBox.h"
+#include "propertyBox.h"
+#include "sizeBox.h"
+#include "lineTypeBox.h"
+#include "codeBox.h"
+#include "colorBoard.h"
+#include "colorLabel.h"
+
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLabel>
+#include <QRadioButton>
+#include <QPushButton>
+
 // Make a popup dialog box 
 SpinBoard::SpinBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )

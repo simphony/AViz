@@ -25,6 +25,21 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ***********************************************************************/
 
 #include "bondBoard.h"
+#include "floatSpin.h"
+#include "mainForm.h"
+
+#include <q3buttongroup.h>
+#include <q3grid.h>
+#include <q3hbox.h>
+#include <Q3GridLayout>
+
+#include <QComboBox>
+#include <QCheckBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QSpinBox>
+#include <QPixmap>
 
 #include "./pixmaps/whiteSquare2.xpm"
 #include "./pixmaps/blackSquare2.xpm"
@@ -35,10 +50,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "./pixmaps/goldSquare2.xpm"
 #include "./pixmaps/silverSquare2.xpm"
 #include "./pixmaps/bronzeSquare2.xpm"
-
-#include <Q3GridLayout>
-#include <QPixmap>
-#include <QLabel>
 
 // Make a popup dialog box 
 BondBoard::BondBoard( QWidget * parent, const char * name )
@@ -197,14 +208,14 @@ BondBoard::BondBoard( QWidget * parent, const char * name )
 	minLengthL->setText( "Min Length: " );
 
 	// Create a spin box to set the min length
- 	bondMinLengthSb = new QFSpinBox( gr1, "minLengthSb" );
+    bondMinLengthSb = new QFSpinBox( gr1 );
 
 	// Create a label
 	maxLengthL = new QLabel( gr1, "maxLengthL" );
 	maxLengthL->setText( "Max Length: " );
 
 	// Create a spin box to set the max length
-	bondMaxLengthSb = new QFSpinBox( gr1, "maxLengthSb" );
+    bondMaxLengthSb = new QFSpinBox( gr1 );
 
 	// Create a placeholder 
 	QLabel * emptyL0 = new QLabel( gr1, "emptyL1" );

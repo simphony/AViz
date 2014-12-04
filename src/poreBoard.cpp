@@ -26,7 +26,23 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "poreBoard.h"
 
-#include <Q3GridLayout>
+#include "mainForm.h"
+#include "colorBoard.h"
+#include "colorLabel.h"
+
+#include "codeBox.h"
+#include "defaults.h"
+#include "lineTypeBox.h"
+#include "positionBox.h"
+#include "propertyBox.h"
+#include "sizeBox.h"
+#include "typeColorNumberBox.h"
+
+#include <QPushButton>
+#include <QLabel>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QRadioButton>
 
 // Make a popup dialog box 
 PoreBoard::PoreBoard( QWidget * parent, const char * name )

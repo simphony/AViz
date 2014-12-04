@@ -26,8 +26,23 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "lcBoard.h"
 
+#include "mainForm.h"
+#include "codeBox.h"
+#include "colorBoard.h"
+#include "colorLabel.h"
+#include "floatSpin.h"
+#include "typeColorNumberBox.h"
+#include "sizeBox.h"
+#include "positionBox.h"
+#include "propertyBox.h"
+
 #include <Q3GridLayout>
 #include <QLabel>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QRadioButton>
+
 
 // Make a popup dialog box 
 LcBoard::LcBoard( QWidget * parent, const char * name )

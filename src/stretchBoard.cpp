@@ -49,7 +49,7 @@ StretchBoard::StretchBoard( QWidget * parent, const char * name )
 	QLabel * labelx = new QLabel( this, "labelx" );
 	labelx->setText( " Stretch X: ");
 	stretchBox->addWidget( labelx, 0, 0);
-	stretchSBX = new QFSpinBox( this, "stretchx" );
+    stretchSBX = new QFSpinBox( this );
 	stretchSBX->setMaxValue( MAXSTRETCH );
 	stretchSBX->setMinValue( MINSTRETCH );
 	stretchBox->addWidget( stretchSBX, 0, 1);
@@ -57,15 +57,15 @@ StretchBoard::StretchBoard( QWidget * parent, const char * name )
 	QLabel * labely = new QLabel( this, "labely" );
 	labely->setText( " Stretch Y: ");
 	stretchBox->addWidget( labely, 1, 0);
-	stretchSBY = new QFSpinBox( this, "stretchy" );
+    stretchSBY = new QFSpinBox( this );
 	stretchSBY->setMaxValue( MAXSTRETCH );
 	stretchSBY->setMinValue( MINSTRETCH );
 	stretchBox->addWidget( stretchSBY, 1, 1);
 
-	QLabel * labelz = new QLabel( this, "labelz" );
+    QLabel * labelz = new QLabel( this, "labelz" );
 	labelz->setText( " Stretch Z: ");
 	stretchBox->addWidget( labelz, 2, 0);
-	stretchSBZ = new QFSpinBox( this, "stretchz" );
+    stretchSBZ = new QFSpinBox( this );
 	stretchSBZ->setMaxValue( MAXSTRETCH );
 	stretchSBZ->setMinValue( MINSTRETCH );
 	stretchBox->addWidget( stretchSBZ, 2, 1);

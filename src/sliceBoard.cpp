@@ -25,6 +25,16 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ***********************************************************************/
 
 #include "sliceBoard.h"
+#include "mainForm.h"
+#include "floatSpin.h"
+#include "parameterLimits.h"
+
+#include <q3grid.h>
+#include <q3hbox.h>
+#include <QLabel>
+#include <QCheckBox>
+#include <QPushButton>
+
 
 // Make a popup dialog box 
 SliceBoard::SliceBoard( QWidget * parent, const char * name )
@@ -56,7 +66,7 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
         sliceLX1->setText( " Slice X From: ");
 	sliceBox->addWidget( sliceLX1, 1, 0 );
 
-	sliceSbX1 = new QFSpinBox( this, "sliceX1SB" );
+    sliceSbX1 = new QFSpinBox( this );
 	sliceSbX1->setMinValue( MINSLI );
 	sliceSbX1->setMaxValue( MAXSLI );
 	sliceBox->addWidget( sliceSbX1, 1, 1 );
@@ -65,7 +75,7 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
         sliceLX2->setText( " To: ");
 	sliceBox->addWidget( sliceLX2, 1, 2 );
 
-	sliceSbX2 = new QFSpinBox( this, "sliceX2SB" );
+    sliceSbX2 = new QFSpinBox( this );
 	sliceSbX2->setMinValue( MINSLI );
 	sliceSbX2->setMaxValue( MAXSLI );
 	sliceBox->addWidget( sliceSbX2, 1, 3 );
@@ -74,7 +84,7 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
         sliceLY1->setText( " Slice Y From: ");
 	sliceBox->addWidget( sliceLY1, 2, 0 );
 
-	sliceSbY1 = new QFSpinBox( this, "sliceY1SB" );
+    sliceSbY1 = new QFSpinBox( this );
 	sliceSbY1->setMinValue( MINSLI );
 	sliceSbY1->setMaxValue( MAXSLI );
 	sliceBox->addWidget( sliceSbY1, 2, 1 );
@@ -83,7 +93,7 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
         sliceLY2->setText( " To: ");
 	sliceBox->addWidget( sliceLY2, 2, 2 );
 
-	sliceSbY2 = new QFSpinBox( this, "sliceY2SB" );
+    sliceSbY2 = new QFSpinBox( this );
 	sliceSbY2->setMinValue( MINSLI );
 	sliceSbY2->setMaxValue( MAXSLI );
 	sliceBox->addWidget( sliceSbY2, 2, 3 );
@@ -92,7 +102,7 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
         sliceLZ1->setText( " Slice Z From: ");
 	sliceBox->addWidget( sliceLZ1, 3, 0 );
 
-	sliceSbZ1 = new QFSpinBox( this, "sliceZ1SB" );
+    sliceSbZ1 = new QFSpinBox( this );
 	sliceSbZ1->setMinValue( MINSLI );
 	sliceSbZ1->setMaxValue( MAXSLI );
 	sliceBox->addWidget( sliceSbZ1, 3, 1 );
@@ -101,7 +111,7 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
         sliceLZ2->setText( " To: ");
 	sliceBox->addWidget( sliceLZ2, 3, 2 );
 
-	sliceSbZ2 = new QFSpinBox( this, "sliceZ2SB" );
+    sliceSbZ2 = new QFSpinBox( this );
 	sliceSbZ2->setMinValue( MINSLI );
 	sliceSbZ2->setMaxValue( MAXSLI );
 	sliceBox->addWidget( sliceSbZ2, 3, 3 );

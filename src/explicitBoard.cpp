@@ -26,6 +26,9 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "explicitBoard.h"
 
+#include "floatSpin.h"
+#include "mainForm.h"
+
 #include "./pixmaps/phi.xpm"
 #include "./pixmaps/theta.xpm"
 #include "./pixmaps/chi.xpm"
@@ -55,7 +58,7 @@ ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
         phiL->setPixmap(  phiPm );
 	explicitBox->addWidget( phiL, 0, 0 );
 
-	phiSb = new QFSpinBox( this, "phiSb" );
+    phiSb = new QFSpinBox( this );
 	phiSb->setMinValue( (int)floor(10.0*PHI_MIN+0.5) );
 	phiSb->setMaxValue( (int)floor(10.0*PHI_MAX+0.5) );
 	phiSb->setWrapping( TRUE );
@@ -73,7 +76,7 @@ ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
         thetaL->setPixmap(  thetaPm );
 	explicitBox->addWidget( thetaL, 1, 0 );
 
-	thetaSb = new QFSpinBox( this, "thetaSb" );
+    thetaSb = new QFSpinBox( this );
 	thetaSb->setMinValue( (int)floor(10.0*THETA_MIN+0.5) );
 	thetaSb->setMaxValue( (int)floor(10.0*THETA_MAX+0.5) );
 	thetaSb->setWrapping( TRUE );
@@ -91,7 +94,7 @@ ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
         chiL->setPixmap(  chiPm );
 	explicitBox->addWidget( chiL, 2, 0 );
 
-	chiSb = new QFSpinBox( this, "chiSb" );
+    chiSb = new QFSpinBox( this );
 	chiSb->setMinValue( (int)floor(10.0*CHI_MIN+0.5) );
 	chiSb->setMaxValue( (int)floor(10.0*CHI_MAX+0.5) );
 	chiSb->setWrapping( TRUE );
@@ -109,7 +112,7 @@ ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
         dollyL->setPixmap(  dollyPm );
 	explicitBox->addWidget( dollyL, 3, 0 );
 
-	dollySb = new QFSpinBox( this, "dollySb" );
+    dollySb = new QFSpinBox( this );
 	dollySb->setMinValue( (int)floor(10.0*DOLLY_MIN+0.5) );
 	dollySb->setMaxValue( (int)floor(10.0*DOLLY_MAX+0.5) );
 	explicitBox->addWidget( dollySb, 3, 1 );
@@ -126,7 +129,7 @@ ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
         fovyL->setPixmap(  fovyPm );
 	explicitBox->addWidget( fovyL, 4, 0 );
 
-	fovySb = new QFSpinBox( this, "fovySb" );
+    fovySb = new QFSpinBox( this );
 	fovySb->setMinValue( (int)floor(10.0*FOVY_MIN+0.5) );
 	fovySb->setMaxValue( (int)floor(10.0*FOVY_MAX+0.5) );
 	explicitBox->addWidget( fovySb, 4, 1 );

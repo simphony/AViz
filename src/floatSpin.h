@@ -27,17 +27,34 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef FSPIN_H
 #define FSPIN_H 
 
-#include <qspinbox.h>
+#include <QSpinBox>
 
-// Define floating-point spin box
+class QDoubleValidator;
+
+/*! @class QFSpinBox
+    @brief Floating point spin box.
+
+    Floating point spin box where the displayed value is a
+    float (with one digit after the decimal place).
+
+    Users of this class should note that the integer value
+    provded by this class is 10 times the intended value (in
+    other words it is 10 times the displayed float).
+*/
+
 class QFSpinBox: public QSpinBox 
 { 
 	Q_OBJECT
 public:
-	QFSpinBox( QWidget* parent = 0, const char *name = 0);
+    QFSpinBox( QWidget* parent = 0);
 
-	QString mapValueToText( int value );
-	int mapTextToValue( bool* ok );
+protected:
+    virtual QString textFromValue(int value) const;
+    virtual int valueFromText(const QString &text) const;
+    virtual QValidator::State validate(QString & text, int & pos) const;
+
+private:
+    QDoubleValidator *m_validator;
 };
 
 #endif // FSPIN_H
