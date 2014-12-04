@@ -34,7 +34,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "defaultParticles.h"
 #include "defaults.h"
 #include "fileFunctions.h"
-#include "memoryFunctions.h"
 #include "positionBox.h"
 #include "propertyBox.h"
 #include "sizeBox.h"

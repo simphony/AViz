@@ -35,7 +35,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "defaults.h"
 #include "fileFunctions.h"
 #include "mainForm.h"
-#include "memoryFunctions.h"
 #include "positionBox.h"
 #include "propertyBox.h"
 #include "sizeBox.h"

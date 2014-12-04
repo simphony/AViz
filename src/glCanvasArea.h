@@ -33,7 +33,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "fileFunctions.h"
 #include "imageFileFunctions.h"
 #include "mainForm.h"
-#include "memoryFunctions.h"
 #include "parameterLimits.h"
 
 #include <qbitmap.h>

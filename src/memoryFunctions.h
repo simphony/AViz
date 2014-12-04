@@ -28,14 +28,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define MEM_H
 
 #include "data.h"
-#include "defaultParticles.h"
-#include "defaults.h"
-#include "fileFunctions.h"
-#include "version.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 void allocateParticleData( particleData * );
 void allocateAggregateData( aggregateData * );

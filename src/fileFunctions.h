@@ -30,7 +30,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "data.h"
 #include "defaultParticles.h"
 #include "defaults.h"
-#include "memoryFunctions.h"
 #include "version.h"
 
 #include <stdio.h>

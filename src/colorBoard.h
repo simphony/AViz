@@ -32,7 +32,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "defaults.h"
 #include "defaultParticles.h"
 #include "fileFunctions.h"
-#include "memoryFunctions.h"
 
 #include <qcombobox.h>
 #include <qdialog.h>
