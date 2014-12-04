@@ -50,7 +50,7 @@ void allocateAggregateData( aggregateData * ad )
 {
 	// Allocate memory for the particle positions 
 	(*ad).particles = (particle *)malloc( (*ad).numberOfParticles*sizeof(particle) );
-	(*ad).haveMemoryAllocated = TRUE;
+    (*ad).haveMemoryAllocated = true;
 }
 
 // Free memory

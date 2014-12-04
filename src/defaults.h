@@ -41,9 +41,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define BOND_MAXLENGTH 10.0
 #define BDIAMETER 0.1
 
-#define FALSE 0
-#define TRUE 1
-
 // Max number of atom types
 #define ATOMS_MAX 256
 
@@ -112,8 +109,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define unidentified "?? 0.5 0.5 0.5"   // Used if identification of type fails
 
 // Miscellaneous definitions
-#define FALSE 0
-#define TRUE 1
 #define SPACE_CHAR 32
 #define PI 3.1415927
 #define TWO_PI 6.28318530
