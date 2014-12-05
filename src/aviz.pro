@@ -1,8 +1,10 @@
 TEMPLATE        = app
 TARGET          = aviz
 CONFIG          += qt opengl warn_on release thread
-
 QMAKE_CXXFLAGS  = -O2
+QT +=  opengl qt3support 
+#DEFINES = QT3_SUPPORT_WARNINGS
+LIBS += -lX11 -lpng -lGLU
 HEADERS		= SoAnyThumbWheel.h \
 		  SoQtThumbWheel.h \
 		  animationBoard.h \
@@ -87,5 +89,3 @@ SOURCES         = SoAnyThumbWheel.cpp \
 		  trackBoard.cpp \
 		  translationBoard.cpp \
 		  typeColorNumberBox.cpp
-#The following line was inserted by qt3to4
-QT +=  opengl qt3support 
