@@ -27,11 +27,18 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "animationBoard.h"
 
 #include <dirent.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <cstdio>
 
 #include <Q3GridLayout>
+#include <Q3HBox>
+
 #include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QLabel>
+#include <QFileDialog>
+
+#include "defaults.h"
 
 #define MIN_FILE_LINE_WIDTH 500
 #define MIN_FILE_LINE_HEIGHT 100
@@ -136,7 +143,7 @@ void AnimationBoard::browseCB()
 	char * filename = (char *)malloc(BUFSIZ);
 	char * buffer = (char *)malloc(BUFSIZ);
 
-	QString fn (Q3FileDialog::getExistingDirectory( QString::null, this, "./") );
+    QString fn (QFileDialog::getExistingDirectory( QString::null, this, "./") );
 	// Register the selection
 	if ( !fn.isEmpty() ) {
 		targetDir = fn;

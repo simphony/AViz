@@ -27,49 +27,31 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef ANIMB_H
 #define ANIMB_H 
 
-#include <qdialog.h>
-#include <q3filedialog.h>
-#include <qlayout.h>
-#include <q3hbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <q3vbox.h>
-#include <qwidget.h>
+#include <QDialog>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <unistd.h>
-
-#include "defaults.h"
+class QLineEdit;
+class QPushButton;
+class QLabel;
 
 // File list board dialog widget
 class AnimationBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	AnimationBoard( QWidget * parent=0, const char * name=0 );
-
-
-public slots:
+    AnimationBoard( QWidget * parent=0, const char * name=0 );
 
 private slots:
-	void createAGIF();
-	void browseCB();
-	void bdone();
+    void createAGIF();
+    void browseCB();
+    void bdone();
 
 private:
-	QLineEdit * fileLine;
-	QPushButton * animGIF;
-	QLabel * numberL;
-	QString targetDir;
-	QSizePolicy sizePolicy() const;
-	bool haveTarget;
+    QLineEdit * fileLine;
+    QPushButton * animGIF;
+    QLabel * numberL;
+    QString targetDir;
+    QSizePolicy sizePolicy() const;
+    bool haveTarget;
 };
 
 #endif // ANIMB_H
