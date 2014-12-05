@@ -38,7 +38,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <qwidget.h>
 
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 // Line type box widget
 class LineTypeBox: public Q3HBox

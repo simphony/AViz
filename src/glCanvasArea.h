@@ -42,9 +42,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <q3hbox.h>
 #include <QMouseEvent>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <X11/Xlib.h>

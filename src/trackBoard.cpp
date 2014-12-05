@@ -26,15 +26,18 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "trackBoard.h"
 
-#include "mainForm.h"
-
 #include <Q3ButtonGroup>
+#include <Q3GridLayout>
+#include <Q3HBox>
+
 #include <QComboBox>
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QPushButton>
-#include <Q3GridLayout>
 #include <QLabel>
+
+#include "mainForm.h"
+#include "fileFunctions.h"
 
 // Make a popup dialog box 
 TrackBoard::TrackBoard( QWidget * parent, const char * name )

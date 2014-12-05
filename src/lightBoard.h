@@ -41,8 +41,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <q3vbox.h>
 #include <qwidget.h>
 
-#include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 // Lights board dialog widget
 class LightsBoard: public QDialog

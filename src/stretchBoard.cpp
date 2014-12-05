@@ -26,13 +26,16 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "stretchBoard.h"
 
-#include "floatSpin.h"
-#include "mainForm.h"
+#include <cmath>
 
 #include <Q3GridLayout>
+#include <q3hbox.h>
 #include <QPushButton>
 #include <QLabel>
 
+#include "floatSpin.h"
+#include "mainForm.h"
+#include "parameterLimits.h"
 
 // Make a popup dialog box 
 StretchBoard::StretchBoard( QWidget * parent, const char * name )

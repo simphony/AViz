@@ -26,6 +26,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "glCanvasFrame.h"
 
+#include <cmath>
+
 #include "./pixmaps/home.xpm"
 #include "./pixmaps/homenew.xpm"
 #include "./pixmaps/parallel.xpm"

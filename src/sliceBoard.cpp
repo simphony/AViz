@@ -25,6 +25,9 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ***********************************************************************/
 
 #include "sliceBoard.h"
+
+#include <cmath>
+
 #include "mainForm.h"
 #include "floatSpin.h"
 #include "parameterLimits.h"
@@ -34,6 +37,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QLabel>
 #include <QCheckBox>
 #include <QPushButton>
+
 
 
 // Make a popup dialog box 

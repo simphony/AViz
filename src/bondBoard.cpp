@@ -27,6 +27,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "bondBoard.h"
 #include "floatSpin.h"
 #include "mainForm.h"
+#include "fileFunctions.h"
 
 #include <q3buttongroup.h>
 #include <q3grid.h>
@@ -50,6 +51,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "./pixmaps/goldSquare2.xpm"
 #include "./pixmaps/silverSquare2.xpm"
 #include "./pixmaps/bronzeSquare2.xpm"
+
+#include <cmath>
 
 // Make a popup dialog box 
 BondBoard::BondBoard( QWidget * parent, const char * name )

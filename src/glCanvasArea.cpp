@@ -24,6 +24,9 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ***********************************************************************/
 
 #include "glCanvasArea.h"
+
+#include <cmath>
+
 #include "memoryFunctions.h"
 #include "./bitmaps/hand2.xbm"
 #include "./bitmaps/hand2Shift.xbm"

@@ -41,11 +41,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <qtimer.h>
 #include <q3vbox.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <sys/time.h>
-
 
 
 // Frame widget containing the Open GL drawing area

@@ -27,23 +27,13 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef FORM_H
 #define FORM_H
 
-#include "data.h"
-#include "defaults.h"
-#include "fileFunctions.h"
-#include "parameterLimits.h"
+#include <QWidget>
 
-#include <q3hbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qsize.h>
-#include <qsizepolicy.h>
-#include <q3vbox.h>
-#include <qwidget.h>
 #include <Q3GridLayout>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include "data.h"
+
+class QLabel;
 
 // Note: Pointers to composite widgets are defined in 
 // mainForm.cpp and not here -- it causes problems 
@@ -53,111 +43,111 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // the drawing canvas and associated control elements
 class MainForm: public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	MainForm( QWidget *parent=0, const char *name=0 );
-	
-	void setAVizAddress( char * );
-	void setFileType( fileType );
-	fileType isFileType();
-	void setKeepViewObject( bool );
-	bool isKeepViewObject();
-	void readFile( const QString & );
-	void writeFile( const QString & );
-	QString readFileFromList( int, bool );
+    MainForm( QWidget *parent=0, const char *name=0 );
 
-	void setDefaults();		
-	void setDefaults( viewParam, const char * );
-	void setViewParam( viewParam );
-	void setAutoAndStart( viewParam );
-	void updateView();
+    void setAVizAddress( char * );
+    void setFileType( fileType );
+    fileType isFileType();
+    void setKeepViewObject( bool );
+    bool isKeepViewObject();
+    void readFile( const QString & );
+    void writeFile( const QString & );
+    QString readFileFromList( int, bool );
 
-	aggregateData * getAggregateData();
-	viewParam * getViewParam();
-	viewObject * getViewObject();
-	particleData * getParticleData();
+    void setDefaults();
+    void setDefaults( viewParam, const char * );
+    void setViewParam( viewParam );
+    void setAutoAndStart( viewParam );
+    void updateView();
 
-	void updateRendering();
-	void updateExplicitBoard();
-	void snapRendering();
-	void snapRendering( const QString & );
-	void setAtomMenus();
-	void setSpinMenus();
-	void setLcMenus();
-	void setPolymerMenus();
-	void setPoreMenus();
-	void broadcastDotStyle();
-	void broadcastLineStyle();
-	void broadcastCubeStyle();
-	void broadcastCylinderStyle();
-	void broadcastConeStyle();
-	void broadcastSphereStyle();
-	void broadcastLowQuality();
-	void broadcastHighQuality();
-	void broadcastFinalQuality();
-	void closeModeBoards();
+    aggregateData * getAggregateData();
+    viewParam * getViewParam();
+    viewObject * getViewObject();
+    particleData * getParticleData();
 
-	void setViewXYPlus();
-	void setViewXYMinus();
-	void setViewXZPlus();
-	void setViewXZMinus();
-	void setViewYZPlus();
-	void setViewYZMinus();
-	void computeTransformation( double, double, double, double, double *, double *, double * );
+    void updateRendering();
+    void updateExplicitBoard();
+    void snapRendering();
+    void snapRendering( const QString & );
+    void setAtomMenus();
+    void setSpinMenus();
+    void setLcMenus();
+    void setPolymerMenus();
+    void setPoreMenus();
+    void broadcastDotStyle();
+    void broadcastLineStyle();
+    void broadcastCubeStyle();
+    void broadcastCylinderStyle();
+    void broadcastConeStyle();
+    void broadcastSphereStyle();
+    void broadcastLowQuality();
+    void broadcastHighQuality();
+    void broadcastFinalQuality();
+    void closeModeBoards();
 
-	void statusMessage( const char * );
-	void statusMessage( const char *, const char * );
+    void setViewXYPlus();
+    void setViewXYMinus();
+    void setViewXZPlus();
+    void setViewXZMinus();
+    void setViewYZPlus();
+    void setViewYZMinus();
+    void computeTransformation( double, double, double, double, double *, double *, double * );
 
-	void launchAnnotation( void );
-	void launchAtoms( void );
-	void launchBonds( void );
-	void launchClip( void );
-	void launchExplicit( void );
-	void launchFileList( void );
-	void launchFileList( const QString & );
-	void launchLights( void );
-	void launchLiquidCrystals( void );
-	void launchPolymers( void );
-	void launchPores( void );
-	void launchSlice( void );
-	void launchSpins( void );
-	void launchStretch( void );
-	void launchTrack( const QString & );
-	void launchTranslation( void );
+    void statusMessage( const char * );
+    void statusMessage( const char *, const char * );
 
-	void hideTrack( void );
-	void generateTracks( void );
+    void launchAnnotation( void );
+    void launchAtoms( void );
+    void launchBonds( void );
+    void launchClip( void );
+    void launchExplicit( void );
+    void launchFileList( void );
+    void launchFileList( const QString & );
+    void launchLights( void );
+    void launchLiquidCrystals( void );
+    void launchPolymers( void );
+    void launchPores( void );
+    void launchSlice( void );
+    void launchSpins( void );
+    void launchStretch( void );
+    void launchTrack( const QString & );
+    void launchTranslation( void );
+
+    void hideTrack( void );
+    void generateTracks( void );
 
 private:
-	QWidget * aviz;
-	QWidget * glCanvasFrame;
-	QWidget * renderBox;
-	QWidget * liveBox;
-	QWidget * ab;
-	QWidget * anb;
-	QWidget * bb;
-	QWidget * clb;
-	QWidget * eb;
-	QWidget * flb;
-	QWidget * lcb;
-	QWidget * lb;
-	QWidget * plb;
-	QWidget * pb;
-	QWidget * sb;
-	QWidget * slb;
-	QWidget * stb;
-	QWidget * tb;
-	QWidget * trab;
-	Q3GridLayout * mainBox;
-	QLabel * status;
-	fileList fl;
-	fileType ft;
-	bool keepViewObject;
-	int numCols;
-	int numRows;
+    QWidget * aviz;
+    QWidget * glCanvasFrame;
+    QWidget * renderBox;
+    QWidget * liveBox;
+    QWidget * ab;
+    QWidget * anb;
+    QWidget * bb;
+    QWidget * clb;
+    QWidget * eb;
+    QWidget * flb;
+    QWidget * lcb;
+    QWidget * lb;
+    QWidget * plb;
+    QWidget * pb;
+    QWidget * sb;
+    QWidget * slb;
+    QWidget * stb;
+    QWidget * tb;
+    QWidget * trab;
+    Q3GridLayout * mainBox;
+    QLabel * status;
+    fileList fl;
+    fileType ft;
+    bool keepViewObject;
+    int numCols;
+    int numRows;
 
-	QSize sizeHint() const;
-        QSizePolicy sizePolicy() const;
+    QSize sizeHint() const;
+    QSizePolicy sizePolicy() const;
 };
 
 

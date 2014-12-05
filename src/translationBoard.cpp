@@ -29,10 +29,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "mainForm.h"
 
 #include <Q3GridLayout>
+#include <Q3HBox>
 #include <QLabel>
 #include <QPushButton>
 
-#include <math.h>
+#include <cmath>
 
 TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )

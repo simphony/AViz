@@ -39,7 +39,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 class QPaintEvent;
 
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 // Color label class definition
 class ColorLabel: public QWidget

@@ -26,6 +26,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "explicitBoard.h"
 
+#include "parameterLimits.h"
 #include "floatSpin.h"
 #include "mainForm.h"
 
@@ -37,8 +38,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <QPixmap>
 #include <Q3GridLayout>
+#include <q3hbox.h>
 #include <QLabel>
 #include <QPushButton>
+
+#include <cmath>
 
 // Make a popup dialog box
 ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )

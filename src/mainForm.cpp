@@ -25,8 +25,12 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ***********************************************************************/
 
 #include "mainForm.h"
-#include "aviz.h"
 
+#include <QLabel>
+
+#include "aviz.h"
+#include "parameterLimits.h"
+#include "fileFunctions.h"
 #include "annotationBoard.h"
 #include "atomBoard.h"
 #include "bondBoard.h"
@@ -47,6 +51,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "renderStyleBox.h"
 #include "liveBox.h"
 
+
 // Private pointers are defined in mainForm.h, but the corresponding
 // header files cannot be included there -- it causes problems regarding 
 // the mutual inclusion of  header files.  Here the pointers are of 
@@ -65,14 +70,12 @@ MainForm::MainForm( QWidget *parent, const char *name )
 	mainBox = new Q3GridLayout( this, numCols, numRows, 0 );
 
 	// Create the OpenGL widget
-	glCanvasFrame = NULL;
 	glCanvasFrame = new GLCanvasFrame( this, "glcanvas");
 	if (glCanvasFrame)
 		((GLCanvasFrame *)glCanvasFrame)->setFormAddress( this );
 
 	// Make a box that will hold 
 	// a row of elements to define render quality
-	renderBox = NULL;
 	renderBox = new RenderBox( this, "renderBox" );
 	if (renderBox) { 
 		((RenderBox *)renderBox)->setFormAddress( this );
@@ -81,7 +84,6 @@ MainForm::MainForm( QWidget *parent, const char *name )
 
 	// Make a box that will hold 
 	// two buttons to take snapshots
-	liveBox = NULL;
 	liveBox = new LiveBox( this, "liveBox" );
 	if (liveBox) {
 		((LiveBox *)liveBox)->setFormAddress( this );
@@ -89,7 +91,6 @@ MainForm::MainForm( QWidget *parent, const char *name )
 	}
 
 	// Add a label that pretends to be a status bar
-	status = NULL;
 	status = new QLabel( this );
 	if (status) {
 		status->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
@@ -98,23 +99,23 @@ MainForm::MainForm( QWidget *parent, const char *name )
 		mainBox->addMultiCellWidget( status, numRows-1, numRows-1, 0, numCols-1 );
 	}
 
-	// Clear pointers
-	aviz = NULL;
-	ab = NULL;
-        anb = NULL;
-        bb = NULL;
-        clb = NULL;
-        eb = NULL;
-        flb = NULL;
-        lb = NULL;
-        lcb = NULL;
-        pb = NULL;
-        plb = NULL;
-        sb = NULL;
-        slb = NULL;
-        stb = NULL;
-        tb = NULL;
-        trab = NULL;
+    // Clear pointers
+    aviz = NULL;
+    ab = NULL;
+    anb = NULL;
+    bb = NULL;
+    clb = NULL;
+    eb = NULL;
+    flb = NULL;
+    lb = NULL;
+    lcb = NULL;
+    pb = NULL;
+    plb = NULL;
+    sb = NULL;
+    slb = NULL;
+    stb = NULL;
+    tb = NULL;
+    trab = NULL;
 
 	// Create some of the more important boards
         if (!ab) {

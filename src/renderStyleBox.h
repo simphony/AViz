@@ -38,7 +38,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <q3vbox.h>
 
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 // Render quality box in main form
 class RenderBox: public Q3VBox

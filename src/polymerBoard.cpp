@@ -26,6 +26,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "polymerBoard.h"
 
+#include <cmath>
+
 #include <Q3GridLayout>
 #include <QLabel>
 

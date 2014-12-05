@@ -55,14 +55,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 class Q3GridLayout;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <sys/stat.h>
-#include <unistd.h>
-
-
 
 // Polymer board dialog widget
 class PolymerBoard: public QDialog

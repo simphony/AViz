@@ -28,6 +28,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "floatSpin.h"
 #include "mainForm.h"
+#include "parameterLimits.h" // for MAXCLIP
 
 #include <QCheckBox>
 #include <q3hbox.h>
@@ -35,6 +36,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <Q3GridLayout>
 #include <QLabel>
+
+#include <cmath>
 
 // Make a popup dialog box 
 ClipBoard::ClipBoard( QWidget * parent, const char * name )
