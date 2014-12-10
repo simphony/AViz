@@ -38,19 +38,17 @@ class AnimationBoard: public QDialog
 {
     Q_OBJECT
 public:
-    AnimationBoard( QWidget * parent=0, const char * name=0 );
+    AnimationBoard( QWidget * parent=0 );
 
 private slots:
     void createAGIF();
     void browseCB();
-    void bdone();
 
 private:
     QLineEdit * fileLine;
     QPushButton * animGIF;
     QLabel * numberL;
     QString targetDir;
-    QSizePolicy sizePolicy() const;
     bool haveTarget;
 };
 
