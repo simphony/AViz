@@ -33,92 +33,92 @@ Contact address: Computational Physics Group, Dept. of Physics,
 AnnotationBoard::AnnotationBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Set Annotation" );
+    this->setCaption( "AViz: Set Annotation" );
 
-	// Insert a grid that will hold sliders and text windoes,
-	// plus a row of control buttons
-	const int numCols = 7;
-        const int numRows = 3;
-        Q3GridLayout * annotBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "annotBox" );
-	
-	// Create a label
-	QLabel * textL = new QLabel( this, "textL" );
-	textL->setText( "Annotation:" ); 
-	annotBox->addWidget( textL, 0, 0);
+    // Insert a grid that will hold sliders and text windoes,
+    // plus a row of control buttons
+    const int numCols = 7;
+    const int numRows = 3;
+    Q3GridLayout * annotBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "annotBox" );
 
-	// Create a text window
-	annotationTextLe = new QLineEdit( this, "annotationText" );
-	annotBox->addMultiCellWidget( annotationTextLe, 0, 0, 1, numCols-3);
+    // Create a label
+    QLabel * textL = new QLabel( this, "textL" );
+    textL->setText( "Annotation:" );
+    annotBox->addWidget( textL, 0, 0);
 
-	// Create a check box
-	showAnnotationCb = new QCheckBox( this, "showAnnotation" );
-	showAnnotationCb->setText( "Show Annotation" );
-	annotBox->addMultiCellWidget( showAnnotationCb, 0, 0, numCols-2, -1);
+    // Create a text window
+    annotationTextLe = new QLineEdit( this, "annotationText" );
+    annotBox->addMultiCellWidget( annotationTextLe, 0, 0, 1, numCols-3);
 
-	// Create three sliders and labels
-	QLabel * sizeL = new QLabel( this, "sizeL" );
-	sizeL->setText( "Size:" ); 
-	annotBox->addWidget( sizeL, 1, 1);
+    // Create a check box
+    showAnnotationCb = new QCheckBox( this, "showAnnotation" );
+    showAnnotationCb->setText( "Show Annotation" );
+    annotBox->addMultiCellWidget( showAnnotationCb, 0, 0, numCols-2, -1);
 
-	annotationSizeSb = new QSpinBox( this, "annotationSizeSl" );
-	annotationSizeSb->setMinValue( 1 );
-	annotationSizeSb->setMaxValue( 4 );
-	annotationSizeSb->setLineStep( 1 );
-	annotBox->addWidget( annotationSizeSb, 1, 2);
+    // Create three sliders and labels
+    QLabel * sizeL = new QLabel( this, "sizeL" );
+    sizeL->setText( "Size:" );
+    annotBox->addWidget( sizeL, 1, 1);
 
-	QLabel * xL = new QLabel( this, "xL" );
-	xL->setText( "X Position:" ); 
-	annotBox->addWidget( xL, 1, 3);
+    annotationSizeSb = new QSpinBox( this, "annotationSizeSl" );
+    annotationSizeSb->setMinValue( 1 );
+    annotationSizeSb->setMaxValue( 4 );
+    annotationSizeSb->setLineStep( 1 );
+    annotBox->addWidget( annotationSizeSb, 1, 2);
 
-	annotationXSb = new QSpinBox( this, "xSl" );
-	annotationXSb->setMinValue( 0 );
-	annotationXSb->setMaxValue( 1000 );
-	annotationXSb->setLineStep( 10 );
-	annotBox->addWidget( annotationXSb, 1, 4);
+    QLabel * xL = new QLabel( this, "xL" );
+    xL->setText( "X Position:" );
+    annotBox->addWidget( xL, 1, 3);
 
-	QLabel * yL = new QLabel( this, "yL" );
-	yL->setText( "Y Position:" ); 
-	annotBox->addWidget( yL, 1, 5);
+    annotationXSb = new QSpinBox( this, "xSl" );
+    annotationXSb->setMinValue( 0 );
+    annotationXSb->setMaxValue( 1000 );
+    annotationXSb->setLineStep( 10 );
+    annotBox->addWidget( annotationXSb, 1, 4);
 
-	annotationYSb = new QSpinBox( this, "ySl" );
-	annotationYSb->setMinValue( 0 );
-	annotationYSb->setMaxValue( 1000 );
-	annotationYSb->setLineStep( 10 );
-	annotBox->addWidget( annotationYSb, 1, 6);
+    QLabel * yL = new QLabel( this, "yL" );
+    yL->setText( "Y Position:" );
+    annotBox->addWidget( yL, 1, 5);
 
-	Q3HBox * hb = new Q3HBox( this, "hb" );
-	annotBox->addMultiCellWidget( hb, numRows-1, numRows-1, 0, -1);
-	
-	// Create a placeholder 
-	QLabel * emptyL = new QLabel( hb, "emptyL" );
+    annotationYSb = new QSpinBox( this, "ySl" );
+    annotationYSb->setMinValue( 0 );
+    annotationYSb->setMaxValue( 1000 );
+    annotationYSb->setLineStep( 10 );
+    annotBox->addWidget( annotationYSb, 1, 6);
 
-	// Create pushbuttons that will go into the lowest row
-	QPushButton * done = new QPushButton( hb, "done" );
-	done->setText( "Done" ); 
+    Q3HBox * hb = new Q3HBox( this, "hb" );
+    annotBox->addMultiCellWidget( hb, numRows-1, numRows-1, 0, -1);
 
-	 // Define a callback for that button
-        QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
+    // Create a placeholder
+    QLabel * emptyL = new QLabel( hb, "emptyL" );
 
-	QPushButton * apply = new QPushButton( hb, "apply" );
-	apply->setText( "Apply" ); 
+    // Create pushbuttons that will go into the lowest row
+    QPushButton * done = new QPushButton( hb, "done" );
+    done->setText( "Done" );
 
-	 // Define a callback for that button
-        QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
+    // Define a callback for that button
+    QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
 
-	QPushButton * cancel = new QPushButton( hb, "cancel" );
-	cancel->setText( "Cancel" ); 
+    QPushButton * apply = new QPushButton( hb, "apply" );
+    apply->setText( "Apply" );
 
-	 // Define a callback for that button
-        QObject::connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
+    // Define a callback for that button
+    QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
 
-	hb->setStretchFactor( emptyL, 10 );
+    QPushButton * cancel = new QPushButton( hb, "cancel" );
+    cancel->setText( "Cancel" );
+
+    // Define a callback for that button
+    QObject::connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
+
+    hb->setStretchFactor( emptyL, 10 );
 }
 
 
 // Set a pointer to the main form
 void AnnotationBoard::setMainFormAddress( MainForm * thisMF )
 {
-	mainForm = thisMF;
+    mainForm = thisMF;
 }
 
 
@@ -126,62 +126,62 @@ void AnnotationBoard::setMainFormAddress( MainForm * thisMF )
 // it using a local copy, and update the settings
 void AnnotationBoard::setAnnotation( viewParam vp )
 {
-	annotationTextLe->setText( vp.annotationText );
-	showAnnotationCb->setChecked( vp.showAnnotation );
-	annotationSizeSb->setValue( vp.annotationSize );
-	annotationXSb->setValue( vp.annotationCoordX );
-	annotationYSb->setValue( vp.annotationCoordY );
+    annotationTextLe->setText( vp.annotationText );
+    showAnnotationCb->setChecked( vp.showAnnotation );
+    annotationSizeSb->setValue( vp.annotationSize );
+    annotationXSb->setValue( vp.annotationCoordX );
+    annotationYSb->setValue( vp.annotationCoordY );
 }
 
 
 // Register the current settings
 void AnnotationBoard::registerSettings( void )
 {
-	// Get the current settings 
-	if (mainForm) {
-		viewParam * vp = mainForm->getViewParam( );
+    // Get the current settings
+    if (mainForm) {
+        viewParam * vp = mainForm->getViewParam( );
 
-		// Update the values
-		QString text = annotationTextLe->text();
-		sprintf( (*vp).annotationText, "%s", (const char *)text );
-		(*vp).showAnnotation = showAnnotationCb->isChecked();
-		(*vp).annotationSize = annotationSizeSb->value();
-		(*vp).annotationCoordX = annotationXSb->value();
-		(*vp).annotationCoordY = annotationYSb->value();
-	}
+        // Update the values
+        QString text = annotationTextLe->text();
+        sprintf( (*vp).annotationText, "%s", (const char *)text );
+        (*vp).showAnnotation = showAnnotationCb->isChecked();
+        (*vp).annotationSize = annotationSizeSb->value();
+        (*vp).annotationCoordX = annotationXSb->value();
+        (*vp).annotationCoordY = annotationYSb->value();
+    }
 }
 
 
 // Complete the annotation setting
 void AnnotationBoard::bdone()
 {
-	this->registerSettings();
+    this->registerSettings();
 
-	// Re-do the graphics, using the new view settings
-	if (mainForm) {
-		mainForm->updateRendering();
-	}
+    // Re-do the graphics, using the new view settings
+    if (mainForm) {
+        mainForm->updateRendering();
+    }
 
-	// Hide now
-        hide();
+    // Hide now
+    hide();
 }
 
 
 // Accept the annotation setting
 void AnnotationBoard::bapply()
 {
-	this->registerSettings();
+    this->registerSettings();
 
-	// Re-do the graphics, using the new view settings
-	if (mainForm) {
-		mainForm->updateRendering();
-	}
+    // Re-do the graphics, using the new view settings
+    if (mainForm) {
+        mainForm->updateRendering();
+    }
 }
 
 
 // Cancel the annotation setting: hide the board
 void AnnotationBoard::bcancel()
 {
-	// Hide now
-	hide();
+    // Hide now
+    hide();
 }

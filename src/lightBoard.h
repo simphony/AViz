@@ -46,37 +46,37 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // Lights board dialog widget
 class LightsBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	LightsBoard( QWidget * parent=0, const char * name=0 );
+    LightsBoard( QWidget * parent=0, const char * name=0 );
 
 public slots:
-	void setMainFormAddress( MainForm * );
-	void setLights( viewParam );
+    void setMainFormAddress( MainForm * );
+    void setLights( viewParam );
 
 private slots:
-	void registerSettings();
-	void setLightDepth( int );
-	void bdone();
-	void bapply();
-	void bcancel();
+    void registerSettings();
+    void setLightDepth( int );
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	MainForm * mainForm;
-	QCheckBox * light0;
-	QCheckBox * light1;
-	QCheckBox * light2;
-	QCheckBox * light3;
-	QCheckBox * light4;
-	QCheckBox * light5;
-	QCheckBox * light6;
-	QCheckBox * light7;
-	QComboBox * lightCob;
-	QSlider * depthS;
-	QSlider * ambientS;
-	QSlider * shininessS;
-	QLabel * depthL0;
-	QLabel * depthL1;
+    MainForm * mainForm;
+    QCheckBox * light0;
+    QCheckBox * light1;
+    QCheckBox * light2;
+    QCheckBox * light3;
+    QCheckBox * light4;
+    QCheckBox * light5;
+    QCheckBox * light6;
+    QCheckBox * light7;
+    QComboBox * lightCob;
+    QSlider * depthS;
+    QSlider * ambientS;
+    QSlider * shininessS;
+    QLabel * depthL0;
+    QLabel * depthL1;
 };
 
 #endif // LIGHTB_H
