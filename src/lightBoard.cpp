@@ -26,6 +26,19 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "lightBoard.h"
 
+#include <Q3GridLayout>
+#include <Q3HBox>
+#include <Q3VBox>
+#include <Q3Grid>
+
+#include <QCheckBox>
+#include <QSlider>
+#include <QComboBox>
+#include <QPushButton>
+#include <QLabel>
+
+#include <cmath>
+
 // Make a popup dialog box that will hold a vertical row of buttons
 LightsBoard::LightsBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )

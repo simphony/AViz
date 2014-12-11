@@ -34,6 +34,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <q3grid.h>
 #include <q3hbox.h>
+#include <Q3GridLayout>
+
 #include <QLabel>
 #include <QCheckBox>
 #include <QPushButton>

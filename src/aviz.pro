@@ -48,7 +48,8 @@ HEADERS		= SoAnyThumbWheel.h \
 		  trackBoard.h \
 		  translationBoard.h \
 		  typeColorNumberBox.h \
-		  version.h
+		  version.h \
+		  widgets/doneapplycancelwidget.h
 SOURCES         = SoAnyThumbWheel.cpp \
 		  SoQtThumbWheel.cpp \
 		  animationBoard.cpp \
@@ -88,4 +89,5 @@ SOURCES         = SoAnyThumbWheel.cpp \
 		  stretchBoard.cpp \
 		  trackBoard.cpp \
 		  translationBoard.cpp \
-		  typeColorNumberBox.cpp
+		  typeColorNumberBox.cpp \
+		  widgets/doneapplycancelwidget.cpp

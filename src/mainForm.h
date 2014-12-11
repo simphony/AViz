@@ -29,11 +29,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <QWidget>
 
-#include <Q3GridLayout>
-
 #include "data.h"
 
 class QLabel;
+class Q3GridLayout;
+class AnnotationBoard;
 
 // Note: Pointers to composite widgets are defined in 
 // mainForm.cpp and not here -- it causes problems 
@@ -124,7 +124,7 @@ private:
     QWidget * renderBox;
     QWidget * liveBox;
     QWidget * ab;
-    QWidget * anb;
+    AnnotationBoard * m_anb;
     QWidget * bb;
     QWidget * clb;
     QWidget * eb;

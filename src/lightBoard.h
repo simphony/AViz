@@ -30,18 +30,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "mainForm.h"
 #include "data.h"
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qdialog.h>
-#include <q3grid.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qslider.h>
-#include <q3vbox.h>
-#include <qwidget.h>
+#include <QDialog>
 
-#include <cmath>
+class QCheckBox;
+class QSlider;
+class QComboBox;
 
 // Lights board dialog widget
 class LightsBoard: public QDialog

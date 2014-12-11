@@ -27,6 +27,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "mainForm.h"
 
 #include <QLabel>
+#include <Q3GridLayout>
 
 #include "aviz.h"
 #include "parameterLimits.h"
@@ -62,7 +63,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // Main form: implements drawing control elements
 // 
 MainForm::MainForm( QWidget *parent, const char *name )
-    : QWidget( parent, name )
+    : QWidget( parent, name ), m_anb(NULL)
 {
 	// Make a grid layout that will hold all elements
 	numCols = 1;
@@ -102,7 +103,6 @@ MainForm::MainForm( QWidget *parent, const char *name )
     // Clear pointers
     aviz = NULL;
     ab = NULL;
-    anb = NULL;
     bb = NULL;
     clb = NULL;
     eb = NULL;
@@ -846,8 +846,8 @@ void MainForm::closeModeBoards( void )
 {
         if (ab)
                 ab->hide();
-        if (anb)
-                anb->hide();
+        if (m_anb)
+                m_anb->hide();
         if (bb)
                 bb->hide();
         if (clb)
@@ -1073,18 +1073,13 @@ void MainForm::statusMessage( const char * mess1, const char * mess2 )
 // Callback function to launch the annotation settings panel
 void MainForm::launchAnnotation( void )
 {
-        if (!anb) {
-                anb = new AnnotationBoard( this, "annotationBoard" );
-                if (anb)
-                        ((AnnotationBoard *)anb)->setMainFormAddress( this );
-        }
+    if (!m_anb) {
+        m_anb = new AnnotationBoard(this /*parent*/, this /*mainForm*/);
+    }
 
-        // Adjust the controls and show
-        // the panel
-        if (anb) {
-                ((AnnotationBoard *)anb)->setAnnotation( (*this->getViewParam()) );
-                anb->show();
-        }
+    // Adjust the controls and show
+    m_anb->setAnnotation( (*this->getViewParam()) );
+    m_anb->show();
 }
 
 
