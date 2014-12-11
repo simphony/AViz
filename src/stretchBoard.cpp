@@ -41,7 +41,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 StretchBoard::StretchBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Set Data Stretching" );
+	setWindowTitle( "AViz: Set Data Stretching" );
 
 	// Insert a grid that will hold control buttons
 	const int numCols = 3;
@@ -53,24 +53,24 @@ StretchBoard::StretchBoard( QWidget * parent, const char * name )
 	labelx->setText( " Stretch X: ");
 	stretchBox->addWidget( labelx, 0, 0);
     stretchSBX = new QFSpinBox( this );
-	stretchSBX->setMaxValue( MAXSTRETCH );
-	stretchSBX->setMinValue( MINSTRETCH );
+	stretchSBX->setMaximum( MAXSTRETCH );
+	stretchSBX->setMinimum( MINSTRETCH );
 	stretchBox->addWidget( stretchSBX, 0, 1);
 
 	QLabel * labely = new QLabel( this, "labely" );
 	labely->setText( " Stretch Y: ");
 	stretchBox->addWidget( labely, 1, 0);
     stretchSBY = new QFSpinBox( this );
-	stretchSBY->setMaxValue( MAXSTRETCH );
-	stretchSBY->setMinValue( MINSTRETCH );
+	stretchSBY->setMaximum( MAXSTRETCH );
+	stretchSBY->setMinimum( MINSTRETCH );
 	stretchBox->addWidget( stretchSBY, 1, 1);
 
     QLabel * labelz = new QLabel( this, "labelz" );
 	labelz->setText( " Stretch Z: ");
 	stretchBox->addWidget( labelz, 2, 0);
     stretchSBZ = new QFSpinBox( this );
-	stretchSBZ->setMaxValue( MAXSTRETCH );
-	stretchSBZ->setMinValue( MINSTRETCH );
+	stretchSBZ->setMaximum( MAXSTRETCH );
+	stretchSBZ->setMinimum( MINSTRETCH );
 	stretchBox->addWidget( stretchSBZ, 2, 1);
 
 	// Define a callback for the spin boxes

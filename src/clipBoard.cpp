@@ -43,7 +43,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ClipBoard::ClipBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Set Clipping" );
+	setWindowTitle( "AViz: Set Clipping" );
 
 	// Insert a grid that will hold spin boxes
 	// plus a row of control buttons
@@ -57,7 +57,7 @@ ClipBoard::ClipBoard( QWidget * parent, const char * name )
 	clipBox->addWidget( clipNearL, 0, 0 );
 
     clipNearSb = new QFSpinBox( this );
-	clipNearSb->setMaxValue( MAXCLIP );
+	clipNearSb->setMaximum( MAXCLIP );
 	clipBox->addWidget( clipNearSb, 0, 1 );
 
         // Create a label and a spin box
@@ -66,7 +66,7 @@ ClipBoard::ClipBoard( QWidget * parent, const char * name )
 	clipBox->addWidget( clipFarL, 1, 0 );
 
     clipFarSb = new QFSpinBox( this );
-	clipFarSb->setMaxValue( MAXCLIP );
+	clipFarSb->setMaximum( MAXCLIP );
 	clipBox->addWidget( clipFarSb, 1, 1 );
 
 	// Create check boxes to control auto clipping

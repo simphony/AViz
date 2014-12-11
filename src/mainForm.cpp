@@ -119,7 +119,7 @@ MainForm::MainForm( QWidget *parent, const char *name )
 
 	// Create some of the more important boards
         if (!ab) {
-                ab = new AtomBoard( this, "atomBoard" );
+                ab = new AtomBoard( this );
                 if (ab)
                         ((AtomBoard *)ab)->setMainFormAddress( this );
 		

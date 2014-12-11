@@ -45,7 +45,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 SpinBoard::SpinBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Set Spins" );
+	setWindowTitle( "AViz: Set Spins" );
 
 	// Create a hboxlayout that will fill the first row
 	hb1 = new Q3HBox( this, "hb1" );

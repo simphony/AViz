@@ -32,7 +32,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 FileListBoard::FileListBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: File List Control" );
+	setWindowTitle( "AViz: File List Control" );
 
 	// Insert a grid that will hold control buttons
 	const int numCols = 5;
@@ -155,7 +155,7 @@ void FileListBoard::setFileListParam( int thisCurrentFile,
 	// Adjust the caption of the board
 	QString caption =  "AViz: File List Control ";
 	caption.append(fn);
-	this->setCaption( caption );
+	setWindowTitle( caption );
 
 	// Show the current file
 	this->showCurrentFile();

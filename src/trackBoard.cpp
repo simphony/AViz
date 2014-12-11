@@ -43,7 +43,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 TrackBoard::TrackBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Track Rendering Control" );
+	setWindowTitle( "AViz: Track Rendering Control" );
 
 	// Insert a grid that will hold control buttons
 	const int numCols = 4;
@@ -242,7 +242,7 @@ void TrackBoard::setFileListParam( const QString &fn )
 	// Adjust the caption of the board
 	QString caption =  "AViz: Track Rendering Control ";
 	caption.append(fn);
-	this->setCaption( caption );
+	setWindowTitle( caption );
 }
 
 

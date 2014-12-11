@@ -56,9 +56,9 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Make a popup dialog box 
 BondBoard::BondBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
+    : QDialog( parent, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Set Bonds" );
+    setWindowTitle( "AViz: Set Bonds" );
 
 	// Insert a grid that will hold combo boxes and
 	// a spin box, plus a row of control buttons

@@ -30,10 +30,10 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QLabel>
 
 // Make a popup dialog box 
-AtomBoard::AtomBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
+AtomBoard::AtomBoard( QWidget * parent )
+    : QDialog( parent, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Set Atom Types" );
+    setWindowTitle( "AViz: Set Atom Types" );
 
 	// Create a hboxlayout that will fill the first row
 	hb1 = new Q3HBox( this, "hb1" );

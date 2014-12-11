@@ -43,7 +43,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 LightsBoard::LightsBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-    this->setCaption( "AViz: Set Lights" );
+    setWindowTitle( "AViz: Set Lights" );
 
     // Insert a grid that will hold sliders, labels and
     // check boxes, plus a row of control buttons
@@ -119,8 +119,8 @@ LightsBoard::LightsBoard( QWidget * parent, const char * name )
     depthL0 = new QLabel( hb1, "depthL0" );
     depthL0->setText( " Position Depth:  Near  ");
     depthS = new QSlider( Qt::Horizontal, hb1, "depthS" );
-    depthS->setMinValue( 0 );
-    depthS->setMaxValue( 100 );
+    depthS->setMinimum( 0 );
+    depthS->setMaximum( 100 );
     depthS->setTickInterval( 10 );
     depthS->setTickmarks( QSlider::TicksAbove );
     depthS->setFixedHeight( SLIDER_HEIGHT );
@@ -140,8 +140,8 @@ LightsBoard::LightsBoard( QWidget * parent, const char * name )
     ambientL->setText( " Global Ambient Light:  ");
 
     ambientS = new QSlider( Qt::Horizontal, gr1, "ambientS" );
-    ambientS->setMinValue( LIGHT_MIN );
-    ambientS->setMaxValue( LIGHT_MAX );
+    ambientS->setMinimum( LIGHT_MIN );
+    ambientS->setMaximum( LIGHT_MAX );
     ambientS->setTickInterval( 10 );
     ambientS->setTickmarks( QSlider::TicksAbove );
     ambientS->setFixedHeight( SLIDER_HEIGHT );
@@ -152,8 +152,8 @@ LightsBoard::LightsBoard( QWidget * parent, const char * name )
     shininessL->setText( " Surface Shininess:  ");
 
     shininessS = new QSlider( Qt::Horizontal, gr1, "shininessS" );
-    shininessS->setMinValue( SHINE_MIN );
-    shininessS->setMaxValue( SHINE_MAX );
+    shininessS->setMinimum( SHINE_MIN );
+    shininessS->setMaximum( SHINE_MAX );
     shininessS->setTickInterval( 10 );
     shininessS->setTickmarks( QSlider::TicksAbove );
     shininessS->setFixedHeight( SLIDER_HEIGHT );

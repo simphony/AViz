@@ -48,7 +48,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Set Viewpoint" );
+	setWindowTitle( "AViz: Set Viewpoint" );
 
 	// Insert a grid that will hold spin boxes
 	// plus a row of control buttons
@@ -63,8 +63,8 @@ ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
 	explicitBox->addWidget( phiL, 0, 0 );
 
     phiSb = new QFSpinBox( this );
-	phiSb->setMinValue( (int)floor(10.0*PHI_MIN+0.5) );
-	phiSb->setMaxValue( (int)floor(10.0*PHI_MAX+0.5) );
+	phiSb->setMinimum( (int)floor(10.0*PHI_MIN+0.5) );
+	phiSb->setMaximum( (int)floor(10.0*PHI_MAX+0.5) );
 	phiSb->setWrapping( TRUE );
 	explicitBox->addWidget( phiSb, 0, 1 );
 
@@ -81,8 +81,8 @@ ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
 	explicitBox->addWidget( thetaL, 1, 0 );
 
     thetaSb = new QFSpinBox( this );
-	thetaSb->setMinValue( (int)floor(10.0*THETA_MIN+0.5) );
-	thetaSb->setMaxValue( (int)floor(10.0*THETA_MAX+0.5) );
+	thetaSb->setMinimum( (int)floor(10.0*THETA_MIN+0.5) );
+	thetaSb->setMaximum( (int)floor(10.0*THETA_MAX+0.5) );
 	thetaSb->setWrapping( TRUE );
 	explicitBox->addWidget( thetaSb, 1, 1 );
 
@@ -99,8 +99,8 @@ ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
 	explicitBox->addWidget( chiL, 2, 0 );
 
     chiSb = new QFSpinBox( this );
-	chiSb->setMinValue( (int)floor(10.0*CHI_MIN+0.5) );
-	chiSb->setMaxValue( (int)floor(10.0*CHI_MAX+0.5) );
+	chiSb->setMinimum( (int)floor(10.0*CHI_MIN+0.5) );
+	chiSb->setMaximum( (int)floor(10.0*CHI_MAX+0.5) );
 	chiSb->setWrapping( TRUE );
 	explicitBox->addWidget( chiSb, 2, 1 );
 
@@ -117,8 +117,8 @@ ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
 	explicitBox->addWidget( dollyL, 3, 0 );
 
     dollySb = new QFSpinBox( this );
-	dollySb->setMinValue( (int)floor(10.0*DOLLY_MIN+0.5) );
-	dollySb->setMaxValue( (int)floor(10.0*DOLLY_MAX+0.5) );
+	dollySb->setMinimum( (int)floor(10.0*DOLLY_MIN+0.5) );
+	dollySb->setMaximum( (int)floor(10.0*DOLLY_MAX+0.5) );
 	explicitBox->addWidget( dollySb, 3, 1 );
 
 	char strDollyRange[30];
@@ -134,8 +134,8 @@ ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
 	explicitBox->addWidget( fovyL, 4, 0 );
 
     fovySb = new QFSpinBox( this );
-	fovySb->setMinValue( (int)floor(10.0*FOVY_MIN+0.5) );
-	fovySb->setMaxValue( (int)floor(10.0*FOVY_MAX+0.5) );
+	fovySb->setMinimum( (int)floor(10.0*FOVY_MIN+0.5) );
+	fovySb->setMaximum( (int)floor(10.0*FOVY_MAX+0.5) );
 	explicitBox->addWidget( fovySb, 4, 1 );
 
 	char strFovyRange[30];

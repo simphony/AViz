@@ -46,7 +46,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ColorBoard::ColorBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Set Colors" );
+	setWindowTitle( "AViz: Set Colors" );
 
 	// Create a hboxlayout that will contain the top
 	// set of color sliders
@@ -139,8 +139,8 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 
 	// Create three sliders
 	redS0 = new QSlider( Qt::Horizontal, vb1, "redS" );
-	redS0->setMinValue( COLOR_MIN );
-        redS0->setMaxValue( COLOR_MAX );
+	redS0->setMinimum( COLOR_MIN );
+        redS0->setMaximum( COLOR_MAX );
         redS0->setTickInterval( 10 );
         redS0->setTickmarks( QSlider::TicksAbove );
 	redS0->setValue( COLOR_MAX );
@@ -148,8 +148,8 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
         redS0->setFixedHeight( SLIDER_HEIGHT );
 
 	greenS0 = new QSlider(  Qt::Horizontal, vb1, "greenS" );
-	greenS0->setMinValue( COLOR_MIN );
-        greenS0->setMaxValue( COLOR_MAX );
+	greenS0->setMinimum( COLOR_MIN );
+        greenS0->setMaximum( COLOR_MAX );
         greenS0->setTickInterval( 10 );
         greenS0->setTickmarks( QSlider::TicksAbove );
 	greenS0->setValue( COLOR_MAX );
@@ -157,8 +157,8 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
         greenS0->setFixedHeight( SLIDER_HEIGHT );
 
 	blueS0 = new QSlider( Qt::Horizontal, vb1, "blueS" );
-	blueS0->setMinValue( COLOR_MIN );
-        blueS0->setMaxValue( COLOR_MAX );
+	blueS0->setMinimum( COLOR_MIN );
+        blueS0->setMaximum( COLOR_MAX );
         blueS0->setTickInterval( 10 );
         blueS0->setTickmarks( QSlider::TicksAbove );
 	blueS0->setValue( COLOR_MAX );
@@ -172,8 +172,8 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 
 	// Create again three sliders
 	redS1 = new QSlider( Qt::Horizontal, vb4, "redS" );
-	redS1->setMinValue( COLOR_MIN );
-        redS1->setMaxValue( COLOR_MAX );
+	redS1->setMinimum( COLOR_MIN );
+        redS1->setMaximum( COLOR_MAX );
         redS1->setTickInterval( 10 );
         redS1->setTickmarks( QSlider::TicksAbove );
 	redS1->setValue( COLOR_MAX );
@@ -181,8 +181,8 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
         redS1->setFixedHeight( SLIDER_HEIGHT );
 
 	greenS1 = new QSlider(  Qt::Horizontal, vb4, "greenS" );
-	greenS1->setMinValue( COLOR_MIN );
-        greenS1->setMaxValue( COLOR_MAX );
+	greenS1->setMinimum( COLOR_MIN );
+        greenS1->setMaximum( COLOR_MAX );
         greenS1->setTickInterval( 10 );
         greenS1->setTickmarks( QSlider::TicksAbove );
 	greenS1->setValue( COLOR_MAX );
@@ -190,8 +190,8 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
         greenS1->setFixedHeight( SLIDER_HEIGHT );
 
 	blueS1 = new QSlider( Qt::Horizontal, vb4, "blueS" );
-	blueS1->setMinValue( COLOR_MIN );
-        blueS1->setMaxValue( COLOR_MAX );
+	blueS1->setMinimum( COLOR_MIN );
+        blueS1->setMaximum( COLOR_MAX );
         blueS1->setTickInterval( 10 );
         blueS1->setTickmarks( QSlider::TicksAbove );
 	blueS1->setValue( COLOR_MAX );
@@ -205,8 +205,8 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 
 	// Create again three sliders
 	redS2 = new QSlider( Qt::Horizontal, vb7, "redS" );
-	redS2->setMinValue( COLOR_MIN );
-        redS2->setMaxValue( COLOR_MAX );
+	redS2->setMinimum( COLOR_MIN );
+        redS2->setMaximum( COLOR_MAX );
         redS2->setTickInterval( 10 );
         redS2->setTickmarks( QSlider::TicksAbove );
 	redS2->setValue( COLOR_MAX );
@@ -214,8 +214,8 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
         redS2->setFixedHeight( SLIDER_HEIGHT );
 
 	greenS2 = new QSlider(  Qt::Horizontal, vb7, "greenS" );
-	greenS2->setMinValue( COLOR_MIN );
-        greenS2->setMaxValue( COLOR_MAX );
+	greenS2->setMinimum( COLOR_MIN );
+        greenS2->setMaximum( COLOR_MAX );
         greenS2->setTickInterval( 10 );
         greenS2->setTickmarks( QSlider::TicksAbove );
 	greenS2->setValue( COLOR_MAX );
@@ -223,8 +223,8 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
         greenS2->setFixedHeight( SLIDER_HEIGHT );
 
 	blueS2 = new QSlider( Qt::Horizontal, vb7, "blueS" );
-	blueS2->setMinValue( COLOR_MIN );
-        blueS2->setMaxValue( COLOR_MAX );
+	blueS2->setMinimum( COLOR_MIN );
+        blueS2->setMaximum( COLOR_MAX );
         blueS2->setTickInterval( 10 );
         blueS2->setTickmarks( QSlider::TicksAbove );
 	blueS2->setValue( COLOR_MAX );

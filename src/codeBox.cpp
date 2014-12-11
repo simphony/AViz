@@ -38,20 +38,20 @@ CodeBox::CodeBox( QWidget * parent, const char * name )
         codeRedL = new QLabel( this, "codeRedL" );
 	codeRedL->setText( "  Red: Property" ); 
 	codeRedSb = new QSpinBox( this, "codeRedSb" ); 
-	codeRedSb->setMinValue( 1 );
-	codeRedSb->setMaxValue( 8 );
+	codeRedSb->setMinimum( 1 );
+	codeRedSb->setMaximum( 8 );
 	codeRedSb->setFixedWidth( SPIN_WIDTH );
         codeGreenL = new QLabel( this, "codeGreenL" );
 	codeGreenL->setText( "  Green: Property" ); 
 	codeGreenSb = new QSpinBox( this, "codeGreenSb" ); 
-	codeGreenSb->setMinValue( 1 );
-	codeGreenSb->setMaxValue( 8 );
+	codeGreenSb->setMinimum( 1 );
+	codeGreenSb->setMaximum( 8 );
 	codeGreenSb->setFixedWidth( SPIN_WIDTH );
         codeBlueL = new QLabel( this, "codeBlueL" );
 	codeBlueL->setText( "  Blue: Property" ); 
 	codeBlueSb = new QSpinBox( this, "codeBlueSb" ); 
-	codeBlueSb->setMinValue( 1 );
-	codeBlueSb->setMaxValue( 8 );
+	codeBlueSb->setMinimum( 1 );
+	codeBlueSb->setMaximum( 8 );
 	codeBlueSb->setFixedWidth( SPIN_WIDTH );
 }
 

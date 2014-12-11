@@ -38,7 +38,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Set Data Translation" );
+	setWindowTitle( "AViz: Set Data Translation" );
 
 	// Insert a grid that will hold control buttons
 	const int numCols = 4;
@@ -50,24 +50,24 @@ TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
 	labelx->setText( " Translate X: ");
 	transBox->addWidget( labelx, 0, 0);
     panSBX = new QFSpinBox( this );
-	panSBX->setMaxValue( MAXPAN );
-	panSBX->setMinValue( MINPAN );
+	panSBX->setMaximum( MAXPAN );
+	panSBX->setMinimum( MINPAN );
 	transBox->addWidget( panSBX, 0, 1);
 
 	QLabel * labely = new QLabel( this, "labely" );
 	labely->setText( " Translate Y: ");
 	transBox->addWidget( labely, 1, 0);
     panSBY = new QFSpinBox( this );
-	panSBY->setMaxValue( MAXPAN );
-	panSBY->setMinValue( MINPAN );
+	panSBY->setMaximum( MAXPAN );
+	panSBY->setMinimum( MINPAN );
 	transBox->addWidget( panSBY, 1, 1);
 
 	QLabel * labelz = new QLabel( this, "labelz" );
 	labelz->setText( " Translate Z: ");
 	transBox->addWidget( labelz, 2, 0);
     panSBZ = new QFSpinBox( this );
-	panSBZ->setMaxValue( MAXPAN );
-	panSBZ->setMinValue( MINPAN );
+	panSBZ->setMaximum( MAXPAN );
+	panSBZ->setMinimum( MINPAN );
 	transBox->addWidget( panSBZ, 2, 1);
 
 	// Create labels and spin boxes
@@ -75,24 +75,24 @@ TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
 	labelright->setText( " Translate Right: ");
 	transBox->addWidget( labelright, 0, 2);
     panSBRight = new QFSpinBox( this );
-	panSBRight->setMaxValue( MAXPAN );
-	panSBRight->setMinValue( MINPAN );
+	panSBRight->setMaximum( MAXPAN );
+	panSBRight->setMinimum( MINPAN );
 	transBox->addWidget( panSBRight, 0, 3);
 
 	QLabel * labeltop = new QLabel( this, "labeltop" );
 	labeltop->setText( " Translate Top: ");
 	transBox->addWidget( labeltop, 1, 2);
     panSBTop = new QFSpinBox( this );
-	panSBTop->setMaxValue( MAXPAN );
-	panSBTop->setMinValue( MINPAN );
+	panSBTop->setMaximum( MAXPAN );
+	panSBTop->setMinimum( MINPAN );
 	transBox->addWidget( panSBTop, 1, 3);
 
 	QLabel * labelforward = new QLabel( this, "labelforward" );
 	labelforward->setText( " Translate Forward: ");
 	transBox->addWidget( labelforward, 2, 2);
     panSBForward = new QFSpinBox( this );
-	panSBForward->setMaxValue( MAXPAN );
-	panSBForward->setMinValue( MINPAN );
+	panSBForward->setMaximum( MAXPAN );
+	panSBForward->setMinimum( MINPAN );
 	transBox->addWidget( panSBForward, 2, 3);
 
 	// Create a hboxlayout that will fill the lowest row

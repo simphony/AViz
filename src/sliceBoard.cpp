@@ -46,7 +46,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 SliceBoard::SliceBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Set Clipping" );
+	setWindowTitle( "AViz: Set Clipping" );
 
 	// Insert a grid that will hold spin boxes
 	// plus a row of control buttons
@@ -73,8 +73,8 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
 	sliceBox->addWidget( sliceLX1, 1, 0 );
 
     sliceSbX1 = new QFSpinBox( this );
-	sliceSbX1->setMinValue( MINSLI );
-	sliceSbX1->setMaxValue( MAXSLI );
+	sliceSbX1->setMinimum( MINSLI );
+	sliceSbX1->setMaximum( MAXSLI );
 	sliceBox->addWidget( sliceSbX1, 1, 1 );
 
         QLabel * sliceLX2 = new QLabel( this, "sliceXL2" );
@@ -82,8 +82,8 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
 	sliceBox->addWidget( sliceLX2, 1, 2 );
 
     sliceSbX2 = new QFSpinBox( this );
-	sliceSbX2->setMinValue( MINSLI );
-	sliceSbX2->setMaxValue( MAXSLI );
+	sliceSbX2->setMinimum( MINSLI );
+	sliceSbX2->setMaximum( MAXSLI );
 	sliceBox->addWidget( sliceSbX2, 1, 3 );
 
         QLabel * sliceLY1 = new QLabel( this, "sliceYL1" );
@@ -91,8 +91,8 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
 	sliceBox->addWidget( sliceLY1, 2, 0 );
 
     sliceSbY1 = new QFSpinBox( this );
-	sliceSbY1->setMinValue( MINSLI );
-	sliceSbY1->setMaxValue( MAXSLI );
+	sliceSbY1->setMinimum( MINSLI );
+	sliceSbY1->setMaximum( MAXSLI );
 	sliceBox->addWidget( sliceSbY1, 2, 1 );
 
         QLabel * sliceLY2 = new QLabel( this, "sliceYL2" );
@@ -100,8 +100,8 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
 	sliceBox->addWidget( sliceLY2, 2, 2 );
 
     sliceSbY2 = new QFSpinBox( this );
-	sliceSbY2->setMinValue( MINSLI );
-	sliceSbY2->setMaxValue( MAXSLI );
+	sliceSbY2->setMinimum( MINSLI );
+	sliceSbY2->setMaximum( MAXSLI );
 	sliceBox->addWidget( sliceSbY2, 2, 3 );
 
         QLabel * sliceLZ1 = new QLabel( this, "sliceZL1" );
@@ -109,8 +109,8 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
 	sliceBox->addWidget( sliceLZ1, 3, 0 );
 
     sliceSbZ1 = new QFSpinBox( this );
-	sliceSbZ1->setMinValue( MINSLI );
-	sliceSbZ1->setMaxValue( MAXSLI );
+	sliceSbZ1->setMinimum( MINSLI );
+	sliceSbZ1->setMaximum( MAXSLI );
 	sliceBox->addWidget( sliceSbZ1, 3, 1 );
 
         QLabel * sliceLZ2 = new QLabel( this, "sliceZL2" );
@@ -118,8 +118,8 @@ SliceBoard::SliceBoard( QWidget * parent, const char * name )
 	sliceBox->addWidget( sliceLZ2, 3, 2 );
 
     sliceSbZ2 = new QFSpinBox( this );
-	sliceSbZ2->setMinValue( MINSLI );
-	sliceSbZ2->setMaxValue( MAXSLI );
+	sliceSbZ2->setMinimum( MINSLI );
+	sliceSbZ2->setMaximum( MAXSLI );
 	sliceBox->addWidget( sliceSbZ2, 3, 3 );
 
 	 // Define a callback for the spin boxes

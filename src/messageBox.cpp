@@ -32,7 +32,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 MessageBox::MessageBox( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Message" );
+	setWindowTitle( "AViz: Message" );
 
 	// Insert a grid that will hold a label 
 	// and a button

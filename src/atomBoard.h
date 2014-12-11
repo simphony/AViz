@@ -67,7 +67,7 @@ class AtomBoard: public QDialog
 {
 	Q_OBJECT
 public:
-	AtomBoard( QWidget * parent=0, const char * name=0 );
+    AtomBoard( QWidget * parent=0 );
 
 public slots:
 	void setMainFormAddress( MainForm * );

@@ -35,7 +35,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 PolymerBoard::PolymerBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Set Polymer Atom Types" );
+	setWindowTitle( "AViz: Set Polymer Atom Types" );
 
 	// Create a hboxlayout that will fill the first row
 	hb1 = new Q3HBox( this, "hb1" );

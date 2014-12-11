@@ -48,7 +48,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 LcBoard::LcBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	this->setCaption( "AViz: Set Liquid Crystals" );
+	setWindowTitle( "AViz: Set Liquid Crystals" );
 
 	// Create a hboxlayout that will fill the first row
 	hb1 = new Q3HBox( this, "hb1" );
