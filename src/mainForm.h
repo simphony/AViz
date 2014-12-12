@@ -24,20 +24,34 @@ Contact address: Computational Physics Group, Dept. of Physics,
                  gery@tx.technion.ac.il
 ***********************************************************************/
 
-#ifndef FORM_H
-#define FORM_H
+#ifndef MAIN_FORM_H
+#define MAIN_FORM_H
 
 #include <QWidget>
 
 #include "data.h"
 
 class QLabel;
-class Q3GridLayout;
-class AnnotationBoard;
 
-// Note: Pointers to composite widgets are defined in 
-// mainForm.cpp and not here -- it causes problems 
-// regarding the mutual inclusion of  header files 
+class AnnotationBoard;
+class AViz;
+class AtomBoard;
+class GLCanvasFrame;
+class RenderBox;
+class LiveBox;
+class BondBoard;
+class ClipBoard;
+class ExplicitBoard;
+class FileListBoard;
+class LcBoard;
+class LightsBoard;
+class PolymerBoard;
+class PoreBoard;
+class SpinBoard;
+class SliceBoard;
+class StretchBoard;
+class TranslationBoard;
+class TrackBoard;
 
 // MainForm is a composite widget that implements
 // the drawing canvas and associated control elements
@@ -45,9 +59,8 @@ class MainForm: public QWidget
 {
     Q_OBJECT
 public:
-    MainForm( QWidget *parent=0, const char *name=0 );
+    MainForm(QWidget *parent, AViz*);
 
-    void setAVizAddress( char * );
     void setFileType( fileType );
     fileType isFileType();
     void setKeepViewObject( bool );
@@ -70,7 +83,7 @@ public:
     void updateRendering();
     void updateExplicitBoard();
     void snapRendering();
-    void snapRendering( const QString & );
+    void snapRendering(const QString &);
     void setAtomMenus();
     void setSpinMenus();
     void setLcMenus();
@@ -93,61 +106,55 @@ public:
     void setViewXZMinus();
     void setViewYZPlus();
     void setViewYZMinus();
-    void computeTransformation( double, double, double, double, double *, double *, double * );
+    void computeTransformation(double, double, double, double, double *, double *, double *);
 
-    void statusMessage( const char * );
-    void statusMessage( const char *, const char * );
+    void statusMessage(const QString &);
+    void statusMessage(const QString &, const QString &);
 
-    void launchAnnotation( void );
-    void launchAtoms( void );
-    void launchBonds( void );
-    void launchClip( void );
-    void launchExplicit( void );
-    void launchFileList( void );
-    void launchFileList( const QString & );
-    void launchLights( void );
-    void launchLiquidCrystals( void );
-    void launchPolymers( void );
-    void launchPores( void );
-    void launchSlice( void );
-    void launchSpins( void );
-    void launchStretch( void );
-    void launchTrack( const QString & );
-    void launchTranslation( void );
+    void launchAnnotation();
+    void launchAtoms();
+    void launchBonds();
+    void launchClip();
+    void launchExplicit();
+    void launchFileList();
+    void launchFileList(const QString &);
+    void launchLights();
+    void launchLiquidCrystals();
+    void launchPolymers();
+    void launchPores();
+    void launchSlice();
+    void launchSpins();
+    void launchStretch();
+    void launchTrack(const QString &);
+    void launchTranslation();
 
-    void hideTrack( void );
-    void generateTracks( void );
+    void hideTrack();
+    void generateTracks();
 
 private:
-    QWidget * aviz;
-    QWidget * glCanvasFrame;
-    QWidget * renderBox;
-    QWidget * liveBox;
-    QWidget * ab;
+    AViz *m_aviz;
+    GLCanvasFrame * glCanvasFrame;
+    RenderBox * renderBox;
+    LiveBox *m_liveBox;
+    AtomBoard * ab;
     AnnotationBoard * m_anb;
-    QWidget * bb;
-    QWidget * clb;
-    QWidget * eb;
-    QWidget * flb;
-    QWidget * lcb;
-    QWidget * lb;
-    QWidget * plb;
-    QWidget * pb;
-    QWidget * sb;
-    QWidget * slb;
-    QWidget * stb;
-    QWidget * tb;
-    QWidget * trab;
-    Q3GridLayout * mainBox;
-    QLabel * status;
+    BondBoard * bb;
+    ClipBoard * clb;
+    ExplicitBoard * eb;
+    FileListBoard * flb;
+    LcBoard * lcb;
+    LightsBoard * lb;
+    PolymerBoard * plb;
+    PoreBoard * pb;
+    SpinBoard * sb;
+    SliceBoard * slb;
+    StretchBoard * stb;
+    TranslationBoard * tb;
+    TrackBoard * trab;
+    QLabel * m_status;
     fileList fl;
     fileType ft;
-    bool keepViewObject;
-    int numCols;
-    int numRows;
-
-    QSize sizeHint() const;
-    QSizePolicy sizePolicy() const;
+    bool m_keepViewObject;
 };
 
 

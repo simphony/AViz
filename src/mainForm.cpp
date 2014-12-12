@@ -27,7 +27,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "mainForm.h"
 
 #include <QLabel>
-#include <Q3GridLayout>
+#include <QGridLayout>
+#include <QSizePolicy>
 
 #include "aviz.h"
 #include "parameterLimits.h"
@@ -52,422 +53,355 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "renderStyleBox.h"
 #include "liveBox.h"
 
-
-// Private pointers are defined in mainForm.h, but the corresponding
-// header files cannot be included there -- it causes problems regarding 
-// the mutual inclusion of  header files.  Here the pointers are of 
-// the general class QWiget and must be cast into the specific 
-// class 
-
 // 
 // Main form: implements drawing control elements
 // 
-MainForm::MainForm( QWidget *parent, const char *name )
-    : QWidget( parent, name ), m_anb(NULL)
-{
-	// Make a grid layout that will hold all elements
-	numCols = 1;
-	numRows = 4;
-	mainBox = new Q3GridLayout( this, numCols, numRows, 0 );
+MainForm::MainForm(QWidget *parent, AViz *aviz)
+    : QWidget(parent), m_aviz(aviz), glCanvasFrame(NULL),
+      renderBox(NULL), m_liveBox(NULL), ab(NULL), m_anb(NULL), bb(NULL),
+      clb(NULL), eb(NULL), flb(NULL), lcb(NULL), lb(NULL), plb(NULL),
+      pb(NULL), sb(NULL), slb(NULL), stb(NULL), tb(NULL), trab(NULL),
+      m_keepViewObject(false) {
 
-	// Create the OpenGL widget
-	glCanvasFrame = new GLCanvasFrame( this, "glcanvas");
-	if (glCanvasFrame)
-		((GLCanvasFrame *)glCanvasFrame)->setFormAddress( this );
+    // Make a grid layout that will hold all elements
+    QGridLayout *mainBox = new QGridLayout(this);
 
-	// Make a box that will hold 
-	// a row of elements to define render quality
-	renderBox = new RenderBox( this, "renderBox" );
-	if (renderBox) { 
-		((RenderBox *)renderBox)->setFormAddress( this );
-		mainBox->addWidget( renderBox, 1, 0 );
-	}
+    // Create the OpenGL widget
+    glCanvasFrame = new GLCanvasFrame( this, "glcanvas");
+    glCanvasFrame->setFormAddress( this );
 
-	// Make a box that will hold 
-	// two buttons to take snapshots
-	liveBox = new LiveBox( this, "liveBox" );
-	if (liveBox) {
-		((LiveBox *)liveBox)->setFormAddress( this );
-		mainBox->addWidget( liveBox, 2, 0 );
-	}
+    // Make a box that will hold
+    // a row of elements to define render quality
+    renderBox = new RenderBox(this, "renderBox");
+    renderBox->setFormAddress(this);
+    renderBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    mainBox->addWidget(renderBox, 1, 0);
 
-	// Add a label that pretends to be a status bar
-	status = new QLabel( this );
-	if (status) {
-		status->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
-		status->setFixedHeight( status->sizeHint().height() );
-		status->setAlignment( Qt::AlignVCenter | Qt::AlignLeft );
-		mainBox->addMultiCellWidget( status, numRows-1, numRows-1, 0, numCols-1 );
-	}
+    // Make a box that will hold
+    // two buttons to take snapshots
+    m_liveBox = new LiveBox(this, "liveBox");
+    m_liveBox->setFormAddress( this );
+    mainBox->addWidget(m_liveBox, 2, 0);
 
-    // Clear pointers
-    aviz = NULL;
-    ab = NULL;
-    bb = NULL;
-    clb = NULL;
-    eb = NULL;
-    flb = NULL;
-    lb = NULL;
-    lcb = NULL;
-    pb = NULL;
-    plb = NULL;
-    sb = NULL;
-    slb = NULL;
-    stb = NULL;
-    tb = NULL;
-    trab = NULL;
+    mainBox->addWidget(m_liveBox, 2, 0);
 
-	// Create some of the more important boards
-        if (!ab) {
-                ab = new AtomBoard( this );
-                if (ab)
-                        ((AtomBoard *)ab)->setMainFormAddress( this );
-		
-        }
-	if (!sb) {
-                sb = new SpinBoard( this, "spinBoard" );
-                if (sb)
-                        ((SpinBoard *)sb)->setMainFormAddress( this );
-        }
+    // Add a label that pretends to be a status bar
+    m_status = new QLabel(this);
+    m_status->setFrameStyle(Q3Frame::Panel | Q3Frame::Sunken);
+    m_status->setFixedHeight(m_status->sizeHint().height());
+    m_status->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+    mainBox->addWidget(m_status, 3, 0);
 
-        if (!lcb) {
-                lcb = new LcBoard( this, "lcBoard" );
-                if (lcb)
-                        ((LcBoard *)lcb)->setMainFormAddress( this );
-        }
+    // Create some of the more important boards
+    ab = new AtomBoard(this);
+    ab->setMainFormAddress(this);
 
-        if (!plb) {
-                plb = new PolymerBoard( this, "polymerBoard" );
-                if (plb)
-                        ((PolymerBoard *)plb)->setMainFormAddress( this );
-        }
+    sb = new SpinBoard(this, "spinBoard");
+    sb->setMainFormAddress(this);
 
-        if (!pb) {
-                pb = new PoreBoard( this, "poreBoard" );
-                if (pb)
-                        ((PoreBoard *)pb)->setMainFormAddress( this );
-        }
+    lcb = new LcBoard( this, "lcBoard");
+    lcb->setMainFormAddress(this);
 
-	// Fix the geometry of this panel
-	this->setFixedHeight( renderBox->sizeHint().height() + liveBox->sizeHint().height() + status->sizeHint().height() );
-	this->setFixedWidth( renderBox->sizeHint().width() );
+    plb = new PolymerBoard( this, "polymerBoard");
+    plb->setMainFormAddress(this);
+
+    pb = new PoreBoard(this, "poreBoard");
+    pb->setMainFormAddress(this);
+
+    // Fix the geometry of this panel so that
+    // the above widgets are all kept small
+    mainBox->setColumnStretch(1, 1/*stretch*/ );
+    mainBox->setRowStretch(4, 1/*stretch*/ );
 }
-
-
-// Set a pointer to the calling class
-void MainForm::setAVizAddress( char * thisAViz )
-{
-	aviz =  (AViz *)thisAViz;
-}
-
 
 // Set the file type to be used during reading or writing files
-void MainForm::setFileType( fileType thisFt )
-{
-	ft = thisFt;
+void MainForm::setFileType(fileType thisFt) {
+    ft = thisFt;
 }
 
 
 // Get the file type to be used during reading or writing files
-fileType MainForm::isFileType( void )
-{
-	return ft;
+fileType MainForm::isFileType() {
+    return ft;
 }
 
 
 // Set the view freeze control used to prevent updating of the 
 // view object
-void MainForm::setKeepViewObject( bool thisKeepViewObject )
-{
-	keepViewObject = thisKeepViewObject;
+void MainForm::setKeepViewObject( bool thisKeepViewObject ) {
+    m_keepViewObject = thisKeepViewObject;
 }
 
 
 // Get the  view freeze control used to prevent updating of the 
 // view object
-bool MainForm::isKeepViewObject( void )
-{
-	return keepViewObject;
+bool MainForm::isKeepViewObject() {
+    return m_keepViewObject;
 }
 
 
 // Read a file
-void MainForm::readFile( const QString &fn )
-{
-	aggregateData * ad = this->getAggregateData();;
-	viewParam thisVp;
+void MainForm::readFile( const QString &fn ) {
+    aggregateData * ad = getAggregateData();;
+    viewParam thisVp;
 
-	if ( !fn.isEmpty() ) {
-		// Write a message to the status bar
-		this->statusMessage( "Loading", (const char *)fn );
-		
-		switch (this->isFileType()) {
-			case XYZ_FILE:
+    if ( !fn.isEmpty() ) {
+        // Write a message to the status bar
+        statusMessage( "Loading", fn );
 
-				// Read these coordinates
-				if (openCoordinateFunction( (const char *)fn, ad )) {
-					// Write a message to the status bar
-					this->statusMessage( "Loaded", (const char *)fn );
+        switch (isFileType()) {
+        case XYZ_FILE:
 
-					// Let this be the current aggregate
-					this->updateView();
+            // Read these coordinates
+            if (openCoordinateFunction( qPrintable(fn), ad )) {
+                // Write a message to the status bar
+                statusMessage("Loaded", fn);
 
-					// Pass on information to the 
-					// various boards
-        				if (ab) 
-				                ((AtomBoard *)ab)->setData();
-        				if (bb) 
-				                ((BondBoard *)bb)->setData();
-        				if (lcb) 
-				                ((LcBoard *)lcb)->setData();
-        				if (plb) 
-				                ((PolymerBoard *)plb)->setData();
-        				if (pb) 
-				                ((PoreBoard *)pb)->setData();
-        				if (sb) 
-				                ((SpinBoard *)sb)->setData();
-        				if (trab) 
-				                ((TrackBoard *)trab)->setData();
-				}
-				else {
-					// Write a message to the status bar
-					this->statusMessage( "Could not load", (const char *)fn );
-				}
-			break;
-			case ANIMATION:
-				if (openFileListFunction( (const char *)fn, &fl )) {
-					// Write a message to the status bar
-					this->statusMessage( "Loaded", (const char *)fn );
-				}
-				else {
-					// Write a message to the status bar
-					this->statusMessage( "Could not load", (const char *)fn );
-					printf( "Could not load %s\n", (const char *)fn );
-				}
-			break;
-			case VP_FILE:
+                // Let this be the current aggregate
+                updateView();
 
-				// Read these view parameters 
-				if (openViewParamFunction( (const char *)fn, &thisVp )) {
-					// Write a message to the status bar
-					this->statusMessage( "Loaded", (const char *)fn );
+                // Pass on information to the
+                // various boards
+                ab->setData();
+                lcb->setData();
+                plb->setData();
+                pb->setData();
+                sb->setData();
+                if (bb)
+                    bb->setData();
+                if (trab)
+                    trab->setData();
+            }
+            else {
+                // Write a message to the status bar
+                statusMessage( "Could not load ", fn );
+            }
+            break;
+        case ANIMATION:
+            if (openFileListFunction( qPrintable(fn), &fl )) {
+                // Write a message to the status bar
+                statusMessage( "Loaded ", fn );
+            }
+            else {
+                // Write a message to the status bar
+                statusMessage( "Could not load ", fn );
+            }
+            break;
+        case VP_FILE:
 
-					// Let this be the current view 
-					// parameters 
-					this->setViewParam( thisVp );
-				}
-				else {
-					// Write a message to the status bar
-					this->statusMessage( "Could not load", (const char *)fn );
-					printf( "Could not load %s\n", (const char *)fn );
-				}
-			break;
-			case UNKNOWN:
-					printf( "??? Could not load %s\n", (const char *)fn );
-			break;
-		}
-	}
-	else {
-		this->statusMessage( "Loading aborted" );
-	}
+            // Read these view parameters
+            if (openViewParamFunction( qPrintable(fn), &thisVp )) {
+                // Write a message to the status bar
+                statusMessage( "Loaded", fn );
+
+                // Let this be the current view
+                // parameters
+                setViewParam( thisVp );
+            }
+            else {
+                // Write a message to the status bar
+                statusMessage( "Could not load ", fn);
+            }
+            break;
+        case PNG_FILE: case UNKNOWN:
+            statusMessage("??? Could not load ", fn);
+            break;
+        }
+    }
+    else {
+        statusMessage("Loading aborted");
+    }
 }
 
 
 // Write a file
-void MainForm::writeFile( const QString &fn )
-{
-	// Read the current view parameters
-	viewParam * thisVp = this->getViewParam();				
+void MainForm::writeFile( const QString &fn ) {
+    // Read the current view parameters
+    if ( !fn.isEmpty() ) {
 
-	if ( !fn.isEmpty() ) {
+        switch (isFileType()) {
+        case VP_FILE:
+            // Save these view parameters
+            // Make sure the suffix is correct
+            checkSuffix( qPrintable(fn), "vpm" );
 
-		switch (this->isFileType()) {
-			case VP_FILE:
-				// Save these view parameters
-				// Make sure the suffix is correct
-				checkSuffix( (const char *)fn, "vpm" );
+            // Write a message to the status bar
+            statusMessage( "Saving ", fn );
 
-				// Write a message to the status bar
-				this->statusMessage( "Saving", (const char *)fn );
-
-				if (saveViewParamFunction( (const char *)fn, thisVp )) {
-					// Write a message to the status bar
-					this->statusMessage( "Saved", (const char *)fn );
-				}
-				else {
-					// Write a message to the status bar
-					this->statusMessage( "Could not save", (const char *)fn );
-				}
-			break;
-			case XYZ_FILE:
-				printf( "?? Could not save %s\n", (const char *)fn );
-			break;
-			case ANIMATION:
-				printf( "?? Could not save %s\n", (const char *)fn );
-			break;
-			case UNKNOWN:
-				printf( "?? Could not save %s\n", (const char *)fn );
-			break;
-		}
-	}
-	else {
-		this->statusMessage( "Saving aborted" );
-	}
+            if (saveViewParamFunction( qPrintable(fn), getViewParam() )) {
+                // Write a message to the status bar
+                statusMessage( "Saved ", fn );
+            }
+            else {
+                // Write a message to the status bar
+                statusMessage("Could not save ", fn );
+            }
+            break;
+        case XYZ_FILE:
+        case ANIMATION:
+        case PNG_FILE:
+        case UNKNOWN:
+            statusMessage("?? Could not save ", fn);
+            break;
+        }
+    }
+    else {
+        statusMessage( "Saving aborted" );
+    }
 }
 
 
 // Read a file from the file list, specified by the index, 
 // upon request from the file list board; return the 
 // filename
-QString MainForm::readFileFromList( int current, bool thisKeepViewObject )
-{
-	// Register index of file in file list
-	fl.currentFile = current;
+QString MainForm::readFileFromList( int current, bool thisKeepViewObject ) {
+    // Register index of file in file list
+    fl.currentFile = current;
 
-	// Prepare reading of file
-	this->setFileType( XYZ_FILE );
-	if (fl.currentFile >= 0 && fl.currentFile < fl.numberOfFiles) {
-		QString file = QString( fl.filename[fl.currentFile] );
+    // Prepare reading of file
+    setFileType( XYZ_FILE );
+    if (fl.currentFile >= 0 && fl.currentFile < fl.numberOfFiles) {
+        QString file = QString( fl.filename[fl.currentFile] );
 
-		// Control freezing of the view object data
-		this->setKeepViewObject( thisKeepViewObject );
-	
-		// Set limits for track rendering, if necessary
-		if ((*this->getViewParam()).showTracks) {
-			(*this->getViewParam()).trackRenderFromStage = 0;
-			switch ((*this->getViewParam()).tRenderMode) {
-				case ALL_STAGES:
-					(*this->getViewParam()).trackRenderToStage = fl.numberOfFiles-1;
-				break;
-				case UP_TO_CURRENT:
-					(*this->getViewParam()).trackRenderToStage = fl.currentFile;
-				break;
-			}
-		}
-		
-		// Read the file 
-		this->readFile( file );
+        // Control freezing of the view object data
+        setKeepViewObject( thisKeepViewObject );
 
-		// Set freezing of the view object data back to default
-		this->setKeepViewObject( FALSE );
+        // Set limits for track rendering, if necessary
+        if (getViewParam()->showTracks) {
+            getViewParam()->trackRenderFromStage = 0;
+            switch (getViewParam()->tRenderMode) {
+            case ALL_STAGES:
+                getViewParam()->trackRenderToStage = fl.numberOfFiles-1;
+                break;
+            case UP_TO_CURRENT:
+                getViewParam()->trackRenderToStage = fl.currentFile;
+                break;
+            }
+        }
 
-		return file;
-	}
-	else  
-		return QString( "--" );
+        // Read the file
+        readFile( file );
+
+        // Set freezing of the view object data back to default
+        setKeepViewObject( FALSE );
+
+        return file;
+    }
+    else
+        return QString( "--" );
 }
 
 
 // Set factory default values for the view parameters
 // and settings (overloaded function) 
-void MainForm::setDefaults( void )
+void MainForm::setDefaults()
 {
-	viewParam vp;
+    viewParam vp;
 
-	// Write a message
-	this->statusMessage( "Setting factory defaults");
+    // Write a message
+    statusMessage( "Setting factory defaults");
 
-	// Assume auto clip and set clip and slice 
-	// parameter values
-	vp.autoClipNear = TRUE;
-	vp.autoClipFar = TRUE;
-	vp.clipNear = 0.0;
-	vp.clipFar = 0.0;
-	vp.slicing = FALSE;
-	vp.slicingSet = FALSE;
-	vp.showSlicePlaneX = FALSE;
-	vp.showSlicePlaneY = FALSE;
-	vp.showSlicePlaneZ = FALSE;
-	vp.showTracks = FALSE;
-	vp.sliceXMin = 0.0;
-	vp.sliceXMax = 0.0;
-	vp.sliceYMin = 0.0;
-	vp.sliceYMin = 0.0;
-	vp.sliceZMax = 0.0;
-	vp.sliceZMax = 0.0;
+    // Assume auto clip and set clip and slice
+    // parameter values
+    vp.autoClipNear = TRUE;
+    vp.autoClipFar = TRUE;
+    vp.clipNear = 0.0;
+    vp.clipFar = 0.0;
+    vp.slicing = FALSE;
+    vp.slicingSet = FALSE;
+    vp.showSlicePlaneX = FALSE;
+    vp.showSlicePlaneY = FALSE;
+    vp.showSlicePlaneZ = FALSE;
+    vp.showTracks = FALSE;
+    vp.sliceXMin = 0.0;
+    vp.sliceXMax = 0.0;
+    vp.sliceYMin = 0.0;
+    vp.sliceYMin = 0.0;
+    vp.sliceZMax = 0.0;
+    vp.sliceZMax = 0.0;
 
-	// No stretching
-	vp.stretchX = 1.0;
-	vp.stretchY = 1.0;
-	vp.stretchZ = 1.0;
+    // No stretching
+    vp.stretchX = 1.0;
+    vp.stretchY = 1.0;
+    vp.stretchZ = 1.0;
 
-        // Set more parameter values
-        vp.phi = PHI;
-        vp.theta = THETA;
-        vp.chi = CHI;
-        vp.dolly = DOLLY;
-        vp.fovy = FOVY;
-        vp.phiHome = vp.phi;
-        vp.thetaHome = vp.theta;
-        vp.chiHome = vp.chi;
-        vp.fovyHome = vp.fovy;
-		
-	vp.panX = vp.panY = vp.panZ = 0.0;
-	vp.panRight = vp.panTop = vp.panForward = 0.0;
+    // Set more parameter values
+    vp.phi = PHI;
+    vp.theta = THETA;
+    vp.chi = CHI;
+    vp.dolly = DOLLY;
+    vp.fovy = FOVY;
+    vp.phiHome = vp.phi;
+    vp.thetaHome = vp.theta;
+    vp.chiHome = vp.chi;
+    vp.fovyHome = vp.fovy;
 
-	// No auto motion to start with
-	vp.autoRot1 = FALSE;
-	vp.autoRot2 = FALSE;
-	vp.autoTilt1 = FALSE;
-	vp.autoTilt2 = FALSE;
-	vp.autoSpin1 = FALSE;
-	vp.autoSpin2 = FALSE;
-	vp.autoZoom1 = FALSE;
-	vp.autoZoom2 = FALSE;
+    vp.panX = vp.panY = vp.panZ = 0.0;
+    vp.panRight = vp.panTop = vp.panForward = 0.0;
 
-	// Set render parameters
-	vp.renderMode = ATOMS;
-	vp.renderSize = SIZE;
-	vp.renderQuality = LOW;
-	vp.showAxes = TRUE;
-	vp.showContour = TRUE;
-	vp.onlyContour = FALSE;
-	vp.atomRenderStyle = ADOT;
-	vp.spinRenderStyle = SLINE;
-	vp.lcRenderStyle = LLINE;
-	vp.poreRenderStyle = PLINE;
+    // No auto motion to start with
+    vp.autoRot1 = FALSE;
+    vp.autoRot2 = FALSE;
+    vp.autoTilt1 = FALSE;
+    vp.autoTilt2 = FALSE;
+    vp.autoSpin1 = FALSE;
+    vp.autoSpin2 = FALSE;
+    vp.autoZoom1 = FALSE;
+    vp.autoZoom2 = FALSE;
 
-	// Set annotation parameters
-	vp.showAnnotation = TRUE;
-	vp.annotationSize = 1;
-	vp.annotationCoordX = 100;
-	vp.annotationCoordY = 100;
-	sprintf(vp.annotationText, " " );
+    // Set render parameters
+    vp.renderMode = ATOMS;
+    vp.renderSize = SIZE;
+    vp.renderQuality = LOW;
+    vp.showAxes = TRUE;
+    vp.showContour = TRUE;
+    vp.onlyContour = FALSE;
+    vp.atomRenderStyle = ADOT;
+    vp.spinRenderStyle = SLINE;
+    vp.lcRenderStyle = LLINE;
+    vp.poreRenderStyle = PLINE;
 
-	// Set stereo vision patemeters
-	vp.stereoVisionEn = FALSE;
-	vp.eyeSeparation = 0.4;
+    // Set annotation parameters
+    vp.showAnnotation = TRUE;
+    vp.annotationSize = 1;
+    vp.annotationCoordX = 100;
+    vp.annotationCoordY = 100;
+    sprintf(vp.annotationText, " " );
 
-	// Set more settings
-	vp.background = BGBLACK;
-	vp.viewMode = PERSPECTIVE;
+    // Set stereo vision patemeters
+    vp.stereoVisionEn = FALSE;
+    vp.eyeSeparation = 0.4;
 
-	for (int i=0;i<8;i++) {
-        	vp.light[i] = FALSE; 
-		vp.lightDepth[i] = 0.4;
-	}
-	vp.light[5] = TRUE;
-        vp.ambientLight = 0.2;
-        vp.shininess = 100.0;
+    // Set more settings
+    vp.background = BGBLACK;
+    vp.viewMode = PERSPECTIVE;
 
-	// Prevent immediate updating
-        vp.enableUpdate = FALSE;
+    for (int i=0;i<8;i++) {
+        vp.light[i] = FALSE;
+        vp.lightDepth[i] = 0.4;
+    }
+    vp.light[5] = TRUE;
+    vp.ambientLight = 0.2;
+    vp.shininess = 100.0;
 
-	if (renderBox) 
-		((RenderBox *)renderBox)->setValue( vp );
+    // Prevent immediate updating
+    vp.enableUpdate = FALSE;
 
-	if (glCanvasFrame)
-		((GLCanvasFrame *)glCanvasFrame)->setAuto( vp );
+    if (renderBox)
+        renderBox->setValue( vp );
 
-        // Enable updating
-        vp.enableUpdate = TRUE;
+    if (glCanvasFrame)
+        glCanvasFrame->setAuto( vp );
 
-        // Refresh the drawing now 
-	this->setViewParam( vp );
-	this->updateRendering();
+    // Enable updating
+    vp.enableUpdate = TRUE;
 
-	// Always update the view object data
-	this->setKeepViewObject( FALSE );
+    // Refresh the drawing now
+    setViewParam( vp );
+    updateRendering();
+
+    // Always update the view object data
+    setKeepViewObject( FALSE );
 }
 
 
@@ -475,83 +409,75 @@ void MainForm::setDefaults( void )
 // (overloaded function) 
 void MainForm::setDefaults( viewParam vp, const char * filename )
 {
-	// Write a message
-	this->statusMessage( "Setting defaults in file ", filename );
+    // Write a message
+    statusMessage( "Setting defaults in file ", filename );
 
-	// Prevent immediate updating
-        vp.enableUpdate = FALSE;
+    // Prevent immediate updating
+    vp.enableUpdate = FALSE;
 
-	if (renderBox) 
-		((RenderBox *)renderBox)->setValue( vp );
+    if (renderBox)
+        renderBox->setValue( vp );
 
-	if (glCanvasFrame)
-		((GLCanvasFrame *)glCanvasFrame)->setAuto( vp );
+    if (glCanvasFrame)
+        glCanvasFrame->setAuto( vp );
 
-	// Adjust the menus
-	switch (vp.renderMode) {
-		case ATOMS:
-			if (aviz) 
-				((AViz * )aviz)->setAtomMenus();	
-		break;
-		case SPINS:
-			if (aviz) 
-				((AViz *)aviz)->setSpinMenus();	
-		break;
-		case LIQUID_CRYSTALS:
-			if (aviz) 
-				((AViz *)aviz)->setLcMenus();	
-		break;
-		case POLYMERS:
-			if (aviz) 
-				((AViz *)aviz)->setPolymerMenus();	
-		break;
-		case PORES:
-			if (aviz) 
-				((AViz *)aviz)->setPoreMenus();	
-		break;
-		default:
-			if (aviz) 
-				((AViz * )aviz)->setAtomMenus();	
-		break;
-	}
+    // Adjust the menus
+    switch (vp.renderMode) {
+    case ATOMS:
+        m_aviz->setAtomMenus();
+        break;
+    case SPINS:
+        m_aviz->setSpinMenus();
+        break;
+    case LIQUID_CRYSTALS:
+        m_aviz->setLcMenus();
+        break;
+    case POLYMERS:
+        m_aviz->setPolymerMenus();
+        break;
+    case PORES:
+        m_aviz->setPoreMenus();
+        break;
+    default:
+        m_aviz->setAtomMenus();
+        break;
+    }
 
-        // Enable updating
-        vp.enableUpdate = TRUE;
+    // Enable updating
+    vp.enableUpdate = TRUE;
 
-        // Refresh the drawing now 
-	this->setViewParam( vp );
-	this->updateRendering();
+    // Refresh the drawing now
+    setViewParam( vp );
+    updateRendering();
 
-	// Always update the view object data
-	this->setKeepViewObject( FALSE );
+    // Always update the view object data
+    setKeepViewObject( FALSE );
 }
 
 
 // Accept new data sent from the main panel 
-void MainForm::updateView( void )
+void MainForm::updateView()
 {
-	if (glCanvasFrame) {
-		switch (this->isKeepViewObject()) {
-			case FALSE:
-				// Update the view object
-				((GLCanvasFrame *)glCanvasFrame)->updateView();
-			break;
-			case TRUE:
-				// Update the view object
-				((GLCanvasFrame *)glCanvasFrame)->updateViewWithoutViewObjectChange();
-			break;
-		}
-	}
+    switch (isKeepViewObject()) {
+    case FALSE:
+        // Update the view object
+        glCanvasFrame->updateView();
+        break;
+    case TRUE:
+        // Update the view object
+        glCanvasFrame->updateViewWithoutViewObjectChange();
+        break;
+    }
 }
 
 
 // Return a pointer to the current data to the main panel
-aggregateData * MainForm::getAggregateData( void )
+aggregateData * MainForm::getAggregateData()
 {
-	if (glCanvasFrame) 
-		return ((GLCanvasFrame *)glCanvasFrame)->getAggregateData();
-	else 
-		return NULL;
+    if (glCanvasFrame)
+        return glCanvasFrame->getAggregateData();
+    else
+        return NULL;
 
 }
 
@@ -559,81 +485,73 @@ aggregateData * MainForm::getAggregateData( void )
 // Accept new view parameters and settings sent from the main panel 
 void MainForm::setViewParam( viewParam vp )
 {
-	// Refresh the drawing now
-	if (glCanvasFrame) 
-		((GLCanvasFrame *)glCanvasFrame)->setViewParam( vp );
+    // Refresh the drawing now
+    if (glCanvasFrame)
+        glCanvasFrame->setViewParam( vp );
 }
 
 
 // Set the auto buttons according to settings sent from 
 // the main panel and trigger auto rot/tilt/spin
-void MainForm::setAutoAndStart( viewParam vp )
-{
-	if (glCanvasFrame) {
-		if (vp.autoRot1 == TRUE) {
-			((GLCanvasFrame *)glCanvasFrame)->startAutoRot1( );
-		}
-		if (vp.autoRot2 == TRUE) {
-			((GLCanvasFrame *)glCanvasFrame)->startAutoRot2( );
-		}
-		if (vp.autoTilt1 == TRUE) {
-			((GLCanvasFrame *)glCanvasFrame)->startAutoTilt1( );
-		}
-		if (vp.autoTilt2 == TRUE) {
-			((GLCanvasFrame *)glCanvasFrame)->startAutoTilt2( );
-		}
-		if (vp.autoSpin1 == TRUE) {
-			((GLCanvasFrame *)glCanvasFrame)->startAutoSpin1( );
-		}
-		if (vp.autoSpin2 == TRUE) {
-			((GLCanvasFrame *)glCanvasFrame)->startAutoSpin2( );
-		}
-		if (vp.autoZoom1 == TRUE) {
-			((GLCanvasFrame *)glCanvasFrame)->startAutoZoom1( );
-		}
-		if (vp.autoZoom2 == TRUE) {
-			((GLCanvasFrame *)glCanvasFrame)->startAutoZoom2( );
-		}
+void MainForm::setAutoAndStart( viewParam vp ) {
+    if (vp.autoRot1 == TRUE) {
+        glCanvasFrame->startAutoRot1( );
+    }
+    if (vp.autoRot2 == TRUE) {
+        glCanvasFrame->startAutoRot2( );
+    }
+    if (vp.autoTilt1 == TRUE) {
+        glCanvasFrame->startAutoTilt1( );
+    }
+    if (vp.autoTilt2 == TRUE) {
+        glCanvasFrame->startAutoTilt2( );
+    }
+    if (vp.autoSpin1 == TRUE) {
+        glCanvasFrame->startAutoSpin1( );
+    }
+    if (vp.autoSpin2 == TRUE) {
+        glCanvasFrame->startAutoSpin2( );
+    }
+    if (vp.autoZoom1 == TRUE) {
+        glCanvasFrame->startAutoZoom1( );
+    }
+    if (vp.autoZoom2 == TRUE) {
+        glCanvasFrame->startAutoZoom2( );
+    }
 
-		((GLCanvasFrame *)glCanvasFrame)->setAuto( vp );
-	}
+    glCanvasFrame->setAuto( vp );
 
-	if (liveBox) {
-		if (vp.autoSnap == TRUE) {
-			((LiveBox *)liveBox)->startAutoSnap( );
-		}
-	}
+    if (m_liveBox) {
+        if (vp.autoSnap == TRUE) {
+            ((LiveBox *)m_liveBox)->startAutoSnap( );
+        }
+    }
 
-	// Save those settings
-	if (glCanvasFrame)
-		((GLCanvasFrame *)glCanvasFrame)->setViewParam( vp );
+    // Save those settings
+    glCanvasFrame->setViewParam( vp );
 }
 
 
 // Update the rendering of the data, without recompiling
-void MainForm::updateRendering( void )
-{
-	if (glCanvasFrame)
-		((GLCanvasFrame *)glCanvasFrame)->updateRendering();
+void MainForm::updateRendering() {
+    glCanvasFrame->updateRendering();
 }
 
 
 // Update the settings of the view parameter board
-void MainForm::updateExplicitBoard( void )
-{
-	if (eb)
-                ((ExplicitBoard *)eb)->setExplicit( (*this->getViewParam()) );
+void MainForm::updateExplicitBoard() {
+    if (eb)
+        eb->setExplicit(*getViewParam());
 }
 
 
 // Create an image file from the current rendering
 // (overloaded function)
-void MainForm::snapRendering( void )
-{
-        if (glCanvasFrame) {
-		((GLCanvasFrame *)glCanvasFrame)->updateRendering();
-		((GLCanvasFrame *)glCanvasFrame)->snapRendering();
-	}
+void MainForm::snapRendering() {
+    if (glCanvasFrame) {
+        glCanvasFrame->updateRendering();
+        glCanvasFrame->snapRendering();
+    }
 }
 
 
@@ -641,763 +559,581 @@ void MainForm::snapRendering( void )
 // (overloaded function)
 void MainForm::snapRendering( const QString &fn )
 {
-        if (glCanvasFrame) {
-		((GLCanvasFrame *)glCanvasFrame)->updateRendering();
-		((GLCanvasFrame *)glCanvasFrame)->snapRendering( (const char *)fn );
-	}
+    glCanvasFrame->updateRendering();
+    glCanvasFrame->snapRendering(qPrintable(fn));
 }
 
 
 // Adjust the menus
-void MainForm::setAtomMenus( void )
-{
-	if (aviz) {
-		((AViz *)aviz)->setAtomMenus();
-	}
+void MainForm::setAtomMenus() {
+    m_aviz->setAtomMenus();
 }
 
 
 // Adjust the menus
-void MainForm::setSpinMenus( void )
-{
-	if (aviz) {
-		((AViz *)aviz)->setSpinMenus();
-	}
+void MainForm::setSpinMenus() {
+    m_aviz->setSpinMenus();
 }
 
 
 // Adjust the menus
-void MainForm::setLcMenus( void )
-{
-	if (aviz) {
-		((AViz *)aviz)->setLcMenus();
-	}
+void MainForm::setLcMenus() {
+    m_aviz->setLcMenus();
 }
 
 
 // Adjust the menus
-void MainForm::setPolymerMenus( void )
-{
-	if (aviz) {
-		((AViz *)aviz)->setPolymerMenus();
-	}
+void MainForm::setPolymerMenus() {
+    m_aviz->setPolymerMenus();
 }
-
 
 // Adjust the menus
-void MainForm::setPoreMenus( void )
-{
-	if (aviz) {
-		((AViz *)aviz)->setPoreMenus();
-	}
+void MainForm::setPoreMenus() {
+    m_aviz->setPoreMenus();
+}
+
+// Adjust the boards
+void MainForm::broadcastDotStyle() {
+    ab->setDotStyle();
+    sb->setDotStyle();
+    lcb->setDotStyle();
+    plb->setDotStyle();
+    pb->setDotStyle();
+}
+
+// Adjust the boards
+void MainForm::broadcastLineStyle() {
+    ab->setLineStyle();
+    sb->setLineStyle();
+    lcb->setLineStyle();
+    plb->setLineStyle();
+    pb->setLineStyle();
 }
 
 
 // Adjust the boards
-void MainForm::broadcastDotStyle( void )
-{
-        if (ab)
-                ((AtomBoard *)ab)->setDotStyle();
-        if (sb)
-                ((SpinBoard *)sb)->setDotStyle();
-        if (lcb)
-                ((LcBoard *)lcb)->setDotStyle();
-        if (plb)
-                ((PolymerBoard *)plb)->setDotStyle();
-        if (pb)
-                ((PoreBoard *)pb)->setDotStyle();
-
+void MainForm::broadcastCubeStyle() {
+    ab->setCubeStyle();
+    sb->setCubeStyle();
+    lcb->setCubeStyle();
+    plb->setCubeStyle();
+    pb->setCubeStyle();
 }
 
 
 // Adjust the boards
-void MainForm::broadcastLineStyle( void )
-{
-        if (ab)
-                ((AtomBoard *)ab)->setLineStyle();
-        if (sb)
-                ((SpinBoard *)sb)->setLineStyle();
-        if (lcb)
-                ((LcBoard *)lcb)->setLineStyle();
-        if (plb)
-                ((PolymerBoard *)plb)->setLineStyle();
-        if (pb)
-                ((PoreBoard *)pb)->setLineStyle();
-
+void MainForm::broadcastCylinderStyle() {
+    ab->setCylinderStyle();
+    sb->setCylinderStyle();
+    lcb->setCylinderStyle();
+    plb->setCylinderStyle();
+    pb->setCylinderStyle();
 }
 
 
 // Adjust the boards
-void MainForm::broadcastCubeStyle( void )
-{
-       if (ab)
-                ((AtomBoard *)ab)->setCubeStyle();
-        if (sb)
-                ((SpinBoard *)sb)->setCubeStyle();
-        if (lcb)
-                ((LcBoard *)lcb)->setCubeStyle();
-        if (plb)
-                ((PolymerBoard *)plb)->setCubeStyle();
-        if (pb)
-                ((PoreBoard *)pb)->setCubeStyle();
-
+void MainForm::broadcastConeStyle() {
+    ab->setConeStyle();
+    sb->setConeStyle();
+    lcb->setConeStyle();
+    plb->setConeStyle();
+    pb->setConeStyle();
 }
 
 
 // Adjust the boards
-void MainForm::broadcastCylinderStyle( void )
-{
-       if (ab)
-                ((AtomBoard *)ab)->setCylinderStyle();
-        if (sb)
-                ((SpinBoard *)sb)->setCylinderStyle();
-        if (lcb)
-                ((LcBoard *)lcb)->setCylinderStyle();
-        if (plb)
-                ((PolymerBoard *)plb)->setCylinderStyle();
-        if (pb)
-                ((PoreBoard *)pb)->setCylinderStyle();
-
+void MainForm::broadcastSphereStyle() {
+    ab->setSphereStyle();
+    sb->setSphereStyle();
+    lcb->setSphereStyle();
+    plb->setSphereStyle();
+    pb->setSphereStyle();
 }
 
 
 // Adjust the boards
-void MainForm::broadcastConeStyle( void )
-{
-        if (ab)
-                ((AtomBoard *)ab)->setConeStyle();
-        if (sb)
-                ((SpinBoard *)sb)->setConeStyle();
-        if (lcb)
-                ((LcBoard *)lcb)->setConeStyle();
-        if (plb)
-                ((PolymerBoard *)plb)->setConeStyle();
-        if (pb)
-                ((PoreBoard *)pb)->setConeStyle();
+void MainForm::broadcastLowQuality() {
+    ab->setLowQuality();
+    sb->setLowQuality();
+    lcb->setLowQuality();
+    plb->setLowQuality();
+    pb->setLowQuality();
 }
 
 
 // Adjust the boards
-void MainForm::broadcastSphereStyle( void )
-{
-       if (ab)
-                ((AtomBoard *)ab)->setSphereStyle();
-        if (sb)
-                ((SpinBoard *)sb)->setSphereStyle();
-        if (lcb)
-                ((LcBoard *)lcb)->setSphereStyle();
-        if (plb)
-                ((PolymerBoard *)plb)->setSphereStyle();
-        if (pb)
-                ((PoreBoard *)pb)->setSphereStyle();
+void MainForm::broadcastHighQuality() {
+    ab->setHighQuality();
+    sb->setHighQuality();
+    lcb->setHighQuality();
+    plb->setHighQuality();
+    pb->setHighQuality();
 }
 
 
 // Adjust the boards
-void MainForm::broadcastLowQuality( void )
-{
-        if (ab)
-                ((AtomBoard *)ab)->setLowQuality();
-        if (sb)
-                ((SpinBoard *)sb)->setLowQuality();
-        if (lcb)
-                ((LcBoard *)lcb)->setLowQuality();
-        if (plb)
-                ((PolymerBoard *)plb)->setLowQuality();
-        if (pb)
-                ((PoreBoard *)pb)->setLowQuality();
-}
-
-
-// Adjust the boards
-void MainForm::broadcastHighQuality( void )
-{
-        if (ab)
-                ((AtomBoard *)ab)->setHighQuality();
-        if (sb)
-                ((SpinBoard *)sb)->setHighQuality();
-        if (lcb)
-                ((LcBoard *)lcb)->setHighQuality();
-        if (plb)
-                ((PolymerBoard *)plb)->setHighQuality();
-        if (pb)
-                ((PoreBoard *)pb)->setHighQuality();
-}
-
-
-// Adjust the boards
-void MainForm::broadcastFinalQuality( void )
-{
-        if (ab)
-                ((AtomBoard *)ab)->setFinalQuality();
-        if (sb)
-                ((SpinBoard *)sb)->setFinalQuality();
-        if (lcb)
-                ((LcBoard *)lcb)->setFinalQuality();
-        if (plb)
-                ((PolymerBoard *)plb)->setFinalQuality();
-        if (pb)
-                ((PoreBoard *)pb)->setFinalQuality();
+void MainForm::broadcastFinalQuality() {
+    ab->setFinalQuality();
+    sb->setFinalQuality();
+    lcb->setFinalQuality();
+    plb->setFinalQuality();
+    pb->setFinalQuality();
 }
 
 
 // Close open boards after change of render mode
-void MainForm::closeModeBoards( void )
+void MainForm::closeModeBoards()
 {
-        if (ab)
-                ab->hide();
-        if (m_anb)
-                m_anb->hide();
-        if (bb)
-                bb->hide();
-        if (clb)
-                clb->hide();
-        if (eb)
-                eb->hide();
-        if (flb)
-                flb->hide();
-        if (lb)
-                lb->hide();
-        if (lcb)
-                lcb->hide();
-        if (pb)
-                pb->hide();
-        if (plb)
-                plb->hide();
-        if (sb)
-                sb->hide();
-        if (slb)
-                slb->hide();
-        if (stb)
-                stb->hide();
-        if (tb)
-                tb->hide();
+    if (ab)
+        ab->hide();
+    if (m_anb)
+        m_anb->hide();
+    if (bb)
+        bb->hide();
+    if (clb)
+        clb->hide();
+    if (eb)
+        eb->hide();
+    if (flb)
+        flb->hide();
+    if (lb)
+        lb->hide();
+    if (lcb)
+        lcb->hide();
+    if (pb)
+        pb->hide();
+    if (plb)
+        plb->hide();
+    if (sb)
+        sb->hide();
+    if (slb)
+        slb->hide();
+    if (stb)
+        stb->hide();
+    if (tb)
+        tb->hide();
 }
 
 
 // Return a pointer to the current view parameters
-viewParam * MainForm::getViewParam( void )
-{
-	if (glCanvasFrame)
-		return ((GLCanvasFrame *)glCanvasFrame)->getViewParam();
-	else 
-		return NULL;
+viewParam * MainForm::getViewParam() {
+    return glCanvasFrame->getViewParam();
 }
 
 
 // Return a pointer to the current view object structure 
-viewObject * MainForm::getViewObject( void )
-{
-        // Read the current view object
-        // and return
-        if (glCanvasFrame)
-                return ((GLCanvasFrame *)glCanvasFrame)->getViewObject();
-	else 
-		return NULL;
+viewObject * MainForm::getViewObject() {
+    return glCanvasFrame->getViewObject();
 }
 
 
 // Read the current particle data structure and return
-particleData * MainForm::getParticleData( void )
-{
-        // Read the current particle type data
-        // and return
-        if (glCanvasFrame)
-                return ((GLCanvasFrame *)glCanvasFrame)->getParticleData();
-	else 
-		return NULL;
+particleData * MainForm::getParticleData() {
+    return glCanvasFrame->getParticleData();
 }
 
 
 // Set fixed view parameters
-void MainForm::setViewXYPlus( void )
-{
-	if (glCanvasFrame) {
-        	// Read the current view parameters
-        	viewParam * vp = ((GLCanvasFrame *)glCanvasFrame)->getViewParam();
+void MainForm::setViewXYPlus() {
+    // Read the current view parameters
+    viewParam * vp = glCanvasFrame->getViewParam();
 
-        	// Set the new parameter values
-	        (*vp).phi = 0.01;
-	        (*vp).theta = 270.0;
-		(*vp).chi = 0.0;
+    // Set the new parameter values
+    (*vp).phi = 0.01;
+    (*vp).theta = 270.0;
+    (*vp).chi = 0.0;
 
-		// Refresh the drawing now
-		((GLCanvasFrame *)glCanvasFrame)->setViewParam( (*vp) );
-		((GLCanvasFrame *)glCanvasFrame)->updateRendering();
+    // Refresh the drawing now
+    glCanvasFrame->setViewParam( (*vp) );
+    glCanvasFrame->updateRendering();
 
-		// Write a message
-		this->statusMessage("Setting XY+ viewpoint");
-	}
+    // Write a message
+    statusMessage("Setting XY+ viewpoint");
 }
 
 
 // Set fixed view parameters
-void MainForm::setViewXYMinus( void )
-{
-	if (glCanvasFrame) {
-        	// Read the current view parameters
-        	viewParam * vp = ((GLCanvasFrame *)glCanvasFrame)->getViewParam();
+void MainForm::setViewXYMinus() {
+    // Read the current view parameters
+    viewParam * vp = glCanvasFrame->getViewParam();
 
-        	// Set the new parameter values
-	        (*vp).phi = 180.01;
-	        (*vp).theta = 270.0;
-		(*vp).chi = 90.0;
+    // Set the new parameter values
+    (*vp).phi = 180.01;
+    (*vp).theta = 270.0;
+    (*vp).chi = 90.0;
 
-		// Refresh the drawing now
-		((GLCanvasFrame *)glCanvasFrame)->setViewParam( (*vp) );
-		((GLCanvasFrame *)glCanvasFrame)->updateRendering();
+    // Refresh the drawing now
+    glCanvasFrame->setViewParam( (*vp) );
+    glCanvasFrame->updateRendering();
 
-		// Write a message
-		this->statusMessage("Setting XY- viewpoint");
-	}
+    // Write a message
+    statusMessage("Setting XY- viewpoint");
 }
 
 
 // Set fixed view parameters
-void MainForm::setViewXZPlus( void )
-{
-	if (glCanvasFrame) {
-        	// Read the current view parameters
-        	viewParam * vp = ((GLCanvasFrame *)glCanvasFrame)->getViewParam();
+void MainForm::setViewXZPlus() {
+    // Read the current view parameters
+    viewParam * vp = glCanvasFrame->getViewParam();
 
-        	// Set the new parameter values
-	        (*vp).phi = 90.01;
-	        (*vp).theta = -90.0;
-		(*vp).chi = 90.0;
+    // Set the new parameter values
+    (*vp).phi = 90.01;
+    (*vp).theta = -90.0;
+    (*vp).chi = 90.0;
 
-		// Refresh the drawing now
-		((GLCanvasFrame *)glCanvasFrame)->setViewParam( (*vp) );
-		((GLCanvasFrame *)glCanvasFrame)->updateRendering();
+    // Refresh the drawing now
+    glCanvasFrame->setViewParam( (*vp) );
+    glCanvasFrame->updateRendering();
 
-		// Write a message
-		this->statusMessage("Setting XZ+ viewpoint");
-	}
+    // Write a message
+    statusMessage("Setting XZ+ viewpoint");
 }
 
 
 // Set fixed view parameters
-void MainForm::setViewXZMinus( void )
-{
-	if (glCanvasFrame) {
-        	// Read the current view parameters
-        	viewParam * vp = ((GLCanvasFrame *)glCanvasFrame)->getViewParam();
+void MainForm::setViewXZMinus() {
+    // Read the current view parameters
+    viewParam * vp = glCanvasFrame->getViewParam();
 
-        	// Set the new parameter values
-	        (*vp).phi = 0.01;
-	        (*vp).theta = 0.0;
-		(*vp).chi = 0.0;
+    // Set the new parameter values
+    (*vp).phi = 0.01;
+    (*vp).theta = 0.0;
+    (*vp).chi = 0.0;
 
-		// Refresh the drawing now
-		((GLCanvasFrame *)glCanvasFrame)->setViewParam( (*vp) );
-		((GLCanvasFrame *)glCanvasFrame)->updateRendering();
+    // Refresh the drawing now
+    glCanvasFrame->setViewParam( (*vp) );
+    glCanvasFrame->updateRendering();
 
-		// Write a message
-		this->statusMessage("Setting XZ- viewpoint");
-	}
+    // Write a message
+    statusMessage("Setting XZ- viewpoint");
 }
 
 
 // Set fixed view parameters
-void MainForm::setViewYZPlus( void )
-{
-	if (glCanvasFrame) {
-        	// Read the current view parameters
-        	viewParam * vp = ((GLCanvasFrame *)glCanvasFrame)->getViewParam();
+void MainForm::setViewYZPlus() {
+    // Read the current view parameters
+    viewParam * vp = glCanvasFrame->getViewParam();
 
-        	// Set the new parameter values
-	        (*vp).phi = 0.01;
-	        (*vp).theta = 0.0;
-		(*vp).chi = -90.0;
+    // Set the new parameter values
+    (*vp).phi = 0.01;
+    (*vp).theta = 0.0;
+    (*vp).chi = -90.0;
 
-		// Refresh the drawing now
-		((GLCanvasFrame *)glCanvasFrame)->setViewParam( (*vp) );
-		((GLCanvasFrame *)glCanvasFrame)->updateRendering();
+    // Refresh the drawing now
+    glCanvasFrame->setViewParam( (*vp) );
+    glCanvasFrame->updateRendering();
 
-		// Write a message
-		this->statusMessage("Setting YZ+ viewpoint");
-	}
+    // Write a message
+    statusMessage("Setting YZ+ viewpoint");
 }
 
 
 // Set fixed view parameters
-void MainForm::setViewYZMinus( void )
-{
-	if (glCanvasFrame) {
-        	// Read the current view parameters
-        	viewParam * vp = ((GLCanvasFrame *)glCanvasFrame)->getViewParam();
+void MainForm::setViewYZMinus() {
+    // Read the current view parameters
+    viewParam * vp = glCanvasFrame->getViewParam();
 
-        	// Set the new parameter values
-	        (*vp).phi = -90.01;
-	        (*vp).theta = 90.0;
-		(*vp).chi = 180.0;
+    // Set the new parameter values
+    (*vp).phi = -90.01;
+    (*vp).theta = 90.0;
+    (*vp).chi = 180.0;
 
-		// Refresh the drawing now
-		((GLCanvasFrame *)glCanvasFrame)->setViewParam( (*vp) );
-		((GLCanvasFrame *)glCanvasFrame)->updateRendering();
+    // Refresh the drawing now
+    glCanvasFrame->setViewParam( (*vp) );
+    glCanvasFrame->updateRendering();
 
-		// Write a message
-		this->statusMessage("Setting YZ- viewpoint");
-	}
+    // Write a message
+    statusMessage("Setting YZ- viewpoint");
 }
 
 
 // Upon request from the drawing area, pass on data to the 
 // frame -- this is used to handle mouse-controlled rotations 
 // and spins
-void MainForm::computeTransformation( double delta, double w1, double w2, double w3, double * deltaPhi, double * deltaTheta, double * deltaChi )
-{
-	if (glCanvasFrame) 
-		((GLCanvasFrame *)glCanvasFrame)->computeTransformation( delta, w1, w2, w3, deltaPhi, deltaTheta, deltaChi );
+void MainForm::computeTransformation( double delta, double w1, double w2, double w3, double * deltaPhi, double * deltaTheta, double * deltaChi ) {
+    glCanvasFrame->computeTransformation( delta, w1, w2, w3, deltaPhi, deltaTheta, deltaChi );
 }
 
 
 // Write a status bar message
-void MainForm::statusMessage( const char * mess )
-{
-	if (status)
-		status->setText( mess );
+void MainForm::statusMessage(const QString& mess) {
+    m_status->setText( mess );
 }
 
 
 // Write a status bar message (overloaded function) 
-void MainForm::statusMessage( const char * mess1, const char * mess2 )
-{
-	char * buffer = (char *)malloc(BUFSIZ);
-	sprintf(buffer, "%s %s", mess1, mess2);
-	if (status)
-		status->setText( buffer );
-	free(buffer);
+void MainForm::statusMessage(const QString& mess1, const QString& mess2) {
+    m_status->setText(mess1 + mess2);
 }
 
 
 // Callback function to launch the annotation settings panel
-void MainForm::launchAnnotation( void )
-{
+void MainForm::launchAnnotation() {
     if (!m_anb) {
         m_anb = new AnnotationBoard(this /*parent*/, this /*mainForm*/);
     }
 
     // Adjust the controls and show
-    m_anb->setAnnotation( (*this->getViewParam()) );
+    m_anb->setAnnotation(*getViewParam());
     m_anb->show();
 }
 
 
 // Launch the atom control board
-void MainForm::launchAtoms( void )
-{
-        // Get the current particle data and show
-        // the panel
-        if (ab) {
-                ((AtomBoard *)ab)->setData();
-                ab->show();
-        }
-
+void MainForm::launchAtoms() {
+    // Get the current particle data and show
+    // the panel
+    ab->setData();
+    ab->show();
 }
 
 
 // Callback function to launch the bond settings panel
-void MainForm::launchBonds( void )
-{
-        if (!bb) {
-                bb = new BondBoard( this, "bondBoard" );
-                if (bb)
-                        ((BondBoard *)bb)->setMainFormAddress( this );
-        }
+void MainForm::launchBonds() {
+    if (!bb) {
+        bb = new BondBoard( this, "bondBoard" );
+        bb->setMainFormAddress( this );
+    }
 
-        // Adjust the controls and show
-        // the panel
-        if (bb) {
-                ((BondBoard *)bb)->setData();
-                bb->show();
-        }
+    // Adjust the controls and show
+    // the panel
+    bb->setData();
+    bb->show();
 }
 
 
 // Callback function to launch the clip settings panel
-void MainForm::launchClip( void )
-{
-        if (!clb) {
-                clb = new ClipBoard( this, "clipBoard" );
-                if (clb)
-                        ((ClipBoard *)clb)->setMainFormAddress( this );
-        }
+void MainForm::launchClip() {
+    if (!clb) {
+        clb = new ClipBoard(this, "clipBoard");
+        clb->setMainFormAddress(this);
+    }
 
-        // Get the current settings and show
-        // the panel
-        if (clb) {
-                ((ClipBoard *)clb)->setClip( (*this->getViewParam()) );
-                clb->show();
-        }
+    // Get the current settings and show
+    // the panel
+    clb->setClip(*getViewParam());
+    clb->show();
 }
 
 
 // Callback function to launch the explicit view point settings panel
-void MainForm::launchExplicit( void )
-{
-        if (!eb) {
-                eb = new ExplicitBoard( this, "explicitBoard" );
-                if (eb)
-                        ((ExplicitBoard *)eb)->setMainFormAddress( this );
-        }
+void MainForm::launchExplicit() {
+    if (!eb) {
+        eb = new ExplicitBoard(this, "explicitBoard");
+        eb->setMainFormAddress(this);
+    }
 
-        // Get the current settings and show
-        // the panel
-        if (eb) {
-                ((ExplicitBoard *)eb)->setExplicit( (*this->getViewParam()) );
-                eb->show();
-        }
+    // Get the current settings and show
+    // the panel
+    eb->setExplicit(*getViewParam());
+    eb->show();
 }
 
 
 // Callback function to launch the file list panel (overloaded function)
-void MainForm::launchFileList( void )
-{
-        if (!flb) {
-                flb = new FileListBoard( this, "fileListBoard" );
-                if (flb)
-                        ((FileListBoard *)flb)->setMainFormAddress( this );
-        }
+void MainForm::launchFileList() {
+    if (!flb) {
+        flb = new FileListBoard(this, "fileListBoard");
+        flb->setMainFormAddress(this);
+    }
 
-        // Show the file list now (resetting the view freeze control)
-	if (flb) {
-		((FileListBoard *)flb)->resetKeepViewScale();
-		flb->show();
-	}
+    // Show the file list now (resetting the view freeze control)
+    flb->resetKeepViewScale();
+    flb->show();
 }
 
 
 // Callback function to launch the file list panel (overloaded function)
-void MainForm::launchFileList( const QString &fn )
-{
-        if (!flb) {
-                flb = new FileListBoard( this, "fileListBoard" );
-                if (flb)
-                        ((FileListBoard *)flb)->setMainFormAddress( this );
-        }
+void MainForm::launchFileList( const QString &fn ) {
+    if (!flb) {
+        flb = new FileListBoard(this, "fileListBoard");
+        flb->setMainFormAddress(this);
+    }
 
-	// Reset counter and prepare cycling
-	if (flb) {
-		((FileListBoard *)flb)->setFileListParam( 0, fl.numberOfFiles, fn );
-	}
+    // Reset counter and prepare cycling
+    flb->setFileListParam( 0, fl.numberOfFiles, fn );
 
-        // Show the file list now (resetting the view freeze control)
-	if (flb) {
-		((FileListBoard *)flb)->resetKeepViewScale();
-		flb->show();
-	}
+    // Show the file list now (resetting the view freeze control)
+    flb->resetKeepViewScale();
+    flb->show();
 }
 
 
 // Callback function to launch the lights settings panel
-void MainForm::launchLights( void )
-{
-        if (!lb) {
-                lb = new LightsBoard( this, "lightsBoard" );
-                if (lb)
-                        ((LightsBoard *)lb)->setMainFormAddress( this );
-        }
+void MainForm::launchLights() {
+    if (!lb) {
+        lb = new LightsBoard( this, "lightsBoard" );
+        lb->setMainFormAddress( this );
+    }
 
-        // Adjust the controls and show
-        // the panel
-        if (lb) {
-                ((LightsBoard *)lb)->setLights( (*this->getViewParam()) );
-                lb->show();
-        }
+    // Adjust the controls and show
+    // the panel
+    lb->setLights(*getViewParam());
+    lb->show();
 }
 
 
 // Callback function to launch the liquid crystal settings panel
-void MainForm::launchLiquidCrystals( void )
-{
-        // Get the current liquid crystal data and show
-        // the panel
-        if (lcb) {
-                ((LcBoard *)lcb)->setData();
-                lcb->show();
-        }
+void MainForm::launchLiquidCrystals() {
+    // Get the current liquid crystal data and show
+    // the panel
+    lcb->setData();
+    lcb->show();
 }
 
 
 // Callback function to launch the pore settings panel
-void MainForm::launchPores( void )
-{
-        // Get the current pore data and show
-        // the panel
-        if (pb) {
-                ((PoreBoard *)pb)->setData();
-                pb->show();
-        }
+void MainForm::launchPores() {
+    // Get the current pore data and show
+    // the panel
+    pb->setData();
+    pb->show();
 }
 
 
 // Callback function to launch the polymers settings panel
-void MainForm::launchPolymers( void )
+void MainForm::launchPolymers()
 {
-        // Get the current polymer data and show
-        // the panel
-        if (plb) {
-                ((PolymerBoard *)plb)->setData();
-                plb->show();
-        }
+    // Get the current polymer data and show
+    // the panel
+    plb->setData();
+    plb->show();
 }
 
 
 // Callback function to launch the slicing settings panel
-void MainForm::launchSlice( void )
+void MainForm::launchSlice()
 {
-        if (!slb) {
-                slb = new SliceBoard( this, "sliceBoard" );
-                if (slb)
-                        ((SliceBoard *)slb)->setMainFormAddress( this );
-        }
+    if (!slb) {
+        slb = new SliceBoard( this, "sliceBoard" );
+        if (slb)
+            slb->setMainFormAddress( this );
+    }
 
-        // Get the current settings and show
-        // the panel
-        if (slb) {
-                ((SliceBoard *)slb)->setSlice( (*this->getViewParam()) );
+    // Get the current settings and show
+    // the panel
+    if (slb) {
+        slb->setSlice(*getViewParam());
 
-                // Use the object boundaries as defaults
-                if ( (*this->getViewParam()).slicingSet == FALSE)
-                        ((SliceBoard *)slb)->autoSlice();
+        // Use the object boundaries as defaults
+        if (!getViewParam()->slicingSet)
+            slb->autoSlice();
 
-                slb->show();
-        }
+        slb->show();
+    }
 }
 
 
 // Callback function to launch the spin settings panel
-void MainForm::launchSpins( void )
+void MainForm::launchSpins()
 {
-        // Get the current spin data and show
-        // the panel
-        if (sb) {
-                ((SpinBoard *)sb)->setData();
-                sb->show();
-        }
+    // Get the current spin data and show
+    // the panel
+    sb->setData();
+    sb->show();
 }
 
 
 // Callback function to launch the stretch settings panel
 // (to manipulate data)
-void MainForm::launchStretch( void )
-{
-        if (!stb) {
-                stb = new StretchBoard( this, "stretchBoard" );
-                if (stb)
-                        ((StretchBoard *)stb)->setMainFormAddress( this );
-        }
+void MainForm::launchStretch() {
+    if (!stb) {
+        stb = new StretchBoard(this, "stretchBoard");
+        if (stb)
+            stb->setMainFormAddress(this);
+    }
 
-        // Adjust the controls and show
-        // the panel
-        if (stb) {
-                ((StretchBoard *)stb)->setData( (*this->getViewParam()) );
-                stb->show();
-        }
+    // Adjust the controls and show
+    // the panel
+    stb->setData(*getViewParam());
+    stb->show();
 }
 
 
 // Callback function to launch the track board panel
-void MainForm::launchTrack( const QString &fn )
-{
-        if (!trab) {
-                trab = new TrackBoard( this, "trackBoard" );
-                if (trab)
-                        ((TrackBoard *)trab)->setMainFormAddress( this );
-        }
+void MainForm::launchTrack(const QString &fn) {
+    if (!trab) {
+        trab = new TrackBoard(this, "trackBoard");
+        trab->setMainFormAddress(this);
+    }
 
-        // Get the current particle data and show
-        // the panel
-        if (trab) {
-                ((TrackBoard *)trab)->setFileListParam( fn );
-                ((TrackBoard *)trab)->setData();
-                trab->show();
-        }
+    // Get the current particle data and show
+    // the panel
+    trab->setFileListParam( fn );
+    trab->setData();
+    trab->show();
 }
 
 
 // Callback function to launch the translation settings panel
-void MainForm::launchTranslation( void )
-{
-        if (!tb) {
-                tb = new TranslationBoard( this, "transBoard" );
-                if (tb)
-                        ((TranslationBoard *)tb)->setMainFormAddress( this );
-        }
+void MainForm::launchTranslation() {
+    if (!tb) {
+        tb = new TranslationBoard(this, "transBoard");
+        tb->setMainFormAddress(this);
+    }
 
-        // Adjust the controls and show
-        // the panel
-        if (tb) {
-                ((TranslationBoard *)tb)->setData( (*this->getViewParam()) );
-                tb->show();
-        }
+    // Adjust the controls and show
+    // the panel
+    tb->setData(*getViewParam());
+    tb->show();
 }
 
 
 // Callback function to hide the track board panel
-void MainForm::hideTrack()
-{
-	if (trab)
-		trab->hide();
+void MainForm::hideTrack() {
+    if (trab)
+        trab->hide();
 }
 
 
 // Generate track data file based on current file list
-void MainForm::generateTracks()
-{	
-	aggregateData * ad = this->getAggregateData();;
-	trackData * td =  NULL;
+void MainForm::generateTracks() {
+    // Write a message to the m_status bar
+    statusMessage("Generating tracks...");
 
-	// Get a pointer to the track data structure
-	if (glCanvasFrame)
-		td = ((GLCanvasFrame *)glCanvasFrame)->getTrackData();
+    // Attempt to generate tracks now, using a pointer to
+    // the current aggregated structure (it will be necessary
+    // to read in aggregated data over and over again) and
+    // a pointer to the current track data structure
+    if (generateTrackDataFunction( &fl, getAggregateData(), glCanvasFrame->getTrackData() )) {
 
-	// Write a message to the status bar
-	this->statusMessage( "Generating tracks..." );
+        // Write a message to the m_status bar
+        statusMessage( "Completed generation of tracks" );
 
-	// Attempt to generate tracks now, using a pointer to 
-	// the current aggregated structure (it will be necessary
-	// to read in aggregated data over and over again) and
-	// a pointer to the current track data structure
-	if (generateTrackDataFunction( &fl, ad, td )) {
+        // Set limits for first track rendering
+        getViewParam()->trackRenderFromStage = 0;
 
-		// Write a message to the status bar
-		this->statusMessage( "Completed generation of tracks" );
+        switch (getViewParam()->tRenderMode) {
+        case ALL_STAGES:
+            getViewParam()->trackRenderToStage = fl.numberOfFiles-1;
+            break;
+        case UP_TO_CURRENT:
+            getViewParam()->trackRenderToStage = fl.currentFile;
+            break;
+        }
 
-		// Set limits for first track rendering
-		(*this->getViewParam()).trackRenderFromStage = 0;
-
-		switch ((*this->getViewParam()).tRenderMode) {
-			case ALL_STAGES:
-				(*this->getViewParam()).trackRenderToStage = fl.numberOfFiles-1;
-			break;
-			case UP_TO_CURRENT:
-				(*this->getViewParam()).trackRenderToStage = fl.currentFile;
-			break;
-		}
-
-		// Cause a recompile of the drawing lists	
-		this->updateView();
-	}
-	else {
-		// Write a message to the status bar
-		this->statusMessage( "Could not generate tracks" );
-	}
+        // Cause a recompile of the drawing lists
+        updateView();
+    }
+    else {
+        // Write a message to the m_status bar
+        statusMessage( "Could not generate tracks" );
+    }
 }
 
-
+#if 0
 // Give size hints and define size policy
-QSize MainForm::sizeHint() const
-{
-	if (renderBox && status)
-		return QSize( renderBox->width(), renderBox->height() + status->height() );
-	else 
-		return QSize( MIN_SIZE, MIN_SIZE );
+QSize MainForm::sizeHint() const {
+    if (renderBox && m_status)
+        return QSize( renderBox->width(), renderBox->height() + m_status->height() );
+    else
+        return QSize( MIN_SIZE, MIN_SIZE );
 }
 
 
 // Give size hints and define size policy
 QSizePolicy MainForm::sizePolicy() const
 {
-	return QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    return QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 }
+#endif

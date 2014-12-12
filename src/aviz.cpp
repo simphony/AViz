@@ -131,22 +131,18 @@ AViz::AViz()
 	menuBar()->insertItem( "&Help", help );
 	menuBar()->setSeparator( QMenuBar::InWindowsStyle );
 
-	// Now construct the main form
-	mf = NULL;
-	mf = new MainForm(this, "mainForm");
-	if (mf) {
-		this->setCentralWidget(mf);
+    // Now construct the main form
+    // (Note having aviz as paramter for MainForm ctor
+    // is "This is an ugly hack, intended to propagate the
+    // address of the calling class")
+    mf = new MainForm(this/*parent*/, this /*aviz*/);
+    setCentralWidget(mf);
 
-		// This is an ugly hack, intended to propagate the
-		// address of the calling class
-		mf->setAVizAddress( (char *)this );
-	}
+    // Construct a timer
+    watchTimer = new QTimer( this, "watchTimer" );
 
-	// Construct a timer
-        watchTimer = new QTimer( this, "watchTimer" );
-
-	// Set initial settings
-	this->setAtomMenus();
+    // Set initial settings
+    this->setAtomMenus();
 }
 
 
@@ -1274,8 +1270,8 @@ void AViz::mirrorY( void )
 // Callback function to manipulate data
 void AViz::mirrorZ( void )
 {
-	if (mf) {
-		// Write a message
+    if (mf) {
+        // Write a message
 		mf->statusMessage( "Mirroring Z -> -Z" );
 
 		// Get local copy of the current data set
@@ -1289,5 +1285,5 @@ void AViz::mirrorZ( void )
 		// Let this be the current aggregate and render
 		mf->updateView();
 		mf->updateRendering();
-	}
+    }
 }
