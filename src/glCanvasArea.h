@@ -54,7 +54,7 @@ class GLCanvasArea: public QGLWidget
 	Q_OBJECT
 
 public:
-	GLCanvasArea( QWidget* parent, const char* name );
+    GLCanvasArea(QWidget* parent);
 	~GLCanvasArea();
 
 	void setFormAddress( MainForm * );

@@ -25,6 +25,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "glCanvasArea.h"
 
+#include <QX11Info>
+
 #include <cmath>
 
 #include "memoryFunctions.h"
@@ -40,9 +42,8 @@ static GLfloat slice_mat[] = { white_color, 0.95 };
 static GLfloat opaque_mat[] = { white_color, 1.0 };
 
 // OpenGL Drawing area widget constructor 
-GLCanvasArea::GLCanvasArea( QWidget* parent, const char* name )
-    : QGLWidget( parent, name )
-{
+GLCanvasArea::GLCanvasArea(QWidget* parent)
+    : QGLWidget(parent) {
 	// Init the data structures
 	allocateParticleData( &pd );
 
@@ -91,8 +92,7 @@ GLCanvasArea::~GLCanvasArea()
 
 
 // Set a pointer to the main form
-void GLCanvasArea::setFormAddress( MainForm * thisForm )
-{
+void GLCanvasArea::setFormAddress( MainForm * thisForm ) {
         mainForm = thisForm;
 }
 
@@ -137,7 +137,7 @@ void GLCanvasArea::recompileObjects( void )
 		glDeleteLists( tracks, 1 );
 
 	// Should drawing lists be compiled? 
-	if (ad.numberOfParticles) {
+    if (ad.numberOfParticles) {
 		// Compile the drawing procedures: first the bonds...
 		if (vp.renderMode == ATOMS) 	
 			atomBonds = this->makeBondsObject( FALSE );
@@ -259,8 +259,7 @@ void GLCanvasArea::snapRendering( void )
 
 // Create an image file from the current rendering
 // (overloaded function)
-void GLCanvasArea::snapRendering( const char * filename )
-{
+void GLCanvasArea::snapRendering( const char * filename ) {
 	int width = this->width();
 	int height = this->height();
 	char * imageRed;
@@ -284,7 +283,6 @@ void GLCanvasArea::snapRendering( const char * filename )
 	else {
 		if (mainForm) 
 			mainForm->statusMessage( "Could not create PNG image file");
-			printf("Could not create PNG image file\n");
 	}
 
 	// Free memory
@@ -379,12 +377,12 @@ void GLCanvasArea::completeParticleData( void )
 void GLCanvasArea::mousePressEvent( QMouseEvent * qme )
 {
 	// Create bitmaps to set cursor icon
-	QBitmap handIcon( hand2_width, hand2_height, hand2_bits, TRUE );
-	QBitmap handIconMask( hand2Mask_width, hand2Mask_height, hand2Mask_bits, TRUE );
-	QBitmap handShiftIcon( hand2Shift_width, hand2Shift_height, hand2Shift_bits, TRUE );
-	QBitmap handShiftIconMask( hand2ShiftMask_width, hand2ShiftMask_height, hand2ShiftMask_bits, TRUE );
-	QBitmap handZoomIcon( hand2Zoom_width, hand2Zoom_height, hand2Zoom_bits, TRUE );
-	QBitmap handZoomIconMask( hand2ZoomMask_width, hand2ZoomMask_height, hand2ZoomMask_bits, TRUE );
+    QBitmap handIcon = QBitmap::fromData( QSize(hand2_width, hand2_height), hand2_bits, QImage::Format_MonoLSB );
+    QBitmap handIconMask = QBitmap::fromData( QSize(hand2Mask_width, hand2Mask_height), hand2Mask_bits, QImage::Format_MonoLSB );
+    QBitmap handShiftIcon = QBitmap::fromData( QSize(hand2Shift_width, hand2Shift_height), hand2Shift_bits, QImage::Format_MonoLSB );
+    QBitmap handShiftIconMask = QBitmap::fromData( QSize(hand2ShiftMask_width, hand2ShiftMask_height), hand2ShiftMask_bits, QImage::Format_MonoLSB );
+    QBitmap handZoomIcon = QBitmap::fromData( QSize(hand2Zoom_width, hand2Zoom_height), hand2Zoom_bits, QImage::Format_MonoLSB );
+    QBitmap handZoomIconMask = QBitmap::fromData( QSize(hand2ZoomMask_width, hand2ZoomMask_height), hand2ZoomMask_bits, QImage::Format_MonoLSB );
 
 	// Create cursor icons
 	QCursor handCursor( handIcon, handIconMask );
@@ -405,7 +403,7 @@ void GLCanvasArea::mousePressEvent( QMouseEvent * qme )
         case Qt::LeftButton:
 			// Show standard hand icon and rotate/tilt
 			// if the left or right mouse button is pressed
-		        grabMouse( handCursor );
+                grabMouse( handCursor );
 		break;
         case Qt::MidButton:
 			// Show pan hand icon and pan
@@ -1452,7 +1450,7 @@ GLuint GLCanvasArea::makeRasterFont( int size )
         XFontStruct *fontInfo;
         Font id;
         unsigned int first, last;
-        Display *xdisplay = QPaintDevice::x11AppDisplay();
+        Display *xdisplay = QX11Info::display();
 	GLuint thisFont = 0;
 
 	switch (size) { 

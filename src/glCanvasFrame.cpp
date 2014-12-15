@@ -60,8 +60,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <Q3Frame>
 
 //  Framed canvas widget constructor and destructor
-GLCanvasFrame::GLCanvasFrame( QWidget* parent, const char* name )
-    : Q3VBox( parent, name )
+GLCanvasFrame::GLCanvasFrame(QWidget* parent)
+    : Q3VBox(parent)
 {
 	// Draw a frame in a new window
 	drawFrame = new Q3VBox( NULL, "drawFrame" );
@@ -80,8 +80,7 @@ GLCanvasFrame::GLCanvasFrame( QWidget* parent, const char* name )
 	Q3VBox * vb0Frame = new Q3VBox( hb0, "vb0Frame" );
         vb0Frame->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
         vb0Frame->setLineWidth( 2 );
-	drawArea = NULL;
-	drawArea = new GLCanvasArea( vb0Frame, "glCanvasArea" );
+    drawArea = new GLCanvasArea(vb0Frame);
 
 	// Construct a vertical box to contain controls	
 	Q3VBox * vb1 = new Q3VBox( hb0, "vb1" );

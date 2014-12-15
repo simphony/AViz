@@ -49,10 +49,10 @@ class GLCanvasFrame: public Q3VBox
 	Q_OBJECT
 
 public:
-	GLCanvasFrame( QWidget* parent, const char* name );
+    GLCanvasFrame(QWidget* parent);
 	~GLCanvasFrame();
 
-        void setFormAddress( MainForm * );
+    void setFormAddress(MainForm *);
 
 public slots:
 	void updateView();
