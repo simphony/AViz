@@ -87,7 +87,7 @@ MainForm::MainForm(QWidget *parent, AViz *aviz)
 
     // Add a label that pretends to be a status bar
     m_status = new QLabel(this);
-    m_status->setFrameStyle(Q3Frame::Panel | Q3Frame::Sunken);
+    m_status->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_status->setFixedHeight(m_status->sizeHint().height());
     m_status->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     mainBox->addWidget(m_status, 3, 0);
