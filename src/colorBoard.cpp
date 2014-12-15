@@ -142,7 +142,7 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	redS0->setMinimum( COLOR_MIN );
         redS0->setMaximum( COLOR_MAX );
         redS0->setTickInterval( 10 );
-        redS0->setTickmarks( QSlider::TicksAbove );
+        redS0->setTickPosition( QSlider::TicksAbove );
 	redS0->setValue( COLOR_MAX );
 	redS0->setFixedWidth( SLIDER_WIDTH );
         redS0->setFixedHeight( SLIDER_HEIGHT );
@@ -151,7 +151,7 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	greenS0->setMinimum( COLOR_MIN );
         greenS0->setMaximum( COLOR_MAX );
         greenS0->setTickInterval( 10 );
-        greenS0->setTickmarks( QSlider::TicksAbove );
+        greenS0->setTickPosition( QSlider::TicksAbove );
 	greenS0->setValue( COLOR_MAX );
 	greenS0->setFixedWidth( SLIDER_WIDTH );
         greenS0->setFixedHeight( SLIDER_HEIGHT );
@@ -160,7 +160,7 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	blueS0->setMinimum( COLOR_MIN );
         blueS0->setMaximum( COLOR_MAX );
         blueS0->setTickInterval( 10 );
-        blueS0->setTickmarks( QSlider::TicksAbove );
+        blueS0->setTickPosition( QSlider::TicksAbove );
 	blueS0->setValue( COLOR_MAX );
 	blueS0->setFixedWidth( SLIDER_WIDTH );
         blueS0->setFixedHeight( SLIDER_HEIGHT );
@@ -175,7 +175,7 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	redS1->setMinimum( COLOR_MIN );
         redS1->setMaximum( COLOR_MAX );
         redS1->setTickInterval( 10 );
-        redS1->setTickmarks( QSlider::TicksAbove );
+        redS1->setTickPosition( QSlider::TicksAbove );
 	redS1->setValue( COLOR_MAX );
 	redS1->setFixedWidth( SLIDER_WIDTH );
         redS1->setFixedHeight( SLIDER_HEIGHT );
@@ -184,7 +184,7 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	greenS1->setMinimum( COLOR_MIN );
         greenS1->setMaximum( COLOR_MAX );
         greenS1->setTickInterval( 10 );
-        greenS1->setTickmarks( QSlider::TicksAbove );
+        greenS1->setTickPosition( QSlider::TicksAbove );
 	greenS1->setValue( COLOR_MAX );
 	greenS1->setFixedWidth( SLIDER_WIDTH );
         greenS1->setFixedHeight( SLIDER_HEIGHT );
@@ -193,7 +193,7 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	blueS1->setMinimum( COLOR_MIN );
         blueS1->setMaximum( COLOR_MAX );
         blueS1->setTickInterval( 10 );
-        blueS1->setTickmarks( QSlider::TicksAbove );
+        blueS1->setTickPosition( QSlider::TicksAbove );
 	blueS1->setValue( COLOR_MAX );
 	blueS1->setFixedWidth( SLIDER_WIDTH );
         blueS1->setFixedHeight( SLIDER_HEIGHT );
@@ -208,7 +208,7 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	redS2->setMinimum( COLOR_MIN );
         redS2->setMaximum( COLOR_MAX );
         redS2->setTickInterval( 10 );
-        redS2->setTickmarks( QSlider::TicksAbove );
+        redS2->setTickPosition( QSlider::TicksAbove );
 	redS2->setValue( COLOR_MAX );
 	redS2->setFixedWidth( SLIDER_WIDTH );
         redS2->setFixedHeight( SLIDER_HEIGHT );
@@ -217,7 +217,7 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	greenS2->setMinimum( COLOR_MIN );
         greenS2->setMaximum( COLOR_MAX );
         greenS2->setTickInterval( 10 );
-        greenS2->setTickmarks( QSlider::TicksAbove );
+        greenS2->setTickPosition( QSlider::TicksAbove );
 	greenS2->setValue( COLOR_MAX );
 	greenS2->setFixedWidth( SLIDER_WIDTH );
         greenS2->setFixedHeight( SLIDER_HEIGHT );
@@ -226,7 +226,7 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	blueS2->setMinimum( COLOR_MIN );
         blueS2->setMaximum( COLOR_MAX );
         blueS2->setTickInterval( 10 );
-        blueS2->setTickmarks( QSlider::TicksAbove );
+        blueS2->setTickPosition( QSlider::TicksAbove );
 	blueS2->setValue( COLOR_MAX );
 	blueS2->setFixedWidth( SLIDER_WIDTH );
         blueS2->setFixedHeight( SLIDER_HEIGHT );

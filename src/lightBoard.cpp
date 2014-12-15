@@ -94,12 +94,11 @@ LightsBoard::LightsBoard(MainForm * mainForm, QWidget * parent)
 
             connect( lightCob, SIGNAL(activated(int)), SLOT(setLightDepth(int)) );
 
-            depthS = new QSlider( Qt::Horizontal);
+            depthS = new QSlider(Qt::Horizontal);
             depthS->setMinimum( 0 );
             depthS->setMaximum( 100 );
             depthS->setTickInterval( 10 );
-            depthS->setTickPosition( QSlider::TicksAbove );
-            depthS->setFixedHeight( SLIDER_HEIGHT );
+            depthS->setTickPosition(QSlider::TicksAbove);
 
             hBox->addWidget(lightCob);
             hBox->addWidget(new QLabel(" Position Depth:  Near  "));
@@ -130,15 +129,13 @@ LightsBoard::LightsBoard(MainForm * mainForm, QWidget * parent)
         ambientS->setMinimum( LIGHT_MIN );
         ambientS->setMaximum( LIGHT_MAX );
         ambientS->setTickInterval( 10 );
-        ambientS->setTickmarks( QSlider::TicksAbove );
-        ambientS->setFixedHeight( SLIDER_HEIGHT );
+        ambientS->setTickPosition( QSlider::TicksAbove );
 
         shininessS = new QSlider( Qt::Horizontal);
         shininessS->setMinimum( SHINE_MIN );
         shininessS->setMaximum( SHINE_MAX );
         shininessS->setTickInterval( 10 );
-        shininessS->setTickmarks( QSlider::TicksAbove );
-        shininessS->setFixedHeight( SLIDER_HEIGHT );
+        shininessS->setTickPosition(QSlider::TicksAbove);
 
         grid1->addWidget(new QLabel(" Global Ambient Light:  "), 0, 0);
         grid1->addWidget(ambientS, 0, 1);
