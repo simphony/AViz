@@ -28,6 +28,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <cmath>
 
+#include <QLabel>
+#include <Q3Frame>
+
+#include "glCanvasArea.h"
+
 #include "./pixmaps/home.xpm"
 #include "./pixmaps/homenew.xpm"
 #include "./pixmaps/parallel.xpm"
@@ -55,9 +60,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "./pixmaps/stereoVisionEn.xpm"
 #include "./pixmaps/eyeSeparationPlus.xpm"
 #include "./pixmaps/eyeSeparationMinus.xpm"
-
-#include <QLabel>
-#include <Q3Frame>
 
 //  Framed canvas widget constructor and destructor
 GLCanvasFrame::GLCanvasFrame(QWidget* parent)

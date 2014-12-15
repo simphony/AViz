@@ -29,7 +29,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "data.h"
 #include "defaults.h"
-#include "glCanvasArea.h"
 #include "mainForm.h"
 #include "parameterLimits.h"
 #include "SoQtThumbWheel.h"
@@ -41,7 +40,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <qtimer.h>
 #include <q3vbox.h>
 
-
+class GLCanvasArea;
 
 // Frame widget containing the Open GL drawing area
 class GLCanvasFrame: public Q3VBox

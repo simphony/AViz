@@ -28,6 +28,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "floatSpin.h"
 #include "mainForm.h"
 #include "fileFunctions.h"
+#include "defaultParticles.h"
 
 #include <q3buttongroup.h>
 #include <q3grid.h>

@@ -25,11 +25,18 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "glCanvasArea.h"
 
-#include <QX11Info>
-
 #include <cmath>
 
+#include <QX11Info>
+#include <QBitmap>
+#include <QCursor>
+
+#include "mainForm.h"
 #include "memoryFunctions.h"
+#include "defaultParticles.h"
+#include "fileFunctions.h"
+#include "imageFileFunctions.h"
+
 #include "./bitmaps/hand2.xbm"
 #include "./bitmaps/hand2Shift.xbm"
 #include "./bitmaps/hand2Zoom.xbm"

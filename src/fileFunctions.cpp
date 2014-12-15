@@ -26,6 +26,10 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "fileFunctions.h"
 #include "memoryFunctions.h"
+#include "version.h"
+#include "defaultParticles.h"
+
+#include <sys/stat.h>
 
 // Check the suffix in a file name
 void checkSuffix( const char * filename, const char * suffix )

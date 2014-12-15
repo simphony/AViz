@@ -28,25 +28,14 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define GLCANVAR_H
 
 #include "data.h"
-#include "defaultParticles.h"
-#include "defaults.h"
-#include "fileFunctions.h"
-#include "imageFileFunctions.h"
-#include "mainForm.h"
-#include "parameterLimits.h"
 
-#include <qbitmap.h>
-#include <qcursor.h>
-#include <qevent.h>
-#include <qgl.h>
-#include <q3hbox.h>
+#include <QGLWidget>
 #include <QMouseEvent>
 
-#include <sys/stat.h>
-#include <unistd.h>
-#include <X11/Xlib.h>
 #include <GL/glx.h>
 #include <GL/glu.h>
+
+class MainForm;
 
 //  Open GL drawing area
 class GLCanvasArea: public QGLWidget

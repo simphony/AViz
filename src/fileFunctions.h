@@ -28,15 +28,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define FILE_H
 
 #include "data.h"
-#include "defaultParticles.h"
-#include "defaults.h"
-#include "version.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 void checkSuffix( const char *, const char * );
 bool fileExists( const char * );
