@@ -962,8 +962,7 @@ void MainForm::launchFileList( const QString &fn ) {
 // Callback function to launch the lights settings panel
 void MainForm::launchLights() {
     if (!lb) {
-        lb = new LightsBoard( this, "lightsBoard" );
-        lb->setMainFormAddress( this );
+        lb = new LightsBoard(this /*mainForm*/, this /*parent*/);
     }
 
     // Adjust the controls and show

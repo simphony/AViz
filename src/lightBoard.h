@@ -41,10 +41,9 @@ class LightsBoard: public QDialog
 {
     Q_OBJECT
 public:
-    LightsBoard( QWidget * parent=0, const char * name=0 );
+    LightsBoard(MainForm *, QWidget * parent=0);
 
-public slots:
-    void setMainFormAddress( MainForm * );
+public:
     void setLights( viewParam );
 
 private slots:
@@ -55,7 +54,7 @@ private slots:
     void bcancel();
 
 private:
-    MainForm * mainForm;
+    MainForm * m_mainForm;
     QCheckBox * light0;
     QCheckBox * light1;
     QCheckBox * light2;
@@ -68,8 +67,6 @@ private:
     QSlider * depthS;
     QSlider * ambientS;
     QSlider * shininessS;
-    QLabel * depthL0;
-    QLabel * depthL1;
 };
 
 #endif // LIGHTB_H
