@@ -93,8 +93,7 @@ MainForm::MainForm(QWidget *parent, AViz *aviz)
     mainBox->addWidget(m_status, 3, 0);
 
     // Create some of the more important boards
-    ab = new AtomBoard(this);
-    ab->setMainFormAddress(this);
+    ab = new AtomBoard(this/*mainForm*/, this /*parent*/);
 
     sb = new SpinBoard(this, "spinBoard");
     sb->setMainFormAddress(this);

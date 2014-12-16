@@ -50,14 +50,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qdialog.h>
-#include <q3hbox.h>
-#include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qsizepolicy.h>
-#include <q3vbox.h>
 #include <qwidget.h>
 
 class Q3GridLayout;
@@ -67,10 +64,9 @@ class AtomBoard: public QDialog
 {
     Q_OBJECT
 public:
-    AtomBoard( QWidget * parent=0 );
+    AtomBoard(MainForm *mainForm, QWidget * parent=0);
 
 public slots:
-    void setMainFormAddress( MainForm * );
     void setData();
     void getColors( float, float, float, float, float, float );
     void getColorBoardPos( int, int );
@@ -86,17 +82,19 @@ public slots:
     void closeColorBoard();
 
 private slots:
-    void buildLayout( colorCriterion );
     void setAtom();
     void adjustAtom();
     void adjustCriterion();
     void setColorCb();
-    void setColors();
-    void readToggles();
     void bbonds();
     void bdone();
     void bapply();
     void bcancel();
+
+private:
+    void buildLayout( colorCriterion );
+    void setColors();
+    void readToggles();
 
 private:
     MainForm * mainForm;
@@ -105,17 +103,14 @@ private:
     PropertyBox * propertyBox;
     SizeBox * sizeBox;
     Q3GridLayout * atomBox;
-    Q3HBox * hb1;
-    Q3HBox * hb2;
-    Q3HBox * hb3;
-    Q3HBox * hb4;
-    Q3HBox * hb5;
+    Q3HBox *hb1;
+    Q3HBox *hb2;
+    Q3HBox *hb3;
+    QWidget *hb4ColorCriterion;
+    QWidget *hb5BondsDoneApply;
     QComboBox * atomCob;
     QComboBox * styleCob;
     QCheckBox * showAtomCb;
-    QLabel * modeL;
-    QLabel * colorL;
-    Q3ButtonGroup * colorMode;
     QRadioButton * colorMode0;
     QRadioButton * colorMode1;
     QRadioButton * colorMode2;

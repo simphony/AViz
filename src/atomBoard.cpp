@@ -30,8 +30,9 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QLabel>
 
 // Make a popup dialog box 
-AtomBoard::AtomBoard( QWidget * parent )
-    : QDialog( parent, Qt::WType_TopLevel )
+AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
+    : QDialog( parent, Qt::WType_TopLevel ),
+      mainForm(mainForm)
 {
     setWindowTitle( "AViz: Set Atom Types" );
 
@@ -66,7 +67,7 @@ AtomBoard::AtomBoard( QWidget * parent )
     hb2 = new Q3HBox( this, "hb2" );
 
     // Add a label and color labels
-    colorL = new QLabel( hb2, "colorL" );
+    QLabel *colorL = new QLabel( hb2, "colorL" );
     colorL->setText( " Color: " );
     colorLabel0 = new ColorLabel(hb2);
     colorLabel1 = new ColorLabel(hb2);
@@ -97,30 +98,38 @@ AtomBoard::AtomBoard( QWidget * parent )
     // Create a hboxlayout that will fill the next row
     sizeBox = new SizeBox( this );
 
-    // Create a hboxlayout that will fill the next row
-    hb4 = new Q3HBox( this, "hb4" );
+    // Create a widget for the next row
+    {
+        hb4ColorCriterion = new QWidget(this);
 
-    // Add radiobuttons and a label
-    modeL = new QLabel( hb4, "modeL" );
-    modeL->setText( " Color Criterion: " );
+        // Add radiobuttons and a label
+        QLabel *modeL = new QLabel(" Color Criterion: ");
 
-    colorMode = new Q3ButtonGroup( 4, Qt::Horizontal, hb4, "colorMode"
-                                   );
-    colorMode0 = new QRadioButton( colorMode, "type" );
-    colorMode0->setText( "Type" );
-    colorMode1 = new QRadioButton( colorMode, "position" );
-    colorMode1->setText( "Position" );
-    colorMode2 = new QRadioButton( colorMode, "property" );
-    colorMode2->setText( "Property" );
-    colorMode3 = new QRadioButton( colorMode, "colorcode" );
-    colorMode3->setText( "ColorCode" );
-    colorMode->insert( colorMode0, 0 );
-    colorMode->insert( colorMode1, 1 );
-    colorMode->insert( colorMode2, 2 );
-    colorMode->insert( colorMode3, 3 );
+        QGroupBox *colorMode = new QGroupBox();
+        QHBoxLayout *colorModeLayout = new QHBoxLayout(colorMode);
 
-    // Define a callback for these radio buttons
-    connect( colorMode, SIGNAL(clicked(int)), this, SLOT(adjustCriterion()) );
+        colorMode0 = new QRadioButton("Type");
+        colorMode1 = new QRadioButton("Position");
+        colorMode2 = new QRadioButton("Property");
+        colorMode3 = new QRadioButton("ColorCode");
+        colorModeLayout->addWidget(colorMode0);
+        colorModeLayout->addWidget(colorMode1);
+        colorModeLayout->addWidget(colorMode2);
+        colorModeLayout->addWidget(colorMode3);
+
+        // Define a callback for these radio buttons
+        QButtonGroup *colorModeButtonGroup = new QButtonGroup(this);
+        colorModeButtonGroup->addButton(colorMode0);
+        colorModeButtonGroup->addButton(colorMode1);
+        colorModeButtonGroup->addButton(colorMode2);
+        colorModeButtonGroup->addButton(colorMode3);
+        connect(colorModeButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(adjustCriterion()) );
+
+        QHBoxLayout *hbox = new QHBoxLayout(hb4ColorCriterion);
+        hbox->addWidget(modeL);
+        hbox->addWidget(colorMode);
+    }
+
 
     // Create hboxlayouts that will fill the next row; these
     // are shown only when appropriate
@@ -128,39 +137,31 @@ AtomBoard::AtomBoard( QWidget * parent )
     propertyBox = new PropertyBox( this, "positionBox" );
     codeBox = new CodeBox( this, "codeBox" );
 
-    // Create a hboxlayout that will fill the lowest row
-    hb5 = new Q3HBox( this, "hb5" );
 
-    // Create pushbuttons that will go into the lowest row
-    QPushButton * bonds = new QPushButton( hb5, "bonds" );
-    bonds->setText( "Bonds..." );
+    // Create widget (of buttons) for the lowest row
+    {
+        hb5BondsDoneApply = new QWidget(this);
 
-    // Define a callback for that button
-    QObject::connect( bonds, SIGNAL(clicked()), this, SLOT(bbonds()) );
+        // Create pushbuttons that will go into the lowest row
+        QPushButton * bonds = new QPushButton("Bonds...");
+        connect( bonds, SIGNAL(clicked()), this, SLOT(bbonds()) );
 
-    // Create a placeholder
-    QLabel * emptyL1 = new QLabel( hb5, "emptyL1" );
+        QPushButton * done = new QPushButton("Done");
+        connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
 
-    // Create pushbuttons that will go into the lowest row
-    QPushButton * done = new QPushButton( hb5, "done" );
-    done->setText( "Done" );
+        QPushButton * apply = new QPushButton("Apply");
+        connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
 
-    // Define a callback for that button
-    QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
+        QPushButton * cancel = new QPushButton("Cancel");
+        connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
 
-    QPushButton * apply = new QPushButton( hb5, "apply" );
-    apply->setText( "Apply" );
-
-    // Define a callback for that button
-    QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
-
-    QPushButton * cancel = new QPushButton( hb5, "cancel" );
-    cancel->setText( "Cancel" );
-
-    // Define a callback for that button
-    QObject::connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
-
-    hb5->setStretchFactor( emptyL1, 10 );
+        QHBoxLayout *hbox = new QHBoxLayout(hb5BondsDoneApply);
+        hbox->addWidget(bonds);
+        hbox->addStretch(1);
+        hbox->addWidget(done);
+        hbox->addWidget(apply);
+        hbox->addWidget(cancel);
+    }
 
     // Clear the board pointer
     atomBox = NULL;
@@ -178,21 +179,11 @@ AtomBoard::AtomBoard( QWidget * parent )
     // Set defaults appropriate for startup without data
     colorButton->setDisabled( TRUE );
     sizeBox->setDisabled( TRUE );
-    modeL->setDisabled( TRUE );
-    colorMode->setDisabled( TRUE );
-    colorMode0->setChecked( TRUE );
+    hb4ColorCriterion->setDisabled( TRUE );
 
     // Build default layout
     this->buildLayout( TYPE );
 }
-
-
-// Set a pointer to the main form
-void AtomBoard::setMainFormAddress( MainForm * thisMF )
-{
-    mainForm = thisMF;
-}
-
 
 // Build the layout
 void AtomBoard::buildLayout( colorCriterion crit ) 
@@ -219,8 +210,8 @@ void AtomBoard::buildLayout( colorCriterion crit )
     atomBox->addMultiCellWidget( hb1, 0, 0, 0, -1);
     atomBox->addMultiCellWidget( hb2, 1, 1, 0, -1);
     atomBox->addMultiCellWidget( sizeBox, 2, 2, 0, -1);
-    atomBox->addMultiCellWidget( hb4, 3, 3, 0, -1);
-    atomBox->addMultiCellWidget( hb5, numRows-1, numRows-1, 0, -1);
+    atomBox->addMultiCellWidget( hb4ColorCriterion, 3, 3, 0, -1);
+    atomBox->addMultiCellWidget( hb5BondsDoneApply, numRows-1, numRows-1, 0, -1);
 
     // Add additional components
     switch (crit) {
@@ -343,18 +334,15 @@ void AtomBoard::setAtom( void )
             switch( thisShowParticle) {
             case TRUE:
                 if (thisAtomIndex >= 0) {
-                    modeL->setDisabled( FALSE );
-                    colorMode->setDisabled( FALSE );
+                    hb4ColorCriterion->setDisabled( FALSE );
                 }
                 else {
-                    modeL->setDisabled( TRUE );
-                    colorMode->setDisabled( TRUE );
+                    hb4ColorCriterion->setDisabled( TRUE );
                 }
                 break;
             case FALSE:
                 sizeBox->setDisabled( TRUE );
-                modeL->setDisabled( TRUE );
-                colorMode->setDisabled( TRUE );
+                hb4ColorCriterion->setDisabled( TRUE );
                 break;
             }
 
@@ -410,8 +398,7 @@ void AtomBoard::setAtom( void )
 
 // Adjust the settings, using the local
 // copy of the particle data structure 
-void AtomBoard::adjustAtom( void )
-{
+void AtomBoard::adjustAtom() {
     // Read the toggle switch values and
     // update the particle data entry
     if (thisAtomIndex >= 0)
