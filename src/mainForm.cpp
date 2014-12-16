@@ -933,8 +933,7 @@ void MainForm::launchExplicit() {
 // Callback function to launch the file list panel (overloaded function)
 void MainForm::launchFileList() {
     if (!flb) {
-        flb = new FileListBoard(this, "fileListBoard");
-        flb->setMainFormAddress(this);
+        flb = new FileListBoard(this/*mainForm*/, this/*parent*/);
     }
 
     // Show the file list now (resetting the view freeze control)
@@ -946,8 +945,7 @@ void MainForm::launchFileList() {
 // Callback function to launch the file list panel (overloaded function)
 void MainForm::launchFileList( const QString &fn ) {
     if (!flb) {
-        flb = new FileListBoard(this, "fileListBoard");
-        flb->setMainFormAddress(this);
+        flb = new FileListBoard(this/*mainForm*/, this/*parent*/);
     }
 
     // Reset counter and prepare cycling

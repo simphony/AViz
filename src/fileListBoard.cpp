@@ -27,12 +27,22 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "fileListBoard.h"
 
 #include <Q3GridLayout>
+#include <QPushButton>
+#include <Q3ButtonGroup>
+#include <QRadioButton>
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QTimer>
+#include <QLabel>
+
+#include "mainForm.h"
 
 // Make a popup dialog box 
-FileListBoard::FileListBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
+FileListBoard::FileListBoard(MainForm * mainForm, QWidget * parent)
+    : QDialog( parent, Qt::WType_TopLevel ), mainForm(mainForm),
+      thisDirection(FORWARD), cycleMode(false), haveFileList(false)
 {
-	setWindowTitle( "AViz: File List Control" );
+    setWindowTitle( "AViz: File List Control" );
 
 	// Insert a grid that will hold control buttons
 	const int numCols = 5;
@@ -50,7 +60,7 @@ FileListBoard::FileListBoard( QWidget * parent, const char * name )
 
 	QPushButton * cyclePb = new QPushButton( this, "cycle" );
 	cyclePb->setText( "Cycle" );
-	cyclePb->setToggleButton( TRUE );
+    cyclePb->setToggleButton(true);
 	fileListBox->addWidget( cyclePb, 0, 2);
 
 	// Construct the cycle timer
@@ -62,11 +72,11 @@ FileListBoard::FileListBoard( QWidget * parent, const char * name )
         connect( cyclePb, SIGNAL(clicked()), SLOT(bcycle()) );
 
 	// Create radio buttons to choose direction
-	direction = new Q3ButtonGroup( 2, Qt::Horizontal, this, "direction" );
+    Q3ButtonGroup *direction = new Q3ButtonGroup( 2, Qt::Horizontal, this, "direction" );
 	fileListBox->addMultiCellWidget( direction, 0, 0, 3, 4 );
 	forwardRb = new QRadioButton( direction, "forward" );
 	forwardRb->setText( "Forward" );
-	backwardRb = new QRadioButton( direction, "backward" );
+    QRadioButton *backwardRb = new QRadioButton( direction, "backward" );
 	backwardRb->setText( "Backward" );
 
 	// Define a callback for these radio buttons
@@ -105,7 +115,7 @@ FileListBoard::FileListBoard( QWidget * parent, const char * name )
 	// Create a text window
 	fileLine = new QLineEdit( this, "fileLine" );
 	fileLine->setText("--");
-	fileLine->setReadOnly( TRUE );
+    fileLine->setReadOnly(true);
 	fileListBox->addMultiCellWidget( fileLine, 2, 2, 1, 4 );
 
 	// Create a pushbutton
@@ -124,25 +134,8 @@ FileListBoard::FileListBoard( QWidget * parent, const char * name )
 	 // Define a callback for that button
         QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
 
-	// Set defaults
-	cycleMode = FALSE;
-	thisDirection = FORWARD;
-	forwardRb->setChecked (TRUE );	
-
-	// Reset the pointers
-	mainForm = NULL;
-
-	// Set a flag
-	haveFileList = FALSE;
+    forwardRb->setChecked (thisDirection == FORWARD);
 }
-
-
-// Set a pointer to the main form
-void FileListBoard::setMainFormAddress( MainForm * thisMF )
-{
-	mainForm = thisMF;
-}
-
 
 // Receive the current file list parameters 
 void FileListBoard::setFileListParam( int thisCurrentFile, 
@@ -161,7 +154,7 @@ void FileListBoard::setFileListParam( int thisCurrentFile,
 	this->showCurrentFile();
 
 	// Set a flag
-	haveFileList = TRUE;
+    haveFileList = true;
 }
 
 
@@ -216,16 +209,15 @@ void FileListBoard::bfastStep()
 // Start or stop the cycling
 void FileListBoard::bcycle()
 {
-	if (cycleMode == TRUE) {
+    if (cycleMode) {
 		// End the cycling
 		cycleTimer->stop();
-		cycleMode = FALSE;
-	}
-	else { 
+        cycleMode = false;
+    } else {
 		// Start the timer
 		connect(cycleTimer, SIGNAL(timeout()), this, SLOT(bsingleStep()) );
 		cycleTimer->start( 40 );
-		cycleMode = TRUE;
+        cycleMode = true;
 	}
 }
 
@@ -276,7 +268,7 @@ FileListBoard::listDirection FileListBoard::getDirection( )
 // visible at all!)
 void FileListBoard::resetKeepViewScale( )
 {
-	keepViewScaleCb->setChecked( FALSE );
+    keepViewScaleCb->setChecked( false );
 }
 
 
