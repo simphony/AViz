@@ -40,25 +40,25 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // Size box widget
 class SizeBox: public Q3HBox
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	SizeBox( QWidget * parent=0, const char * name=0 );
+    SizeBox( QWidget * parent=0, const char * name=0 );
 
 public slots:
-	void setParticle( particleData *, int );
-	void readToggles( particleData *, int );
-	void setDisabled( bool );
+    void setParticle( particleData *, int );
+    void readToggles( particleData *, int );
+    void setDisabled( bool );
 
 private slots:
 
 private:
-	QLabel * sizeL;
-	Q3ButtonGroup * rSize;
-        QRadioButton * rSize0;
-        QRadioButton * rSize1;
-        QRadioButton * rSize2;
-        QRadioButton * rSize3;
-        QRadioButton * rSize4;
+    QLabel * sizeL;
+    Q3ButtonGroup * rSize;
+    QRadioButton * rSize0;
+    QRadioButton * rSize1;
+    QRadioButton * rSize2;
+    QRadioButton * rSize3;
+    QRadioButton * rSize4;
 };
 
 #endif // SIZEBO_H

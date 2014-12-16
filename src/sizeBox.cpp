@@ -30,83 +30,83 @@ Contact address: Computational Physics Group, Dept. of Physics,
 SizeBox::SizeBox( QWidget * parent, const char * name )
     : Q3HBox( parent, name )
 {
-	this->setMargin( SPACE );
+    this->setMargin( SPACE );
 
-	// Add a label and radio buttons to adjust size
-	sizeL = new QLabel( this, "sizeL" );
-        sizeL->setText( " Rel. Render Size: " );
+    // Add a label and radio buttons to adjust size
+    sizeL = new QLabel( this, "sizeL" );
+    sizeL->setText( " Rel. Render Size: " );
 
-        rSize = new Q3ButtonGroup( 5, Qt::Horizontal, this, "rSize" );
-        rSize0 = new QRadioButton( rSize, "regular" );
-        rSize0->setText( "Regular" );
-        rSize1 = new QRadioButton( rSize, "tiny" );
-        rSize1->setText( "Tiny" );
-        rSize2 = new QRadioButton( rSize, "small" );
-        rSize2->setText( "Small" );
-        rSize3 = new QRadioButton( rSize, "large" );
-        rSize3->setText( "Large" );
-        rSize4 = new QRadioButton( rSize, "huge" );
-        rSize4->setText( "Huge" );
+    rSize = new Q3ButtonGroup( 5, Qt::Horizontal, this, "rSize" );
+    rSize0 = new QRadioButton( rSize, "regular" );
+    rSize0->setText( "Regular" );
+    rSize1 = new QRadioButton( rSize, "tiny" );
+    rSize1->setText( "Tiny" );
+    rSize2 = new QRadioButton( rSize, "small" );
+    rSize2->setText( "Small" );
+    rSize3 = new QRadioButton( rSize, "large" );
+    rSize3->setText( "Large" );
+    rSize4 = new QRadioButton( rSize, "huge" );
+    rSize4->setText( "Huge" );
 
-	// Set a default
-	rSize0->setChecked( TRUE );
-	this->setDisabled( TRUE );
+    // Set a default
+    rSize0->setChecked( TRUE );
+    this->setDisabled( TRUE );
 }
 
 
 // Adjust the controls
 void SizeBox::setParticle( particleData * thisPd, int thisIndex )
 {
-	if (thisIndex >= 0) {
-		relativeSize relSize = (*thisPd).relSize[thisIndex];
+    if (thisIndex >= 0) {
+        relativeSize relSize = (*thisPd).relSize[thisIndex];
 
-	        switch (relSize) {
-	        	case REGULAR:
-				rSize0->setChecked( TRUE );
-			break;
-			case TINY:
-				rSize1->setChecked( TRUE );
-			break;
-			case SMALL:
-				rSize2->setChecked( TRUE );
-			break;
-       			case LARGE:
-				rSize3->setChecked( TRUE );
-			break;
-			case HHUGE:
-				rSize4->setChecked( TRUE );
-			break;
-        	}
+        switch (relSize) {
+        case REGULAR:
+            rSize0->setChecked( TRUE );
+            break;
+        case TINY:
+            rSize1->setChecked( TRUE );
+            break;
+        case SMALL:
+            rSize2->setChecked( TRUE );
+            break;
+        case LARGE:
+            rSize3->setChecked( TRUE );
+            break;
+        case HHUGE:
+            rSize4->setChecked( TRUE );
+            break;
         }
+    }
 }
 
 
 // Read the controls
 void SizeBox::readToggles( particleData * thisPd, int thisIndex )
 {
-	if (thisIndex >= 0 && thisPd) {
-		if (rSize0->isChecked() == TRUE) {
-			(*thisPd).relSize[thisIndex] = REGULAR;
-                }
-                if (rSize1->isChecked() == TRUE) {
-                        (*thisPd).relSize[thisIndex] = TINY;
-                }
-                if (rSize2->isChecked() == TRUE) {
-                        (*thisPd).relSize[thisIndex] = SMALL;
-                }
-                if (rSize3->isChecked() == TRUE) {
-                        (*thisPd).relSize[thisIndex] = LARGE;
-                }
-                if (rSize4->isChecked() == TRUE) {
-                        (*thisPd).relSize[thisIndex] = HHUGE;
-                }
-	}
+    if (thisIndex >= 0 && thisPd) {
+        if (rSize0->isChecked() == TRUE) {
+            (*thisPd).relSize[thisIndex] = REGULAR;
+        }
+        if (rSize1->isChecked() == TRUE) {
+            (*thisPd).relSize[thisIndex] = TINY;
+        }
+        if (rSize2->isChecked() == TRUE) {
+            (*thisPd).relSize[thisIndex] = SMALL;
+        }
+        if (rSize3->isChecked() == TRUE) {
+            (*thisPd).relSize[thisIndex] = LARGE;
+        }
+        if (rSize4->isChecked() == TRUE) {
+            (*thisPd).relSize[thisIndex] = HHUGE;
+        }
+    }
 }
 
 
 // Switch on or off the entire box
 void SizeBox::setDisabled( bool on ) 
 {
-	sizeL->setDisabled( on );
-	rSize->setDisabled( on );
+    sizeL->setDisabled( on );
+    rSize->setDisabled( on );
 }
