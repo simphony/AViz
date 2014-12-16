@@ -36,7 +36,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ColorLabel::ColorLabel(QWidget *parent)
         : QWidget(parent)
 {
-	resize( SMALL_LABEL_WIDTH, LABEL_HEIGHT );
+    setAutoFillBackground(true);
 }
 
 
@@ -55,13 +55,6 @@ void ColorLabel::setColor( float red, float green, float blue )
 void ColorLabel::switchOff( void ) {
 	setPalette( QPalette( QColor( 255, 255, 255 ) ) );
 }
-
-
-// Set size of the label
-QSizePolicy ColorLabel::sizePolicy() const {
-	return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed);
-}
-
 
 // Set size of the label
 QSize ColorLabel::minimumSizeHint() const {

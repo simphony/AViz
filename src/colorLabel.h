@@ -35,8 +35,9 @@ class ColorLabel: public QWidget
     Q_OBJECT
 public:
     ColorLabel(QWidget *parent=0);
-    QSizePolicy sizePolicy() const;
-    QSize minimumSizeHint() const;
+
+protected:
+    virtual QSize minimumSizeHint() const;
 
 public slots:
     void setColor( float, float, float );
