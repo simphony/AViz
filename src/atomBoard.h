@@ -65,76 +65,76 @@ class Q3GridLayout;
 // Atom board dialog widget
 class AtomBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
     AtomBoard( QWidget * parent=0 );
 
 public slots:
-	void setMainFormAddress( MainForm * );
-	void setData();
-	void getColors( float, float, float, float, float, float );
-	void getColorBoardPos( int, int );
-	void setDotStyle();
-	void setLineStyle();
-	void setCubeStyle();
-	void setCylinderStyle();
-	void setConeStyle();
-	void setSphereStyle();
-	void setLowQuality();
-	void setHighQuality();
-	void setFinalQuality();
-	void closeColorBoard();
+    void setMainFormAddress( MainForm * );
+    void setData();
+    void getColors( float, float, float, float, float, float );
+    void getColorBoardPos( int, int );
+    void setDotStyle();
+    void setLineStyle();
+    void setCubeStyle();
+    void setCylinderStyle();
+    void setConeStyle();
+    void setSphereStyle();
+    void setLowQuality();
+    void setHighQuality();
+    void setFinalQuality();
+    void closeColorBoard();
 
 private slots:
-	void buildLayout( colorCriterion );
-	void setAtom();
-	void adjustAtom();
-	void adjustCriterion();
-	void setColorCb();
-	void setColors();
-	void readToggles();
-	void bbonds();
-	void bdone();
-	void bapply();
-	void bcancel();
+    void buildLayout( colorCriterion );
+    void setAtom();
+    void adjustAtom();
+    void adjustCriterion();
+    void setColorCb();
+    void setColors();
+    void readToggles();
+    void bbonds();
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	MainForm * mainForm;
-	CodeBox * codeBox;
-	PositionBox * positionBox;
-	PropertyBox * propertyBox;
-	SizeBox * sizeBox;
-	Q3GridLayout * atomBox;
-	Q3HBox * hb1;
-	Q3HBox * hb2;
-	Q3HBox * hb3;
-	Q3HBox * hb4;
-	Q3HBox * hb5;
-	QComboBox * atomCob;
-	QComboBox * styleCob;
-	QCheckBox * showAtomCb;
-	QLabel * modeL;
-	QLabel * colorL;
-        Q3ButtonGroup * colorMode;
-        QRadioButton * colorMode0;
-        QRadioButton * colorMode1;
-        QRadioButton * colorMode2;
-        QRadioButton * colorMode3;
-	ColorLabel * colorLabel0;
-        ColorLabel * colorLabel1;
-        ColorLabel * colorLabel2;
-        ColorLabel * colorLabel3;
-        ColorLabel * colorLabel4;
-        ColorLabel * colorLabel5;
-	QPushButton * colorButton;
-	ColorBoard * cb;
-	particleData * thisPd;
-	int thisAtomIndex;
-	char colors; 
-	int colorPosX, colorPosY;
-        atomRStyle atomRenderStyle;
-        quality renderQuality;
-	bool showColorBoard;
+    MainForm * mainForm;
+    CodeBox * codeBox;
+    PositionBox * positionBox;
+    PropertyBox * propertyBox;
+    SizeBox * sizeBox;
+    Q3GridLayout * atomBox;
+    Q3HBox * hb1;
+    Q3HBox * hb2;
+    Q3HBox * hb3;
+    Q3HBox * hb4;
+    Q3HBox * hb5;
+    QComboBox * atomCob;
+    QComboBox * styleCob;
+    QCheckBox * showAtomCb;
+    QLabel * modeL;
+    QLabel * colorL;
+    Q3ButtonGroup * colorMode;
+    QRadioButton * colorMode0;
+    QRadioButton * colorMode1;
+    QRadioButton * colorMode2;
+    QRadioButton * colorMode3;
+    ColorLabel * colorLabel0;
+    ColorLabel * colorLabel1;
+    ColorLabel * colorLabel2;
+    ColorLabel * colorLabel3;
+    ColorLabel * colorLabel4;
+    ColorLabel * colorLabel5;
+    QPushButton * colorButton;
+    ColorBoard * cb;
+    particleData * thisPd;
+    int thisAtomIndex;
+    char colors;
+    int colorPosX, colorPosY;
+    atomRStyle atomRenderStyle;
+    quality renderQuality;
+    bool showColorBoard;
 };
 
 #endif // ATOMB_H
