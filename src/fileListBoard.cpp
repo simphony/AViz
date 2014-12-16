@@ -82,7 +82,7 @@ FileListBoard::FileListBoard(MainForm * mainForm, QWidget * parent)
     QButtonGroup *directionButtonGroup = new QButtonGroup(this);
     directionButtonGroup->addButton(forwardRb);
     directionButtonGroup->addButton(backwardRb);
-    connect(directionButtonGroup, SIGNAL(clicked(int)), this, SLOT(bdirection(int)) );
+    connect(directionButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(bdirection(int)) );
 
     // Create pushbuttons to jump to start
     QPushButton *startPb = new QPushButton("Jump To Start");
