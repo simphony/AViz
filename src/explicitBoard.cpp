@@ -48,22 +48,22 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	setWindowTitle( "AViz: Set Viewpoint" );
+    setWindowTitle( "AViz: Set Viewpoint" );
 
-	// Insert a grid that will hold spin boxes
-	// plus a row of control buttons
-	const int numCols = 3;
-        const int numRows = 6;
-        Q3GridLayout * explicitBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "explicitBox" );
+    // Insert a grid that will hold spin boxes
+    // plus a row of control buttons
+    const int numCols = 3;
+    const int numRows = 6;
+    Q3GridLayout * explicitBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "explicitBox" );
 
-        // Create a label and a spin box - PHI
-        phiL = new QLabel( this, "phiL" );
-	QPixmap phiPm = QPixmap( phi );
-        phiL->setPixmap(  phiPm );
-	explicitBox->addWidget( phiL, 0, 0 );
+    // Create a label and a spin box - PHI
+    phiL = new QLabel( this, "phiL" );
+    QPixmap phiPm = QPixmap( phi );
+    phiL->setPixmap(  phiPm );
+    explicitBox->addWidget( phiL, 0, 0 );
 
     phiSb = new QFSpinBox( this );
-	phiSb->setMinimum( (int)floor(10.0*PHI_MIN+0.5) );
+    phiSb->setMinimum( (int)floor(10.0*PHI_MIN+0.5) );
 	phiSb->setMaximum( (int)floor(10.0*PHI_MAX+0.5) );
 	phiSb->setWrapping( TRUE );
 	explicitBox->addWidget( phiSb, 0, 1 );

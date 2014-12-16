@@ -107,7 +107,7 @@ SpinBoard::SpinBoard( QWidget * parent, const char * name )
                                                                      )) );
 
     // Create a hboxlayout that will fill the next row
-    sizeBox = new SizeBox( this, "sizeBox" );
+    sizeBox = new SizeBox(this);
 
     // Create a hboxlayout that will fill the next row
     hb4 = new Q3HBox( this, "hb4" );

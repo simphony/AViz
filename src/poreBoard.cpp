@@ -108,7 +108,7 @@ PoreBoard::PoreBoard( QWidget * parent, const char * name )
     QObject::connect( colorButton, SIGNAL(clicked()), this, SLOT(setColorCb()) );
 
     // Create a hboxlayout that will fill the next row
-    sizeBox = new SizeBox( this, "sizeBox" );
+    sizeBox = new SizeBox(this);
 
     // Create a hboxlayout that will fill the next row
     hb4 = new Q3HBox( this, "hb4" );
