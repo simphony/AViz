@@ -75,47 +75,44 @@ PoreBoard::PoreBoard( QWidget * parent, const char * name )
 	showPoreCb->setChecked( TRUE );
 
 	// Define a callback for this toggle switch
-	connect( showPoreCb, SIGNAL(clicked()), this, SLOT(adjustPore()) );
+    connect( showPoreCb, SIGNAL(clicked()), this, SLOT(adjustPore()) );
 
-        // Create a hboxlayout that will fill the next row
-        hb2 = new Q3HBox( this, "hb2" );
+    // Create a hboxlayout that will fill the next row
+    hb2 = new Q3HBox( this, "hb2" );
 
-        // Add a label and color labels
-        colorL = new QLabel( hb2, "colorL" );
-        colorL->setText( " Color: " );
-	colorLabel0 = new ColorLabel( hb2, "color0" );
-        colorLabel1 = new ColorLabel( hb2, "color1" );
-        colorLabel2 = new ColorLabel( hb2, "color2" );
-        colorLabel3 = new ColorLabel( hb2, "color3" );
-        colorLabel4 = new ColorLabel( hb2, "color4" );
-        colorLabel5 = new ColorLabel( hb2, "color5" );
-        colorLabel0->setFixedHeight( LABEL_HEIGHT );
-        colorLabel1->setFixedHeight( LABEL_HEIGHT );
-        colorLabel2->setFixedHeight( LABEL_HEIGHT );
-        colorLabel3->setFixedHeight( LABEL_HEIGHT );
-        colorLabel4->setFixedHeight( LABEL_HEIGHT );
-        colorLabel5->setFixedHeight( LABEL_HEIGHT );
-        colorLabel0->setColor( 1.0, 1.0, 1.0);
-        colorLabel1->setColor( 1.0, 1.0, 1.0);
-        colorLabel2->setColor( 1.0, 1.0, 1.0);
-        colorLabel3->setColor( 1.0, 1.0, 1.0);
-        colorLabel4->setColor( 1.0, 1.0, 1.0);
-        colorLabel5->setColor( 1.0, 1.0, 1.0);
+    // Add a label and color labels
+    colorL = new QLabel(" Color: ", hb2);
+    colorLabel0 = new ColorLabel(hb2);
+    colorLabel1 = new ColorLabel(hb2);
+    colorLabel2 = new ColorLabel(hb2);
+    colorLabel3 = new ColorLabel(hb2);
+    colorLabel4 = new ColorLabel(hb2);
+    colorLabel5 = new ColorLabel(hb2);
+    colorLabel0->setFixedHeight( LABEL_HEIGHT );
+    colorLabel1->setFixedHeight( LABEL_HEIGHT );
+    colorLabel2->setFixedHeight( LABEL_HEIGHT );
+    colorLabel3->setFixedHeight( LABEL_HEIGHT );
+    colorLabel4->setFixedHeight( LABEL_HEIGHT );
+    colorLabel5->setFixedHeight( LABEL_HEIGHT );
+    colorLabel0->setColor( 1.0, 1.0, 1.0);
+    colorLabel1->setColor( 1.0, 1.0, 1.0);
+    colorLabel2->setColor( 1.0, 1.0, 1.0);
+    colorLabel3->setColor( 1.0, 1.0, 1.0);
+    colorLabel4->setColor( 1.0, 1.0, 1.0);
+    colorLabel5->setColor( 1.0, 1.0, 1.0);
 
-        // Add a push button
-        colorButton = new QPushButton( hb2, "colorButton" );
-        colorButton->setText( "Set Color..." );
+    // Add a push button
+    colorButton = new QPushButton("Set Color...", hb2);
 
-        // Define a callback for this button
-        QObject::connect( colorButton, SIGNAL(clicked()), this, SLOT(setColorCb(
-)) );
+    // Define a callback for this button
+    QObject::connect( colorButton, SIGNAL(clicked()), this, SLOT(setColorCb()) );
 
-	// Create a hboxlayout that will fill the next row
-	sizeBox = new SizeBox( this, "sizeBox" );
+    // Create a hboxlayout that will fill the next row
+    sizeBox = new SizeBox( this, "sizeBox" );
 
-	// Create a hboxlayout that will fill the next row
-	hb4 = new Q3HBox( this, "hb4" );
-	
+    // Create a hboxlayout that will fill the next row
+    hb4 = new Q3HBox( this, "hb4" );
+
 	// Add radiobuttons and a label
         modeL = new QLabel( hb4, "modeL" );
 	modeL->setText( " Color Criterion: " ); 

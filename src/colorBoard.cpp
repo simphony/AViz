@@ -249,15 +249,15 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 	vb5->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
 
 	// Create the top color label canvas 
-	colorLabel0 = new ColorLabel( vb2, "colorLabel0" );	
+    colorLabel0 = new ColorLabel(vb2);
 	colorLabel0->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
 
 	// Create the bottom color label canvas 
-	colorLabel1 = new ColorLabel( vb5, "colorLabel1" );	
+    colorLabel1 = new ColorLabel(vb5);
 	colorLabel1->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
 
 	// Create the bottom color label canvas 
-	colorLabel2 = new ColorLabel( vb8, "colorLabel2" );	
+    colorLabel2 = new ColorLabel(vb8);
 	colorLabel2->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
 
 	// Create a hboxlayout that will fill the lowest row

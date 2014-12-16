@@ -68,12 +68,12 @@ AtomBoard::AtomBoard( QWidget * parent )
 	// Add a label and color labels
         colorL = new QLabel( hb2, "colorL" );
 	colorL->setText( " Color: " ); 
-	colorLabel0 = new ColorLabel( hb2, "color0" );
-	colorLabel1 = new ColorLabel( hb2, "color1" );
-	colorLabel2 = new ColorLabel( hb2, "color1" );
-	colorLabel3 = new ColorLabel( hb2, "color1" );
-	colorLabel4 = new ColorLabel( hb2, "color1" );
-	colorLabel5 = new ColorLabel( hb2, "color1" );
+    colorLabel0 = new ColorLabel(hb2);
+    colorLabel1 = new ColorLabel(hb2);
+    colorLabel2 = new ColorLabel(hb2);
+    colorLabel3 = new ColorLabel(hb2);
+    colorLabel4 = new ColorLabel(hb2);
+    colorLabel5 = new ColorLabel(hb2);
 	colorLabel0->setFixedHeight( LABEL_HEIGHT );
 	colorLabel1->setFixedHeight( LABEL_HEIGHT );
 	colorLabel2->setFixedHeight( LABEL_HEIGHT );

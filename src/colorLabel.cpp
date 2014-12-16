@@ -26,11 +26,15 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "colorLabel.h"
 
-#include <QPaintEvent>
+#include <cmath>
+
+#include <QPalette>
+
+#include "defaults.h"
 
 // Construct the color label
-ColorLabel::ColorLabel( QWidget *parent, const char *name )
-        : QWidget( parent, name )
+ColorLabel::ColorLabel(QWidget *parent)
+        : QWidget(parent)
 {
 	resize( SMALL_LABEL_WIDTH, LABEL_HEIGHT );
 }
@@ -39,37 +43,27 @@ ColorLabel::ColorLabel( QWidget *parent, const char *name )
 // Set the label color
 void ColorLabel::setColor( float red, float green, float blue )
 {
-	int redi = (int)floor( (double)Qt::red*255.0 );
-	int greeni = (int)floor( (double)Qt::green*255.0 );
-	int bluei = (int)floor( (double)Qt::blue*255.0 );
+    int redi = (int)floor(red*255.0);
+    int greeni = (int)floor(green*255.0);
+    int bluei = (int)floor(blue*255.0);
 
 	setPalette( QPalette( QColor( redi, greeni, bluei) ) );
 }
 
 
 // Set colors that indicate that the label is not active
-void ColorLabel::switchOff( void )
-{
+void ColorLabel::switchOff( void ) {
 	setPalette( QPalette( QColor( 255, 255, 255 ) ) );
 }
 
 
-// Color the label
-void ColorLabel::paintEvent( QPaintEvent * )
-{
-	QPainter p( this );
-}
-
-
 // Set size of the label
-QSizePolicy ColorLabel::sizePolicy() const
-{
+QSizePolicy ColorLabel::sizePolicy() const {
 	return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
 
 // Set size of the label
-QSize ColorLabel::minimumSizeHint() const
-{
+QSize ColorLabel::minimumSizeHint() const {
 	return QSize( SMALL_LABEL_WIDTH, LABEL_HEIGHT );
 }

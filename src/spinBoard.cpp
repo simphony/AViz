@@ -45,156 +45,155 @@ Contact address: Computational Physics Group, Dept. of Physics,
 SpinBoard::SpinBoard( QWidget * parent, const char * name )
     : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
 {
-	setWindowTitle( "AViz: Set Spins" );
+    setWindowTitle( "AViz: Set Spins" );
 
-	// Create a hboxlayout that will fill the first row
-	hb1 = new Q3HBox( this, "hb1" );
+    // Create a hboxlayout that will fill the first row
+    hb1 = new Q3HBox( this, "hb1" );
 
-	// Create a label 
-	QLabel * spinL = new QLabel( hb1, "spinL" );
-	spinL->setText( " Type: ");
+    // Create a label
+    QLabel * spinL = new QLabel( hb1, "spinL" );
+    spinL->setText( " Type: ");
 
-	// Create a combo box that will go into the
-	// second column; entries in the combo box will
-	// be made later
-	spinCob = new QComboBox( FALSE, hb1, "spinSelection" );
+    // Create a combo box that will go into the
+    // second column; entries in the combo box will
+    // be made later
+    spinCob = new QComboBox( FALSE, hb1, "spinSelection" );
 
-	// Define a callback for this combo box
-	connect( spinCob, SIGNAL(activated(int)), SLOT(setSpin()) );
+    // Define a callback for this combo box
+    connect( spinCob, SIGNAL(activated(int)), SLOT(setSpin()) );
 
-	// Create a placeholder 
-	QLabel * emptyL0 = new QLabel( hb1, "emptyL0" );
-	emptyL0->setText("");
+    // Create a placeholder
+    QLabel * emptyL0 = new QLabel( hb1, "emptyL0" );
+    emptyL0->setText("");
 
-        // Add a check box button
-        showSpinCb = new QCheckBox( hb1, "showSpin" );
-	showSpinCb->setText( "Show Spins" );
-	showSpinCb->setChecked( TRUE );
+    // Add a check box button
+    showSpinCb = new QCheckBox( hb1, "showSpin" );
+    showSpinCb->setText( "Show Spins" );
+    showSpinCb->setChecked( TRUE );
 
-	// Define a callback for this toggle switch
-	connect( showSpinCb, SIGNAL(clicked()), this, SLOT(adjustSpin()) );
+    // Define a callback for this toggle switch
+    connect( showSpinCb, SIGNAL(clicked()), this, SLOT(adjustSpin()) );
 
-        // Create a hboxlayout that will fill the next row
-        hb2 = new Q3HBox( this, "hb2" );
+    // Create a hboxlayout that will fill the next row
+    hb2 = new Q3HBox( this, "hb2" );
 
-        // Add a label and color labels
-        colorL = new QLabel( hb2, "colorL" );
-        colorL->setText( " Color: " );
-	colorLabel0 = new ColorLabel( hb2, "color0" );
-        colorLabel1 = new ColorLabel( hb2, "color1" );
-        colorLabel2 = new ColorLabel( hb2, "color2" );
-        colorLabel3 = new ColorLabel( hb2, "color3" );
-        colorLabel4 = new ColorLabel( hb2, "color4" );
-        colorLabel5 = new ColorLabel( hb2, "color5" );
-        colorLabel0->setFixedHeight( LABEL_HEIGHT );
-        colorLabel1->setFixedHeight( LABEL_HEIGHT );
-        colorLabel2->setFixedHeight( LABEL_HEIGHT );
-        colorLabel3->setFixedHeight( LABEL_HEIGHT );
-        colorLabel4->setFixedHeight( LABEL_HEIGHT );
-        colorLabel5->setFixedHeight( LABEL_HEIGHT );
-        colorLabel0->setColor( 1.0, 1.0, 1.0);
-        colorLabel1->setColor( 1.0, 1.0, 1.0);
-        colorLabel2->setColor( 1.0, 1.0, 1.0);
-        colorLabel3->setColor( 1.0, 1.0, 1.0);
-        colorLabel4->setColor( 1.0, 1.0, 1.0);
-        colorLabel5->setColor( 1.0, 1.0, 1.0);
+    // Add a label and color labels
+    colorL = new QLabel(" Color: ", hb2);
+    colorLabel0 = new ColorLabel(hb2);
+    colorLabel1 = new ColorLabel(hb2);
+    colorLabel2 = new ColorLabel(hb2);
+    colorLabel3 = new ColorLabel(hb2);
+    colorLabel4 = new ColorLabel(hb2);
+    colorLabel5 = new ColorLabel(hb2);
+    colorLabel0->setFixedHeight( LABEL_HEIGHT );
+    colorLabel1->setFixedHeight( LABEL_HEIGHT );
+    colorLabel2->setFixedHeight( LABEL_HEIGHT );
+    colorLabel3->setFixedHeight( LABEL_HEIGHT );
+    colorLabel4->setFixedHeight( LABEL_HEIGHT );
+    colorLabel5->setFixedHeight( LABEL_HEIGHT );
+    colorLabel0->setColor( 1.0, 1.0, 1.0);
+    colorLabel1->setColor( 1.0, 1.0, 1.0);
+    colorLabel2->setColor( 1.0, 1.0, 1.0);
+    colorLabel3->setColor( 1.0, 1.0, 1.0);
+    colorLabel4->setColor( 1.0, 1.0, 1.0);
+    colorLabel5->setColor( 1.0, 1.0, 1.0);
 
-        // Add a push button
-        colorButton = new QPushButton( hb2, "colorButton" );
-        colorButton->setText( "Set Color..." );
+    // Add a push button
+    colorButton = new QPushButton( hb2, "colorButton" );
+    colorButton->setText( "Set Color..." );
 
-        // Define a callback for this button
-        QObject::connect( colorButton, SIGNAL(clicked()), this, SLOT(setColorCb(
-)) );
+    // Define a callback for this button
+    QObject::connect( colorButton, SIGNAL(clicked()), this, SLOT(setColorCb(
+                                                                     )) );
 
-	// Create a hboxlayout that will fill the next row
-        sizeBox = new SizeBox( this, "sizeBox" );
+    // Create a hboxlayout that will fill the next row
+    sizeBox = new SizeBox( this, "sizeBox" );
 
-	// Create a hboxlayout that will fill the next row
-	hb4 = new Q3HBox( this, "hb4" );
+    // Create a hboxlayout that will fill the next row
+    hb4 = new Q3HBox( this, "hb4" );
 
-	// Add radiobuttons and a label
-        modeL = new QLabel( hb4, "modeL" );
-	modeL->setText( " Color Criterion: " ); 
+    // Add radiobuttons and a label
+    modeL = new QLabel( hb4, "modeL" );
+    modeL->setText( " Color Criterion: " );
 
-	colorMode = new Q3ButtonGroup( 4, Qt::Horizontal, hb4, "colorMode" );
-	colorMode0 = new QRadioButton( colorMode, "type" );
-	colorMode0->setText( "Type" );
-	colorMode1 = new QRadioButton( colorMode, "position" );
-	colorMode1->setText( "Position" );
-	colorMode2 = new QRadioButton( colorMode, "property" );
-	colorMode2->setText( "Property" );
-	colorMode3 = new QRadioButton( colorMode, "colorcode" );
-	colorMode3->setText( "ColorCode" );
-	colorMode->insert( colorMode0, 0 );
-	colorMode->insert( colorMode1, 1 );
-	colorMode->insert( colorMode2, 2 );
-	colorMode->insert( colorMode3, 3 );
+    colorMode = new Q3ButtonGroup( 4, Qt::Horizontal, hb4, "colorMode" );
+    colorMode0 = new QRadioButton( colorMode, "type" );
+    colorMode0->setText( "Type" );
+    colorMode1 = new QRadioButton( colorMode, "position" );
+    colorMode1->setText( "Position" );
+    colorMode2 = new QRadioButton( colorMode, "property" );
+    colorMode2->setText( "Property" );
+    colorMode3 = new QRadioButton( colorMode, "colorcode" );
+    colorMode3->setText( "ColorCode" );
+    colorMode->insert( colorMode0, 0 );
+    colorMode->insert( colorMode1, 1 );
+    colorMode->insert( colorMode2, 2 );
+    colorMode->insert( colorMode3, 3 );
 
-	// Define a callback for these radio buttons
-	connect( colorMode, SIGNAL(clicked(int)), this, SLOT(adjustCriterion()) );
+    // Define a callback for these radio buttons
+    connect( colorMode, SIGNAL(clicked(int)), this, SLOT(adjustCriterion()) );
 
-	// Create hboxlayouts that will fill the next row; these
-        // are shown only when appropriate
-        positionBox = new PositionBox( this, "positionBox" );
-        propertyBox = new PropertyBox( this, "positionBox" );
-        codeBox = new CodeBox( this, "codeBox" );
-	
-	// Create a box that will fill the next row
-	lineTypeBox = new LineTypeBox( this, "lineTypeBox" );
+    // Create hboxlayouts that will fill the next row; these
+    // are shown only when appropriate
+    positionBox = new PositionBox( this, "positionBox" );
+    propertyBox = new PropertyBox( this, "positionBox" );
+    codeBox = new CodeBox( this, "codeBox" );
 
-	// Create a hboxlayout that will fill the lowest row
-	hb5 = new Q3HBox( this, "hb5" );
-	
-	// Create a placeholder 
-	QLabel * emptyL1 = new QLabel( hb5, "emptyL1" );
+    // Create a box that will fill the next row
+    lineTypeBox = new LineTypeBox( this, "lineTypeBox" );
 
-	// Create pushbuttons that will go into the lowest row
-	QPushButton * done = new QPushButton( hb5, "done" );
-	done->setText( "Done" ); 
+    // Create a hboxlayout that will fill the lowest row
+    hb5 = new Q3HBox( this, "hb5" );
 
-	 // Define a callback for that button
-        QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
+    // Create a placeholder
+    QLabel * emptyL1 = new QLabel( hb5, "emptyL1" );
 
-	QPushButton * apply = new QPushButton( hb5, "apply" );
-	apply->setText( "Apply" ); 
+    // Create pushbuttons that will go into the lowest row
+    QPushButton * done = new QPushButton( hb5, "done" );
+    done->setText( "Done" );
 
-	 // Define a callback for that button
-        QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
+    // Define a callback for that button
+    QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
 
-	QPushButton * cancel = new QPushButton( hb5, "cancel" );
-	cancel->setText( "Cancel" ); 
+    QPushButton * apply = new QPushButton( hb5, "apply" );
+    apply->setText( "Apply" );
 
-	 // Define a callback for that button
-        QObject::connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
+    // Define a callback for that button
+    QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
 
-	hb5->setStretchFactor( emptyL1, 10 );
+    QPushButton * cancel = new QPushButton( hb5, "cancel" );
+    cancel->setText( "Cancel" );
 
-	// Clear the board pointer
-	spinBox = NULL;
+    // Define a callback for that button
+    QObject::connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
 
-	// Clear the color board pointer
-	cb = NULL;
+    hb5->setStretchFactor( emptyL1, 10 );
 
-	// Clear internal variables
-        colors = 1;
-        colorPosX = colorPosY = 0;
-        showColorBoard = FALSE;
-	spinRenderStyle = SLINE;
-	renderQuality = LOW;
+    // Clear the board pointer
+    spinBox = NULL;
 
-	// Set defaults
-	lineTypeBox->setDisabled( TRUE );
+    // Clear the color board pointer
+    cb = NULL;
 
-	// Set defaults appropriate for startup without data
-        colorButton->setDisabled( TRUE );
-        sizeBox->setDisabled( TRUE );
-        modeL->setDisabled( TRUE );
-        colorMode->setDisabled( TRUE );
-        colorMode0->setChecked( TRUE );
+    // Clear internal variables
+    colors = 1;
+    colorPosX = colorPosY = 0;
+    showColorBoard = FALSE;
+    spinRenderStyle = SLINE;
+    renderQuality = LOW;
 
-        // Build default layout
-        this->buildLayout( TYPE );
+    // Set defaults
+    lineTypeBox->setDisabled( TRUE );
+
+    // Set defaults appropriate for startup without data
+    colorButton->setDisabled( TRUE );
+    sizeBox->setDisabled( TRUE );
+    modeL->setDisabled( TRUE );
+    colorMode->setDisabled( TRUE );
+    colorMode0->setChecked( TRUE );
+
+    // Build default layout
+    this->buildLayout( TYPE );
 }
 
 
