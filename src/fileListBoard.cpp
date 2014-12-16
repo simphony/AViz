@@ -26,9 +26,10 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "fileListBoard.h"
 
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QPushButton>
-#include <Q3ButtonGroup>
+#include <QButtonGroup>
+#include <QGroupBox>
 #include <QRadioButton>
 #include <QLineEdit>
 #include <QCheckBox>
@@ -45,22 +46,19 @@ FileListBoard::FileListBoard(MainForm * mainForm, QWidget * parent)
     setWindowTitle( "AViz: File List Control" );
 
     // Insert a grid that will hold control buttons
-    const int numCols = 5;
-    const int numRows = 4;
-    Q3GridLayout * fileListBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "fileListBox" );
+    QGridLayout * fileListBox = new QGridLayout(this);
+    fileListBox->setHorizontalSpacing(SPACE);
+    fileListBox->setVerticalSpacing(SPACE);
 
     // Create buttons
-    QPushButton * singleStepPb = new QPushButton( this, "singleStep" );
-    singleStepPb->setText( "SingleStep" );
+    QPushButton * singleStepPb = new QPushButton("SingleStep");
     fileListBox->addWidget( singleStepPb, 0, 0);
 
-    QPushButton * fastStepPb = new QPushButton( this, "fastStep" );
-    fastStepPb->setText( "FastStep" );
+    QPushButton * fastStepPb = new QPushButton("FastStep");
     fileListBox->addWidget( fastStepPb, 0, 1);
 
-    QPushButton * cyclePb = new QPushButton( this, "cycle" );
-    cyclePb->setText( "Cycle" );
-    cyclePb->setToggleButton(true);
+    QPushButton * cyclePb = new QPushButton("Cycle");
+    cyclePb->setCheckable(true);
     fileListBox->addWidget( cyclePb, 0, 2);
 
     // Construct the cycle timer
@@ -72,67 +70,65 @@ FileListBoard::FileListBoard(MainForm * mainForm, QWidget * parent)
     connect( cyclePb, SIGNAL(clicked()), SLOT(bcycle()) );
 
     // Create radio buttons to choose direction
-    Q3ButtonGroup *direction = new Q3ButtonGroup( 2, Qt::Horizontal, this, "direction" );
-    fileListBox->addMultiCellWidget( direction, 0, 0, 3, 4 );
-    forwardRb = new QRadioButton( direction, "forward" );
-    forwardRb->setText( "Forward" );
-    QRadioButton *backwardRb = new QRadioButton( direction, "backward" );
-    backwardRb->setText( "Backward" );
+    QGroupBox *direction = new QGroupBox();
+    QHBoxLayout *directionLayout = new QHBoxLayout(direction);
+    fileListBox->addWidget(direction, 0 /*fromRow*/, 3 /*fromCol*/, 1 /*rowSpan*/, 1/*colSpan*/);
+    forwardRb = new QRadioButton("Forward" , direction);
+    directionLayout->addWidget(forwardRb);
+    QRadioButton *backwardRb = new QRadioButton("Backward", direction);
+    directionLayout->addWidget(backwardRb);
 
     // Define a callback for these radio buttons
-    connect( direction, SIGNAL(clicked(int)), this, SLOT(bdirection(int)) );
+    QButtonGroup *directionButtonGroup = new QButtonGroup(this);
+    directionButtonGroup->addButton(forwardRb);
+    directionButtonGroup->addButton(backwardRb);
+    connect(directionButtonGroup, SIGNAL(clicked(int)), this, SLOT(bdirection(int)) );
 
     // Create pushbuttons to jump to start
-    QPushButton * startPb = new QPushButton( this, "start" );
-    startPb->setText( "Jump To Start" );
-    fileListBox->addWidget( startPb, 1, 0);
+    QPushButton *startPb = new QPushButton("Jump To Start");
+    fileListBox->addWidget(startPb, 1, 0);
 
     // Define a callback for that button
     QObject::connect( startPb, SIGNAL(clicked()), this, SLOT(start()) );
 
     // Create pushbuttons to jump to end
-    QPushButton * endPb = new QPushButton( this, "end" );
-    endPb->setText( "Jump To End" );
+    QPushButton * endPb = new QPushButton("Jump To End");
     fileListBox->addWidget( endPb, 1, 1);
 
     // Define a callback for that button
     QObject::connect( endPb, SIGNAL(clicked()), this, SLOT(end()) );
 
     // Create a checkbox
-    keepViewScaleCb = new QCheckBox( this, "keepViewScale" );
+    keepViewScaleCb = new QCheckBox("Keep ViewScale");
+
     fileListBox->addWidget( keepViewScaleCb, 1, 4);
-    keepViewScaleCb->setText( "Keep ViewScale" );
     this->resetKeepViewScale();
 
     // Define a callback for that check box
     QObject::connect( keepViewScaleCb, SIGNAL(clicked()), this, SLOT(keepViewScaleChanged()) );
 
     // Create a label
-    QLabel * lineL = new QLabel( this, "lineL ");
-    lineL->setText( " File List: " );
+    QLabel * lineL = new QLabel(" File List: ");
     fileListBox->addWidget( lineL, 2, 0 );
 
     // Create a text window
-    fileLine = new QLineEdit( this, "fileLine" );
-    fileLine->setText("--");
+    fileLine = new QLineEdit("--");
     fileLine->setReadOnly(true);
-    fileListBox->addMultiCellWidget( fileLine, 2, 2, 1, 4 );
+    fileListBox->addWidget(fileLine, 2 /*fromRow*/, 1 /*fromCol*/, 1 /*rowSpan*/, 3/*colSpan*/);
 
     // Create a pushbutton
-    QPushButton * tracksPb = new QPushButton( this, "tracks" );
-    tracksPb->setText( "Tracks..." );
+    QPushButton * tracksPb = new QPushButton("Tracks...");
     fileListBox->addWidget( tracksPb, 3, 0);
 
     // Define a callback for that button
-    QObject::connect( tracksPb, SIGNAL(clicked()), this, SLOT(launchTrack()) );
+    connect( tracksPb, SIGNAL(clicked()), this, SLOT(launchTrack()) );
 
     // Create more pushbuttons that will go into the lowest row
-    QPushButton * done = new QPushButton( this, "done" );
+    QPushButton * done = new QPushButton("Done");
     fileListBox->addWidget( done, 3, 4);
-    done->setText( "Done" );
 
     // Define a callback for that button
-    QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
+    connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
 
     forwardRb->setChecked (thisDirection == FORWARD);
 }
@@ -275,8 +271,7 @@ void FileListBoard::resetKeepViewScale( )
 // Callback function to launch track board
 void FileListBoard::launchTrack( )
 {
-    if (mainForm)
-        mainForm->launchTrack( fileListName );
+    mainForm->launchTrack( fileListName );
 }
 
 
@@ -290,7 +285,7 @@ void FileListBoard::keepViewScaleChanged( )
 // Show the current file in the file list
 void FileListBoard::showCurrentFile( )
 {
-    if (mainForm && haveFileList) {
+    if (haveFileList) {
 
         // Read the data; control the freezing of the view object data
         QString file = mainForm->readFileFromList( currentFile, keepViewScaleCb->isChecked() );
@@ -311,6 +306,5 @@ void FileListBoard::bdone()
     hide();
 
     // Also hide the track board
-    if (mainForm)
-        mainForm->hideTrack();
+    mainForm->hideTrack();
 }
