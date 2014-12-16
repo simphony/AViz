@@ -24,37 +24,22 @@ Contact address: Computational Physics Group, Dept. of Physics,
                  gery@tx.technion.ac.il
 ***********************************************************************/
 
-#ifndef MESSB_H
-#define MESSB_H 
+#ifndef MESSAGE_BOX_H
+#define MESSAGE_BOX_H
 
-#include "data.h"
-#include "mainForm.h"
+#include <QDialog>
 
-#include <qdialog.h>
-#include <q3hbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qwidget.h>
+/*! @class MessageBox
+    @brief Dialog that shows message
 
-#include <stdio.h>
-#include <stdlib.h>
-
-// Message box dialog widget
+    Dialog shows a message and an "ok" button.  Once,
+    the ok button is pushed, the dialog is closed (and destroyed).
+    The dialog is non-modal and has a title ("AViz: Message").
+*/
 class MessageBox: public QDialog
 {
-	Q_OBJECT
 public:
-	MessageBox( QWidget * parent=0, const char * name=0 );
-
-public slots:
-	void setText( char * );
-	void setText( char *, char * );
-
-private slots:
-	void ok();
-
-private:
-	QLabel * messageL;
+    MessageBox(const QString& message, QWidget *parent=0);
 };
 
-#endif // MESSB_H
+#endif // MESSAGE_BOX_H

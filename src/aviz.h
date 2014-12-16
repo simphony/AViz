@@ -41,17 +41,13 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <qapplication.h>
 #include <q3filedialog.h>
 #include <q3mainwindow.h>
-#include <qmessagebox.h>
 #include <qmenubar.h>
 #include <q3popupmenu.h>
 #include <qstatusbar.h>
 #include <q3popupmenu.h>
 #include <qtimer.h>
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <sys/stat.h>
-#include <unistd.h>
 #include <time.h>
 
 class AViz: public Q3MainWindow 

@@ -487,39 +487,35 @@ void AViz::launchAnimation( void )
 
 
 // Help callback function
-void AViz::about( void )
-{
+void AViz::about() {
 	// Launch a message box
-	MessageBox * mb = new MessageBox( this, "mb" );
-	mb->setText( VERSION_STRING );
+    MessageBox *mb = new MessageBox(VERSION_STRING, this);
 	mb->show();
 }
 
 
 // Help callback function
-void AViz::license( void )
+void AViz::license()
 {
-        // Launch a message box
-        MessageBox * mb = new MessageBox( this, "mb" );
-        mb->setText( SHORT_LICENSE_STRING );
-        mb->show();
+    // Launch a message box
+    MessageBox *mb = new MessageBox(SHORT_LICENSE_STRING, this);
+    mb->show();
 
-	// Print the full license conditions
-	printf("%s\n", LICENSE_STRING );
-	printf("%s\n", DISTRIBUTE_STRING );
+    // Print the full license conditions
+    printf("%s\n", LICENSE_STRING );
+    printf("%s\n", DISTRIBUTE_STRING );
 }
 
 
 // Help callback function
-void AViz::distribute( void )
+void AViz::distribute()
 {
-        // Launch a message box
-        MessageBox * mb = new MessageBox( this, "mb" );
-        mb->setText( SHORT_DISTRIBUTE_STRING );
-        mb->show();
+    // Launch a message box
+    MessageBox * mb = new MessageBox(SHORT_DISTRIBUTE_STRING, this);
+    mb->show();
 
-	// Print the full distribution conditions
-	printf("%s\n", DISTRIBUTE_STRING );
+    // Print the full distribution conditions
+    printf("%s\n", DISTRIBUTE_STRING );
 }
 
 
