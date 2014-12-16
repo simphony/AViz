@@ -40,7 +40,7 @@ LiveBox::LiveBox( QWidget * parent, const char * name )
 	
 	autoSnapPb= new QPushButton( this, "AutoSnap" );
 	autoSnapPb->setText( "AutoSnap" );
-	autoSnapPb->setToggleButton( TRUE );
+	autoSnapPb->setCheckable(true);
 	
 	// Define callbacks for these pushbuttons
 	connect( snapPb, SIGNAL(clicked()), this, SLOT(snapCB()) );

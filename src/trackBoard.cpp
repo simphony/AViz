@@ -96,7 +96,7 @@ TrackBoard::TrackBoard( QWidget * parent, const char * name )
 	// Create buttons
 	showTracksPb = new QPushButton( this, "generateTracks" );
 	showTracksPb->setText( "Generate Tracks" );
-	showTracksPb->setToggleButton( TRUE );
+	showTracksPb->setCheckable(true);
 	trackBox->addWidget( showTracksPb, 2, 0);
 
 	// Define a callback for this pushbutton

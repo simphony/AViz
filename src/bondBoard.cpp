@@ -129,35 +129,34 @@ BondBoard::BondBoard( QWidget * parent, const char * name )
         QPixmap goldIcon = QPixmap( goldSquare2 );
         QPixmap silverIcon = QPixmap( silverSquare2 );
         QPixmap bronzeIcon = QPixmap( bronzeSquare2 );
-//        QPixmap graphiteIcon = QPixmap( graphiteSquare2 );
 
         bondColor0 = new QRadioButton( bondColor, "white" );
         bondColor0->setMinimumWidth( COLORLABEL_WIDTH );
-        bondColor0->setPixmap( whiteIcon );
+        bondColor0->setIcon( whiteIcon );
         bondColor1 = new QRadioButton( bondColor, "black" );
         bondColor1->setMinimumWidth( COLORLABEL_WIDTH );
-        bondColor1->setPixmap( blackIcon );
+        bondColor1->setIcon( blackIcon );
         bondColor2 = new QRadioButton( bondColor, "red" );
         bondColor2->setMinimumWidth( COLORLABEL_WIDTH );
-        bondColor2->setPixmap( redIcon );
+        bondColor2->setIcon( redIcon );
         bondColor3 = new QRadioButton( bondColor, "green" );
         bondColor3->setMinimumWidth( COLORLABEL_WIDTH );
-        bondColor3->setPixmap( greenIcon );
+        bondColor3->setIcon( greenIcon );
         bondColor4 = new QRadioButton( bondColor, "blue" );
         bondColor4->setMinimumWidth( COLORLABEL_WIDTH );
-        bondColor4->setPixmap( blueIcon );
+        bondColor4->setIcon( blueIcon );
         bondColor5 = new QRadioButton( bondColor, "yellow" );
         bondColor5->setMinimumWidth( COLORLABEL_WIDTH );
-        bondColor5->setPixmap( yellowIcon );
+        bondColor5->setIcon( yellowIcon );
         bondColor6 = new QRadioButton( bondColor, "gold" );
         bondColor6->setMinimumWidth( COLORLABEL_WIDTH );
-        bondColor6->setPixmap( goldIcon );
+        bondColor6->setIcon( goldIcon );
         bondColor7 = new QRadioButton( bondColor, "silver" );
         bondColor7->setMinimumWidth( COLORLABEL_WIDTH );
-        bondColor7->setPixmap( silverIcon );
+        bondColor7->setIcon( silverIcon );
         bondColor8 = new QRadioButton( bondColor, "bronze" );
         bondColor8->setMinimumWidth( COLORLABEL_WIDTH );
-        bondColor8->setPixmap( bronzeIcon );
+        bondColor8->setIcon( bronzeIcon );
 
 	// Create a label
 	thickL = new QLabel( hb1, "thickL" );

@@ -96,7 +96,7 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     z1Button = new QToolButton( vb0, "z1Button" );
     z1Pixmap = QPixmap( spinRight_xpm );
     z1RedPixmap = QPixmap( spinRightRed_xpm );
-    z1Button->setPixmap( z1Pixmap );
+    z1Button->setIcon( z1Pixmap );
     z1Button->setAutoRepeat( TRUE );
     connect( z1Button, SIGNAL(clicked()), SLOT(spin1()) );
 
@@ -111,7 +111,7 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     z2Button = new QToolButton( vb0, "z2Button" );
     z2Pixmap = QPixmap( spinLeft_xpm );
     z2RedPixmap = QPixmap( spinLeftRed_xpm );
-    z2Button->setPixmap( z2Pixmap );
+    z2Button->setIcon( z2Pixmap );
     z2Button->setAutoRepeat( TRUE );
     connect( z2Button, SIGNAL(clicked()), SLOT(spin2()) );
 
@@ -123,7 +123,7 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     y1Button = new QToolButton( vb0, "y1Button" );
     y1Pixmap = QPixmap( up_xpm );
     y1RedPixmap = QPixmap( upRed_xpm );
-    y1Button->setPixmap( y1Pixmap );
+    y1Button->setIcon( y1Pixmap );
     y1Button->setAutoRepeat( TRUE );
     connect( y1Button, SIGNAL(clicked()), SLOT(tilt1()) );
 
@@ -138,7 +138,7 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     y2Button = new QToolButton( vb0, "y2Button" );
     y2Pixmap = QPixmap( down_xpm );
     y2RedPixmap = QPixmap( downRed_xpm );
-    y2Button->setPixmap( y2Pixmap );
+    y2Button->setIcon( y2Pixmap );
     y2Button->setAutoRepeat( TRUE );
     connect( y2Button, SIGNAL(clicked()), SLOT(tilt2()) );
 
@@ -151,7 +151,7 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     x1Button = new QToolButton( hb1, "x1Button" );
     x1Pixmap = QPixmap( left_xpm );
     x1RedPixmap = QPixmap( leftRed_xpm );
-    x1Button->setPixmap( x1Pixmap );
+    x1Button->setIcon( x1Pixmap );
     x1Button->setAutoRepeat( TRUE );
     connect( x1Button, SIGNAL(clicked()), SLOT(rot1()) );
 
@@ -166,7 +166,7 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     x2Button = new QToolButton( hb1, "x2Button" );
     x2Pixmap = QPixmap( right_xpm );
     x2RedPixmap = QPixmap( rightRed_xpm );
-    x2Button->setPixmap( x2Pixmap );
+    x2Button->setIcon( x2Pixmap );
     x2Button->setAutoRepeat( TRUE );
     connect( x2Button, SIGNAL(clicked()), SLOT(rot2()) );
 
@@ -179,8 +179,8 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     autoButton = new QToolButton( hb1, "autoButton" );
     autoPixmap = QPixmap( auto_xpm );
     autoRedPixmap = QPixmap( autoRed_xpm );
-    autoButton->setPixmap( autoPixmap );
-    autoButton->setToggleButton( TRUE );
+    autoButton->setIcon( autoPixmap );
+    autoButton->setCheckable(true);
     connect( autoButton, SIGNAL(clicked()), this, SLOT(autoButtonCB()) );
 
     // Add a placeholder
@@ -191,60 +191,60 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     // Add home button
     setHomeButton = new QToolButton( vb1, "setHomeButton" );
     setHomePixmap = QPixmap( home_xpm );
-    setHomeButton->setPixmap( setHomePixmap );
+    setHomeButton->setIcon( setHomePixmap );
     connect( setHomeButton, SIGNAL(clicked()), SLOT(setHome()) );
 
     // Add set home button
     setNewHomeButton = new QToolButton( vb1, "setNewHomeButton" );
     setNewHomePixmap = QPixmap( homenew_xpm );
-    setNewHomeButton->setPixmap( setNewHomePixmap );
+    setNewHomeButton->setIcon( setNewHomePixmap );
     connect( setNewHomeButton, SIGNAL(clicked()), SLOT(setNewHome()) );
 
     // Add ortho perspective button
     parallelButton = new QToolButton( vb1, "parallelButton" );
     parallelPixmap = QPixmap( parallel_xpm );
-    parallelButton->setPixmap( parallelPixmap );
-    parallelButton->setToggleButton( TRUE );
+    parallelButton->setIcon( parallelPixmap );
+    parallelButton->setCheckable(true);
     connect( parallelButton, SIGNAL(clicked()), SLOT(setParallel()) );
 
     // Add 3D perspective button
     perspectiveButton = new QToolButton( vb1, "perspectiveButton" );
     perspectivePixmap = QPixmap( perspective_xpm );
-    perspectiveButton->setPixmap( perspectivePixmap );
-    perspectiveButton->setToggleButton( TRUE );
+    perspectiveButton->setIcon( perspectivePixmap );
+    perspectiveButton->setCheckable(true);
     connect( perspectiveButton, SIGNAL(clicked()), SLOT(setPerspective()) );
 
     // Add background buttons
     blackBackgroundButton = new QToolButton( vb1, "blackBackgroundButton" );
     blackBackgroundPixmap = QPixmap( blackBackground_xpm );
-    blackBackgroundButton->setPixmap( blackBackgroundPixmap );
-    blackBackgroundButton->setToggleButton( TRUE );
+    blackBackgroundButton->setIcon( blackBackgroundPixmap );
+    blackBackgroundButton->setCheckable(true);
     connect( blackBackgroundButton, SIGNAL(clicked()), SLOT(setBlackBackground()) );
 
     whiteBackgroundButton = new QToolButton( vb1, "whitekBackgroundButton" );
     whiteBackgroundPixmap = QPixmap( whiteBackground_xpm );
-    whiteBackgroundButton->setPixmap( whiteBackgroundPixmap );
-    whiteBackgroundButton->setToggleButton( TRUE );
+    whiteBackgroundButton->setIcon( whiteBackgroundPixmap );
+    whiteBackgroundButton->setCheckable(true);
     connect( whiteBackgroundButton, SIGNAL(clicked()), SLOT(setWhiteBackground()) );
 
     // Add stereo vision enable/disable button
     stereoVisionButton = new QToolButton( vb1, "stereoVisionButton" );
     stereoVisionPixmap = QPixmap( stereoVisionEn_xpm );
-    stereoVisionButton->setPixmap( stereoVisionPixmap );
-    stereoVisionButton->setToggleButton( TRUE );
+    stereoVisionButton->setIcon( stereoVisionPixmap );
+    stereoVisionButton->setCheckable(true);
     connect( stereoVisionButton, SIGNAL(clicked()), SLOT(toggleStereoVision()) );
 
     // Add eyes separation "plus" button
     eyeSeparationPlusButton = new QToolButton( vb1, "eyeSeparationPlusButton" );
     eyeSeparationPlusPixmap = QPixmap( eyeSeparationPlus_xpm );
-    eyeSeparationPlusButton->setPixmap( eyeSeparationPlusPixmap );
+    eyeSeparationPlusButton->setIcon( eyeSeparationPlusPixmap );
     eyeSeparationPlusButton->setAutoRepeat( TRUE );
     connect( eyeSeparationPlusButton, SIGNAL(clicked()), SLOT(eyeSeparationPlus()) );
 
     // Add eyes separation "minus" button
     eyeSeparationMinusButton = new QToolButton( vb1, "eyeSeparationMinusButton" );
     eyeSeparationMinusPixmap = QPixmap( eyeSeparationMinus_xpm );
-    eyeSeparationMinusButton->setPixmap( eyeSeparationMinusPixmap );
+    eyeSeparationMinusButton->setIcon( eyeSeparationMinusPixmap );
     eyeSeparationMinusButton->setAutoRepeat( TRUE );
     connect( eyeSeparationMinusButton, SIGNAL(clicked()), SLOT(eyeSeparationMinus()) );
 
@@ -256,7 +256,7 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     dolly2Button = new QToolButton( vb1, "dolly2Button" );
     dolly2Pixmap = QPixmap( dollyOut_xpm );
     dolly2RedPixmap = QPixmap( dollyOutRed_xpm );
-    dolly2Button->setPixmap( dolly2Pixmap );
+    dolly2Button->setIcon( dolly2Pixmap );
     dolly2Button->setAutoRepeat( TRUE );
     connect( dolly2Button, SIGNAL(clicked()), SLOT(dolly2()) );
 
@@ -271,7 +271,7 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     dolly1Button = new QToolButton( vb1, "dolly1Button" );
     dolly1Pixmap = QPixmap( dollyIn_xpm );
     dolly1RedPixmap = QPixmap( dollyInRed_xpm );
-    dolly1Button->setPixmap( dolly1Pixmap );
+    dolly1Button->setIcon( dolly1Pixmap );
     dolly1Button->setAutoRepeat( TRUE );
     connect( dolly1Button, SIGNAL(clicked()), SLOT(dolly1()) );
 
@@ -559,7 +559,7 @@ void GLCanvasFrame::rot1( void )
     if (autoMode) {
         switch (x1Button->isOn()) {
         case TRUE:
-            x1Button->setPixmap( x1RedPixmap );
+            x1Button->setIcon( x1RedPixmap );
 
             // Start the rotation
             connect(rotTimer1, SIGNAL(timeout()), this, SLOT(rot1SingleStep()) );
@@ -567,7 +567,7 @@ void GLCanvasFrame::rot1( void )
             (*vp).autoRot1 = TRUE;
             break;
         case FALSE:
-            x1Button->setPixmap( x1Pixmap );
+            x1Button->setIcon( x1Pixmap );
 
             // End the rotation
             rotTimer1->stop();
@@ -601,7 +601,7 @@ void GLCanvasFrame::rot2( void )
     if (autoMode) {
         switch (x2Button->isOn()) {
         case TRUE:
-            x2Button->setPixmap( x2RedPixmap );
+            x2Button->setIcon( x2RedPixmap );
 
             // Start the rotation
             connect(rotTimer2, SIGNAL(timeout()), this, SLOT(rot2SingleStep()) );
@@ -609,7 +609,7 @@ void GLCanvasFrame::rot2( void )
             (*vp).autoRot2 = TRUE;
             break;
         case FALSE:
-            x2Button->setPixmap( x2Pixmap );
+            x2Button->setIcon( x2Pixmap );
 
             // End the rotation
             rotTimer2->stop();
@@ -663,7 +663,7 @@ void GLCanvasFrame::tilt1( void )
     if (autoMode) {
         switch (y1Button->isOn()) {
         case TRUE:
-            y1Button->setPixmap( y1RedPixmap );
+            y1Button->setIcon( y1RedPixmap );
 
             // Start the tilt
             connect(tiltTimer1, SIGNAL(timeout()), this, SLOT(tilt1SingleStep()) );
@@ -671,7 +671,7 @@ void GLCanvasFrame::tilt1( void )
             (*vp).autoTilt1 = TRUE;
             break;
         case FALSE:
-            y1Button->setPixmap( y1Pixmap );
+            y1Button->setIcon( y1Pixmap );
 
             // End the tilt
             tiltTimer1->stop();
@@ -705,7 +705,7 @@ void GLCanvasFrame::tilt2( void )
     if (autoMode) {
         switch (y2Button->isOn()) {
         case TRUE:
-            y2Button->setPixmap( y2RedPixmap );
+            y2Button->setIcon( y2RedPixmap );
 
             // Start the tilt
             connect(tiltTimer2, SIGNAL(timeout()), this, SLOT(tilt2SingleStep()) );
@@ -713,7 +713,7 @@ void GLCanvasFrame::tilt2( void )
             (*vp).autoTilt2 = TRUE;
             break;
         case FALSE:
-            y2Button->setPixmap( y2Pixmap );
+            y2Button->setIcon( y2Pixmap );
 
             // End the tilt
             tiltTimer2->stop();
@@ -767,7 +767,7 @@ void GLCanvasFrame::spin1( void )
     if (autoMode) {
         switch (z1Button->isOn()) {
         case TRUE:
-            z1Button->setPixmap( z1RedPixmap );
+            z1Button->setIcon( z1RedPixmap );
 
             // Start the spin
             connect(spinTimer1, SIGNAL(timeout()), this, SLOT(spin1SingleStep()) );
@@ -775,7 +775,7 @@ void GLCanvasFrame::spin1( void )
             (*vp).autoSpin1 = TRUE;
             break;
         case FALSE:
-            z1Button->setPixmap( z1Pixmap );
+            z1Button->setIcon( z1Pixmap );
 
             // End the spin
             spinTimer1->stop();
@@ -809,7 +809,7 @@ void GLCanvasFrame::spin2( void )
     if (autoMode) {
         switch (z2Button->isOn()) {
         case TRUE:
-            z2Button->setPixmap( z2RedPixmap );
+            z2Button->setIcon( z2RedPixmap );
 
             // Start the spin
             connect(spinTimer2, SIGNAL(timeout()), this, SLOT(spin2SingleStep()) );
@@ -817,7 +817,7 @@ void GLCanvasFrame::spin2( void )
             (*vp).autoSpin2 = TRUE;
             break;
         case FALSE:
-            z2Button->setPixmap( z2Pixmap );
+            z2Button->setIcon( z2Pixmap );
 
             // End the spin
             spinTimer2->stop();
@@ -871,7 +871,7 @@ void GLCanvasFrame::dolly1( void )
     if (autoMode) {
         switch (dolly1Button->isOn()) {
         case TRUE:
-            dolly1Button->setPixmap( dolly1RedPixmap );
+            dolly1Button->setIcon( dolly1RedPixmap );
 
             // Start the zoom
             connect(zoomTimer1, SIGNAL(timeout()), this, SLOT(dolly1SingleStep()) );
@@ -879,7 +879,7 @@ void GLCanvasFrame::dolly1( void )
             (*vp).autoZoom1 = TRUE;
             break;
         case FALSE:
-            dolly1Button->setPixmap( dolly1Pixmap );
+            dolly1Button->setIcon( dolly1Pixmap );
 
             // End the zoom
             zoomTimer1->stop();
@@ -912,7 +912,7 @@ void GLCanvasFrame::dolly2( void )
     if (autoMode) {
         switch (dolly2Button->isOn()) {
         case TRUE:
-            dolly2Button->setPixmap( dolly2RedPixmap );
+            dolly2Button->setIcon( dolly2RedPixmap );
 
             // Start the zoom
             connect(zoomTimer2, SIGNAL(timeout()), this, SLOT(dolly2SingleStep()) );
@@ -920,7 +920,7 @@ void GLCanvasFrame::dolly2( void )
             (*vp).autoZoom2 = TRUE;
             break;
         case FALSE:
-            dolly2Button->setPixmap( dolly2Pixmap );
+            dolly2Button->setIcon( dolly2Pixmap );
 
             // End the zoom
             zoomTimer2->stop();
@@ -1296,41 +1296,41 @@ void GLCanvasFrame::autoButtonCB( void )
     // Set default pixmaps when switching off auto mode;
     // release control buttons
     if (!autoMode) {
-        autoButton->setPixmap( autoPixmap );
+        autoButton->setIcon( autoPixmap );
         if (autoButton->isOn())
             autoButton->toggle();
 
         if (x1Button->isOn()) {
             x1Button->toggle();
-            x1Button->setPixmap( x1Pixmap );
+            x1Button->setIcon( x1Pixmap );
         }
         if (x2Button->isOn()) {
             x2Button->toggle();
-            x2Button->setPixmap( x2Pixmap );
+            x2Button->setIcon( x2Pixmap );
         }
         if (y1Button->isOn()) {
             y1Button->toggle();
-            y1Button->setPixmap( y1Pixmap );
+            y1Button->setIcon( y1Pixmap );
         }
         if (y2Button->isOn()) {
             y2Button->toggle();
-            y2Button->setPixmap( y2Pixmap );
+            y2Button->setIcon( y2Pixmap );
         }
         if (z1Button->isOn()) {
             z1Button->toggle();
-            z1Button->setPixmap( z1Pixmap );
+            z1Button->setIcon( z1Pixmap );
         }
         if (z2Button->isOn()) {
             z2Button->toggle();
-            z2Button->setPixmap( z2Pixmap );
+            z2Button->setIcon( z2Pixmap );
         }
         if (dolly1Button->isOn()) {
             dolly1Button->toggle();
-            dolly1Button->setPixmap( dolly1Pixmap );
+            dolly1Button->setIcon( dolly1Pixmap );
         }
         if (dolly2Button->isOn()) {
             dolly2Button->toggle();
-            dolly2Button->setPixmap( dolly2Pixmap );
+            dolly2Button->setIcon( dolly2Pixmap );
         }
 
         // Stop all timers
@@ -1353,18 +1353,18 @@ void GLCanvasFrame::autoButtonCB( void )
     }
     else {
         // Indicate auto mode by coloring the auto mode button
-        autoButton->setPixmap( autoRedPixmap );
+        autoButton->setIcon( autoRedPixmap );
     }
 
     // Lock or unlock all control buttons
-    x1Button->setToggleButton( autoMode );
-    x2Button->setToggleButton( autoMode );
-    y1Button->setToggleButton( autoMode );
-    y2Button->setToggleButton( autoMode );
-    z1Button->setToggleButton( autoMode );
-    z2Button->setToggleButton( autoMode );
-    dolly1Button->setToggleButton( autoMode );
-    dolly2Button->setToggleButton( autoMode );
+    x1Button->setCheckable(autoMode);
+    x2Button->setCheckable(autoMode);
+    y1Button->setCheckable(autoMode);
+    y2Button->setCheckable(autoMode);
+    z1Button->setCheckable(autoMode);
+    z2Button->setCheckable(autoMode);
+    dolly1Button->setCheckable(autoMode);
+    dolly2Button->setCheckable(autoMode);
 }
 
 
@@ -1375,42 +1375,42 @@ void GLCanvasFrame::setAuto( viewParam vp )
     if (vp.autoRot1 == TRUE) {
         this->autoButtonCB();
         x1Button->setOn( TRUE );
-        x1Button->setPixmap( x1RedPixmap );
+        x1Button->setIcon( x1RedPixmap );
     }
     if (vp.autoRot2 == TRUE) {
         this->autoButtonCB();
         x2Button->setOn( TRUE );
-        x2Button->setPixmap( x2RedPixmap );
+        x2Button->setIcon( x2RedPixmap );
     }
     if (vp.autoTilt1 == TRUE) {
         this->autoButtonCB();
         y1Button->setOn( TRUE );
-        y1Button->setPixmap( y1RedPixmap );
+        y1Button->setIcon( y1RedPixmap );
     }
     if (vp.autoTilt2 == TRUE) {
         this->autoButtonCB();
         y2Button->setOn( TRUE );
-        y2Button->setPixmap( y2RedPixmap );
+        y2Button->setIcon( y2RedPixmap );
     }
     if (vp.autoSpin1 == TRUE) {
         this->autoButtonCB();
         z1Button->setOn( TRUE );
-        z1Button->setPixmap( z1RedPixmap );
+        z1Button->setIcon( z1RedPixmap );
     }
     if (vp.autoSpin2 == TRUE) {
         this->autoButtonCB();
         z2Button->setOn( TRUE );
-        z2Button->setPixmap( z2RedPixmap );
+        z2Button->setIcon( z2RedPixmap );
     }
     if (vp.autoZoom1 == TRUE) {
         this->autoButtonCB();
         dolly1Button->setOn( TRUE );
-        dolly1Button->setPixmap( dolly1RedPixmap );
+        dolly1Button->setIcon( dolly1RedPixmap );
     }
     if (vp.autoZoom2 == TRUE) {
         this->autoButtonCB();
         dolly2Button->setOn( TRUE );
-        dolly2Button->setPixmap( dolly2RedPixmap );
+        dolly2Button->setIcon( dolly2RedPixmap );
     }
 }
 
