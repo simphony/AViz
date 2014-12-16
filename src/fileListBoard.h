@@ -31,7 +31,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <QDialog>
 
-class Q3ButtonGroup;
 class QRadioButton;
 class QLineEdit;
 class QCheckBox;
@@ -57,26 +56,26 @@ private slots:
     void keepViewScaleChanged();
     void launchTrack();
     void bsingleStep();
-	void bfastStep();
-	void bcycle();
-	void start();
-	void end();
-	void bdirection( int );
-	listDirection getDirection();
-	void bdone();
+    void bfastStep();
+    void bcycle();
+    void start();
+    void end();
+    void bdirection( int );
+    listDirection getDirection();
+    void bdone();
 
 private:
-	MainForm * mainForm;
-	QRadioButton * forwardRb;
-	QLineEdit * fileLine;
-	QCheckBox * keepViewScaleCb;
-	QTimer * cycleTimer;
-	int numberOfFiles;
-	int currentFile;
-	listDirection thisDirection;
-	bool cycleMode;
-	QString fileListName;
-	bool haveFileList;
+    MainForm * mainForm;
+    QRadioButton * forwardRb;
+    QLineEdit * fileLine;
+    QCheckBox * keepViewScaleCb;
+    QTimer * cycleTimer;
+    int numberOfFiles;
+    int currentFile;
+    listDirection thisDirection;
+    bool cycleMode;
+    QString fileListName;
+    bool haveFileList;
 };
 
 #endif // FILELB_H
