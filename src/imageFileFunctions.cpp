@@ -26,7 +26,9 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "imageFileFunctions.h"
 
-#include <png.h>	// Best kept away from header file!
+#include <png.h>
+#include <stdlib.h>
+#include <sys/stat.h>
 
 // Return a suitable filename
 void getImageFilename( char * datafile, char * filename )
