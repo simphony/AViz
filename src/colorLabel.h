@@ -34,6 +34,7 @@ class ColorLabel: public QWidget
 {
     Q_OBJECT
 public:
+    /// create ColorLabel with grey color
     ColorLabel(QWidget *parent=0);
 
 protected:

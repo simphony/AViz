@@ -91,12 +91,6 @@ SpinBoard::SpinBoard( QWidget * parent, const char * name )
     colorLabel3->setFixedHeight( LABEL_HEIGHT );
     colorLabel4->setFixedHeight( LABEL_HEIGHT );
     colorLabel5->setFixedHeight( LABEL_HEIGHT );
-    colorLabel0->setColor( 1.0, 1.0, 1.0);
-    colorLabel1->setColor( 1.0, 1.0, 1.0);
-    colorLabel2->setColor( 1.0, 1.0, 1.0);
-    colorLabel3->setColor( 1.0, 1.0, 1.0);
-    colorLabel4->setColor( 1.0, 1.0, 1.0);
-    colorLabel5->setColor( 1.0, 1.0, 1.0);
 
     // Add a push button
     colorButton = new QPushButton( hb2, "colorButton" );

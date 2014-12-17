@@ -37,6 +37,8 @@ ColorLabel::ColorLabel(QWidget *parent)
         : QWidget(parent)
 {
     setAutoFillBackground(true);
+
+    setColor(1.0, 1.0, 1.0);
 }
 
 
