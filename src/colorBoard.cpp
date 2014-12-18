@@ -469,26 +469,23 @@ void ColorBoard::setColor( float r0, float g0, float b0, float r1, float g1, flo
 
 
 // Set the current labels (overloaded function)
-void ColorBoard::setLabel( char * label1 )
-{
-	topL->setText( label1 );
+void ColorBoard::setLabel(const QString& label1) {
+    topL->setText(label1);
 }
 
 
 // Set the current labels (overloaded function)
-void ColorBoard::setLabel( char * label1, char * label2 )
-{
-	topL->setText( label1 );
-	centerL->setText( label2 );
+void ColorBoard::setLabel(const QString& label1, const QString& label2) {
+    topL->setText(label1);
+    centerL->setText(label2);
 }
 
 
 // Set the current labels (overloaded function)
-void ColorBoard::setLabel( char * label1, char * label2, char * label3 )
-{
-	topL->setText( label1 );
-	centerL->setText( label2 );
-	bottomL->setText( label3 );
+void ColorBoard::setLabel(const QString& label1, const QString& label2, const QString& label3) {
+    topL->setText(label1);
+    centerL->setText(label2);
+    bottomL->setText(label3);
 }
 
 

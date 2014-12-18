@@ -74,9 +74,9 @@ public slots:
 	void setColor( float, float, float );
 	void setColor( float, float, float, float, float, float );
 	void setColor( float, float, float, float, float, float, float, float, float );
-	void setLabel( char * );
-	void setLabel( char *, char * );
-	void setLabel( char *, char *, char * );
+    void setLabel(const QString&);
+    void setLabel(const QString&, const QString&);
+    void setLabel(const QString&, const QString&, const QString&);
 
 private slots:
 	void adjustColor0();
