@@ -280,7 +280,6 @@ void SpinBoard::setData( void )
 	        // Make entries in the combo box -- use only particle
 	        // types that are really needed; otherwise the list
 	        // gets too long
-                int item = 0;
                 if (spinCob) {
                         spinCob->clear();
                         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
@@ -296,9 +295,7 @@ void SpinBoard::setData( void )
 
                                 // Add the item to the list
                                 if (needed) {
-                                        spinCob->insertItem( QString( (char *)&(*thisPd).type[i]), item );
-                                        item++;
-
+                                        spinCob->addItem( QString( (char *)&(*thisPd).type[i]));
                                 }
                         }
                         spinCob->setMinimumSize( spinCob->sizeHint() );
@@ -308,9 +305,9 @@ void SpinBoard::setData( void )
         // Sort the entries alphabetically, at least approximately
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 for (int j=0;j<spinCob->count()-1;j++) {
-                        if (QString::compare(spinCob->text(j), spinCob->text(j+1)) > 0) {
-                                typeCopy( (const char *)spinCob->text(j+1), (char *)&tmp );
-                                spinCob->insertItem( QString( (char *)&tmp), j);
+                        if (QString::compare(spinCob->itemText(j), spinCob->itemText(j+1)) > 0) {
+                                typeCopy( (const char *)spinCob->itemText(j+1), (char *)&tmp );
+                                spinCob->insertItem(j, QString( (char *)&tmp));
                                 spinCob->removeItem(j+2);
                         }
                 }

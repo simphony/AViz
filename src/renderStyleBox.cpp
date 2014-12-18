@@ -40,11 +40,11 @@ RenderBox::RenderBox( QWidget * parent, const char * name )
 
 	// Add a selector to choose rendering style
     modeCob = new QComboBox(hb0);
-	modeCob->insertItem( "Atom" );
-	modeCob->insertItem( "Spin" );
-	modeCob->insertItem( "LiquidCrystal" );
-	modeCob->insertItem( "Polymer" );
-	modeCob->insertItem( "Pore" );
+    modeCob->addItem( "Atom" );
+    modeCob->addItem( "Spin" );
+    modeCob->addItem( "LiquidCrystal" );
+    modeCob->addItem( "Polymer" );
+    modeCob->addItem( "Pore" );
 
 	// Define a callback for that combo box
 	connect( modeCob, SIGNAL(activated(int)), this, SLOT(renderModeCb()) );
@@ -54,12 +54,12 @@ RenderBox::RenderBox( QWidget * parent, const char * name )
 
 	// Add a selector to choose rendering style
     styleCob = new QComboBox(hb0);
-	styleCob->insertItem( "Dots" );
-	styleCob->insertItem( "Lines" );
-	styleCob->insertItem( "Cubes" );
-	styleCob->insertItem( "Cylinders" );
-	styleCob->insertItem( "Cones" );
-	styleCob->insertItem( "Spheres" );
+    styleCob->addItem( "Dots" );
+    styleCob->addItem( "Lines" );
+    styleCob->addItem( "Cubes" );
+    styleCob->addItem( "Cylinders" );
+    styleCob->addItem( "Cones" );
+    styleCob->addItem( "Spheres" );
 
 	// Define two callbacks for that combo box
 	connect( styleCob, SIGNAL(activated(int)), this, SLOT(renderStyleCb()) );
@@ -81,9 +81,9 @@ RenderBox::RenderBox( QWidget * parent, const char * name )
 	qualL->setText( " Quality: " );
 
     qualityCob = new QComboBox(hb0);
-	qualityCob->insertItem( "Low" );
-	qualityCob->insertItem( "High" );
-	qualityCob->insertItem( "Final" );
+    qualityCob->addItem( "Low" );
+    qualityCob->addItem( "High" );
+    qualityCob->addItem( "Final" );
 	qualityCob->setMinimumSize( qualityCob->sizeHint() );
 
 	// Define two callbacks for that combo box
@@ -406,9 +406,9 @@ void RenderBox::renderModeCb( void )
 	
 				// Re-build the style combo box
 				styleCob->clear();
-				styleCob->insertItem( "Dots" );
-				styleCob->insertItem( "Cubes" );
-				styleCob->insertItem( "Spheres" );
+                styleCob->addItem( "Dots" );
+                styleCob->addItem( "Cubes" );
+                styleCob->addItem( "Spheres" );
 
 				// Set the style value
 				switch ((*vp).atomRenderStyle) {
@@ -442,9 +442,9 @@ void RenderBox::renderModeCb( void )
 	
 				// Re-build the style combo box
 				styleCob->clear();
-				styleCob->insertItem( "Lines" );
-				styleCob->insertItem( "Cones" );
-				styleCob->insertItem( "Pins" );		// These are really spheres
+                styleCob->addItem( "Lines" );
+                styleCob->addItem( "Cones" );
+                styleCob->addItem( "Pins" );		// These are really spheres
 	
 				// Set the style value
 				switch ((*vp).spinRenderStyle) {
@@ -478,10 +478,10 @@ void RenderBox::renderModeCb( void )
 
 				// Re-build the style combo box
 				styleCob->clear();
-				styleCob->insertItem( "Dots" );
-				styleCob->insertItem( "Lines" );
-				styleCob->insertItem( "Cones" );
-				styleCob->insertItem( "Cylinders" );
+                styleCob->addItem( "Dots" );
+                styleCob->addItem( "Lines" );
+                styleCob->addItem( "Cones" );
+                styleCob->addItem( "Cylinders" );
 	
 				// Set the style value
 				switch ((*vp).lcRenderStyle) {
@@ -518,9 +518,9 @@ void RenderBox::renderModeCb( void )
 	
 				// Re-build the style combo box
 				styleCob->clear();
-				styleCob->insertItem( "Dots" );
-				styleCob->insertItem( "Cubes" );
-				styleCob->insertItem( "Spheres" );
+                styleCob->addItem( "Dots" );
+                styleCob->addItem( "Cubes" );
+                styleCob->addItem( "Spheres" );
 
 				// Set the style value
 				switch ((*vp).polymerAtomRenderStyle) {
@@ -554,9 +554,9 @@ void RenderBox::renderModeCb( void )
 	
 				// Re-build the style combo box
 				styleCob->clear();
-				styleCob->insertItem( "Dots" );
-				styleCob->insertItem( "Lines" );
-				styleCob->insertItem( "Cylinders" );
+                styleCob->addItem( "Dots" );
+                styleCob->addItem( "Lines" );
+                styleCob->addItem( "Cylinders" );
 
 				// Set the style value
 				switch ((*vp).poreRenderStyle) {

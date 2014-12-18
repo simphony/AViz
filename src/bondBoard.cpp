@@ -306,13 +306,11 @@ void BondBoard::setData( void )
 
 				// Add the item to the list
 				if (needed) {
-					fParticleCob->insertItem( QString( (char *)&(*thisPd).type[i]), item );
-					tParticleCob->insertItem( QString( (char *)&(*thisPd).type[i]), item );
+                    fParticleCob->addItem(QString( (char *)&(*thisPd).type[i]));
+                    tParticleCob->addItem(QString( (char *)&(*thisPd).type[i]));
 					// Set flags
 					haveFEntry = TRUE;
 					haveTEntry = TRUE;
-
-					item++;
 				}
 			}
 			fParticleCob->setMinimumSize( fParticleCob->sizeHint() );
@@ -325,11 +323,11 @@ void BondBoard::setData( void )
 	if (haveFEntry && haveTEntry) {
 		for (i=0;i<(*thisPd).numberOfParticleTypes;i++) {
 			for (int j=0;j<fParticleCob->count()-1;j++) {
-				if (QString::compare(fParticleCob->text(j), fParticleCob->text(j+1)) > 0) {
+                if (QString::compare(fParticleCob->itemText(j), fParticleCob->itemText(j+1)) > 0) {
 					fParticleCob->removeItem(j);
-					fParticleCob->insertItem( tParticleCob->text(j), j+1);
+                    fParticleCob->insertItem(j+1,tParticleCob->itemText(j));
 					tParticleCob->removeItem(j);
-					tParticleCob->insertItem( fParticleCob->text(j+1), j+1);
+                    tParticleCob->insertItem(j+1, fParticleCob->itemText(j+1));
 				}
 			}
 		}

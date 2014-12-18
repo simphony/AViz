@@ -167,7 +167,6 @@ void TrackBoard::setData( void )
 	        // Make entries in the combo box -- use only particle
 	        // types that are really needed; otherwise the list
 	        // gets too long
-                int item = 0;
                 if (typeCob) {
                         typeCob->clear();
                         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
@@ -183,9 +182,7 @@ void TrackBoard::setData( void )
 
                                 // Add the item to the list
                                 if (needed) {
-                                        typeCob->insertItem( QString( (char *)&(*thisPd).type[i]), item );
-                                        item++;
-
+                                        typeCob->insertItem(QString( (char *)&(*thisPd).type[i]));
                                 }
                         }
                         typeCob->setMinimumSize( typeCob->sizeHint() );
@@ -195,9 +192,9 @@ void TrackBoard::setData( void )
         // Sort the entries alphabetically, at least approximately
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 for (int j=0;j<typeCob->count()-1;j++) {
-                        if (QString::compare(typeCob->text(j), typeCob->text(j+1)) > 0) {
-                                typeCopy( (const char *)typeCob->text(j+1), (char *)&tmp );
-                                typeCob->insertItem( QString( (char *)&tmp), j);
+                        if (QString::compare(typeCob->itemText(j), typeCob->itemText(j+1)) > 0) {
+                                typeCopy( (const char *)typeCob->itemText(j+1), (char *)&tmp );
+                                typeCob->insertItem(j, QString( (char *)&tmp));
                                 typeCob->removeItem(j+2);
                         }
                 }

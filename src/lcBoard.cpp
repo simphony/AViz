@@ -283,7 +283,6 @@ void LcBoard::setData( void )
 	        // Make entries in the combo box -- use only atoms
 	        // types that are really needed; otherwise the list
 	        // gets too long
-                int item = 0;
                 if (lcCob) {
                         lcCob->clear();
                         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
@@ -299,9 +298,7 @@ void LcBoard::setData( void )
 
                                 // Add the item to the list
                                 if (needed) {
-                                        lcCob->insertItem( QString( (char *)&(*thisPd).type[i]), item );
-                                        item++;
-
+                                        lcCob->addItem( QString( (char *)&(*thisPd).type[i]));
                                 }
                         }
                         lcCob->setMinimumSize( lcCob->sizeHint() );
@@ -311,9 +308,9 @@ void LcBoard::setData( void )
         // Sort the entries alphabetically, at least approximately
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 for (int j=0;j<lcCob->count()-1;j++) {
-                        if (QString::compare(lcCob->text(j), lcCob->text(j+1)) > 0) {
-                                typeCopy( (const char *)lcCob->text(j+1), (char *)&tmp );
-                                lcCob->insertItem( QString( (char *)&tmp), j);
+                        if (QString::compare(lcCob->itemText(j), lcCob->itemText(j+1)) > 0) {
+                                typeCopy( (const char *)lcCob->itemText(j+1), (char *)&tmp );
+                                lcCob->insertItem(j, QString( (char *)&tmp));
                                 lcCob->removeItem(j+2);
                         }
                 }

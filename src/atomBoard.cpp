@@ -281,7 +281,6 @@ void AtomBoard::setData( void )
         // Make entries in the combo box -- use only particle
         // types that are really needed; otherwise the list
         // gets too long
-        int item = 0;
         if (atomCob) {
             atomCob->clear();
             for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
@@ -297,9 +296,7 @@ void AtomBoard::setData( void )
 
                 // Add the item to the list
                 if (needed) {
-                    atomCob->insertItem( QString( (char *)&(*thisPd).type[i]), item );
-                    item++;
-
+                    atomCob->addItem(QString( (char *)&(*thisPd).type[i]));
                 }
             }
             atomCob->setMinimumSize( atomCob->sizeHint() );
@@ -309,9 +306,9 @@ void AtomBoard::setData( void )
     // Sort the entries alphabetically, at least approximately
     for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
         for (int j=0;j<atomCob->count()-1;j++) {
-            if (QString::compare(atomCob->text(j), atomCob->text(j+1)) > 0) {
-                typeCopy( (const char *)atomCob->text(j+1), (char *)&tmp );
-                atomCob->insertItem( QString( (char *)&tmp), j);
+            if (QString::compare(atomCob->itemText(j), atomCob->itemText(j+1)) > 0) {
+                typeCopy( (const char *)atomCob->itemText(j+1), (char *)&tmp );
+                atomCob->insertItem(j, QString( (char *)&tmp));
                 atomCob->removeItem(j+2);
             }
         }

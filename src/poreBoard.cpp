@@ -281,7 +281,6 @@ void PoreBoard::setData( void )
 	        // Make entries in the combo box -- use only particle
 	        // types that are really needed; otherwise the list
 	        // gets too long
-                int item = 0;
                 if (poreCob) {
                         poreCob->clear();
                         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
@@ -297,9 +296,7 @@ void PoreBoard::setData( void )
 
                                 // Add the item to the list
                                 if (needed) {
-                                        poreCob->insertItem( QString( (char *)&(*thisPd).type[i]), item );
-                                        item++;
-
+                                        poreCob->insertItem( QString( (char *)&(*thisPd).type[i]));
                                 }
                         }
                         poreCob->setMinimumSize( poreCob->sizeHint() );
@@ -309,9 +306,9 @@ void PoreBoard::setData( void )
         // Sort the entries alphabetically, at least approximately
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 for (int j=0;j<poreCob->count()-1;j++) {
-                        if (QString::compare(poreCob->text(j), poreCob->text(j+1)) > 0) {
-                                typeCopy( (const char *)poreCob->text(j+1), (char *)&tmp );
-                                poreCob->insertItem( QString( (char *)&tmp), j);
+                        if (QString::compare(poreCob->itemText(j), poreCob->itemText(j+1)) > 0) {
+                                typeCopy( (const char *)poreCob->itemText(j+1), (char *)&tmp );
+                                poreCob->insertItem(j, QString( (char *)&tmp));
                                 poreCob->removeItem(j+2);
                         }
                 }
