@@ -28,6 +28,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <png.h>
 #include <stdlib.h>
+#include <cstring>
 #include <sys/stat.h>
 
 // Return a suitable filename
