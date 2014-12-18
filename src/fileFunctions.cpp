@@ -30,6 +30,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "defaultParticles.h"
 
 #include <sys/stat.h>
+#include <cstring>
+#include <cstdlib>
 
 // Check the suffix in a file name
 void checkSuffix( const char * filename, const char * suffix )

@@ -28,17 +28,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define ATOMDEF_H
 
 #include "data.h"
-#include "defaults.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 void useDefaultParticleData( particleData * );
 void setColorAndDefaults( particleData *, char *, int );
 void setUnidentColor( particleData *, int );
-void typeCopy( char *, char * );
-void typeCopy( const char *, char * );
-bool typeCmp( char *, char * );
+void typeCopy(const char *, char * );
+bool typeCmp(const char *, const char * );
 
 #endif // ATOMDEF_H 

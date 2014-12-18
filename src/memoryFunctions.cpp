@@ -25,6 +25,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ***********************************************************************/
 
 #include "memoryFunctions.h"
+#include <cstdlib>
 
 // Allocate memory 
 void allocateParticleData( particleData * pd )

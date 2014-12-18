@@ -28,8 +28,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define DATA_H
 
 #include "defaults.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio> // BUFSIZ
 
 // Define view modes
 enum vMode{ PERSPECTIVE, ORTHO };

@@ -27,6 +27,12 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "defaultParticles.h"
 
+#include "defaults.h"
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
 // Set particle defaults
 void useDefaultParticleData( particleData * pd )
 {
@@ -203,19 +209,7 @@ void setUnidentColor( particleData * pd, int index )
 	free(buffer);
 }
 
-
-// Copy a type string (overloaded function)
-void typeCopy( char * typeSrc, char * typeDest )
-{
-	if (typeSrc && typeDest) {
-		typeDest[0] = typeSrc[0];
-		typeDest[1] = typeSrc[1];
-		typeDest[2] = 0;
-	}
-}
-
-
-// Copy a type string (overloaded function)
+// Copy a type string
 void typeCopy( const char * typeSrc, char * typeDest )
 {
 	if (typeSrc && typeDest) {
@@ -228,7 +222,7 @@ void typeCopy( const char * typeSrc, char * typeDest )
 
 // Compare two type strings denoting particle types -- 
 // these can contain either one or two chars
-bool typeCmp( char * type, char * referenceType )
+bool typeCmp(const char * type, const char * referenceType )
 {
 	if (!type || !referenceType) 
         return false;
