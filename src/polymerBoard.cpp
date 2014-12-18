@@ -47,7 +47,7 @@ PolymerBoard::PolymerBoard( QWidget * parent, const char * name )
 	// Create a combo box that will go into the
 	// second column; entries in the combo box will
 	// be made later
-	atomCob = new QComboBox( FALSE, hb1, "atomSelection" );
+    atomCob = new QComboBox(hb1);
 
 	// Define a callback for this combo box
 	connect( atomCob, SIGNAL(activated(int)), SLOT(setPolymerAtom()) );

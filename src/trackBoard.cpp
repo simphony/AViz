@@ -59,7 +59,7 @@ TrackBoard::TrackBoard( QWidget * parent, const char * name )
 	// Create a combo box that will go into the
 	// second column; entries in the combo box will
 	// be made later
-	typeCob = new QComboBox( FALSE, this, "typeSelection" );
+    typeCob = new QComboBox(this);
 	trackBox->addWidget( typeCob, 0, 1);
 	
 	// Define a callback for this combo box

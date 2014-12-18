@@ -78,7 +78,7 @@ BondBoard::BondBoard( QWidget * parent, const char * name )
         // Create a combo box that will go into the
         // second column; entries in the combo box will
         // be made later
-        fParticleCob = new QComboBox( FALSE, hb0, "particleSelection0" );
+        fParticleCob = new QComboBox(hb0);
 
         // Define a callback for this combo boxes
         connect( fParticleCob, SIGNAL(activated(int)), SLOT(setFAtom()) );
@@ -90,7 +90,7 @@ BondBoard::BondBoard( QWidget * parent, const char * name )
         // Create a combo box that will go into the
         // second column; entries in the combo box will
         // be made later
-        tParticleCob = new QComboBox( FALSE, hb0, "particleSelection1" );
+        tParticleCob = new QComboBox(hb0);
 
         // Define a callback for this combo boxes
         connect( tParticleCob, SIGNAL(activated(int)), SLOT(setTAtom()) );

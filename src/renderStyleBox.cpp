@@ -39,7 +39,7 @@ RenderBox::RenderBox( QWidget * parent, const char * name )
 	modeL->setText( " Mode: " );
 
 	// Add a selector to choose rendering style
-	modeCob = new QComboBox( FALSE, hb0, "modeSelection" );
+    modeCob = new QComboBox(hb0);
 	modeCob->insertItem( "Atom" );
 	modeCob->insertItem( "Spin" );
 	modeCob->insertItem( "LiquidCrystal" );
@@ -53,7 +53,7 @@ RenderBox::RenderBox( QWidget * parent, const char * name )
 	styleL->setText( " Style: " );
 
 	// Add a selector to choose rendering style
-	styleCob = new QComboBox( FALSE, hb0, "styleSelection" );
+    styleCob = new QComboBox(hb0);
 	styleCob->insertItem( "Dots" );
 	styleCob->insertItem( "Lines" );
 	styleCob->insertItem( "Cubes" );
@@ -80,7 +80,7 @@ RenderBox::RenderBox( QWidget * parent, const char * name )
 	qualL = new QLabel( hb0, "qualLabel" );
 	qualL->setText( " Quality: " );
 
-	qualityCob = new QComboBox( FALSE, hb0, "qualitySelection" );
+    qualityCob = new QComboBox(hb0);
 	qualityCob->insertItem( "Low" );
 	qualityCob->insertItem( "High" );
 	qualityCob->insertItem( "Final" );

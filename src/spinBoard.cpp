@@ -57,7 +57,7 @@ SpinBoard::SpinBoard( QWidget * parent, const char * name )
     // Create a combo box that will go into the
     // second column; entries in the combo box will
     // be made later
-    spinCob = new QComboBox( FALSE, hb1, "spinSelection" );
+    spinCob = new QComboBox(hb1);
 
     // Define a callback for this combo box
     connect( spinCob, SIGNAL(activated(int)), SLOT(setSpin()) );

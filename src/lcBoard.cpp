@@ -60,7 +60,7 @@ LcBoard::LcBoard( QWidget * parent, const char * name )
 	// Create a combo box that will go into the
 	// second column; entries in the combo box will
 	// be made later
-	lcCob = new QComboBox( FALSE, hb1, "lcSelection" );
+    lcCob = new QComboBox(hb1);
 
 	// Define a callback for this combo box
 	connect( lcCob, SIGNAL(activated(int)), SLOT(setLc()) );

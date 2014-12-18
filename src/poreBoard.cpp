@@ -60,7 +60,7 @@ PoreBoard::PoreBoard( QWidget * parent, const char * name )
 	// Create a combo box that will go into the
 	// second column; entries in the combo box will
 	// be made later
-	poreCob = new QComboBox( FALSE, hb1, "poreSelection" );
+    poreCob = new QComboBox(hb1);
 
 	// Define a callback for this combo box
 	connect( poreCob, SIGNAL(activated(int)), SLOT(setPore()) );
