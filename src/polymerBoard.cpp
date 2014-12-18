@@ -281,7 +281,7 @@ void PolymerBoard::setData( void )
 
                                 // Add the item to the list
                                 if (needed) {
-                                        atomCob->insertItem( QString( (char *)&(*thisPd).type[i]));
+                                        atomCob->addItem( QString( (char *)&(*thisPd).type[i]));
                                 }
                         }
                         atomCob->setMinimumSize( atomCob->sizeHint() );

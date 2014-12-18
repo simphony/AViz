@@ -182,7 +182,7 @@ void TrackBoard::setData( void )
 
                                 // Add the item to the list
                                 if (needed) {
-                                        typeCob->insertItem(QString( (char *)&(*thisPd).type[i]));
+                                        typeCob->addItem(QString( (char *)&(*thisPd).type[i]));
                                 }
                         }
                         typeCob->setMinimumSize( typeCob->sizeHint() );

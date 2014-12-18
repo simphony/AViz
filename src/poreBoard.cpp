@@ -296,7 +296,7 @@ void PoreBoard::setData( void )
 
                                 // Add the item to the list
                                 if (needed) {
-                                        poreCob->insertItem( QString( (char *)&(*thisPd).type[i]));
+                                        poreCob->addItem( QString( (char *)&(*thisPd).type[i]));
                                 }
                         }
                         poreCob->setMinimumSize( poreCob->sizeHint() );
