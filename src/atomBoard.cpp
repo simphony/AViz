@@ -26,8 +26,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "atomBoard.h"
 
-#include <Q3GridLayout>
-
 #include <QGridLayout>
 #include <QLabel>
 #include <QCheckBox>
@@ -46,6 +44,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "data.h"
 #include "positionBox.h"
 #include "propertyBox.h"
+#include "widgets/doneapplycancelwidget.h"
 
 namespace {
 /// creates color label and adds to @param layout
@@ -93,6 +92,7 @@ AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
         m_colorWidget = new QWidget(this);
 
         QHBoxLayout *hbox = new QHBoxLayout(m_colorWidget);
+        hbox->setSpacing(0);
 
         // Add a label
         hbox->addWidget(new QLabel(" Color: "));
@@ -164,21 +164,15 @@ AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
         QPushButton * bonds = new QPushButton("Bonds...");
         connect( bonds, SIGNAL(clicked()), this, SLOT(bbonds()) );
 
-        QPushButton * done = new QPushButton("Done");
-        connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
-
-        QPushButton * apply = new QPushButton("Apply");
-        connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
-
-        QPushButton * cancel = new QPushButton("Cancel");
-        connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
+        DoneApplyCancelWidget *doneApplyCancel = new DoneApplyCancelWidget(this);
+        connect(doneApplyCancel, SIGNAL(done()), this, SLOT(bdone()) );
+        connect(doneApplyCancel, SIGNAL(applied()), this, SLOT(bapply()) );
+        connect(doneApplyCancel, SIGNAL(canceled()), this, SLOT(bcancel()));
 
         QHBoxLayout *hbox = new QHBoxLayout(m_BondsDoneApplyWidget);
         hbox->addWidget(bonds);
         hbox->addStretch(1);
-        hbox->addWidget(done);
-        hbox->addWidget(apply);
-        hbox->addWidget(cancel);
+        hbox->addWidget(doneApplyCancel);
     }
 
     // Clear the board pointer
@@ -206,7 +200,6 @@ AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
 // Build the layout
 void AtomBoard::buildLayout( colorCriterion crit ) 
 {
-    int numCols = 6;
     int numRows = 6;
 
     // Adjust the number of rows
@@ -215,21 +208,19 @@ void AtomBoard::buildLayout( colorCriterion crit )
 
     // Destroy existing layout
     if (atomBox) {
-        atomBox->~Q3GridLayout();
+        atomBox->~QGridLayout();
     }
 
-    // Adjust height of dialog board
-    this->setFixedHeight( numRows*ROW_HEIGHT );
-
     // Insert a grid that will hold control buttons
-    atomBox = new Q3GridLayout( this, numRows, numCols, SPACE, SPACE, "atomBox" );
+    atomBox = new QGridLayout(this);
 
     // Add components that are always needed
-    atomBox->addMultiCellWidget( m_atomWidget, 0, 0, 0, -1);
-    atomBox->addMultiCellWidget( m_colorWidget, 1, 1, 0, -1);
-    atomBox->addMultiCellWidget( sizeBox, 2, 2, 0, -1);
-    atomBox->addMultiCellWidget( m_colorCriterionWidget, 3, 3, 0, -1);
-    atomBox->addMultiCellWidget( m_BondsDoneApplyWidget, numRows-1, numRows-1, 0, -1);
+    atomBox->addWidget(m_atomWidget, 0 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    atomBox->addWidget(m_colorWidget, 1 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    atomBox->addWidget(sizeBox, 2 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    atomBox->addWidget(m_colorCriterionWidget, 3 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    atomBox->addWidget(m_BondsDoneApplyWidget, numRows-1 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+
 
     // Add additional components
     switch (crit) {
@@ -242,19 +233,19 @@ void AtomBoard::buildLayout( colorCriterion crit )
         positionBox->show();
         propertyBox->hide();
         codeBox->hide();
-        atomBox->addMultiCellWidget( positionBox, 4, 4, 0, -1);
+        atomBox->addWidget(positionBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     case PROPERTY:
         positionBox->hide();
         propertyBox->show();
         codeBox->hide();
-        atomBox->addMultiCellWidget( propertyBox, 4, 4, 0, -1);
+        atomBox->addWidget(propertyBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     case COLORCODE:
         positionBox->hide();
         propertyBox->hide();
         codeBox->show();
-        atomBox->addMultiCellWidget( codeBox, 4, 4, 0, -1);
+        atomBox->addWidget(codeBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     }
 

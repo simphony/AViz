@@ -31,7 +31,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "data.h"
 
-class Q3GridLayout;
+class QGridLayout;
 class QCheckBox;
 class QPushButton;
 class QComboBox;
@@ -88,7 +88,7 @@ private:
     PositionBox * positionBox;
     PropertyBox * propertyBox;
     SizeBox * sizeBox;
-    Q3GridLayout * atomBox;
+    QGridLayout * atomBox;
     QWidget *m_atomWidget;
     QWidget *m_colorWidget;
     QWidget *m_colorCriterionWidget;
