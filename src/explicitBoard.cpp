@@ -45,8 +45,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <cmath>
 
 // Make a popup dialog box
-ExplicitBoard::ExplicitBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
+ExplicitBoard::ExplicitBoard(QWidget * parent)
+    : QDialog(parent, Qt::WType_TopLevel)
 {
     setWindowTitle( "AViz: Set Viewpoint" );
 

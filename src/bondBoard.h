@@ -46,7 +46,7 @@ class BondBoard: public QDialog
 {
     Q_OBJECT
 public:
-    BondBoard( QWidget * parent=0, const char * name=0 );
+    BondBoard( QWidget * parent=0);
 
 public slots:
     void setMainFormAddress( MainForm * );

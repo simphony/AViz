@@ -44,8 +44,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QPushButton>
 
 // Make a popup dialog box 
-SpinBoard::SpinBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
+SpinBoard::SpinBoard(QWidget * parent)
+    : QDialog(parent, Qt::WType_TopLevel)
 {
     setWindowTitle( "AViz: Set Spins" );
 
@@ -533,7 +533,7 @@ void SpinBoard::setColors()
 		                                cb->~ColorBoard();
 		                        }
 
-		                        cb = new ColorBoard( this, "colorBoard" );
+                                cb = new ColorBoard(this);
 		
 		                        if (cb) {
 		                                // This is an ugly hack, intended to
@@ -593,7 +593,7 @@ void SpinBoard::setColors()
 		                                cb->~ColorBoard();
 		                        }
 		
-		                        cb = new ColorBoard( this, "colorBoard" );
+                                cb = new ColorBoard(this);
 		
 		                        if (cb) {
 		                                // This is an ugly hack, intended to

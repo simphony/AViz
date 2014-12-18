@@ -40,7 +40,7 @@ class TranslationBoard: public QDialog
 {
 	Q_OBJECT
 public:
-	TranslationBoard( QWidget * parent=0, const char * name=0 );
+    TranslationBoard(QWidget * parent=0);
 
 public slots:
 	void setMainFormAddress( MainForm * );

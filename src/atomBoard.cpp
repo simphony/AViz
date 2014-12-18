@@ -528,7 +528,7 @@ void AtomBoard::setColors()
                     cb->~ColorBoard();
                 }
 
-                cb = new ColorBoard( this, "colorBoard" );
+                cb = new ColorBoard(this);
 
                 if (cb) {
                     // This is an ugly hack, intended to
@@ -587,7 +587,7 @@ void AtomBoard::setColors()
                     cb->~ColorBoard();
                 }
 
-                cb = new ColorBoard( this, "colorBoard" );
+                cb = new ColorBoard(this);
 
                 if (cb) {
                     // This is an ugly hack, intended to

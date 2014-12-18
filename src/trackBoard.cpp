@@ -40,8 +40,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "fileFunctions.h"
 
 // Make a popup dialog box 
-TrackBoard::TrackBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
+TrackBoard::TrackBoard(QWidget * parent)
+    : QDialog(parent, Qt::WType_TopLevel)
 {
 	setWindowTitle( "AViz: Track Rendering Control" );
 

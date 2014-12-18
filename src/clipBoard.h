@@ -41,7 +41,7 @@ class ClipBoard: public QDialog
 {
 	Q_OBJECT
 public:
-	ClipBoard( QWidget * parent=0, const char * name=0 );
+    ClipBoard( QWidget * parent=0);
 
 public slots:
 	void setMainFormAddress( MainForm * );

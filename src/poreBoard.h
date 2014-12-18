@@ -58,7 +58,7 @@ class PoreBoard: public QDialog
 {
     Q_OBJECT
 public:
-    PoreBoard( QWidget * parent=0, const char * name=0 );
+    PoreBoard(QWidget * parent=0);
 
 public slots:
     void setMainFormAddress( MainForm * );

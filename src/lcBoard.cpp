@@ -47,8 +47,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 
 // Make a popup dialog box 
-LcBoard::LcBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
+LcBoard::LcBoard(QWidget * parent)
+    : QDialog(parent, Qt::WType_TopLevel )
 {
 	setWindowTitle( "AViz: Set Liquid Crystals" );
 
@@ -549,7 +549,7 @@ void LcBoard::setColors()
 				                                cb->~ColorBoard();
 				                        }
 			
-				                        cb = new ColorBoard( this, "colorBoard" );
+                                        cb = new ColorBoard(this);
 			
 				                        if (cb) {
 				                                // This is an ugly hack, 
@@ -593,7 +593,7 @@ void LcBoard::setColors()
 				                                cb->~ColorBoard();
 				                        }
 				
-				                        cb = new ColorBoard( this, "colorBoard" );
+                                        cb = new ColorBoard(this);
 				
 				                        if (cb) {
 				                                // This is an ugly hack, 
@@ -636,7 +636,7 @@ void LcBoard::setColors()
 				                                cb->~ColorBoard();
 				                        }
 				
-				                        cb = new ColorBoard( this, "colorBoard" );
+                                        cb = new ColorBoard(this);
 				
 				                        if (cb) {
 				                                // This is an ugly hack, 
@@ -698,7 +698,7 @@ void LcBoard::setColors()
 		                                cb->~ColorBoard();
 		                        }
 	
-		                        cb = new ColorBoard( this, "colorBoard" );
+                                cb = new ColorBoard(this);
 	
 		                        if (cb) {
 		                                // This is an ugly hack, intended to

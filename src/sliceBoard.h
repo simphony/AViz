@@ -41,7 +41,7 @@ class SliceBoard: public QDialog
 {
     Q_OBJECT
 public:
-    SliceBoard( QWidget * parent=0, const char * name=0 );
+    SliceBoard(QWidget * parent=0);
 
 public slots:
     void setMainFormAddress( MainForm * );

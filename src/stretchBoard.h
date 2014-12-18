@@ -38,7 +38,7 @@ class StretchBoard: public QDialog
 {
 	Q_OBJECT
 public:
-	StretchBoard( QWidget * parent=0, const char * name=0 );
+    StretchBoard(QWidget * parent=0);
 
 public slots:
 	void setMainFormAddress( MainForm * );

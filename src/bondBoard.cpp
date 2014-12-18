@@ -56,7 +56,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <cmath>
 
 // Make a popup dialog box 
-BondBoard::BondBoard( QWidget * parent, const char * name )
+BondBoard::BondBoard(QWidget * parent)
     : QDialog( parent, Qt::WType_TopLevel )
 {
     setWindowTitle( "AViz: Set Bonds" );

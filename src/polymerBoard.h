@@ -61,7 +61,7 @@ class PolymerBoard: public QDialog
 {
 	Q_OBJECT
 public:
-	PolymerBoard( QWidget * parent=0, const char * name=0 );
+    PolymerBoard(QWidget * parent=0);
 
 public slots:
 	void setMainFormAddress( MainForm * );

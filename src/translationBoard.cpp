@@ -35,8 +35,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <cmath>
 
-TranslationBoard::TranslationBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
+TranslationBoard::TranslationBoard(QWidget * parent)
+    : QDialog(parent, Qt::WType_TopLevel)
 {
 	setWindowTitle( "AViz: Set Data Translation" );
 

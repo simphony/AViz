@@ -45,8 +45,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // (atomBoard, etc.) to build the layout by calling
 // buildLayout.  The argument indicates how many 
 // colors should be specified (1, 2, or 3)	
-ColorBoard::ColorBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
+ColorBoard::ColorBoard(QWidget * parent)
+    : QDialog(parent, Qt::WType_TopLevel )
 {
 	setWindowTitle( "AViz: Set Colors" );
 

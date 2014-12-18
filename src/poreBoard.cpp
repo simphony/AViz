@@ -47,8 +47,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QRadioButton>
 
 // Make a popup dialog box 
-PoreBoard::PoreBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
+PoreBoard::PoreBoard(QWidget * parent)
+    : QDialog(parent, Qt::WType_TopLevel)
 {
 	setWindowTitle( "AViz: Set Pores" );
 
@@ -545,7 +545,7 @@ void PoreBoard::setColors()
 		               		                 cb->~ColorBoard();
 				                        }
 
-				                        cb = new ColorBoard( this, "colorBoard" );
+                                        cb = new ColorBoard(this);
 				
 			       		                 if (cb) {
 								// This is an ugly hack, 
@@ -589,7 +589,7 @@ void PoreBoard::setColors()
 		                                                cb->~ColorBoard();
 		                                        }
 
-		                                        cb = new ColorBoard( this, "colorBoard");
+                                                cb = new ColorBoard(this);
 
 		                                        if (cb) {
 		                                                // This is an ugly hack, 
@@ -651,7 +651,7 @@ void PoreBoard::setColors()
 						cb->~ColorBoard();
 		                        }
 
-		                        cb = new ColorBoard( this, "colorBoard" );
+                                cb = new ColorBoard(this);
 
 		                        if (cb) {
 		                                // This is an ugly hack, intended to

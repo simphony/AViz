@@ -50,7 +50,7 @@ class ColorBoard: public QDialog
 {
 	Q_OBJECT
 public:
-	ColorBoard( QWidget * parent=0, const char * name=0 );
+    ColorBoard( QWidget * parent=0);
 
 public slots:
 	void buildLayout( char );

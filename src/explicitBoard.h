@@ -40,7 +40,7 @@ class ExplicitBoard: public QDialog
 {
     Q_OBJECT
 public:
-    ExplicitBoard( QWidget * parent=0, const char * name=0 );
+    ExplicitBoard(QWidget * parent=0);
 
 public slots:
     void setMainFormAddress( MainForm * );

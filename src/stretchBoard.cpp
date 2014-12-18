@@ -38,9 +38,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "parameterLimits.h"
 
 // Make a popup dialog box 
-StretchBoard::StretchBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
-{
+StretchBoard::StretchBoard(QWidget * parent)
+    : QDialog(parent, Qt::WType_TopLevel) {
 	setWindowTitle( "AViz: Set Data Stretching" );
 
 	// Insert a grid that will hold control buttons

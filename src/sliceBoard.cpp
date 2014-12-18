@@ -43,8 +43,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 
 // Make a popup dialog box 
-SliceBoard::SliceBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, Qt::WType_TopLevel )
+SliceBoard::SliceBoard(QWidget * parent)
+    : QDialog(parent, Qt::WType_TopLevel)
 {
 	setWindowTitle( "AViz: Set Clipping" );
 

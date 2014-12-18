@@ -57,7 +57,7 @@ class SpinBoard: public QDialog
 {
     Q_OBJECT
 public:
-    SpinBoard( QWidget * parent=0, const char * name=0 );
+    SpinBoard(QWidget * parent=0);
 
 public slots:
     void setMainFormAddress( MainForm * );

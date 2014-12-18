@@ -95,16 +95,16 @@ MainForm::MainForm(QWidget *parent, AViz *aviz)
     // Create some of the more important boards
     ab = new AtomBoard(this/*mainForm*/, this /*parent*/);
 
-    sb = new SpinBoard(this, "spinBoard");
+    sb = new SpinBoard(this);
     sb->setMainFormAddress(this);
 
-    lcb = new LcBoard( this, "lcBoard");
+    lcb = new LcBoard(this);
     lcb->setMainFormAddress(this);
 
-    plb = new PolymerBoard( this, "polymerBoard");
+    plb = new PolymerBoard(this);
     plb->setMainFormAddress(this);
 
-    pb = new PoreBoard(this, "poreBoard");
+    pb = new PoreBoard(this);
     pb->setMainFormAddress(this);
 
     // Fix the geometry of this panel so that
@@ -890,7 +890,7 @@ void MainForm::launchAtoms() {
 // Callback function to launch the bond settings panel
 void MainForm::launchBonds() {
     if (!bb) {
-        bb = new BondBoard( this, "bondBoard" );
+        bb = new BondBoard(this);
         bb->setMainFormAddress( this );
     }
 
@@ -904,7 +904,7 @@ void MainForm::launchBonds() {
 // Callback function to launch the clip settings panel
 void MainForm::launchClip() {
     if (!clb) {
-        clb = new ClipBoard(this, "clipBoard");
+        clb = new ClipBoard(this);
         clb->setMainFormAddress(this);
     }
 
@@ -918,7 +918,7 @@ void MainForm::launchClip() {
 // Callback function to launch the explicit view point settings panel
 void MainForm::launchExplicit() {
     if (!eb) {
-        eb = new ExplicitBoard(this, "explicitBoard");
+        eb = new ExplicitBoard(this);
         eb->setMainFormAddress(this);
     }
 
@@ -1001,7 +1001,7 @@ void MainForm::launchPolymers()
 void MainForm::launchSlice()
 {
     if (!slb) {
-        slb = new SliceBoard( this, "sliceBoard" );
+        slb = new SliceBoard(this);
         if (slb)
             slb->setMainFormAddress( this );
     }
@@ -1034,7 +1034,7 @@ void MainForm::launchSpins()
 // (to manipulate data)
 void MainForm::launchStretch() {
     if (!stb) {
-        stb = new StretchBoard(this, "stretchBoard");
+        stb = new StretchBoard(this);
         if (stb)
             stb->setMainFormAddress(this);
     }
@@ -1049,7 +1049,7 @@ void MainForm::launchStretch() {
 // Callback function to launch the track board panel
 void MainForm::launchTrack(const QString &fn) {
     if (!trab) {
-        trab = new TrackBoard(this, "trackBoard");
+        trab = new TrackBoard(this);
         trab->setMainFormAddress(this);
     }
 
@@ -1064,7 +1064,7 @@ void MainForm::launchTrack(const QString &fn) {
 // Callback function to launch the translation settings panel
 void MainForm::launchTranslation() {
     if (!tb) {
-        tb = new TranslationBoard(this, "transBoard");
+        tb = new TranslationBoard(this);
         tb->setMainFormAddress(this);
     }
 
