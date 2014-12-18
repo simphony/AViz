@@ -27,7 +27,35 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "atomBoard.h"
 
 #include <Q3GridLayout>
+
+#include <QGridLayout>
 #include <QLabel>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QComboBox>
+#include <QRadioButton>
+
+
+#include "defaultParticles.h" // typeCopy, typeCmp
+#include "mainForm.h"
+#include "colorBoard.h"
+#include "colorLabel.h"
+#include "codeBox.h"
+#include "fileFunctions.h"
+#include "sizeBox.h"
+#include "data.h"
+#include "positionBox.h"
+#include "propertyBox.h"
+
+namespace {
+/// creates color label and adds to @param layout
+ColorLabel* createColorLabel(QHBoxLayout* layout, QWidget *parent) {
+    ColorLabel *cLabel = new ColorLabel(parent);
+    cLabel->setFixedHeight( LABEL_HEIGHT );
+    layout->addWidget(cLabel);
+    return cLabel;
+}
+}
 
 // Make a popup dialog box 
 AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
@@ -36,71 +64,61 @@ AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
 {
     setWindowTitle( "AViz: Set Atom Types" );
 
-    // Create a hboxlayout that will fill the first row
-    hb1 = new Q3HBox( this, "hb1" );
+    // Create a widget for basic atom configuration
+    {
+        m_atomWidget = new QWidget( this);
 
-    // Create a label
-    QLabel * atomL = new QLabel( hb1, "atomL" );
-    atomL->setText( " Type: ");
+        // Create a combo box that will go into the
+        // second column; entries in the combo box will
+        // be made later
+        atomCob = new QComboBox(m_atomWidget);
+        connect( atomCob, SIGNAL(activated(int)), SLOT(setAtom()) );
 
-    // Create a combo box that will go into the
-    // second column; entries in the combo box will
-    // be made later
-    atomCob = new QComboBox( FALSE, hb1, "atomSelection" );
+        // Add a check box button
+        showAtomCb = new QCheckBox("Show Atoms", m_atomWidget);
+        showAtomCb->setChecked(true);
 
-    // Define a callback for this combo box
-    connect( atomCob, SIGNAL(activated(int)), SLOT(setAtom()) );
+        QHBoxLayout *hbox = new QHBoxLayout(m_atomWidget);
+        hbox->addWidget(new QLabel(" Type: "));
+        hbox->addWidget(atomCob);
+        hbox->addStretch(1);
+        hbox->addWidget(showAtomCb);
 
-    // Create a placeholder
-    QLabel * emptyL0 = new QLabel( hb1, "emptyL0" );
-    emptyL0->setText("");
+        // Define a callback for this toggle switch
+        connect( showAtomCb, SIGNAL(clicked()), this, SLOT(adjustAtom()) );
+    }
 
-    // Add a check box button
-    showAtomCb = new QCheckBox( hb1, "showAtom" );
-    showAtomCb->setText( "Show Atoms" );
-    showAtomCb->setChecked( TRUE );
+    // Create a widget for colors that fill the next row
+    {
+        m_colorWidget = new QWidget(this);
 
-    // Define a callback for this toggle switch
-    connect( showAtomCb, SIGNAL(clicked()), this, SLOT(adjustAtom()) );
+        QHBoxLayout *hbox = new QHBoxLayout(m_colorWidget);
 
-    // Create a hboxlayout that will fill the next row
-    hb2 = new Q3HBox( this, "hb2" );
+        // Add a label
+        hbox->addWidget(new QLabel(" Color: "));
 
-    // Add a label and color labels
-    QLabel *colorL = new QLabel( hb2, "colorL" );
-    colorL->setText( " Color: " );
-    colorLabel0 = new ColorLabel(hb2);
-    colorLabel1 = new ColorLabel(hb2);
-    colorLabel2 = new ColorLabel(hb2);
-    colorLabel3 = new ColorLabel(hb2);
-    colorLabel4 = new ColorLabel(hb2);
-    colorLabel5 = new ColorLabel(hb2);
-    colorLabel0->setFixedHeight( LABEL_HEIGHT );
-    colorLabel1->setFixedHeight( LABEL_HEIGHT );
-    colorLabel2->setFixedHeight( LABEL_HEIGHT );
-    colorLabel3->setFixedHeight( LABEL_HEIGHT );
-    colorLabel4->setFixedHeight( LABEL_HEIGHT );
-    colorLabel5->setFixedHeight( LABEL_HEIGHT );
-    colorLabel0->setColor( 1.0, 1.0, 1.0);
-    colorLabel1->setColor( 1.0, 1.0, 1.0);
-    colorLabel2->setColor( 1.0, 1.0, 1.0);
-    colorLabel3->setColor( 1.0, 1.0, 1.0);
-    colorLabel4->setColor( 1.0, 1.0, 1.0);
-    colorLabel5->setColor( 1.0, 1.0, 1.0);
+        // 6 color labels to display the various color
+        // schemes
+        colorLabel0 = createColorLabel(hbox, m_colorWidget);
+        colorLabel1 = createColorLabel(hbox, m_colorWidget);
+        colorLabel2 = createColorLabel(hbox, m_colorWidget);
+        colorLabel3 = createColorLabel(hbox, m_colorWidget);
+        colorLabel4 = createColorLabel(hbox, m_colorWidget);
+        colorLabel5 = createColorLabel(hbox, m_colorWidget);
 
-    // Add a push button
-    colorButton = new QPushButton( hb2, "colorButton" );
-    colorButton->setText( "Set Color..." );
+        // Add a push button to edit the color
+        colorButton = new QPushButton("Set Color...", m_colorWidget);
+        hbox->addWidget(colorButton);
+        connect( colorButton, SIGNAL(clicked()), this, SLOT(setColorCb()) );
+    }
 
-    // Define a callback for this button
-    QObject::connect( colorButton, SIGNAL(clicked()), this, SLOT(setColorCb()) );
-
-    // Create a hboxlayout that will fill the next row
+    // Create a sizebox widget that will
+    // be added to next row in @see buildLayout()
     sizeBox = new SizeBox( this );
 
     // Create a widget for the next row
     {
-        hb4ColorCriterion = new QWidget(this);
+        m_colorCriterionWidget = new QWidget(this);
 
         // Add radiobuttons and a label
         QLabel *modeL = new QLabel(" Color Criterion: ");
@@ -125,7 +143,7 @@ AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
         colorModeButtonGroup->addButton(colorMode3);
         connect(colorModeButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(adjustCriterion()) );
 
-        QHBoxLayout *hbox = new QHBoxLayout(hb4ColorCriterion);
+        QHBoxLayout *hbox = new QHBoxLayout(m_colorCriterionWidget);
         hbox->addWidget(modeL);
         hbox->addWidget(colorMode);
     }
@@ -140,7 +158,7 @@ AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
 
     // Create widget (of buttons) for the lowest row
     {
-        hb5BondsDoneApply = new QWidget(this);
+        m_BondsDoneApplyWidget = new QWidget(this);
 
         // Create pushbuttons that will go into the lowest row
         QPushButton * bonds = new QPushButton("Bonds...");
@@ -155,7 +173,7 @@ AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
         QPushButton * cancel = new QPushButton("Cancel");
         connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
 
-        QHBoxLayout *hbox = new QHBoxLayout(hb5BondsDoneApply);
+        QHBoxLayout *hbox = new QHBoxLayout(m_BondsDoneApplyWidget);
         hbox->addWidget(bonds);
         hbox->addStretch(1);
         hbox->addWidget(done);
@@ -177,9 +195,9 @@ AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
     renderQuality = LOW;
 
     // Set defaults appropriate for startup without data
-    colorButton->setDisabled( TRUE );
-    sizeBox->setDisabled( TRUE );
-    hb4ColorCriterion->setDisabled( TRUE );
+    colorButton->setDisabled(true);
+    sizeBox->setDisabled(true);
+    m_colorCriterionWidget->setDisabled(true);
 
     // Build default layout
     this->buildLayout( TYPE );
@@ -207,11 +225,11 @@ void AtomBoard::buildLayout( colorCriterion crit )
     atomBox = new Q3GridLayout( this, numRows, numCols, SPACE, SPACE, "atomBox" );
 
     // Add components that are always needed
-    atomBox->addMultiCellWidget( hb1, 0, 0, 0, -1);
-    atomBox->addMultiCellWidget( hb2, 1, 1, 0, -1);
+    atomBox->addMultiCellWidget( m_atomWidget, 0, 0, 0, -1);
+    atomBox->addMultiCellWidget( m_colorWidget, 1, 1, 0, -1);
     atomBox->addMultiCellWidget( sizeBox, 2, 2, 0, -1);
-    atomBox->addMultiCellWidget( hb4ColorCriterion, 3, 3, 0, -1);
-    atomBox->addMultiCellWidget( hb5BondsDoneApply, numRows-1, numRows-1, 0, -1);
+    atomBox->addMultiCellWidget( m_colorCriterionWidget, 3, 3, 0, -1);
+    atomBox->addMultiCellWidget( m_BondsDoneApplyWidget, numRows-1, numRows-1, 0, -1);
 
     // Add additional components
     switch (crit) {
@@ -334,24 +352,24 @@ void AtomBoard::setAtom( void )
             switch( thisShowParticle) {
             case TRUE:
                 if (thisAtomIndex >= 0) {
-                    hb4ColorCriterion->setDisabled( FALSE );
+                    m_colorCriterionWidget->setDisabled(false);
                 }
                 else {
-                    hb4ColorCriterion->setDisabled( TRUE );
+                    m_colorCriterionWidget->setDisabled(true);
                 }
                 break;
             case FALSE:
-                sizeBox->setDisabled( TRUE );
-                hb4ColorCriterion->setDisabled( TRUE );
+                sizeBox->setDisabled(true);
+                m_colorCriterionWidget->setDisabled(true);
                 break;
             }
 
             // Adjust the toggles
             if (atomRenderStyle != ADOT && atomRenderStyle != ALINE && thisShowParticle) {
-                sizeBox->setDisabled( FALSE );
+                sizeBox->setDisabled(false);
             }
             else {
-                sizeBox->setDisabled( TRUE );
+                sizeBox->setDisabled(true);
             }
 
             // Adjust size settings
@@ -362,23 +380,23 @@ void AtomBoard::setAtom( void )
             switch (colorCrit) {
             case TYPE:
                 this->buildLayout( TYPE );
-                colorMode0->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode0->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case POSITION:
                 this->buildLayout( POSITION );
-                colorMode1->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode1->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case PROPERTY:
                 this->buildLayout( PROPERTY );
-                colorMode2->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode2->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case COLORCODE:
                 this->buildLayout( COLORCODE );
-                colorMode3->setChecked( TRUE );
-                colorButton->setDisabled( TRUE );
+                colorMode3->setChecked(true);
+                colorButton->setDisabled(true);
                 colorLabel0->switchOff();
                 colorLabel1->switchOff();
                 colorLabel2->switchOff();
@@ -408,16 +426,16 @@ void AtomBoard::adjustAtom() {
     case TRUE:
         if (thisAtomIndex >= 0) {
             this->buildLayout( (*thisPd).colorCrit[thisAtomIndex] );
-            colorButton->setDisabled( FALSE );
+            colorButton->setDisabled(false);
         }
         else {
             this->buildLayout( TYPE );
-            colorButton->setDisabled( TRUE );
+            colorButton->setDisabled(true);
         }
         break;
     case FALSE:
         this->buildLayout( TYPE );
-        colorButton->setDisabled( TRUE );
+        colorButton->setDisabled(true);
         break;
     }
 }
@@ -642,7 +660,7 @@ void AtomBoard::getColors( float r0, float g0, float b0, float r1, float g1, flo
 void AtomBoard::setDotStyle( void )
 {	
     atomRenderStyle = ADOT;
-    sizeBox->setDisabled( TRUE );
+    sizeBox->setDisabled(true);
 }
 
 
@@ -650,7 +668,7 @@ void AtomBoard::setDotStyle( void )
 void AtomBoard::setLineStyle( void )
 {	
     atomRenderStyle = ALINE;
-    sizeBox->setDisabled( TRUE );
+    sizeBox->setDisabled(true);
 }
 
 
@@ -658,7 +676,7 @@ void AtomBoard::setLineStyle( void )
 void AtomBoard::setCubeStyle( void )
 {	
     atomRenderStyle = ACUBE;
-    sizeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
 }
 
 
@@ -666,7 +684,7 @@ void AtomBoard::setCubeStyle( void )
 void AtomBoard::setCylinderStyle( void )
 {	
     atomRenderStyle = ACYLINDER;
-    sizeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
 }
 
 
@@ -674,7 +692,7 @@ void AtomBoard::setCylinderStyle( void )
 void AtomBoard::setConeStyle( void )
 {	
     atomRenderStyle = ACONE;
-    sizeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
 }
 
 
@@ -682,7 +700,7 @@ void AtomBoard::setConeStyle( void )
 void AtomBoard::setSphereStyle( void )
 {	
     atomRenderStyle = ASPHERE;
-    sizeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
 }
 
 

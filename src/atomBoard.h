@@ -27,37 +27,23 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef ATOMB_H
 #define ATOMB_H 
 
-#include "mainForm.h"
-#include "codeBox.h"
-#include "colorBoard.h"
-#include "colorLabel.h"
-#include "defaultParticles.h"
-#include "defaults.h"
-#include "fileFunctions.h"
-#include "positionBox.h"
-#include "propertyBox.h"
-#include "sizeBox.h"
+#include <QDialog>
+
 #include "data.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <cmath>
-#include <sys/stat.h>
-#include <unistd.h>
-
-#include <q3buttongroup.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qspinbox.h>
-#include <qsizepolicy.h>
-#include <qwidget.h>
-
 class Q3GridLayout;
+class QCheckBox;
+class QPushButton;
+class QComboBox;
+class QRadioButton;
+
+class MainForm;
+class ColorLabel;
+class ColorBoard;
+class CodeBox;
+class SizeBox;
+class PositionBox;
+class PropertyBox;
 
 // Atom board dialog widget
 class AtomBoard: public QDialog
@@ -103,11 +89,10 @@ private:
     PropertyBox * propertyBox;
     SizeBox * sizeBox;
     Q3GridLayout * atomBox;
-    Q3HBox *hb1;
-    Q3HBox *hb2;
-    Q3HBox *hb3;
-    QWidget *hb4ColorCriterion;
-    QWidget *hb5BondsDoneApply;
+    QWidget *m_atomWidget;
+    QWidget *m_colorWidget;
+    QWidget *m_colorCriterionWidget;
+    QWidget *m_BondsDoneApplyWidget;
     QComboBox * atomCob;
     QComboBox * styleCob;
     QCheckBox * showAtomCb;
