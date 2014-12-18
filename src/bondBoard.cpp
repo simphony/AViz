@@ -379,9 +379,9 @@ void BondBoard::setData( void )
 
         // Find out what combination of particles is set
 	if (haveFEntry)
-        	typeCopy( (const char *)fParticleCob->currentText(), (char *)&thisFParticle );
+            typeCopy( qPrintable(fParticleCob->currentText()), (char *)&thisFParticle );
 	if (haveTEntry)
-        	typeCopy( (const char *)tParticleCob->currentText(), (char *)&thisTParticle );
+            typeCopy( qPrintable(tParticleCob->currentText()), (char *)&thisTParticle );
 
         for (i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisTParticle ) == TRUE) {
@@ -413,9 +413,9 @@ void BondBoard::setFAtom( void )
 {
 	// Find out what combination of atoms is set
 	if (haveFEntry)
-		typeCopy( (const char *)fParticleCob->currentText(), (char *)&thisFParticle ); 
+        typeCopy( qPrintable(fParticleCob->currentText()), (char *)&thisFParticle );
 	if (haveTEntry)
-		typeCopy( (const char *)tParticleCob->currentText(), (char *)&thisTParticle ); 
+        typeCopy( qPrintable(tParticleCob->currentText()), (char *)&thisTParticle );
 
 	for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
 		if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisFParticle ) == TRUE) {
@@ -447,9 +447,9 @@ void BondBoard::setTAtom( void )
 {
 	// Find out what combination of atoms is set
 	if (haveFEntry)
-		typeCopy( (const char *)fParticleCob->currentText(), (char *)&thisFParticle ); 
+        typeCopy( qPrintable(fParticleCob->currentText()), (char *)&thisFParticle );
 	if (haveTEntry)
-		typeCopy( (const char *)tParticleCob->currentText(), (char *)&thisTParticle ); 
+        typeCopy( qPrintable(tParticleCob->currentText()), (char *)&thisTParticle );
 
 	for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
 		if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisTParticle ) == TRUE) {
@@ -483,9 +483,9 @@ void BondBoard::setBond( int radio )
 	
 	// Find out what combination of atoms is set
 	if (haveFEntry)
-		typeCopy( (const char *)fParticleCob->currentText(), (char *)&thisFParticle ); 
+        typeCopy( qPrintable(fParticleCob->currentText()), (char *)&thisFParticle );
 	if (haveTEntry)
-		typeCopy( (const char *)tParticleCob->currentText(), (char *)&thisTParticle ); 
+        typeCopy( qPrintable(tParticleCob->currentText()), (char *)&thisTParticle );
 
 	for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
 		if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisTParticle ) == TRUE) {
@@ -623,9 +623,9 @@ void BondBoard::readToggles( void )
 
 	// Find out what combination of atoms is set
 	if (haveFEntry)
-		typeCopy( (const char *)fParticleCob->currentText(), (char *)&thisFParticle ); 
+        typeCopy( qPrintable(fParticleCob->currentText()), (char *)&thisFParticle );
 	if (haveTEntry)
-		typeCopy( (const char *)tParticleCob->currentText(), (char *)&thisTParticle ); 
+        typeCopy( qPrintable(tParticleCob->currentText()), (char *)&thisTParticle );
 
 	// Find out the combination of atoms to which these 
 	// settings apply

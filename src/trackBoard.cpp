@@ -193,7 +193,7 @@ void TrackBoard::setData( void )
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 for (int j=0;j<typeCob->count()-1;j++) {
                         if (QString::compare(typeCob->itemText(j), typeCob->itemText(j+1)) > 0) {
-                                typeCopy( (const char *)typeCob->itemText(j+1), (char *)&tmp );
+                                typeCopy( qPrintable(typeCob->itemText(j+1)), (char *)&tmp );
                                 typeCob->insertItem(j, QString( (char *)&tmp));
                                 typeCob->removeItem(j+2);
                         }
@@ -218,7 +218,7 @@ void TrackBoard::setType( void )
         thisTypeIndex = -1;
 
         // Find out what combination of atoms is set
-        typeCopy( (const char *)typeCob->currentText(), (char *)&thisType);
+        typeCopy( qPrintable(typeCob->currentText()), (char *)&thisType);
 
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisType) == TRUE) {

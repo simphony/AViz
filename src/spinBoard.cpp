@@ -306,7 +306,7 @@ void SpinBoard::setData( void )
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 for (int j=0;j<spinCob->count()-1;j++) {
                         if (QString::compare(spinCob->itemText(j), spinCob->itemText(j+1)) > 0) {
-                                typeCopy( (const char *)spinCob->itemText(j+1), (char *)&tmp );
+                                typeCopy( qPrintable(spinCob->itemText(j+1)), (char *)&tmp );
                                 spinCob->insertItem(j, QString( (char *)&tmp));
                                 spinCob->removeItem(j+2);
                         }
@@ -331,7 +331,7 @@ void SpinBoard::setSpin( void )
         thisSpinIndex = -1;
 
         // Find out what combination of particles is set
-        typeCopy( (const char *)spinCob->currentText(), (char *)&thisSpin );
+        typeCopy( qPrintable(spinCob->currentText()), (char *)&thisSpin );
 
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisSpin ) == TRUE) {

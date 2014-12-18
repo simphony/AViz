@@ -307,7 +307,7 @@ void PoreBoard::setData( void )
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 for (int j=0;j<poreCob->count()-1;j++) {
                         if (QString::compare(poreCob->itemText(j), poreCob->itemText(j+1)) > 0) {
-                                typeCopy( (const char *)poreCob->itemText(j+1), (char *)&tmp );
+                                typeCopy( qPrintable(poreCob->itemText(j+1)), (char *)&tmp );
                                 poreCob->insertItem(j, QString( (char *)&tmp));
                                 poreCob->removeItem(j+2);
                         }
@@ -332,7 +332,7 @@ void PoreBoard::setPore( void )
         thisPoreIndex = -1;
 
         // Find out what combination of particles is set
-        typeCopy( (const char *)poreCob->currentText(), (char *)&thisPore );
+        typeCopy( qPrintable(poreCob->currentText()), (char *)&thisPore );
 
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisPore ) == TRUE) {

@@ -309,7 +309,7 @@ void LcBoard::setData( void )
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 for (int j=0;j<lcCob->count()-1;j++) {
                         if (QString::compare(lcCob->itemText(j), lcCob->itemText(j+1)) > 0) {
-                                typeCopy( (const char *)lcCob->itemText(j+1), (char *)&tmp );
+                                typeCopy( qPrintable(lcCob->itemText(j+1)), (char *)&tmp );
                                 lcCob->insertItem(j, QString( (char *)&tmp));
                                 lcCob->removeItem(j+2);
                         }
@@ -334,7 +334,7 @@ void LcBoard::setLc( void )
         thisLcIndex = -1;
 
         // Find out what combination of atoms is set
-        typeCopy( (const char *)lcCob->currentText(), (char *)&thisLc );
+        typeCopy( qPrintable(lcCob->currentText()), (char *)&thisLc );
 
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisLc ) == TRUE) {

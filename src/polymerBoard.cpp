@@ -292,7 +292,7 @@ void PolymerBoard::setData( void )
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 for (int j=0;j<atomCob->count()-1;j++) {
                         if (QString::compare(atomCob->itemText(j), atomCob->itemText(j+1)) > 0) {
-                                typeCopy( (const char *)atomCob->itemText(j+1), (char *)&tmp );
+                                typeCopy( qPrintable(atomCob->itemText(j+1)), (char *)&tmp );
                                 atomCob->insertItem(j, QString( (char *)&tmp));
                                 atomCob->removeItem(j+2);
                         }
@@ -317,7 +317,7 @@ void PolymerBoard::setPolymerAtom( void )
         thisPolymerAtomIndex = -1;
 
         // Find out what combination of atoms is set
-        typeCopy( (const char *)atomCob->currentText(), (char *)&thisAtom);
+        typeCopy( qPrintable(atomCob->currentText()), (char *)&thisAtom);
 
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisAtom) == TRUE) {
