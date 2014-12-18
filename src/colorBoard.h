@@ -27,31 +27,19 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef COLORB_H
 #define COLORB_H 
 
-#include "colorLabel.h"
-#include "data.h"
-#include "defaults.h"
-#include "defaultParticles.h"
-#include "fileFunctions.h"
+#include <QDialog>
 
-#include <qcombobox.h>
-#include <qdialog.h>
-#include <q3frame.h>
-#include <q3hbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qslider.h>
-#include <q3vbox.h>
-#include <qwidget.h>
-#include <q3gridlayout.h>
+class Q3GridLayout;
+class Q3HBox;
+class QLabel;
+class QSlider;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <cmath>
-#include <sys/stat.h>
-#include <unistd.h>
+class ColorLabel;
+class AtomBoard;
+class SpinBoard;
+class LcBoard;
+class PolymerBoard;
+class PoreBoard;
 
 // Note: Pointers to composite widgets are defined in 
 // mainForm.cpp and not here -- it causes problems 
@@ -66,11 +54,11 @@ public:
 
 public slots:
 	void buildLayout( char );
-	void setAtomBoardAddress( char * );
-	void setSpinBoardAddress( char * );
-	void setLcBoardAddress( char * );
-	void setPolymerBoardAddress( char * );
-	void setPoreBoardAddress( char * );
+    void setAtomBoardAddress( AtomBoard * );
+    void setSpinBoardAddress( SpinBoard * );
+    void setLcBoardAddress( LcBoard * );
+    void setPolymerBoardAddress( PolymerBoard * );
+    void setPoreBoardAddress( PoreBoard * );
 	void setColor( float, float, float );
 	void setColor( float, float, float, float, float, float );
 	void setColor( float, float, float, float, float, float, float, float, float );
@@ -87,19 +75,17 @@ private slots:
 	void bcancel();
 
 private:
-	QWidget * ab;
-	QWidget * sb;
-	QWidget * lcb;
-	QWidget * pob;
-	QWidget * pb;
+    AtomBoard * ab;
+    SpinBoard * sb;
+    LcBoard * lcb;
+    PolymerBoard * pob;
+    PoreBoard * pb;
 	Q3GridLayout * colorBox;
 	Q3HBox * hb0, * hb1, * hb2, *hb9;
-	QLabel *atomL; 
 	QLabel * topL, * centerL, * bottomL;
 	ColorLabel * colorLabel0;
 	ColorLabel * colorLabel1;
 	ColorLabel * colorLabel2;
-	QComboBox * atomSpinCob;
 	QSlider * redS0, * greenS0, * blueS0;
 	QSlider * redS1, * greenS1, * blueS1;
 	QSlider * redS2, * greenS2, * blueS2;

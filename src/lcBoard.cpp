@@ -35,6 +35,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "sizeBox.h"
 #include "positionBox.h"
 #include "propertyBox.h"
+#include "fileFunctions.h"
+#include "defaultParticles.h" // typeCopy, typeCmp
 
 #include <Q3GridLayout>
 #include <QLabel>
@@ -556,7 +558,7 @@ void LcBoard::setColors()
 				                                // This is an ugly hack, 
 								// intended to propagate the 
 								// address of the calling class
-				                                cb->setLcBoardAddress( (char *)this );
+                                                cb->setLcBoardAddress(this );
 				                                cb->buildLayout( colors );
 				                        }
 		       				}
@@ -600,7 +602,7 @@ void LcBoard::setColors()
 				                                // This is an ugly hack, 
 								// intended to propagate the 
 								// address of the calling class
-				                                cb->setLcBoardAddress( (char *)this );
+                                                cb->setLcBoardAddress(this );
 				                                cb->buildLayout( colors );
 				                        }
 		       	                 	}
@@ -643,7 +645,7 @@ void LcBoard::setColors()
 				                                // This is an ugly hack, 
 								// intended to propagate the 
 								// address of the calling class
-				                                cb->setLcBoardAddress( (char *)this );
+                                                cb->setLcBoardAddress(this );
 				                                cb->buildLayout( colors );
 				                        }
 			                        }
@@ -704,7 +706,7 @@ void LcBoard::setColors()
 		                        if (cb) {
 		                                // This is an ugly hack, intended to
 		                                // propagate the address of the calling class
-		                                cb->setLcBoardAddress( (char *)this );
+                                        cb->setLcBoardAddress(this);
 		                                cb->buildLayout( colors );
 		                        }
 				}

@@ -518,7 +518,7 @@ void AtomBoard::setColors()
                 if (cb) {
                     // This is an ugly hack, intended to
                     // propagate the address of the calling class
-                    cb->setAtomBoardAddress( (char *)this );
+                    cb->setAtomBoardAddress(this);
                     cb->buildLayout( colors );
                 }
             }
@@ -577,7 +577,7 @@ void AtomBoard::setColors()
                 if (cb) {
                     // This is an ugly hack, intended to
                     // propagate the address of the calling class
-                    cb->setAtomBoardAddress( (char *)this );
+                    cb->setAtomBoardAddress(this);
                     cb->buildLayout( colors );
                 }
             }

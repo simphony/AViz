@@ -522,7 +522,7 @@ void PolymerBoard::setColors()
 					if (cb) {
 						// This is an ugly hack, intended to 
 						// propagate the address of the calling class
-						cb->setPolymerBoardAddress( (char *)this );
+                        cb->setPolymerBoardAddress(this);
 						cb->buildLayout( colors );
 					}
 				}
@@ -581,7 +581,7 @@ void PolymerBoard::setColors()
 					if (cb) {
 						// This is an ugly hack, intended to 
 						// propagate the address of the calling class
-						cb->setPolymerBoardAddress( (char *)this );
+                        cb->setPolymerBoardAddress(this);
 						cb->buildLayout( colors );
 					}
 				}

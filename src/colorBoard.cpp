@@ -26,17 +26,19 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "colorBoard.h"
 
+#include <Q3GridLayout>
+#include <Q3HBox>
+#include <QLabel>
+#include <QSlider>
+
+#include "defaults.h"
 #include "atomBoard.h"
 #include "lcBoard.h"
 #include "polymerBoard.h"
 #include "poreBoard.h"
 #include "spinBoard.h"
-
-// Private pointers are defined in colorBoard.h, but the corresponding
-// header files cannot be included there -- it causes problems regarding
-// the mutual inclusion of  header files.  Here the pointers are of
-// the general class QWiget and must be cast into the specific
-// class
+#include "colorLabel.h"
+#include "data.h"
 
 // Make a popup dialog box. Note:
 // It is the responsibility of the calling widget 
@@ -302,35 +304,35 @@ ColorBoard::ColorBoard( QWidget * parent, const char * name )
 
 
 // Set a pointer to the calling class
-void ColorBoard::setAtomBoardAddress( char * thisAB )
+void ColorBoard::setAtomBoardAddress( AtomBoard * thisAB )
 {
-	ab = (AtomBoard * )thisAB;
+    ab = thisAB;
 }
 
 // Set a pointer to the calling class
-void ColorBoard::setSpinBoardAddress( char * thisSB )
+void ColorBoard::setSpinBoardAddress( SpinBoard * thisSB )
 {
-	sb = (SpinBoard * )thisSB;
+    sb = thisSB;
 }
 
 
 // Set a pointer to the calling class
-void ColorBoard::setLcBoardAddress( char * thisLcB )
+void ColorBoard::setLcBoardAddress( LcBoard * thisLcB )
 {	
-	lcb = (LcBoard * )thisLcB;
+    lcb = thisLcB;
 }
 
 
 // Set a pointer to the calling class
-void ColorBoard::setPolymerBoardAddress( char * thisPoB )
+void ColorBoard::setPolymerBoardAddress( PolymerBoard * thisPoB )
 {	
-	pob = (PolymerBoard * )thisPoB;
+    pob = thisPoB;
 }
 
 // Set a pointer to the calling class
-void ColorBoard::setPoreBoardAddress( char * thisPB )
+void ColorBoard::setPoreBoardAddress( PoreBoard * thisPB )
 {	
-	pb = (PoreBoard * )thisPB;
+    pb = thisPB;
 }
 
 
@@ -581,19 +583,19 @@ void ColorBoard::bdone()
 	this->bapply();
 
 	if (ab) {
-		((AtomBoard *)ab)->getColorBoardPos( this->pos().x(), this->pos().y() );
+        ab->getColorBoardPos( this->pos().x(), this->pos().y() );
 	}
 	if (sb) {
-		((SpinBoard *)sb)->getColorBoardPos( this->pos().x(), this->pos().y() );
+        sb->getColorBoardPos( this->pos().x(), this->pos().y() );
 	}
 	if (lcb) {
-		((LcBoard *)lcb)->getColorBoardPos( this->pos().x(), this->pos().y() );
+        lcb->getColorBoardPos( this->pos().x(), this->pos().y() );
 	}
 	if (pb) {
-		((PoreBoard *)pb)->getColorBoardPos( this->pos().x(), this->pos().y() );
+        pb->getColorBoardPos( this->pos().x(), this->pos().y() );
 	}
 	if (pob) {
-		((PolymerBoard *)pob)->getColorBoardPos( this->pos().x(), this->pos().y() );
+        pob->getColorBoardPos( this->pos().x(), this->pos().y() );
 	}
 
 	// Hide now
@@ -601,15 +603,15 @@ void ColorBoard::bdone()
 
 	// Close yourself
 	if (ab) 
-		((AtomBoard *)ab)->closeColorBoard();
+        ab->closeColorBoard();
 	if (sb) 
-		((SpinBoard *)sb)->closeColorBoard();
+        sb->closeColorBoard();
 	if (lcb) 
-		((LcBoard *)lcb)->closeColorBoard();
+        lcb->closeColorBoard();
 	if (pb) 
-		((PoreBoard *)pb)->closeColorBoard();
-	if (pb) 
-		((PolymerBoard *)pob)->closeColorBoard();
+        pb->closeColorBoard();
+    if (pob)
+        pob->closeColorBoard();
 }
 
 
@@ -618,19 +620,19 @@ void ColorBoard::bdone()
 void ColorBoard::bapply()
 {
 	if (ab) {
-		((AtomBoard *)ab)->getColors( red0, green0, blue0, red1, green1, blue1 );
+        ab->getColors( red0, green0, blue0, red1, green1, blue1 );
 	}
 	if (sb) {
-		((SpinBoard *)sb)->getColors( red0, green0, blue0, red1, green1, blue1 );
+        sb->getColors( red0, green0, blue0, red1, green1, blue1 );
 	}
 	if (lcb) {
-		((LcBoard *)lcb)->getColors( red0, green0, blue0, red1, green1, blue1, red2, green2, blue2 );
+        lcb->getColors( red0, green0, blue0, red1, green1, blue1, red2, green2, blue2 );
 	}
 	if (pb) {
-		((PoreBoard *)pb)->getColors( red0, green0, blue0, red1, green1, blue1, red2, green2, blue2 );
+        pb->getColors( red0, green0, blue0, red1, green1, blue1, red2, green2, blue2 );
 	}
 	if (pob) {
-		((PolymerBoard *)pob)->getColors( red0, green0, blue0, red1, green1, blue1 );
+        pob->getColors( red0, green0, blue0, red1, green1, blue1 );
 	}
 }
 
@@ -639,24 +641,24 @@ void ColorBoard::bapply()
 void ColorBoard::bcancel()
 {
 	if (ab) {
-		((AtomBoard *)ab)->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org );
-		((AtomBoard *)ab)->getColorBoardPos( this->pos().x(), this->pos().y() );
+        ab->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org );
+        ab->getColorBoardPos( this->pos().x(), this->pos().y() );
 	}
 	if (sb) {
-		((SpinBoard *)sb)->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org );
-		((SpinBoard *)sb)->getColorBoardPos( this->pos().x(), this->pos().y() );
+        sb->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org );
+        sb->getColorBoardPos( this->pos().x(), this->pos().y() );
 	}
 	if (lcb) {
-		((LcBoard *)lcb)->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org, red2Org, green2Org, blue2Org );
-		((LcBoard *)lcb)->getColorBoardPos( this->pos().x(), this->pos().y() );
+        lcb->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org, red2Org, green2Org, blue2Org );
+        lcb->getColorBoardPos( this->pos().x(), this->pos().y() );
 	}
 	if (pb) {
-		((PoreBoard *)pb)->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org, red2Org, green2Org, blue2Org );
-		((PoreBoard *)pb)->getColorBoardPos( this->pos().x(), this->pos().y() );
+        pb->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org, red2Org, green2Org, blue2Org );
+        pb->getColorBoardPos( this->pos().x(), this->pos().y() );
 	}
 	if (pob) {
-		((PolymerBoard *)pob)->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org );
-		((PolymerBoard *)pob)->getColorBoardPos( this->pos().x(), this->pos().y() );
+        pob->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org );
+        pob->getColorBoardPos( this->pos().x(), this->pos().y() );
 	}
 
 	// Hide now
@@ -664,13 +666,13 @@ void ColorBoard::bcancel()
 
 	// Close yourself
 	if (ab) 
-		((AtomBoard *)ab)->closeColorBoard();
+        ab->closeColorBoard();
 	if (sb) 
-		((SpinBoard *)sb)->closeColorBoard();
+        sb->closeColorBoard();
 	if (lcb) 
-		((LcBoard *)lcb)->closeColorBoard();
+        lcb->closeColorBoard();
 	if (pb) 
-		((PoreBoard *)pb)->closeColorBoard();
+        pb->closeColorBoard();
 	if (pob) 
-		((PolymerBoard *)pob)->closeColorBoard();
+        pob->closeColorBoard();
 }

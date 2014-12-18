@@ -34,6 +34,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "codeBox.h"
 #include "colorBoard.h"
 #include "colorLabel.h"
+#include "fileFunctions.h"
+#include "defaultParticles.h" // typeCopy, typeCmp
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -539,7 +541,7 @@ void SpinBoard::setColors()
 		                        if (cb) {
 		                                // This is an ugly hack, intended to
 		                                // propagate the address of the calling class
-		                                cb->setSpinBoardAddress( (char *)this );
+                                        cb->setSpinBoardAddress(this);
 		                                cb->buildLayout( colors );
 		                        }
 		                }
@@ -599,7 +601,7 @@ void SpinBoard::setColors()
 		                        if (cb) {
 		                                // This is an ugly hack, intended to
 		                                // propagate the address of the calling class
-		                                cb->setSpinBoardAddress( (char *)this );
+                                        cb->setSpinBoardAddress(this);
 		                                cb->buildLayout( colors );
 		                        }
 		                }

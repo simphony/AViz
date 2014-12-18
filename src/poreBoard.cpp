@@ -37,6 +37,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "propertyBox.h"
 #include "sizeBox.h"
 #include "typeColorNumberBox.h"
+#include "fileFunctions.h"
+#include "defaultParticles.h" // typeCopy, typeCmp
 
 #include <QPushButton>
 #include <QLabel>
@@ -552,7 +554,7 @@ void PoreBoard::setColors()
 								// This is an ugly hack, 
 								// intended to propagate the 
 								// address of the calling class
-				                                cb->setPoreBoardAddress( (char *)this );
+                                                cb->setPoreBoardAddress( this);
 				                                cb->buildLayout( colors );
 				                        }
 				                }
@@ -596,7 +598,7 @@ void PoreBoard::setColors()
 		                                                // This is an ugly hack, 
 								// intended to propagate the 
 								// address of the calling class
-		                                                cb->setPoreBoardAddress( (char *)this );
+                                                        cb->setPoreBoardAddress( this);
 		                                                cb->buildLayout( colors );
 		                                        }
 		                                }
@@ -657,7 +659,7 @@ void PoreBoard::setColors()
 		                        if (cb) {
 		                                // This is an ugly hack, intended to
 		                                // propagate the address of the calling class
-		                                cb->setPoreBoardAddress( (char *)this );
+                                        cb->setPoreBoardAddress( this);
 		                                cb->buildLayout( colors );
 		                        }
 		                }
