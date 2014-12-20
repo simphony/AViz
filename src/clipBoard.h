@@ -39,20 +39,18 @@ class QCheckBox;
 // Clip board dialog widget
 class ClipBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-    ClipBoard( QWidget * parent=0);
+    ClipBoard(MainForm*, QWidget * parent=0);
 
-public slots:
-	void setMainFormAddress( MainForm * );
-	void setClip( viewParam );
+    void setClip( viewParam );
 
 private slots:
-	void registerSettings();
-	void autoClip();
-	void bdone();
-	void bapply();
-	void bcancel();
+    void registerSettings();
+    void autoClip();
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
     MainForm * mainForm;

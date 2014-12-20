@@ -904,8 +904,7 @@ void MainForm::launchBonds() {
 // Callback function to launch the clip settings panel
 void MainForm::launchClip() {
     if (!clb) {
-        clb = new ClipBoard(this);
-        clb->setMainFormAddress(this);
+        clb = new ClipBoard(this /*mainForm*/, this /*parent*/);
     }
 
     // Get the current settings and show
