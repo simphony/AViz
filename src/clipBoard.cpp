@@ -26,88 +26,59 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "clipBoard.h"
 
+#include <cmath>
+
+#include <QCheckBox>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QLabel>
+
 #include "floatSpin.h"
 #include "mainForm.h"
 #include "parameterLimits.h" // for MAXCLIP
-
-#include <QCheckBox>
-#include <q3hbox.h>
-#include <QPushButton>
-
-#include <Q3GridLayout>
-#include <QLabel>
-
-#include <cmath>
+#include "widgets/doneapplycancelwidget.h"
 
 // Make a popup dialog box 
 ClipBoard::ClipBoard(MainForm *mainForm, QWidget * parent)
     : QDialog(parent, Qt::WType_TopLevel ), mainForm(mainForm){
     setWindowTitle( "AViz: Set Clipping" );
 
-    // Insert a grid that will hold spin boxes
-    // plus a row of control buttons
-    const int numCols = 3;
-    const int numRows = 3;
-    Q3GridLayout * clipBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "clipBox" );
+    QGridLayout * grid = new QGridLayout(this);
+    grid->setHorizontalSpacing(SPACE);
+    grid->setVerticalSpacing(SPACE);
 
     // Create a label and a spin box
-    clipNearL = new QLabel( this, "clipNearL" );
-    clipNearL->setText( " Near Clip Dist: ");
-    clipBox->addWidget( clipNearL, 0, 0 );
+    clipNearL = new QLabel(" Near Clip Dist: ");
+    grid->addWidget( clipNearL, 0, 0 );
 
     clipNearSb = new QFSpinBox( this );
     clipNearSb->setMaximum( MAXCLIP );
-    clipBox->addWidget( clipNearSb, 0, 1 );
+    grid->addWidget( clipNearSb, 0, 1 );
 
     // Create a label and a spin box
-    clipFarL = new QLabel( this, "clipFarL" );
-    clipFarL->setText( " Far Clip Dist: ");
-    clipBox->addWidget( clipFarL, 1, 0 );
+    clipFarL = new QLabel(" Far Clip Dist: ");
+    grid->addWidget( clipFarL, 1, 0 );
 
     clipFarSb = new QFSpinBox( this );
     clipFarSb->setMaximum( MAXCLIP );
-    clipBox->addWidget( clipFarSb, 1, 1 );
+    grid->addWidget( clipFarSb, 1, 1 );
 
     // Create check boxes to control auto clipping
-    autoNearCb = new QCheckBox( this, "autoNearCb" );
-    autoNearCb->setText( " Auto Clip " );
-    clipBox->addWidget( autoNearCb, 0, 2 );
+    autoNearCb = new QCheckBox(" Auto Clip ");
+    grid->addWidget( autoNearCb, 0, 2 );
 
-    autoFarCb = new QCheckBox( this, "autoFarCb" );
-    autoFarCb->setText( " Auto Clip " );
-    clipBox->addWidget( autoFarCb, 1, 2 );
+    autoFarCb = new QCheckBox(" Auto Clip ");
+    grid->addWidget( autoFarCb, 1, 2 );
 
     // Define callbacks for these checkboxes
     QObject::connect( autoNearCb, SIGNAL(clicked()), this, SLOT(autoClip()) );
     QObject::connect( autoFarCb, SIGNAL(clicked()), this, SLOT(autoClip()) );
 
-    // Create a hboxlayout that will fill the lowest row
-    Q3HBox * hb = new Q3HBox( this, "hb" );
-    clipBox->addMultiCellWidget( hb, numRows-1, numRows-1, 0, -1);
-
-    // Create a placeholder
-    QLabel * emptyL = new QLabel( hb, "emptyL" );
-
-    // Create pushbuttons that will go into the lowest row
-    QPushButton * done = new QPushButton( hb, "done" );
-    done->setText( "Done" );
-
-    // Define a callback for that button
-    QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
-
-    QPushButton * apply = new QPushButton( hb, "apply" );
-    apply->setText( "Apply" );
-
-    // Define a callback for that button
-    QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
-
-    QPushButton * cancel = new QPushButton( hb, "cancel" );
-    cancel->setText( "Cancel" );
-
-    // Define a callback for that button
-    QObject::connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
-
-    hb->setStretchFactor( emptyL, 10 );
+    DoneApplyCancelWidget *doneApplyCancel = new DoneApplyCancelWidget(this);
+    connect(doneApplyCancel, SIGNAL(done()), this, SLOT(bdone()) );
+    connect(doneApplyCancel, SIGNAL(applied()), this, SLOT(bapply()) );
+    connect(doneApplyCancel, SIGNAL(canceled()), this, SLOT(hide()));
+    grid->addWidget(doneApplyCancel, 2 /*fromRow*/, 0 /*fromCol*/, 1/*rowSpan*/, 3/*colSpan*/);
 }
 
 // Get the current settings from the main form
