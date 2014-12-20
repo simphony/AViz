@@ -1034,9 +1034,7 @@ void MainForm::launchSpins()
 // (to manipulate data)
 void MainForm::launchStretch() {
     if (!stb) {
-        stb = new StretchBoard(this);
-        if (stb)
-            stb->setMainFormAddress(this);
+        stb = new StretchBoard(this /*MainForm*/, this);
     }
 
     // Adjust the controls and show

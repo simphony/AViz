@@ -39,10 +39,9 @@ class StretchBoard: public QDialog
 {
     Q_OBJECT
 public:
-    StretchBoard(QWidget * parent=0);
+    StretchBoard(MainForm * , QWidget * parent=0);
 
 public slots:
-    void setMainFormAddress( MainForm * );
     void setData( viewParam );
 
 private slots:
@@ -56,7 +55,7 @@ private slots:
     void bcancel();
 
 private:
-    MainForm * mainForm;
+    MainForm *m_mainForm;
     QFSpinBox * stretchSBX;
     QFSpinBox * stretchSBY;
     QFSpinBox * stretchSBZ;
