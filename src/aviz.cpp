@@ -180,6 +180,7 @@ void AViz::openXYZ( void ) {
 
     // Launch a customized file selector (with generate file list button)
     CustomFileDialog * fd = new CustomFileDialog();
+    fd->setModal(true);
     connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(readFile(const QString&)) );
     fd->show();
 }
@@ -192,6 +193,7 @@ void AViz::openList( void ) {
 
     // Launch a standard file selector
     QFileDialog *fd = new QFileDialog();
+    fd->setModal(true);
     fd->setFileMode(QFileDialog::ExistingFile);
     fd->setNameFilter("General (*)");
     connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(readFile(const QString&)) );
@@ -207,6 +209,7 @@ void AViz::openViewParam( void ) {
 
     // Launch standard a file selector
     QFileDialog *fd = new QFileDialog();
+    fd->setModal(true);
     fd->setFileMode(QFileDialog::ExistingFile);
     fd->setNameFilter("AViz viewpoint files (*.vpm)");
     connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(readFile(const QString&)) );
@@ -221,6 +224,7 @@ void AViz::saveViewParam( void ) {
 
     // Launch a standard file selector
     QFileDialog *fd = new QFileDialog();
+    fd->setModal(true);
     fd->setFileMode(QFileDialog::AnyFile);
     fd->setNameFilter("AViz viewpoint files (*.vpm)");
 
@@ -770,11 +774,11 @@ void AViz::setAnnotationString( char* annotationString )
 
 // Save a PNG screenshot file
 void AViz::savePNGFile( void ) {
-	// Prepare reading of a coordinate file
     setFileType( PNG_FILE );
 
 	// Launch a standard file selector
     QFileDialog * fd = new QFileDialog();
+    fd->setModal(true);
     fd->setFileMode(QFileDialog::AnyFile);
     fd->setNameFilter("PNG image files (*.png)");
 	connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(snapFile(const QString&)) );
