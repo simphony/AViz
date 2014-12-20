@@ -27,8 +27,9 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef STRETCHB_H
 #define STRETCHB_H 
 
-#include "data.h"
 #include <QDialog>
+
+#include "data.h"
 
 class QFSpinBox;
 class MainForm;
@@ -36,30 +37,30 @@ class MainForm;
 // Stretch board dialog widget
 class StretchBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
     StretchBoard(QWidget * parent=0);
 
 public slots:
-	void setMainFormAddress( MainForm * );
-	void setData( viewParam );
+    void setMainFormAddress( MainForm * );
+    void setData( viewParam );
 
 private slots:
-	void stretchChanged( void );
-	void registerSettings( void );
-	void doResetX( void );
-	void doResetY( void );
-	void doResetZ( void );
-	void bdone();
-	void bapply();
-	void bcancel();
+    void stretchChanged( void );
+    void registerSettings( void );
+    void doResetX( void );
+    void doResetY( void );
+    void doResetZ( void );
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	MainForm * mainForm;
-	QFSpinBox * stretchSBX;
-	QFSpinBox * stretchSBY;
-	QFSpinBox * stretchSBZ;
-        bool stretchChange;
+    MainForm * mainForm;
+    QFSpinBox * stretchSBX;
+    QFSpinBox * stretchSBY;
+    QFSpinBox * stretchSBZ;
+    bool stretchChange;
 };
 
 #endif // STRETCHB_H
