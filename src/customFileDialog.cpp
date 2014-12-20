@@ -26,40 +26,47 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "customFileDialog.h"
 
+#include <cstdio>
+
+#include <QPushButton>
+#include <QLayout>
+
+const QString generalFilter = "General (*)";
+const QString xyzFilter = "XYZ coordinate files (*.xyz)";
+
+
 // Define a file dialog with a generate file list button
 CustomFileDialog::CustomFileDialog( )
-    : Q3FileDialog( 0, 0, TRUE )
-{
-	QPushButton * genFileListPb = new QPushButton( this );
+    :  QFileDialog () {
+    setFileMode( QFileDialog::ExistingFile );
+
+    QStringList filts;
+    filts << xyzFilter << generalFilter;
+    setNameFilters(filts);
+    selectNameFilter(xyzFilter);
+
+    /// @todo this needs to be changed/reevaulated
+    /// in qt3 this was added with addToolButton
+    /// however, this is deprecated
+    QPushButton * genFileListPb = new QPushButton(this);
 	genFileListPb->setText( "Generate File List" );
-
-	addToolButton( genFileListPb, FALSE );
-
-	// Add a callback function
-	connect( genFileListPb, SIGNAL(clicked()), SLOT(generateFileList()) );
+    layout()->addWidget(genFileListPb);
+    int result = connect(genFileListPb, SIGNAL(clicked()), SLOT(generateFileList()));
+    Q_UNUSED(result);
 }
 
-
-// Deconstructor
-CustomFileDialog::~CustomFileDialog()
-{
-	// Do nothing
+CustomFileDialog::~CustomFileDialog() {
 }
 
-// Callback function to generate a file list
-void CustomFileDialog::generateFileList( )
-{
+// Generate a file list
+void CustomFileDialog::generateFileList() {
 	// Get the current directory
-	QString currentDir = this->dirPath();
+    const QString currentDir = directory().absolutePath();
 
 	// Generate a file list
-	char * command = (char *)malloc(BUFSIZ);
-	sprintf(command, "cd %s; ls *xyz* |sort > filelist.dat", (const char *)currentDir );
-	system(command);
-	free(command);
+    const QString command = QString("cd %1; ls *xyz* |sort > filelist.dat").arg(currentDir);
+    system(qPrintable(command));
 
 	// Re-read the directory
-	QString filter = "General (*)";
-	this->setFilters( filter );
-	this->rereadDir();
+    selectNameFilter( generalFilter );
 }

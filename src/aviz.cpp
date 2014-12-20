@@ -173,17 +173,12 @@ fileType AViz::isFileType( void )
 
 
 // Open a XYZ coordinate file
-void AViz::openXYZ( void )
-{
+void AViz::openXYZ( void ) {
 	// Prepare reading of a coordinate file
 	this->setFileType( XYZ_FILE );
 
 	// Launch a customized file selector (with generate file list button)
-	Q3FileDialog * fd = new CustomFileDialog();
-	fd->setMode( Q3FileDialog::ExistingFile );
-	QString filter = "XYZ coordinate files (*.xyz)";
-	fd->setFilters( filter );
-
+    CustomFileDialog * fd = new CustomFileDialog();
 	connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(readFile(const QString&)) );
 	fd->show();
 }

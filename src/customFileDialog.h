@@ -24,17 +24,17 @@ Contact address: Computational Physics Group, Dept. of Physics,
                  gery@tx.technion.ac.il
 ***********************************************************************/
 
-#ifndef CFILEDI_H
-#define CFILEDI_H 
+#ifndef CUSTOM_FILE_DIALOG_H
+#define CUSTOM_FILE_DIALOG_H
 
-#include <q3filedialog.h>
-#include <qpushbutton.h>
+#include <QFileDialog>
 
-#include <stdio.h>
-#include <stdlib.h>
-
-// Define floating-point spin box
-class CustomFileDialog: public Q3FileDialog
+/*! @class CustomFileDialog
+    Custom file dialog to select an existing xyz file.  The dialog
+    also includes a button to generate a text file containing a list
+    of the xyz files in the current directory.
+*/
+class CustomFileDialog: public QFileDialog
 { 
 	Q_OBJECT
 public:
@@ -42,6 +42,8 @@ public:
 	~CustomFileDialog();
 
 private slots:
+    /// generates a file ( ) containing a list of file names
+    /// of all xyz files in current directory
 	void generateFileList();
 };
 
