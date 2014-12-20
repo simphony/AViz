@@ -1062,8 +1062,7 @@ void MainForm::launchTrack(const QString &fn) {
 // Callback function to launch the translation settings panel
 void MainForm::launchTranslation() {
     if (!tb) {
-        tb = new TranslationBoard(this);
-        tb->setMainFormAddress(this);
+        tb = new TranslationBoard(this /*mainForm*/, this);
     }
 
     // Adjust the controls and show

@@ -25,190 +25,136 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ***********************************************************************/
 
 #include "translationBoard.h"
-#include "floatSpin.h"
-#include "mainForm.h"
-
-#include <Q3GridLayout>
-#include <Q3HBox>
-#include <QLabel>
-#include <QPushButton>
 
 #include <cmath>
 
-TranslationBoard::TranslationBoard(QWidget * parent)
-    : QDialog(parent, Qt::WType_TopLevel)
-{
-	setWindowTitle( "AViz: Set Data Translation" );
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
 
-	// Insert a grid that will hold control buttons
-	const int numCols = 4;
-        const int numRows = 4;
-        Q3GridLayout * transBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "transBox" );
+#include "floatSpin.h"
+#include "mainForm.h"
+#include "parameterLimits.h"
+#include "widgets/doneapplycancelwidget.h"
 
-	// Create labels and spin boxes
-	QLabel * labelx = new QLabel( this, "labelx" );
-	labelx->setText( " Translate X: ");
-	transBox->addWidget( labelx, 0, 0);
+TranslationBoard::TranslationBoard(MainForm *mainForm, QWidget * parent)
+    : QDialog(parent, Qt::WType_TopLevel), mainForm(mainForm) {
+    setWindowTitle( "AViz: Set Data Translation" );
+
+    // Insert a grid that will hold control buttons
+    QGridLayout *grid = new QGridLayout(this);
+    grid->setHorizontalSpacing(SPACE);
+    grid->setVerticalSpacing(SPACE);
+
+    // Create labels and spin boxes
+    QLabel * labelx = new QLabel(" Translate X: ");
+    grid->addWidget( labelx, 0, 0);
     panSBX = new QFSpinBox( this );
-	panSBX->setMaximum( MAXPAN );
-	panSBX->setMinimum( MINPAN );
-	transBox->addWidget( panSBX, 0, 1);
+    panSBX->setMaximum( MAXPAN );
+    panSBX->setMinimum( MINPAN );
+    grid->addWidget( panSBX, 0, 1);
 
-	QLabel * labely = new QLabel( this, "labely" );
-	labely->setText( " Translate Y: ");
-	transBox->addWidget( labely, 1, 0);
+    QLabel * labely = new QLabel(" Translate Y: ");
+    grid->addWidget( labely, 1, 0);
     panSBY = new QFSpinBox( this );
-	panSBY->setMaximum( MAXPAN );
-	panSBY->setMinimum( MINPAN );
-	transBox->addWidget( panSBY, 1, 1);
+    panSBY->setMaximum( MAXPAN );
+    panSBY->setMinimum( MINPAN );
+    grid->addWidget( panSBY, 1, 1);
 
-	QLabel * labelz = new QLabel( this, "labelz" );
-	labelz->setText( " Translate Z: ");
-	transBox->addWidget( labelz, 2, 0);
+    QLabel * labelz = new QLabel(" Translate Z: ");
+    grid->addWidget( labelz, 2, 0);
     panSBZ = new QFSpinBox( this );
-	panSBZ->setMaximum( MAXPAN );
-	panSBZ->setMinimum( MINPAN );
-	transBox->addWidget( panSBZ, 2, 1);
+    panSBZ->setMaximum( MAXPAN );
+    panSBZ->setMinimum( MINPAN );
+    grid->addWidget( panSBZ, 2, 1);
 
-	// Create labels and spin boxes
-	QLabel * labelright = new QLabel( this, "labelright" );
-	labelright->setText( " Translate Right: ");
-	transBox->addWidget( labelright, 0, 2);
+    // Create labels and spin boxes
+    QLabel * labelright = new QLabel(" Translate Right: ");
+    grid->addWidget( labelright, 0, 2);
     panSBRight = new QFSpinBox( this );
-	panSBRight->setMaximum( MAXPAN );
-	panSBRight->setMinimum( MINPAN );
-	transBox->addWidget( panSBRight, 0, 3);
+    panSBRight->setMaximum( MAXPAN );
+    panSBRight->setMinimum( MINPAN );
+    grid->addWidget( panSBRight, 0, 3);
 
-	QLabel * labeltop = new QLabel( this, "labeltop" );
-	labeltop->setText( " Translate Top: ");
-	transBox->addWidget( labeltop, 1, 2);
+    QLabel * labeltop = new QLabel(" Translate Top: ");
+    grid->addWidget( labeltop, 1, 2);
     panSBTop = new QFSpinBox( this );
-	panSBTop->setMaximum( MAXPAN );
-	panSBTop->setMinimum( MINPAN );
-	transBox->addWidget( panSBTop, 1, 3);
+    panSBTop->setMaximum( MAXPAN );
+    panSBTop->setMinimum( MINPAN );
+    grid->addWidget( panSBTop, 1, 3);
 
-	QLabel * labelforward = new QLabel( this, "labelforward" );
-	labelforward->setText( " Translate Forward: ");
-	transBox->addWidget( labelforward, 2, 2);
+    QLabel * labelforward = new QLabel(" Translate Forward: ");
+    grid->addWidget( labelforward, 2, 2);
     panSBForward = new QFSpinBox( this );
-	panSBForward->setMaximum( MAXPAN );
-	panSBForward->setMinimum( MINPAN );
-	transBox->addWidget( panSBForward, 2, 3);
+    panSBForward->setMaximum( MAXPAN );
+    panSBForward->setMinimum( MINPAN );
+    grid->addWidget( panSBForward, 2, 3);
 
-	// Create a hboxlayout that will fill the lowest row
-	Q3HBox * hb = new Q3HBox( this, "hb" );
-	transBox->addMultiCellWidget( hb, numRows-1, numRows-1, 0, -1);
-	
-	// Create a pushbutton
-	QPushButton * reset = new QPushButton( hb, "reset" );
-	reset->setText( "Reset Translation" );
+    // Create a pushbutton
+    QPushButton *reset = new QPushButton("Reset Translation");
+    connect( reset, SIGNAL(clicked()), SLOT(doReset()) );
+    grid->addWidget(reset, 3, 0);
 
-	// Create a placeholder 
-	QLabel * emptyL = new QLabel( hb, "emptyL" );
-
-	// Define a callback for this pushbutton
-        connect( reset, SIGNAL(clicked()), SLOT(doReset()) );
-
-	// Create more pushbuttons that will go into the lowest row
-	QPushButton * done = new QPushButton( hb, "done" );
-	done->setText( "Done" ); 
-
-	 // Define a callback for that button
-        QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
-
-	QPushButton * apply = new QPushButton( hb, "apply" );
-	apply->setText( "Apply" ); 
-
-	 // Define a callback for that button
-        QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
-
-	QPushButton * cancel = new QPushButton( hb, "cancel" );
-	cancel->setText( "Cancel" ); 
-
-	 // Define a callback for that button
-        QObject::connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
-
-	hb->setStretchFactor( emptyL, 10 );
+    DoneApplyCancelWidget *doneApplyCancel = new DoneApplyCancelWidget(this);
+    connect(doneApplyCancel, SIGNAL(done()), this, SLOT(bdone()) );
+    connect(doneApplyCancel, SIGNAL(applied()), this, SLOT(bapply()) );
+    connect(doneApplyCancel, SIGNAL(canceled()), this, SLOT(hide()));
+    grid->addWidget(doneApplyCancel, 3 /*fromRow*/, 1 /*fromCol*/, 1/*rowSpan*/, 3/*colSpan*/);
 }
-
-
-// Set a pointer to the main form
-void TranslationBoard::setMainFormAddress( MainForm * thisMF )
-{
-	mainForm = thisMF;
-}
-
 
 // Receive the current view parameters
-void TranslationBoard::setData( viewParam vp )
-{
-	panSBX->setValue( (int)floor(10.0*vp.panX+0.5) ); 
-	panSBY->setValue( (int)floor(10.0*vp.panY+0.5) ); 
-	panSBZ->setValue( (int)floor(10.0*vp.panZ+0.5) ); 
-	panSBRight->setValue( (int)floor(10.0*vp.panRight+0.5) ); 
-	panSBTop->setValue( (int)floor(10.0*vp.panTop+0.5) ); 
-	panSBForward->setValue( (int)floor(10.0*vp.panForward+0.5) ); 
+void TranslationBoard::setData( viewParam vp ) {
+    panSBX->setValue( (int)floor(10.0*vp.panX+0.5) );
+    panSBY->setValue( (int)floor(10.0*vp.panY+0.5) );
+    panSBZ->setValue( (int)floor(10.0*vp.panZ+0.5) );
+    panSBRight->setValue( (int)floor(10.0*vp.panRight+0.5) );
+    panSBTop->setValue( (int)floor(10.0*vp.panTop+0.5) );
+    panSBForward->setValue( (int)floor(10.0*vp.panForward+0.5) );
 }
 
 
 // Read the current settings
-void TranslationBoard::registerSettings( void )
-{
-        // Get the current settings
-        if (mainForm) {
-                viewParam * vp = mainForm->getViewParam( );
+void TranslationBoard::registerSettings( void ) {
+    // Get the current settings
+    viewParam * vp = mainForm->getViewParam( );
 
-		// Update the values
-		(*vp).panX = (float)panSBX->value()/10.0;
-		(*vp).panY = (float)panSBY->value()/10.0;
-		(*vp).panZ = (float)panSBZ->value()/10.0;
-		(*vp).panRight = (float)panSBRight->value()/10.0;
-		(*vp).panTop = (float)panSBTop->value()/10.0;
-		(*vp).panForward = (float)panSBForward->value()/10.0;
-	}
+    // Update the values
+    (*vp).panX = (float)panSBX->value()/10.0;
+    (*vp).panY = (float)panSBY->value()/10.0;
+    (*vp).panZ = (float)panSBZ->value()/10.0;
+    (*vp).panRight = (float)panSBRight->value()/10.0;
+    (*vp).panTop = (float)panSBTop->value()/10.0;
+    (*vp).panForward = (float)panSBForward->value()/10.0;
 }
 
 
 // Reset the translations
-void TranslationBoard::doReset( void )
-{
-	viewParam thisVp;
+void TranslationBoard::doReset( void ) {
+    viewParam thisVp;
 
-	thisVp.panX = thisVp.panY = thisVp.panZ = 0.0;
-	thisVp.panRight = thisVp.panTop = thisVp.panForward = 0.0;
+    thisVp.panX = thisVp.panY = thisVp.panZ = 0.0;
+    thisVp.panRight = thisVp.panTop = thisVp.panForward = 0.0;
 
-	this->setData( thisVp );
+    this->setData( thisVp );
 }
 
 
 // Complete the setting: save the view parameter and hide the board
-void TranslationBoard::bdone()
-{
-	this->registerSettings();
+void TranslationBoard::bdone() {
+    registerSettings();
 
-	// Re-do the graphics, using the new parameters
-	if (mainForm) 
-		mainForm->updateRendering();
+    // Re-do the graphics, using the new parameters
+    mainForm->updateRendering();
 
-	// Hide now
-        hide();
+    // Hide now
+    hide();
 }
 
 
 // Accept the setting: save the view parameter
-void TranslationBoard::bapply()
-{
-	this->registerSettings();
+void TranslationBoard::bapply() {
+    registerSettings();
 
-	// Re-do the graphics, using the new parameters
-	if (mainForm) 
-		mainForm->updateRendering();
-}
-
-
-// Cancel the setting: hide the board
-void TranslationBoard::bcancel()
-{
-	// Hide now
-	hide();
+    // Re-do the graphics, using the new parameters
+    mainForm->updateRendering();
 }

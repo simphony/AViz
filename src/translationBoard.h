@@ -29,7 +29,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <QDialog>
 
-#include "parameterLimits.h"
 #include "data.h"
 
 class MainForm;
@@ -38,29 +37,26 @@ class QFSpinBox;
 // Translation board dialog widget
 class TranslationBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-    TranslationBoard(QWidget * parent=0);
+    TranslationBoard(MainForm *, QWidget * parent=0);
 
-public slots:
-	void setMainFormAddress( MainForm * );
-	void setData( viewParam );
+    void setData( viewParam );
 
 private slots:
-	void registerSettings( void );
-	void doReset( void );
-	void bdone();
-	void bapply();
-	void bcancel();
+    void registerSettings();
+    void doReset();
+    void bdone();
+    void bapply();
 
 private:
-	MainForm * mainForm;
-	QFSpinBox * panSBX;
-	QFSpinBox * panSBY;
-	QFSpinBox * panSBZ;
-	QFSpinBox * panSBRight;
-	QFSpinBox * panSBTop;
-	QFSpinBox * panSBForward;
+    MainForm * mainForm;
+    QFSpinBox * panSBX;
+    QFSpinBox * panSBY;
+    QFSpinBox * panSBZ;
+    QFSpinBox * panSBRight;
+    QFSpinBox * panSBTop;
+    QFSpinBox * panSBForward;
 };
 
 #endif // TRANSB_H
