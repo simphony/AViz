@@ -27,6 +27,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "aviz.h"
 
 #include <Q3PopupMenu>
+#include <QFileDialog>
 
 // Constructor and deconstructor of main widget
 AViz::AViz() 
@@ -174,65 +175,57 @@ fileType AViz::isFileType( void )
 
 // Open a XYZ coordinate file
 void AViz::openXYZ( void ) {
-	// Prepare reading of a coordinate file
-	this->setFileType( XYZ_FILE );
+    // Prepare reading of a coordinate file
+    setFileType( XYZ_FILE );
 
-	// Launch a customized file selector (with generate file list button)
+    // Launch a customized file selector (with generate file list button)
     CustomFileDialog * fd = new CustomFileDialog();
-	connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(readFile(const QString&)) );
-	fd->show();
+    connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(readFile(const QString&)) );
+    fd->show();
 }
 
 
 // Open a list of coordinate files
-void AViz::openList( void )
-{
-        // Prepare reading of a list of coordinate files
-        this->setFileType( ANIMATION);
+void AViz::openList( void ) {
+    // Prepare reading of a list of coordinate files
+    setFileType( ANIMATION);
 
-        // Launch a standard file selector
-        Q3FileDialog * fd = new Q3FileDialog();
-        fd->setMode( Q3FileDialog::ExistingFile );
-        QString filter = "General (*)";
-        fd->setFilters( filter );
-
-        connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(readFile(const QString&)) );
-        fd->show();
+    // Launch a standard file selector
+    QFileDialog *fd = new QFileDialog();
+    fd->setFileMode(QFileDialog::ExistingFile);
+    fd->setNameFilter("General (*)");
+    connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(readFile(const QString&)) );
+    fd->show();
 }
 
 
 
 // Read the parameters defining view parameters
-void AViz::openViewParam( void )
-{
-	// Prepare reading of a view parameters file
-	this->setFileType( VP_FILE );
+void AViz::openViewParam( void ) {
+    // Prepare reading of a view parameters file
+    setFileType( VP_FILE );
 
-	// Launch standard a file selector
-	Q3FileDialog * fd = new Q3FileDialog();
-	fd->setMode( Q3FileDialog::ExistingFile );
-	QString filter = "AViz viewpoint files (*.vpm)";
-	fd->setFilters( filter );
-
-	connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(readFile(const QString&)) );
-	fd->show();
+    // Launch standard a file selector
+    QFileDialog *fd = new QFileDialog();
+    fd->setFileMode(QFileDialog::ExistingFile);
+    fd->setNameFilter("AViz viewpoint files (*.vpm)");
+    connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(readFile(const QString&)) );
+    fd->show();
 }
 
 
 // Save the parameters defining view parameters
-void AViz::saveViewParam( void )
-{
-	// Prepare writing of a view parameters files
-	this->setFileType( VP_FILE );
+void AViz::saveViewParam( void ) {
+    // Prepare writing of a view parameters files
+    setFileType( VP_FILE );
 
-	// Launch a standard file selector
-	Q3FileDialog * fd = new Q3FileDialog();
-	fd->setMode( Q3FileDialog::AnyFile );
-	QString filter = "AViz viewpoint files (*.vpm)";
-	fd->setFilters( filter );
+    // Launch a standard file selector
+    QFileDialog *fd = new QFileDialog();
+    fd->setFileMode(QFileDialog::AnyFile);
+    fd->setNameFilter("AViz viewpoint files (*.vpm)");
 
-	connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(writeFile(const QString&)) );
-	fd->show();
+    connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(writeFile(const QString&)) );
+    fd->show();
 }
 
 
@@ -776,17 +769,14 @@ void AViz::setAnnotationString( char* annotationString )
 }
 
 // Save a PNG screenshot file
-void AViz::savePNGFile( void )
-{
+void AViz::savePNGFile( void ) {
 	// Prepare reading of a coordinate file
-	this->setFileType( PNG_FILE );
+    setFileType( PNG_FILE );
 
 	// Launch a standard file selector
-	Q3FileDialog * fd = new Q3FileDialog();
-	fd->setMode( Q3FileDialog::AnyFile );
-	QString filter = "PNG image files (*.png)";
-	fd->setFilters( filter );
-
+    QFileDialog * fd = new QFileDialog();
+    fd->setFileMode(QFileDialog::AnyFile);
+    fd->setNameFilter("PNG image files (*.png)");
 	connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(snapFile(const QString&)) );
 	fd->show();
 }
