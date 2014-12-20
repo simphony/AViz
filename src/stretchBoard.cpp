@@ -29,7 +29,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <cmath>
 
 #include <QGridLayout>
-#include <q3hbox.h>
 #include <QPushButton>
 #include <QLabel>
 
@@ -46,6 +45,8 @@ StretchBoard::StretchBoard(MainForm *mainForm, QWidget * parent)
 
     // Insert a grid that will hold control buttons
     QGridLayout *grid = new QGridLayout(this);
+    grid->setHorizontalSpacing(SPACE);
+    grid->setVerticalSpacing(SPACE);
 
     // Create labels and spin boxes
     grid->addWidget(new QLabel(" Stretch X: "), 0, 0);
