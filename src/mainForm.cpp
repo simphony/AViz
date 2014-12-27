@@ -917,8 +917,7 @@ void MainForm::launchClip() {
 // Callback function to launch the explicit view point settings panel
 void MainForm::launchExplicit() {
     if (!eb) {
-        eb = new ExplicitBoard(this);
-        eb->setMainFormAddress(this);
+        eb = new ExplicitBoard(this /*mainForm*/, this /*parent*/);
     }
 
     // Get the current settings and show
