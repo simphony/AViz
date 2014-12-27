@@ -31,7 +31,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QPixmap>
 #include <QGridLayout>
 #include <QLabel>
-#include <QPushButton>
 
 #include "parameterLimits.h"
 #include "floatSpin.h"
@@ -72,7 +71,7 @@ ExplicitBoard::ExplicitBoard(MainForm *mainForm, QWidget * parent)
     grid->addWidget( new QLabel(strPhiRange), 0, 2 );
 
     // Create a label and a spin box - THETA
-    thetaL = new QLabel(this);
+    QLabel *thetaL = new QLabel(this);
     QPixmap thetaPm = QPixmap( theta );
     thetaL->setPixmap(  thetaPm );
     grid->addWidget( thetaL, 1, 0 );
@@ -87,7 +86,7 @@ ExplicitBoard::ExplicitBoard(MainForm *mainForm, QWidget * parent)
     grid->addWidget(new QLabel(strThetaRange), 1, 2 );
 
     // Create a label and a spin box - CHI
-    chiL = new QLabel(this);
+    QLabel *chiL = new QLabel(this);
     chiL->setPixmap( QPixmap(chi) );
     grid->addWidget( chiL, 2, 0 );
 
@@ -101,7 +100,7 @@ ExplicitBoard::ExplicitBoard(MainForm *mainForm, QWidget * parent)
     grid->addWidget(new QLabel(strChiRange), 2, 2 );
 
     // Create a label and a spin box - DOLLY
-    dollyL = new QLabel(this);
+    QLabel *dollyL = new QLabel(this);
     dollyL->setPixmap( QPixmap(dolly) );
     grid->addWidget( dollyL, 3, 0 );
 

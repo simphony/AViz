@@ -54,8 +54,6 @@ private slots:
 private:
     MainForm * mainForm;
     QFSpinBox * phiSb, * thetaSb, * chiSb, * dollySb, * fovySb;
-    QLabel * phiL, * thetaL, * chiL, * dollyL, * fovyL;
-    QLabel * phiRangeL, * thetaRangeL, * chiRangeL, * dollyRangeL, * fovyRangeL;
 };
 
 #endif // EXPLICITB_H
