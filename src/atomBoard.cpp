@@ -153,7 +153,7 @@ AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
     // are shown only when appropriate
     positionBox = new PositionBox( this, "positionBox" );
     propertyBox = new PropertyBox( this, "positionBox" );
-    codeBox = new CodeBox( this, "codeBox" );
+    codeBox = new CodeBox(this);
 
 
     // Create widget (of buttons) for the lowest row

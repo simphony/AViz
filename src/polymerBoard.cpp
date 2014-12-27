@@ -121,7 +121,7 @@ PolymerBoard::PolymerBoard(QWidget * parent)
 	// are shown only when appropriate
 	positionBox = new PositionBox( this, "positionBox" );
 	propertyBox = new PropertyBox( this, "positionBox" );
-	codeBox = new CodeBox( this, "codeBox" );
+    codeBox = new CodeBox(this);
 
 	// Create a hboxlayout that will fill the lowest row
 	hb5 = new Q3HBox( this, "hb5" );

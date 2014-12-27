@@ -26,56 +26,58 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "codeBox.h"
 
-#include <Q3Frame>
+#include <QLabel>
+#include <QSpinBox>
+#include <QFrame>
+#include <QHBoxLayout>
+
 
 // Make a box
-CodeBox::CodeBox( QWidget * parent, const char * name )
-    : Q3HBox( parent, name )
-{
-	this->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
-	this->setMargin( SPACE );
+CodeBox::CodeBox(QWidget * parent)
+    : QFrame(parent) {
+    setFrameStyle(QFrame::Box | QFrame::Sunken );
 
-        codeRedL = new QLabel( this, "codeRedL" );
-	codeRedL->setText( "  Red: Property" ); 
-	codeRedSb = new QSpinBox( this, "codeRedSb" ); 
-	codeRedSb->setMinimum( 1 );
-	codeRedSb->setMaximum( 8 );
-	codeRedSb->setFixedWidth( SPIN_WIDTH );
-        codeGreenL = new QLabel( this, "codeGreenL" );
-	codeGreenL->setText( "  Green: Property" ); 
-	codeGreenSb = new QSpinBox( this, "codeGreenSb" ); 
-	codeGreenSb->setMinimum( 1 );
-	codeGreenSb->setMaximum( 8 );
-	codeGreenSb->setFixedWidth( SPIN_WIDTH );
-        codeBlueL = new QLabel( this, "codeBlueL" );
-	codeBlueL->setText( "  Blue: Property" ); 
-	codeBlueSb = new QSpinBox( this, "codeBlueSb" ); 
-	codeBlueSb->setMinimum( 1 );
-	codeBlueSb->setMaximum( 8 );
-	codeBlueSb->setFixedWidth( SPIN_WIDTH );
+    QHBoxLayout *hBox = new QHBoxLayout(this);
+    hBox->setMargin( SPACE );
+
+    hBox->addWidget(new QLabel("  Red: Property"));
+    codeRedSb = new QSpinBox(this);
+    hBox->addWidget(codeRedSb);
+    codeRedSb->setMinimum( 1 );
+    codeRedSb->setMaximum( 8 );
+    codeRedSb->setFixedWidth( SPIN_WIDTH );
+    hBox->addWidget(new QLabel("  Green: Property"));
+    codeGreenSb = new QSpinBox(this);
+    hBox->addWidget(codeGreenSb);
+    codeGreenSb->setMinimum( 1 );
+    codeGreenSb->setMaximum( 8 );
+    codeGreenSb->setFixedWidth( SPIN_WIDTH );
+    hBox->addWidget(new QLabel("  Blue: Property"));
+    codeBlueSb = new QSpinBox(this);
+    hBox->addWidget(codeBlueSb);
+    codeBlueSb->setMinimum( 1 );
+    codeBlueSb->setMaximum( 8 );
+    codeBlueSb->setFixedWidth( SPIN_WIDTH );
 }
 
 
 // Adjust the controls
-void CodeBox::setParticle( particleData * thisPd, int thisIndex )
-{
-	if (thisIndex >= 0) {
-		codeRedSb->setValue( (int)(*thisPd).colorCritCodeRed[thisIndex]+1 );
-		codeGreenSb->setValue( (int)(*thisPd).colorCritCodeGreen[thisIndex]+1 );
-		codeBlueSb->setValue( (int)(*thisPd).colorCritCodeBlue[thisIndex]+1 );
-	}
+void CodeBox::setParticle( particleData * thisPd, int thisIndex ) {
+    if (thisIndex >= 0) {
+        codeRedSb->setValue( (int)(*thisPd).colorCritCodeRed[thisIndex]+1 );
+        codeGreenSb->setValue( (int)(*thisPd).colorCritCodeGreen[thisIndex]+1 );
+        codeBlueSb->setValue( (int)(*thisPd).colorCritCodeBlue[thisIndex]+1 );
+    }
 }
 
 
 // Read the controls
-void CodeBox::readToggles( particleData * thisPd, int thisIndex )
-{
-	if (thisIndex >= 0 && thisPd) {
-        	// Read the settings and
-	        // update the particle data entry
-                (*thisPd).colorCritCodeRed[thisIndex] = (colorCriterionColumn)(codeRedSb->value()-1);
-                (*thisPd).colorCritCodeGreen[thisIndex] = (colorCriterionColumn)(codeGreenSb->value()-1);
-                (*thisPd).colorCritCodeBlue[thisIndex] = (colorCriterionColumn)(codeBlueSb->value()-1);
-		
-	}
+void CodeBox::readToggles( particleData * thisPd, int thisIndex ) {
+    if (thisIndex >= 0 && thisPd) {
+        // Read the settings and
+        // update the particle data entry
+        (*thisPd).colorCritCodeRed[thisIndex] = (colorCriterionColumn)(codeRedSb->value()-1);
+        (*thisPd).colorCritCodeGreen[thisIndex] = (colorCriterionColumn)(codeGreenSb->value()-1);
+        (*thisPd).colorCritCodeBlue[thisIndex] = (colorCriterionColumn)(codeBlueSb->value()-1);
+    }
 }
