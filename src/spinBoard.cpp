@@ -136,7 +136,7 @@ SpinBoard::SpinBoard(QWidget * parent)
     codeBox = new CodeBox(this);
 
     // Create a box that will fill the next row
-    lineTypeBox = new LineTypeBox( this, "lineTypeBox" );
+    lineTypeBox = new LineTypeBox( this );
 
     // Create a hboxlayout that will fill the lowest row
     hb5 = new Q3HBox( this, "hb5" );
@@ -214,10 +214,6 @@ void SpinBoard::buildLayout( colorCriterion crit )
         if (spinBox) {
                 spinBox->~Q3GridLayout();
         }
-
-        // Destroy existing layout
-        // Adjust height of dialog board
-        this->setFixedHeight( numRows*ROW_HEIGHT );
 
         // Insert a grid that will hold control buttons
         spinBox = new Q3GridLayout( this, numRows, numCols, SPACE, SPACE, "spinBox" );

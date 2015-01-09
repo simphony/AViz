@@ -26,98 +26,123 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "lineTypeBox.h"
 
+#include <cmath>
+
+#include <QLabel>
+#include <QRadioButton>
+#include <QSpinBox>
+#include <QHBoxLayout>
+#include <QGridLayout>
+#include <QGroupBox>
+
+
 // Make a box
-LineTypeBox::LineTypeBox( QWidget * parent, const char * name )
-    : Q3HBox( parent, name )
-{
-	// Add radiobuttons and a label
-	thickL = new QLabel( this, "thickL" );
-	thickL->setText( "  Thickness: " );
+LineTypeBox::LineTypeBox( QWidget * parent )
+    : QWidget( parent ) {
 
-        // Create radiobuttons to set the thickness
-        footThickness = new Q3ButtonGroup( 2, Qt::Horizontal, this, "footThickness");
+    QHBoxLayout *hbox = new QHBoxLayout(this);
 
-        footThickness0 = new QRadioButton( footThickness, "thin" );
-        footThickness0->setText( "Thin" );
-        footThickness1 = new QRadioButton( footThickness, "medium" );
-        footThickness1->setText( "Medium" );
-        footThickness2 = new QRadioButton( footThickness, "thick" );
-        footThickness2->setText( "Thick" );
-        footThickness3 = new QRadioButton( footThickness, "fat" );
-        footThickness3->setText( "Fat" );
-        footThickness4 = new QRadioButton( footThickness, "varying_linear" );
-        footThickness4->setText( "Linear Variation" );
-        footThickness5 = new QRadioButton( footThickness, "varying_quadratic" );
-        footThickness5->setText( "Quadratic Variation" );
+    // Add radiobuttons and a label
+    thickL =new QLabel("  Thickness: ");
+    hbox->addWidget(thickL);
 
+    // Create radiobuttons to set the thickness
+    footThickness = new QGroupBox();
+    hbox->addWidget(footThickness);
 
-        // Create a label and a spin box
-        footEmL = new QLabel( this, "footEmL" );
-        footEmL->setText( "  Emission:" );
-        footEmSb = new QSpinBox( 0, 100, 10, this );
-        footEmSb->setSuffix( "%" );
-        footEmSb->setValue( 0 );
+    footThickness0 = new QRadioButton( footThickness );
+    footThickness0->setText( "Thin" );
+    footThickness1 = new QRadioButton( footThickness );
+    footThickness1->setText( "Medium" );
+    footThickness2 = new QRadioButton( footThickness );
+    footThickness2->setText( "Thick" );
+    footThickness3 = new QRadioButton( footThickness );
+    footThickness3->setText( "Fat" );
+    footThickness4 = new QRadioButton( footThickness );
+    footThickness4->setText( "Linear Variation" );
+    footThickness5 = new QRadioButton( footThickness );
+    footThickness5->setText( "Quadratic Variation" );
+
+    QGridLayout *grid = new QGridLayout(footThickness);
+    grid->addWidget(footThickness0, 0, 0);
+    grid->addWidget(footThickness1, 0, 1);
+    grid->addWidget(footThickness2, 1, 0);
+    grid->addWidget(footThickness3, 1, 1);
+    grid->addWidget(footThickness4, 2, 0);
+    grid->addWidget(footThickness5, 2, 1);
+
+    // Create a label and a spin box
+    footEmL = new QLabel("  Emission:");
+    hbox->addWidget(footEmL);
+
+    footEmSb = new QSpinBox();
+    hbox->addWidget(footEmSb);
+    footEmSb->setMinimum(0);
+    footEmSb->setMaximum(100);
+    footEmSb->setSingleStep(10);
+    footEmSb->setSuffix( "%" );
+    footEmSb->setValue( 0 );
 }
 
 
 // Adjust the controls
 void LineTypeBox::setParticle( particleData * thisPd, int thisIndex )
 {
-	if (thisIndex >= 0) {
-		fixedThickness fThickness = (*thisPd).line[thisIndex].fThickness;
-		switch (fThickness) {
-			case THIN:
-				footThickness0->setChecked( TRUE );
-			break;
-			case MEDIUM:
-				footThickness1->setChecked( TRUE );
-			break;
-			case THICK:
-				footThickness2->setChecked( TRUE );
-			break;
-			case FAT:
-				footThickness3->setChecked( TRUE );
-			break;
-			case VARYING_LINEAR:
-				footThickness4->setChecked( TRUE );
-			break;
-			case VARYING_QUADRATIC:
-				footThickness4->setChecked( TRUE );
-			break;
-		}
+    if (thisIndex >= 0) {
+        fixedThickness fThickness = (*thisPd).line[thisIndex].fThickness;
+        switch (fThickness) {
+        case THIN:
+            footThickness0->setChecked( TRUE );
+            break;
+        case MEDIUM:
+            footThickness1->setChecked( TRUE );
+            break;
+        case THICK:
+            footThickness2->setChecked( TRUE );
+            break;
+        case FAT:
+            footThickness3->setChecked( TRUE );
+            break;
+        case VARYING_LINEAR:
+            footThickness4->setChecked( TRUE );
+            break;
+        case VARYING_QUADRATIC:
+            footThickness4->setChecked( TRUE );
+            break;
+        }
 
-		footEmSb->setValue( (int)floor(100.0*(*thisPd).line[thisIndex].fEmission+0.5) );
-	}
+        footEmSb->setValue( (int)floor(100.0*(*thisPd).line[thisIndex].fEmission+0.5) );
+    }
 }
 
 
 // Read the controls
 void LineTypeBox::readToggles( particleData * thisPd, int thisIndex )
 {
-	if (thisIndex >= 0 && thisPd) {
-        	// Read the settings and
-	        // update the particle data entry
-		if (footThickness0->isChecked() == TRUE) {
-			(*thisPd).line[thisIndex].fThickness = THIN;
-		}
-		if (footThickness1->isChecked() == TRUE) {
-			(*thisPd).line[thisIndex].fThickness = MEDIUM;
-		}
-		if (footThickness2->isChecked() == TRUE) {
-			(*thisPd).line[thisIndex].fThickness = THICK;
-		}
-		if (footThickness3->isChecked() == TRUE) {
-			(*thisPd).line[thisIndex].fThickness = FAT;
-		}
-		if (footThickness4->isChecked() == TRUE) {
-			(*thisPd).line[thisIndex].fThickness = VARYING_LINEAR;
-		}
-		if (footThickness5->isChecked() == TRUE) {
-			(*thisPd).line[thisIndex].fThickness = VARYING_QUADRATIC;
-		}
+    if (thisIndex >= 0 && thisPd) {
+        // Read the settings and
+        // update the particle data entry
+        if (footThickness0->isChecked() == TRUE) {
+            (*thisPd).line[thisIndex].fThickness = THIN;
+        }
+        if (footThickness1->isChecked() == TRUE) {
+            (*thisPd).line[thisIndex].fThickness = MEDIUM;
+        }
+        if (footThickness2->isChecked() == TRUE) {
+            (*thisPd).line[thisIndex].fThickness = THICK;
+        }
+        if (footThickness3->isChecked() == TRUE) {
+            (*thisPd).line[thisIndex].fThickness = FAT;
+        }
+        if (footThickness4->isChecked() == TRUE) {
+            (*thisPd).line[thisIndex].fThickness = VARYING_LINEAR;
+        }
+        if (footThickness5->isChecked() == TRUE) {
+            (*thisPd).line[thisIndex].fThickness = VARYING_QUADRATIC;
+        }
 
-		(*thisPd).line[thisIndex].fEmission = (float)footEmSb->value()/100.0;
-	}
+        (*thisPd).line[thisIndex].fEmission = (float)footEmSb->value()/100.0;
+    }
 }
 
 
@@ -125,10 +150,10 @@ void LineTypeBox::readToggles( particleData * thisPd, int thisIndex )
 // (overloaded function)
 void LineTypeBox::setDisabled( bool on ) 
 {
-        thickL->setDisabled( on );
-        footThickness->setDisabled( on );
-        footEmL->setDisabled( on );
-        footEmSb->setDisabled( on );
+    thickL->setDisabled( on );
+    footThickness->setDisabled( on );
+    footEmL->setDisabled( on );
+    footEmSb->setDisabled( on );
 }
 
 
@@ -136,8 +161,8 @@ void LineTypeBox::setDisabled( bool on )
 // (overloaded function)
 void LineTypeBox::setDisabled( bool on1, bool on2 ) 
 {
-        thickL->setDisabled( on1 );
-        footThickness->setDisabled( on1 );
-        footEmL->setDisabled( on2 );
-        footEmSb->setDisabled( on2 );
+    thickL->setDisabled( on1 );
+    footThickness->setDisabled( on1 );
+    footEmL->setDisabled( on2 );
+    footEmSb->setDisabled( on2 );
 }

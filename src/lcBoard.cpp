@@ -140,7 +140,7 @@ LcBoard::LcBoard(QWidget * parent)
         typeColorNumberBox = new TypeColorNumberBox( this, "typeColorNumberBox", 3 );
 
         // Create a box that will fill the next row
-        lineTypeBox = new LineTypeBox( this, "lineTypeBox" );
+        lineTypeBox = new LineTypeBox( this );
 
 	// Create a hboxlayout that will fill the lowest row
 	hb5 = new Q3HBox( this, "hb5" );
