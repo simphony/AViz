@@ -101,14 +101,14 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     connect( z1Button, SIGNAL(clicked()), SLOT(spin1()) );
 
     // Add spin control wheel
-    spinWheel =new SoQtThumbWheel(vb0, "spinWheel");
+    spinWheel =new SoQtThumbWheel(vb0);
     spinWheel->setOrientation( SoQtThumbWheel::Vertical );
     spinWheel->setFixedWidth( FRAME_WIDTH );
     spinWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
     QObject::connect(spinWheel, SIGNAL(wheelMoved(float)), this, SLOT(spinWheelMoved(float)));
 
     // Add a control button that also serves as a label
-    z2Button = new QToolButton( vb0, "z2Button" );
+    z2Button = new QToolButton( vb0 );
     z2Pixmap = QPixmap( spinLeft_xpm );
     z2RedPixmap = QPixmap( spinLeftRed_xpm );
     z2Button->setIcon( z2Pixmap );
@@ -120,7 +120,7 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     emptyL0->setText("");
 
     // Add a control button that also serves as a label
-    y1Button = new QToolButton( vb0, "y1Button" );
+    y1Button = new QToolButton( vb0 );
     y1Pixmap = QPixmap( up_xpm );
     y1RedPixmap = QPixmap( upRed_xpm );
     y1Button->setIcon( y1Pixmap );
@@ -128,7 +128,7 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     connect( y1Button, SIGNAL(clicked()), SLOT(tilt1()) );
 
     // Add tilt control wheel
-    tiltWheel =new SoQtThumbWheel(vb0, "tiltWheel");
+    tiltWheel =new SoQtThumbWheel(vb0);
     tiltWheel->setOrientation( SoQtThumbWheel::Vertical );
     tiltWheel->setFixedWidth( FRAME_WIDTH );
     tiltWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
@@ -156,7 +156,7 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     connect( x1Button, SIGNAL(clicked()), SLOT(rot1()) );
 
     // Add rotation control wheel
-    rotWheel =new SoQtThumbWheel(hb1, "rotWheel");
+    rotWheel =new SoQtThumbWheel(hb1);
     rotWheel->setOrientation( SoQtThumbWheel::Horizontal );
     rotWheel->setFixedHeight( FRAME_WIDTH );
     rotWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
@@ -261,7 +261,7 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     connect( dolly2Button, SIGNAL(clicked()), SLOT(dolly2()) );
 
     // Add dolly control wheel
-    dollyWheel =new SoQtThumbWheel(vb1, "dollyWheel");
+    dollyWheel =new SoQtThumbWheel(vb1);
     dollyWheel->setOrientation( SoQtThumbWheel::Vertical );
     dollyWheel->setFixedWidth( FRAME_WIDTH );
     dollyWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );

@@ -40,18 +40,16 @@ static const char rcsid[] =
 static const int SHADEBORDERWIDTH = 2;
 
 SoQtThumbWheel::SoQtThumbWheel(
-  QWidget * parent,
-  const char * name )
-: QWidget( parent, name )
+  QWidget * parent)
+: QWidget( parent )
 {
   this->constructor( SoQtThumbWheel::Vertical );
 } // SoQtThumbWheel()
 
 SoQtThumbWheel::SoQtThumbWheel(
   Orientation orientation,
-  QWidget * parent,
-  const char * name )
-: QWidget( parent, name )
+  QWidget * parent)
+: QWidget( parent )
 {
   this->constructor( orientation );
 } // SoQtThumbWheel()
@@ -88,7 +86,7 @@ SoQtThumbWheel::setOrientation(
   Orientation orientation )
 {
   this->orient = orientation;
-  this->repaint( FALSE );
+  this->repaint();
 } // setOrientation()
 
 void
@@ -98,7 +96,7 @@ SoQtThumbWheel::paintEvent(
   QPainter p( this );
   QRect paintRect = event->rect();
   p.setClipRect(paintRect);
-  QColorGroup g = this->colorGroup();
+  QColorGroup g = QColorGroup(palette());
 
   int w, d;
   if ( this->orient == SoQtThumbWheel::Vertical ) {
@@ -220,7 +218,7 @@ SoQtThumbWheel::mouseMoveEvent(
 
   emit wheelMoved( this->tempWheelValue );
 
-  this->repaint( FALSE );
+  this->repaint();
 } // mouseMoveEvent()
 
 /*!
@@ -321,7 +319,7 @@ SoQtThumbWheel::initWheel(
 
   this->numPixmaps = this->wheel->BitmapsRequired();
   this->pixmaps = new QPixmap * [this->numPixmaps];
-  QImage image( pwidth, pheight, 32, 0 );
+  QImage image( pwidth, pheight, QImage::Format_RGB32);
   for ( int i = 0; i < this->numPixmaps; i++ ) {
     this->wheel->DrawBitmap( i, image.bits(), (this->orient == Vertical) ?
       SoAnyThumbWheel::VERTICAL : SoAnyThumbWheel::HORIZONTAL );
@@ -340,7 +338,7 @@ SoQtThumbWheel::setEnabled(
     this->state = SoQtThumbWheel::Idle;
   else
     this->state = SoQtThumbWheel::Disabled;
-  this->repaint( FALSE );
+  this->repaint();
 } // setEnabled()
 
 bool
@@ -356,7 +354,7 @@ SoQtThumbWheel::setValue(
 {
   this->wheelValue = this->tempWheelValue = value;
   this->mouseDownPos = this->mouseLastPos;
-  this->repaint( FALSE );
+  this->repaint();
 } // setValue()
 
 // *************************************************************************

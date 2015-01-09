@@ -34,15 +34,15 @@ class SoAnyThumbWheel;
 
 // *************************************************************************
 
-class SOQT_DLL_EXPORT SoQtThumbWheel : public QWidget, public Q3RangeControl
+class SOQT_DLL_EXPORT SoQtThumbWheel : public QWidget
 {
   Q_OBJECT
 
 public:
   enum Orientation { Horizontal, Vertical };
 
-  SoQtThumbWheel( QWidget * parent = 0, const char * name = 0 );
-  SoQtThumbWheel( Orientation, QWidget * parent = 0, const char * name = 0 );
+  SoQtThumbWheel(QWidget * parent = 0);
+  SoQtThumbWheel(Orientation, QWidget * parent = 0);
   ~SoQtThumbWheel(void);
 
   void setOrientation( Orientation );
