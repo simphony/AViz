@@ -58,7 +58,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // 
 MainForm::MainForm(QWidget *parent, AViz *aviz)
     : QWidget(parent), m_aviz(aviz),
-      m_liveBox(NULL), ab(NULL), m_anb(NULL), bb(NULL),
+      ab(NULL), m_anb(NULL), bb(NULL),
       clb(NULL), eb(NULL), flb(NULL), lcb(NULL), lb(NULL), plb(NULL),
       pb(NULL), sb(NULL), slb(NULL), stb(NULL), tb(NULL), trab(NULL),
       m_keepViewObject(false) {
@@ -78,10 +78,7 @@ MainForm::MainForm(QWidget *parent, AViz *aviz)
 
     // Make a box that will hold
     // two buttons to take snapshots
-    m_liveBox = new LiveBox(this, "liveBox");
-    m_liveBox->setFormAddress( this );
-    mainBox->addWidget(m_liveBox, 2, 0);
-
+    m_liveBox = new LiveBox(this /*mainForm*/, this);
     mainBox->addWidget(m_liveBox, 2, 0);
 
     // Add a label that pretends to be a status bar
@@ -509,10 +506,8 @@ void MainForm::setAutoAndStart( viewParam vp ) {
 
     glCanvasFrame->setAuto( vp );
 
-    if (m_liveBox) {
-        if (vp.autoSnap == TRUE) {
-            ((LiveBox *)m_liveBox)->startAutoSnap( );
-        }
+    if (vp.autoSnap == TRUE) {
+        ((LiveBox *)m_liveBox)->startAutoSnap( );
     }
 
     // Save those settings

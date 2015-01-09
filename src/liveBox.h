@@ -27,40 +27,31 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef LIVEBOX_H
 #define LIVEBOX_H
 
-#include "data.h"
-#include "mainForm.h"
+#include <QWidget>
 
-#include <qcheckbox.h>
-#include <q3hbox.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <q3vbox.h>
-
-#include <stdio.h>
+class MainForm;
+class QPushButton;
 
 // Live box in main form
-class LiveBox: public Q3HBox
+class LiveBox: public QWidget
 {
     Q_OBJECT
 public:
-    LiveBox( QWidget * parent=0, const char * name=0 );
+    LiveBox(MainForm *mainForm, QWidget * parent=0);
 
-    void setFormAddress( MainForm * );
-
-public slots:
+public:
     void startAutoSnap();
 
 private slots:
     void snapCB();
     void autoSnapCB();
+
+private:
     bool getAutoSnap();
 
 private:
-    MainForm * mainForm;
-    QPushButton * snapPb;
-    QPushButton * autoSnapPb;
-
-    QSizePolicy sizePolicy() const;
+    MainForm *mainForm;
+    QPushButton *autoSnapPb;
 };
 
 
