@@ -31,49 +31,49 @@ Contact address: Computational Physics Group, Dept. of Physics,
 LiveBox::LiveBox( QWidget * parent, const char * name )
     : Q3HBox( parent, name )
 {
-	// Create some space
-	this->setMargin( 0 );
+    // Create some space
+    this->setMargin( 0 );
 
-	// Insert pushbuttons 
-	snapPb = new QPushButton( this, "Snap" );
-	snapPb->setText( "Snap" );
-	
-	autoSnapPb= new QPushButton( this, "AutoSnap" );
-	autoSnapPb->setText( "AutoSnap" );
-	autoSnapPb->setCheckable(true);
-	
-	// Define callbacks for these pushbuttons
-	connect( snapPb, SIGNAL(clicked()), this, SLOT(snapCB()) );
-	connect( autoSnapPb, SIGNAL(clicked()), this, SLOT(autoSnapCB()) );
+    // Insert pushbuttons
+    snapPb = new QPushButton( this, "Snap" );
+    snapPb->setText( "Snap" );
 
-	// Reset the form pointer
-	mainForm = NULL;
+    autoSnapPb= new QPushButton( this, "AutoSnap" );
+    autoSnapPb->setText( "AutoSnap" );
+    autoSnapPb->setCheckable(true);
+
+    // Define callbacks for these pushbuttons
+    connect( snapPb, SIGNAL(clicked()), this, SLOT(snapCB()) );
+    connect( autoSnapPb, SIGNAL(clicked()), this, SLOT(autoSnapCB()) );
+
+    // Reset the form pointer
+    mainForm = NULL;
 }
 
 
 // Set a pointer to the main form
 void LiveBox::setFormAddress( MainForm * thisForm )
 {
-        mainForm = thisForm;
+    mainForm = thisForm;
 }
 
 
 // Trigger a snapshot
 void LiveBox::snapCB( void )
 {
-        if (mainForm)
-                mainForm->snapRendering();
+    if (mainForm)
+        mainForm->snapRendering();
 }
 
 
 // Set a flag 
 void LiveBox::autoSnapCB( void )
 {
-        if (mainForm) {
-		viewParam * vp = mainForm->getViewParam();
+    if (mainForm) {
+        viewParam * vp = mainForm->getViewParam();
 
-		(*vp).autoSnap = this->getAutoSnap();
-	}
+        (*vp).autoSnap = this->getAutoSnap();
+    }
 }
 
 
@@ -81,19 +81,19 @@ void LiveBox::autoSnapCB( void )
 // the button state
 void LiveBox::startAutoSnap( void )
 {
-	this->autoSnapPb->setOn( TRUE );	
-	
+    this->autoSnapPb->setOn( TRUE );
+
 }
 
 // Return the auto snap button toggle state
 bool LiveBox::getAutoSnap( void )
 {
-        return autoSnapPb->isOn( );
+    return autoSnapPb->isOn( );
 }
 
 
 // Give size hints and define size policy
 QSizePolicy LiveBox::sizePolicy() const
 {
-	return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding);
+    return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding);
 }

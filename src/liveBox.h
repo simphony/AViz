@@ -41,26 +41,26 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // Live box in main form
 class LiveBox: public Q3HBox
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	LiveBox( QWidget * parent=0, const char * name=0 );
+    LiveBox( QWidget * parent=0, const char * name=0 );
 
-        void setFormAddress( MainForm * );
+    void setFormAddress( MainForm * );
 
 public slots:
-	void startAutoSnap();
+    void startAutoSnap();
 
 private slots:
-	void snapCB();
-	void autoSnapCB();
-	bool getAutoSnap();
+    void snapCB();
+    void autoSnapCB();
+    bool getAutoSnap();
 
 private:
-        MainForm * mainForm;
-	QPushButton * snapPb;
-	QPushButton * autoSnapPb;
+    MainForm * mainForm;
+    QPushButton * snapPb;
+    QPushButton * autoSnapPb;
 
-	QSizePolicy sizePolicy() const;
+    QSizePolicy sizePolicy() const;
 };
 
 
