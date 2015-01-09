@@ -57,8 +57,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // Main form: implements drawing control elements
 // 
 MainForm::MainForm(QWidget *parent, AViz *aviz)
-    : QWidget(parent), m_aviz(aviz), glCanvasFrame(NULL),
-      renderBox(NULL), m_liveBox(NULL), ab(NULL), m_anb(NULL), bb(NULL),
+    : QWidget(parent), m_aviz(aviz),
+      m_liveBox(NULL), ab(NULL), m_anb(NULL), bb(NULL),
       clb(NULL), eb(NULL), flb(NULL), lcb(NULL), lb(NULL), plb(NULL),
       pb(NULL), sb(NULL), slb(NULL), stb(NULL), tb(NULL), trab(NULL),
       m_keepViewObject(false) {
@@ -72,8 +72,7 @@ MainForm::MainForm(QWidget *parent, AViz *aviz)
 
     // Make a box that will hold
     // a row of elements to define render quality
-    renderBox = new RenderBox(this, "renderBox");
-    renderBox->setFormAddress(this);
+    renderBox = new RenderBox(this /*mainForm*/, this /*parent*/);
     renderBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     mainBox->addWidget(renderBox, 1, 0);
 
@@ -386,11 +385,9 @@ void MainForm::setDefaults()
     // Prevent immediate updating
     vp.enableUpdate = FALSE;
 
-    if (renderBox)
-        renderBox->setValue( vp );
+    renderBox->setValue( vp );
 
-    if (glCanvasFrame)
-        glCanvasFrame->setAuto( vp );
+    glCanvasFrame->setAuto( vp );
 
     // Enable updating
     vp.enableUpdate = TRUE;
@@ -412,13 +409,10 @@ void MainForm::setDefaults( viewParam vp, const char * filename )
     statusMessage( "Setting defaults in file ", filename );
 
     // Prevent immediate updating
-    vp.enableUpdate = FALSE;
+    vp.enableUpdate = false;
 
-    if (renderBox)
-        renderBox->setValue( vp );
-
-    if (glCanvasFrame)
-        glCanvasFrame->setAuto( vp );
+    renderBox->setValue( vp );
+    glCanvasFrame->setAuto( vp );
 
     // Adjust the menus
     switch (vp.renderMode) {
@@ -473,11 +467,7 @@ void MainForm::updateView()
 // Return a pointer to the current data to the main panel
 aggregateData * MainForm::getAggregateData()
 {
-    if (glCanvasFrame)
-        return glCanvasFrame->getAggregateData();
-    else
-        return NULL;
-
+    return glCanvasFrame->getAggregateData();
 }
 
 
@@ -485,7 +475,6 @@ aggregateData * MainForm::getAggregateData()
 void MainForm::setViewParam( viewParam vp )
 {
     // Refresh the drawing now
-    if (glCanvasFrame)
         glCanvasFrame->setViewParam( vp );
 }
 
@@ -547,10 +536,8 @@ void MainForm::updateExplicitBoard() {
 // Create an image file from the current rendering
 // (overloaded function)
 void MainForm::snapRendering() {
-    if (glCanvasFrame) {
-        glCanvasFrame->updateRendering();
-        glCanvasFrame->snapRendering();
-    }
+    glCanvasFrame->updateRendering();
+    glCanvasFrame->snapRendering();
 }
 
 
@@ -1111,20 +1098,3 @@ void MainForm::generateTracks() {
         statusMessage( "Could not generate tracks" );
     }
 }
-
-#if 0
-// Give size hints and define size policy
-QSize MainForm::sizeHint() const {
-    if (renderBox && m_status)
-        return QSize( renderBox->width(), renderBox->height() + m_status->height() );
-    else
-        return QSize( MIN_SIZE, MIN_SIZE );
-}
-
-
-// Give size hints and define size policy
-QSizePolicy MainForm::sizePolicy() const
-{
-    return QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-}
-#endif
