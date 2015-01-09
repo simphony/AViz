@@ -981,22 +981,18 @@ void MainForm::launchPolymers()
 void MainForm::launchSlice()
 {
     if (!slb) {
-        slb = new SliceBoard(this);
-        if (slb)
-            slb->setMainFormAddress( this );
+        slb = new SliceBoard(this /*mainForm*/, this);
     }
 
     // Get the current settings and show
     // the panel
-    if (slb) {
-        slb->setSlice(*getViewParam());
+    slb->setSlice(*getViewParam());
 
-        // Use the object boundaries as defaults
-        if (!getViewParam()->slicingSet)
-            slb->autoSlice();
+    // Use the object boundaries as defaults
+    if (!getViewParam()->slicingSet)
+        slb->autoSlice();
 
-        slb->show();
-    }
+    slb->show();
 }
 
 
