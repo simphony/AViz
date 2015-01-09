@@ -43,35 +43,35 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // Render quality box in main form
 class RenderBox: public Q3VBox
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	RenderBox( QWidget * parent=0, const char * name=0 );
+    RenderBox( QWidget * parent=0, const char * name=0 );
 
-        void setFormAddress( MainForm * );
-	void setValue( viewParam );
+    void setFormAddress( MainForm * );
+    void setValue( viewParam );
 
 private slots:
-	void getRenderMode( viewParam * );
-	void getRenderStyle( viewParam * );
-	float getRenderSize( void );
-	void getRenderQuality( viewParam * );
-        void renderModeCb();
-        void renderStyleCb();
-        void renderQualityCb();
-        void updateRendering();
+    void getRenderMode( viewParam * );
+    void getRenderStyle( viewParam * );
+    float getRenderSize( void );
+    void getRenderQuality( viewParam * );
+    void renderModeCb();
+    void renderStyleCb();
+    void renderQualityCb();
+    void updateRendering();
 
 private:
-        MainForm * mainForm;
-	QLabel * modeL;
-	QLabel * styleL;
-	QLabel * sizeL;
-	QLabel * qualL;
-	QComboBox * modeCob;
-	QComboBox * styleCob;
-	QComboBox * qualityCob;
-	QSpinBox * renderSSb;
-	QSizePolicy sizePolicy() const;
-	bool setValueFlag;
+    MainForm * mainForm;
+    QLabel * modeL;
+    QLabel * styleL;
+    QLabel * sizeL;
+    QLabel * qualL;
+    QComboBox * modeCob;
+    QComboBox * styleCob;
+    QComboBox * qualityCob;
+    QSpinBox * renderSSb;
+    QSizePolicy sizePolicy() const;
+    bool setValueFlag;
 };
 
 

@@ -23,7 +23,6 @@
 #define SOQT_THUMBWHEEL_H
 
 #include <qwidget.h>
-#include <q3rangecontrol.h>
 
 #include "SoQtBasic.h"
 
