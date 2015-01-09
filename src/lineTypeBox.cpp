@@ -107,7 +107,7 @@ void LineTypeBox::setParticle( particleData * thisPd, int thisIndex )
             footThickness4->setChecked( TRUE );
             break;
         case VARYING_QUADRATIC:
-            footThickness4->setChecked( TRUE );
+            footThickness5->setChecked( TRUE );
             break;
         }
 
