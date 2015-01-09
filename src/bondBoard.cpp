@@ -373,9 +373,9 @@ void BondBoard::setData( void )
 
 	// Set the first particle as the current particle
 	if (haveFEntry)
-		fParticleCob->setCurrentItem(0);
+        fParticleCob->setCurrentIndex(0);
 	if (haveTEntry)
-		tParticleCob->setCurrentItem(0);
+        tParticleCob->setCurrentIndex(0);
 
         // Find out what combination of particles is set
 	if (haveFEntry)
