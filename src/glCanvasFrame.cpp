@@ -557,7 +557,7 @@ void GLCanvasFrame::rot1( void )
     // Change pixmap in auto mode while button is pressed,
     // and do rotation steps
     if (autoMode) {
-        switch (x1Button->isOn()) {
+        switch (x1Button->isChecked()) {
         case TRUE:
             x1Button->setIcon( x1RedPixmap );
 
@@ -599,7 +599,7 @@ void GLCanvasFrame::rot2( void )
     // Change pixmap in auto mode while button is pressed,
     // and do rotation steps
     if (autoMode) {
-        switch (x2Button->isOn()) {
+        switch (x2Button->isChecked()) {
         case TRUE:
             x2Button->setIcon( x2RedPixmap );
 
@@ -661,7 +661,7 @@ void GLCanvasFrame::tilt1( void )
     // Change pixmap in auto mode while button is pressed,
     // and do tilt steps
     if (autoMode) {
-        switch (y1Button->isOn()) {
+        switch (y1Button->isChecked()) {
         case TRUE:
             y1Button->setIcon( y1RedPixmap );
 
@@ -703,7 +703,7 @@ void GLCanvasFrame::tilt2( void )
     // Change pixmap in auto mode while button is pressed,
     // and do tilt steps
     if (autoMode) {
-        switch (y2Button->isOn()) {
+        switch (y2Button->isChecked()) {
         case TRUE:
             y2Button->setIcon( y2RedPixmap );
 
@@ -765,7 +765,7 @@ void GLCanvasFrame::spin1( void )
     // Change pixmap in auto mode while button is pressed,
     // and do spin steps
     if (autoMode) {
-        switch (z1Button->isOn()) {
+        switch (z1Button->isChecked()) {
         case TRUE:
             z1Button->setIcon( z1RedPixmap );
 
@@ -807,7 +807,7 @@ void GLCanvasFrame::spin2( void )
     // Change pixmap in auto mode while button is pressed,
     // and do spin steps
     if (autoMode) {
-        switch (z2Button->isOn()) {
+        switch (z2Button->isChecked()) {
         case TRUE:
             z2Button->setIcon( z2RedPixmap );
 
@@ -869,7 +869,7 @@ void GLCanvasFrame::dolly1( void )
     // Change pixmap in auto mode while button is pressed,
     // and do zoom steps
     if (autoMode) {
-        switch (dolly1Button->isOn()) {
+        switch (dolly1Button->isChecked()) {
         case TRUE:
             dolly1Button->setIcon( dolly1RedPixmap );
 
@@ -910,7 +910,7 @@ void GLCanvasFrame::dolly2( void )
     // Change pixmap in auto mode while button is pressed,
     // and do zoom steps
     if (autoMode) {
-        switch (dolly2Button->isOn()) {
+        switch (dolly2Button->isChecked()) {
         case TRUE:
             dolly2Button->setIcon( dolly2RedPixmap );
 
@@ -1297,38 +1297,38 @@ void GLCanvasFrame::autoButtonCB( void )
     // release control buttons
     if (!autoMode) {
         autoButton->setIcon( autoPixmap );
-        if (autoButton->isOn())
+        if (autoButton->isChecked())
             autoButton->toggle();
 
-        if (x1Button->isOn()) {
+        if (x1Button->isChecked()) {
             x1Button->toggle();
             x1Button->setIcon( x1Pixmap );
         }
-        if (x2Button->isOn()) {
+        if (x2Button->isChecked()) {
             x2Button->toggle();
             x2Button->setIcon( x2Pixmap );
         }
-        if (y1Button->isOn()) {
+        if (y1Button->isChecked()) {
             y1Button->toggle();
             y1Button->setIcon( y1Pixmap );
         }
-        if (y2Button->isOn()) {
+        if (y2Button->isChecked()) {
             y2Button->toggle();
             y2Button->setIcon( y2Pixmap );
         }
-        if (z1Button->isOn()) {
+        if (z1Button->isChecked()) {
             z1Button->toggle();
             z1Button->setIcon( z1Pixmap );
         }
-        if (z2Button->isOn()) {
+        if (z2Button->isChecked()) {
             z2Button->toggle();
             z2Button->setIcon( z2Pixmap );
         }
-        if (dolly1Button->isOn()) {
+        if (dolly1Button->isChecked()) {
             dolly1Button->toggle();
             dolly1Button->setIcon( dolly1Pixmap );
         }
-        if (dolly2Button->isOn()) {
+        if (dolly2Button->isChecked()) {
             dolly2Button->toggle();
             dolly2Button->setIcon( dolly2Pixmap );
         }
@@ -1374,42 +1374,42 @@ void GLCanvasFrame::setAuto( viewParam vp )
 {
     if (vp.autoRot1 == TRUE) {
         this->autoButtonCB();
-        x1Button->setOn( TRUE );
+        x1Button->setChecked(true);
         x1Button->setIcon( x1RedPixmap );
     }
     if (vp.autoRot2 == TRUE) {
         this->autoButtonCB();
-        x2Button->setOn( TRUE );
+        x2Button->setChecked(true);
         x2Button->setIcon( x2RedPixmap );
     }
     if (vp.autoTilt1 == TRUE) {
         this->autoButtonCB();
-        y1Button->setOn( TRUE );
+        y1Button->setChecked(true);
         y1Button->setIcon( y1RedPixmap );
     }
     if (vp.autoTilt2 == TRUE) {
         this->autoButtonCB();
-        y2Button->setOn( TRUE );
+        y2Button->setChecked(true);
         y2Button->setIcon( y2RedPixmap );
     }
     if (vp.autoSpin1 == TRUE) {
         this->autoButtonCB();
-        z1Button->setOn( TRUE );
+        z1Button->setChecked(true);
         z1Button->setIcon( z1RedPixmap );
     }
     if (vp.autoSpin2 == TRUE) {
         this->autoButtonCB();
-        z2Button->setOn( TRUE );
+        z2Button->setChecked(true);
         z2Button->setIcon( z2RedPixmap );
     }
     if (vp.autoZoom1 == TRUE) {
         this->autoButtonCB();
-        dolly1Button->setOn( TRUE );
+        dolly1Button->setChecked(true);
         dolly1Button->setIcon( dolly1RedPixmap );
     }
     if (vp.autoZoom2 == TRUE) {
         this->autoButtonCB();
-        dolly2Button->setOn( TRUE );
+        dolly2Button->setChecked(true);
         dolly2Button->setIcon( dolly2RedPixmap );
     }
 }
@@ -1493,32 +1493,32 @@ void GLCanvasFrame::adjustButtons()
 
     switch ((*vp).viewMode) {
     case PERSPECTIVE:
-        perspectiveButton->setOn( TRUE );
-        parallelButton->setOn( FALSE );
+        perspectiveButton->setChecked(true);
+        parallelButton->setChecked(false);
         break;
     case ORTHO:
-        perspectiveButton->setOn( FALSE );
-        parallelButton->setOn( TRUE );
+        perspectiveButton->setChecked(false);
+        parallelButton->setChecked(true);
         break;
     }
 
     switch ((*vp).background) {
     case BGBLACK:
-        blackBackgroundButton->setOn( TRUE );
-        whiteBackgroundButton->setOn( FALSE );
+        blackBackgroundButton->setChecked(true);
+        whiteBackgroundButton->setChecked(false);
         break;
     case BGWHITE:
-        blackBackgroundButton->setOn( FALSE );
-        whiteBackgroundButton->setOn( TRUE );
+        blackBackgroundButton->setChecked(false);
+        whiteBackgroundButton->setChecked(true);
         break;
     }
 
     switch ((*vp).stereoVisionEn) {
     case TRUE:
-        stereoVisionButton->setOn( TRUE );
+        stereoVisionButton->setChecked(true);
         break;
     case FALSE:
-        stereoVisionButton->setOn( FALSE );
+        stereoVisionButton->setChecked(false);
         break;
     }
 

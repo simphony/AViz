@@ -246,7 +246,7 @@ void TrackBoard::setFileListParam( const QString &fn )
 // Activate track rendering
 void TrackBoard::showTracks( void )
 {
-	if (showTracksPb->isOn()) {
+    if (showTracksPb->isChecked()) {
 		// Change labeling of the button
 		showTracksPb->setText( "Show Tracks" );
 
