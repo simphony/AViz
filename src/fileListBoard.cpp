@@ -101,7 +101,7 @@ FileListBoard::FileListBoard(MainForm * mainForm, QWidget * parent)
     // Create a checkbox
     keepViewScaleCb = new QCheckBox("Keep ViewScale");
 
-    fileListBox->addWidget( keepViewScaleCb, 1, 4);
+    fileListBox->addWidget( keepViewScaleCb, 1, 3);
     this->resetKeepViewScale();
 
     // Define a callback for that check box
@@ -125,7 +125,7 @@ FileListBoard::FileListBoard(MainForm * mainForm, QWidget * parent)
 
     // Create more pushbuttons that will go into the lowest row
     QPushButton * done = new QPushButton("Done");
-    fileListBox->addWidget( done, 3, 4);
+    fileListBox->addWidget( done, 3, 3);
 
     // Define a callback for that button
     connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
