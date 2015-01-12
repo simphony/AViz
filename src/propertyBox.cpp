@@ -26,41 +26,39 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "propertyBox.h"
 
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QRadioButton>
+
+
 // Make a box 
-PropertyBox::PropertyBox( QWidget * parent, const char * name )
-    : Q3HBox( parent, name )
-{
-    // Create hboxlayouts that will fill the next row; these
-    // are shown only when appropriate
-    Q3HBox * propertyBox = new Q3HBox( this, "propertyBox" );
+PropertyBox::PropertyBox( QWidget * parent)
+    : QWidget( parent ) {
+    QHBoxLayout *propertyBox = new QHBoxLayout( this);
 
-    QLabel * propL = new QLabel( propertyBox, "propL" );
-    propL->setText( "  Property: " );
+    propertyBox->addWidget(new QLabel("  Property: "));
 
-    property = new Q3ButtonGroup( 8, Qt::Horizontal, propertyBox, "property" );
-    prop1 = new QRadioButton( property, "1" );
-    prop1->setText( "1" );
-    prop2 = new QRadioButton( property, "1" );
-    prop2->setText( "2" );
-    prop3 = new QRadioButton( property, "3" );
-    prop3->setText( "3" );
-    prop4 = new QRadioButton( property, "4" );
-    prop4->setText( "4" );
-    prop5 = new QRadioButton( property, "5" );
-    prop5->setText( "5" );
-    prop6 = new QRadioButton( property, "6" );
-    prop6->setText( "6" );
-    prop7 = new QRadioButton( property, "7" );
-    prop7->setText( "7" );
-    prop8 = new QRadioButton( property, "8" );
-    prop8->setText( "8" );
-    property->insert( prop1, 0 );
-    property->insert( prop2, 1 );
-    property->insert( prop3, 2 );
-    property->insert( prop4, 3 );
-    property->insert( prop5, 4 );
-    property->insert( prop6, 5 );
-    property->insert( prop7, 6 );
+    QGroupBox *property = new QGroupBox();
+    propertyBox->addWidget(property);
+
+    prop1 = new QRadioButton("1");
+    prop2 = new QRadioButton("2");
+    prop3 = new QRadioButton("3");
+    prop4 = new QRadioButton("4");
+    prop5 = new QRadioButton("5");
+    prop6 = new QRadioButton("6");
+    prop7 = new QRadioButton("7");
+    prop8 = new QRadioButton("8");
+
+    QHBoxLayout *hBox = new QHBoxLayout(property);
+    hBox->addWidget(prop1);
+    hBox->addWidget(prop2);
+    hBox->addWidget(prop3);
+    hBox->addWidget(prop4);
+    hBox->addWidget(prop5);
+    hBox->addWidget(prop6);
+    hBox->addWidget(prop7);
 }
 
 
@@ -71,28 +69,28 @@ void PropertyBox::setParticle( particleData * thisPd, int thisIndex )
         colorCriterionColumn colorCritProp = (*thisPd).colorCritProp[thisIndex];
         switch (colorCritProp) {
         case PROP1:
-            prop1->setChecked( TRUE );
+            prop1->setChecked(true);
             break;
         case PROP2:
-            prop2->setChecked( TRUE );
+            prop2->setChecked(true);
             break;
         case PROP3:
-            prop3->setChecked( TRUE );
+            prop3->setChecked(true);
             break;
         case PROP4:
-            prop4->setChecked( TRUE );
+            prop4->setChecked(true);
             break;
         case PROP5:
-            prop5->setChecked( TRUE );
+            prop5->setChecked(true);
             break;
         case PROP6:
-            prop6->setChecked( TRUE );
+            prop6->setChecked(true);
             break;
         case PROP7:
-            prop7->setChecked( TRUE );
+            prop7->setChecked(true);
             break;
         case PROP8:
-            prop8->setChecked( TRUE );
+            prop8->setChecked(true);
             break;
         }
     }
@@ -103,28 +101,28 @@ void PropertyBox::setParticle( particleData * thisPd, int thisIndex )
 void PropertyBox::readToggles( particleData * thisPd, int thisIndex )
 {
     if (thisIndex >= 0 && thisPd) {
-        if (prop1->isChecked() == TRUE) {
+        if (prop1->isChecked()) {
             (*thisPd).colorCritProp[thisIndex] = PROP1;
         }
-        if (prop2->isChecked() == TRUE) {
+        if (prop2->isChecked()) {
             (*thisPd).colorCritProp[thisIndex] = PROP2;
         }
-        if (prop3->isChecked() == TRUE) {
+        if (prop3->isChecked()) {
             (*thisPd).colorCritProp[thisIndex] = PROP3;
         }
-        if (prop4->isChecked() == TRUE) {
+        if (prop4->isChecked()) {
             (*thisPd).colorCritProp[thisIndex] = PROP4;
         }
-        if (prop5->isChecked() == TRUE) {
+        if (prop5->isChecked()) {
             (*thisPd).colorCritProp[thisIndex] = PROP5;
         }
-        if (prop6->isChecked() == TRUE) {
+        if (prop6->isChecked()) {
             (*thisPd).colorCritProp[thisIndex] = PROP6;
         }
-        if (prop7->isChecked() == TRUE) {
+        if (prop7->isChecked()) {
             (*thisPd).colorCritProp[thisIndex] = PROP7;
         }
-        if (prop8->isChecked() == TRUE) {
+        if (prop8->isChecked()) {
             (*thisPd).colorCritProp[thisIndex] = PROP8;
         }
     }

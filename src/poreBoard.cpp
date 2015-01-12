@@ -133,7 +133,7 @@ PoreBoard::PoreBoard(QWidget * parent)
 	// Create hboxlayouts that will fill the next row; these
 	// are shown only when appropriate
     positionBox = new PositionBox(this);
-    propertyBox = new PropertyBox( this, "positionBox" );
+    propertyBox = new PropertyBox(this);
     codeBox = new CodeBox(this);
     typeColorNumberBox = new TypeColorNumberBox( this, 2 );
 

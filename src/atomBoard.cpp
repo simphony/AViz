@@ -32,6 +32,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QPushButton>
 #include <QComboBox>
 #include <QRadioButton>
+#include <QGroupBox>
+#include <QButtonGroup>
 
 
 #include "defaultParticles.h" // typeCopy, typeCmp
@@ -152,7 +154,7 @@ AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
     // Create hboxlayouts that will fill the next row; these
     // are shown only when appropriate
     positionBox = new PositionBox(this);
-    propertyBox = new PropertyBox( this, "positionBox" );
+    propertyBox = new PropertyBox(this);
     codeBox = new CodeBox(this);
 
 
