@@ -38,26 +38,26 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // Property box widget
 class PropertyBox: public Q3HBox
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-        PropertyBox( QWidget * parent=0, const char * name=0 );
+    PropertyBox( QWidget * parent=0, const char * name=0 );
 
 public slots:
-        void setParticle( particleData *, int );
-        void readToggles( particleData *, int );
+    void setParticle( particleData *, int );
+    void readToggles( particleData *, int );
 
 private slots:
 
 private:
-	Q3ButtonGroup * property;
-	QRadioButton * prop1;
-        QRadioButton * prop2;
-        QRadioButton * prop3;
-        QRadioButton * prop4;
-        QRadioButton * prop5;
-        QRadioButton * prop6;
-        QRadioButton * prop7;
-        QRadioButton * prop8;
+    Q3ButtonGroup * property;
+    QRadioButton * prop1;
+    QRadioButton * prop2;
+    QRadioButton * prop3;
+    QRadioButton * prop4;
+    QRadioButton * prop5;
+    QRadioButton * prop6;
+    QRadioButton * prop7;
+    QRadioButton * prop8;
 
 };
 
