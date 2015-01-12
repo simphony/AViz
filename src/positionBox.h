@@ -37,21 +37,21 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // Position box widget
 class PositionBox: public Q3HBox
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-        PositionBox( QWidget * parent=0, const char * name=0 );
+    PositionBox( QWidget * parent=0, const char * name=0 );
 
 public slots:
-        void setParticle( particleData *, int );
-        void readToggles( particleData *, int );
+    void setParticle( particleData *, int );
+    void readToggles( particleData *, int );
 
 private slots:
 
 private:
-	Q3ButtonGroup * coordinate;
-	QRadioButton * xcoord;
-	QRadioButton * ycoord;
-	QRadioButton * zcoord;
+    Q3ButtonGroup * coordinate;
+    QRadioButton * xcoord;
+    QRadioButton * ycoord;
+    QRadioButton * zcoord;
 };
 
 #endif // POSBO_H
