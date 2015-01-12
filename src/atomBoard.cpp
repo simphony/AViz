@@ -200,14 +200,7 @@ AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
 }
 
 // Build the layout
-void AtomBoard::buildLayout( colorCriterion crit ) 
-{
-    int numRows = 6;
-
-    // Adjust the number of rows
-    if (crit == TYPE)
-        numRows = 5;
-
+void AtomBoard::buildLayout( colorCriterion crit )  {
     // Destroy existing layout
     if (atomBox) {
         atomBox->~QGridLayout();
@@ -223,7 +216,7 @@ void AtomBoard::buildLayout( colorCriterion crit )
     atomBox->addWidget(m_colorWidget, 1 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
     atomBox->addWidget(sizeBox, 2 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
     atomBox->addWidget(m_colorCriterionWidget, 3 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
-    atomBox->addWidget(m_BondsDoneApplyWidget, numRows-1 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    atomBox->addWidget(m_BondsDoneApplyWidget, 5 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
 
 
     // Add additional components

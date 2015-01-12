@@ -205,21 +205,12 @@ void PolymerBoard::setMainFormAddress( MainForm * thisMF )
 
 
 // Build the layout
-void PolymerBoard::buildLayout( colorCriterion crit ) 
-{
-    int numRows = 6;
-
-    // Adjust the number of rows
-    if (crit == TYPE)
-        numRows = 5;
+void PolymerBoard::buildLayout( colorCriterion crit ) {
 
     // Destroy existing layout
     if (polymerBox) {
         delete polymerBox;
     }
-
-    // Adjust height of dialog board
-    this->setFixedHeight( numRows*ROW_HEIGHT );
 
     // Insert a grid that will hold control buttons
     polymerBox = new QGridLayout(this);

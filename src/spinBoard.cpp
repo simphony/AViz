@@ -213,14 +213,7 @@ void SpinBoard::setMainFormAddress( MainForm * thisMF )
 
 
 // Build the layout
-void SpinBoard::buildLayout( colorCriterion crit )
-{
-    int numRows = 7;
-
-    // Adjust number of rows
-    if (crit == TYPE)
-        numRows = 6;
-
+void SpinBoard::buildLayout( colorCriterion crit ) {
     // Destroy existing layout
     if (spinBox) {
         spinBox->~QGridLayout();

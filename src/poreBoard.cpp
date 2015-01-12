@@ -213,18 +213,12 @@ void PoreBoard::setMainFormAddress( MainForm * thisMF )
 
 
 // Build the layout
-void PoreBoard::buildLayout( colorCriterion crit )
-{
-    int numRows = 7;
+void PoreBoard::buildLayout( colorCriterion crit ) {
 
     // Destroy existing layout
     if (poreBox) {
         poreBox->~QGridLayout();
     }
-
-    // Destroy existing layout
-    // Adjust height of dialog board
-    this->setFixedHeight( numRows*ROW_HEIGHT );
 
     // Insert a grid that will hold control buttons
     poreBox = new QGridLayout(this);

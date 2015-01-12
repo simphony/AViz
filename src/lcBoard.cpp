@@ -214,18 +214,11 @@ void LcBoard::setMainFormAddress( MainForm * thisMF )
 
 
 // Build the layout
-void LcBoard::buildLayout( colorCriterion crit )
-{
-    int numRows = 7;
-
+void LcBoard::buildLayout( colorCriterion crit ) {
     // Destroy existing layout
     if (lcBox) {
         lcBox->~QGridLayout();
     }
-
-    // Destroy existing layout
-    // Adjust height of dialog board
-    this->setFixedHeight( numRows*ROW_HEIGHT );
 
     // Insert a grid that will hold control buttons
     lcBox = new QGridLayout(this);
