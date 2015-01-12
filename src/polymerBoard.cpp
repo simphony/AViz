@@ -119,7 +119,7 @@ PolymerBoard::PolymerBoard(QWidget * parent)
 	
 	// Create hboxlayouts that will fill the next row; these
 	// are shown only when appropriate
-	positionBox = new PositionBox( this, "positionBox" );
+    positionBox = new PositionBox(this);
 	propertyBox = new PropertyBox( this, "positionBox" );
     codeBox = new CodeBox(this);
 

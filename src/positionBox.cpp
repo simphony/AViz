@@ -26,26 +26,31 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "positionBox.h"
 
+#include <QHBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QRadioButton>
+
 // Make a box 
-PositionBox::PositionBox( QWidget * parent, const char * name )
-    : Q3HBox( parent, name )
+PositionBox::PositionBox(QWidget * parent)
+    : QWidget(parent)
 {
     // Create hboxlayouts that will fill the next row; these
     // are shown only when appropriate
-    Q3HBox * positionBox = new Q3HBox( this, "positionBox" );
-    QLabel * posL = new QLabel( positionBox, "posL" );
-    posL->setText( " Coordinate: " );
+    QHBoxLayout *positionBox = new QHBoxLayout(this);
+    positionBox->addWidget(new QLabel(" Coordinate: "));
 
-    coordinate = new Q3ButtonGroup( 3, Qt::Horizontal, positionBox, "coordinate" );
-    xcoord = new QRadioButton( coordinate, "x" );
-    xcoord->setText( "X" );
-    ycoord = new QRadioButton( coordinate, "y" );
-    ycoord->setText( "Y" );
-    zcoord = new QRadioButton( coordinate, "z" );
-    zcoord->setText( "Z" );
-    coordinate->insert( xcoord, 0 );
-    coordinate->insert( ycoord, 1 );
-    coordinate->insert( zcoord, 2 );
+    QGroupBox *coordinate = new QGroupBox();
+    positionBox->addWidget(coordinate);
+
+    xcoord = new QRadioButton("X", coordinate);
+    ycoord = new QRadioButton("Y", coordinate);
+    zcoord = new QRadioButton("Z", coordinate);
+
+    QHBoxLayout *hBox = new QHBoxLayout(coordinate);
+    hBox->addWidget(xcoord);
+    hBox->addWidget(ycoord);
+    hBox->addWidget(zcoord);
 }
 
 
