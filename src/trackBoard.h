@@ -33,9 +33,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 class MainForm;
 
-class Q3ButtonGroup;
 class QComboBox;
-class QRadioButton;
 class QCheckBox;
 class QPushButton;
 class QLabel;
@@ -45,10 +43,9 @@ class TrackBoard: public QDialog
 {
     Q_OBJECT
 public:
-    TrackBoard(QWidget * parent=0);
+    TrackBoard(MainForm *, QWidget * parent=0);
 
 public slots:
-    void setMainFormAddress( MainForm * );
     void setFileListParam( const QString & );
     void setData();
 
@@ -64,10 +61,6 @@ private slots:
 private:
     MainForm * mainForm;
     QComboBox * typeCob;
-    QLabel * trackRenderModeL;
-    Q3ButtonGroup * stages;
-    QRadioButton * allStagesRb;
-    QRadioButton * upToStagesRb;
     QPushButton * showTracksPb;
     QCheckBox * showTypeTrackCb;
     QCheckBox * periodicCb;

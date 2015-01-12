@@ -26,10 +26,10 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "trackBoard.h"
 
-#include <Q3ButtonGroup>
-#include <Q3GridLayout>
-#include <Q3HBox>
-
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QButtonGroup>
+#include <QGroupBox>
 #include <QComboBox>
 #include <QRadioButton>
 #include <QCheckBox>
@@ -38,23 +38,21 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "mainForm.h"
 #include "fileFunctions.h"
+#include "widgets/doneapplycancelwidget.h"
 
 // Make a popup dialog box 
-TrackBoard::TrackBoard(QWidget * parent)
-    : QDialog(parent, Qt::WType_TopLevel)
+TrackBoard::TrackBoard(MainForm* mainForm, QWidget * parent)
+    : QDialog(parent, Qt::WType_TopLevel), mainForm(mainForm)
 {
     setWindowTitle( "AViz: Track Rendering Control" );
 
     // Insert a grid that will hold control buttons
-    const int numCols = 4;
-    const int numRows = 3;
-    Q3GridLayout * trackBox = new Q3GridLayout( this, numCols, numRows, SPACE, SPACE, "trackListBox" );
-
+    QGridLayout *trackBox = new QGridLayout(this);
+    trackBox->setHorizontalSpacing(SPACE);
+    trackBox->setVerticalSpacing(SPACE);
 
     // Create a label
-    QLabel * typeL = new QLabel( this, "typeL" );
-    typeL->setText( " Type: ");
-    trackBox->addWidget( typeL, 0, 0);
+    trackBox->addWidget(new QLabel(" Type: "), 0, 0);
 
     // Create a combo box that will go into the
     // second column; entries in the combo box will
@@ -66,127 +64,92 @@ TrackBoard::TrackBoard(QWidget * parent)
     connect( typeCob, SIGNAL(activated(int)), SLOT(setType()) );
 
     // Add a checkbox button
-    showTypeTrackCb = new QCheckBox( this, "showTypeTrack" );
-    showTypeTrackCb->setText( "Show Tracks" );
-    showTypeTrackCb->setChecked( TRUE );
+    showTypeTrackCb = new QCheckBox("Show Tracks");
+    showTypeTrackCb->setChecked(true);
     trackBox->addWidget( showTypeTrackCb, 0, 3);
 
     // Add a label
-    trackRenderModeL = new QLabel( this, "trackRenderMode" );
-    trackRenderModeL->setText( "   Tracking Mode: " );
-    trackBox->addWidget( trackRenderModeL, 1, 0);
+    trackBox->addWidget(new QLabel("   Tracking Mode: "), 1, 0);
+
 
     // Create radio buttons to choose track render mode
-    stages = new Q3ButtonGroup( 2, Qt::Horizontal, this, "stages" );
-    trackBox->addMultiCellWidget( stages, 1, 1, 1, 2 );
-    allStagesRb = new QRadioButton( stages, "allStages" );
-    allStagesRb->setText( "All Stages" );
-    upToStagesRb = new QRadioButton( stages, "upToStages" );
-    upToStagesRb->setText( "Up To Current Stage" );
+    {
+        QGroupBox *stages = new QGroupBox(this);
+        trackBox->addWidget(stages, 1/*fromRow*/, 1 /*fromCol*/, 1 /*rowSpan*/, 1/*colSpan*/);
 
-    // Define a callback for these radio buttons
-    connect( stages, SIGNAL(clicked(int)), this, SLOT(bstages(int)) );
+        QRadioButton *allStagesRb = new QRadioButton("All Stages" );
+        QRadioButton *upToStagesRb = new QRadioButton("Up To Current Stage" );
+
+        QHBoxLayout *hbox = new QHBoxLayout(stages);
+        hbox->addWidget(allStagesRb);
+        hbox->addWidget(upToStagesRb);
+
+        QButtonGroup *stagesButtonGroup = new QButtonGroup(stages);
+        stagesButtonGroup->addButton(allStagesRb);
+        stagesButtonGroup->addButton(upToStagesRb);
+
+        // Define a callback for these radio buttons
+        connect( stagesButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(bstages(int)) );
+
+        allStagesRb->setChecked(true);
+    }
 
     // Add a checkbox button
-    periodicCb = new QCheckBox( this, "periodic" );
-    periodicCb->setText( "Periodic BC" );
-    periodicCb->setChecked( TRUE );
-    trackBox->addWidget( periodicCb, 1, 3);
+    periodicCb = new QCheckBox("Periodic BC");
+    periodicCb->setChecked(true);
+    trackBox->addWidget(periodicCb, 1, 3);
 
     // Create buttons
-    showTracksPb = new QPushButton( this, "generateTracks" );
-    showTracksPb->setText( "Generate Tracks" );
+    showTracksPb = new QPushButton("Generate Tracks");
     showTracksPb->setCheckable(true);
-    trackBox->addWidget( showTracksPb, 2, 0);
+    trackBox->addWidget(showTracksPb, 2, 0);
 
     // Define a callback for this pushbutton
-    connect( showTracksPb, SIGNAL(clicked()), SLOT(showTracks()) );
+    connect(showTracksPb, SIGNAL(clicked()), SLOT(showTracks()));
 
-    // Create a horizontal box
-    Q3HBox * hb0 = new Q3HBox( this, "hb0" );
-    trackBox->addMultiCellWidget( hb0, 2, 2, 1, 3 );
+    DoneApplyCancelWidget *doneApplyCancel = new DoneApplyCancelWidget(this);
+    connect(doneApplyCancel, SIGNAL(done()), this, SLOT(bdone()));
+    connect(doneApplyCancel, SIGNAL(applied()), this, SLOT(bapply()));
+    connect(doneApplyCancel, SIGNAL(canceled()), this, SLOT(bcancel()));
 
-    // Create a placeholder
-    QLabel * emptyL0 = new QLabel( hb0, "emptyL0" );
-    emptyL0->setText("");
-
-    // Create more pushbuttons that will go into the lowest row
-    QPushButton * done = new QPushButton( hb0, "done" );
-    done->setText( "Done" );
-
-    // Define a callback for that button
-    QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
-
-    // Create more pushbuttons that will go into the lowest row
-    QPushButton * apply = new QPushButton( hb0, "apply" );
-    apply->setText( "Apply" );
-
-    // Define a callback for that button
-    QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
-
-    // Create more pushbuttons that will go into the lowest row
-    QPushButton * cancel = new QPushButton( hb0, "cancel" );
-    cancel->setText( "Cancel" );
-
-    // Define a callback for that button
-    QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
-
-    hb0->setStretchFactor( emptyL0, 10 );
-
-    // Set defaults
-    allStagesRb->setChecked (TRUE );
-
-    // Reset the pointers
-    mainForm = NULL;
+    trackBox->addWidget(doneApplyCancel, 2/*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
 }
-
-
-// Set a pointer to the main form
-void TrackBoard::setMainFormAddress( MainForm * thisMF )
-{
-    mainForm = thisMF;
-}
-
 
 // Get the current particle data from main form, register
 // it using a local copy,  and prepare a list of particle
 // types; this function is called each time the board is launched
-void TrackBoard::setData( void )
-{
-    aggregateData * ad = NULL;
+void TrackBoard::setData() {
     tag tmp;
 
-    if (mainForm) {
-        // Get the current settings and register
-        // it using a local particle data structure
-        thisPd = mainForm->getParticleData();
+    // Get the current settings and register
+    // it using a local particle data structure
+    thisPd = mainForm->getParticleData();
 
-        // Get a list of particles that are currently rendered
-        ad = mainForm->getAggregateData();
+    // Get a list of particles that are currently rendered
+    aggregateData * ad = mainForm->getAggregateData();
 
-        // Make entries in the combo box -- use only particle
-        // types that are really needed; otherwise the list
-        // gets too long
-        if (typeCob) {
-            typeCob->clear();
-            for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
-                // Check: is this particle type really needed?
-                bool needed = FALSE;
-                for (int j=0;j<(*ad).numberOfParticles;j++) {
-                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i]) == TRUE) {
-                        // Yes it is needed: set a flag
-                        needed = TRUE;
-                        break;
-                    }
-                }
-
-                // Add the item to the list
-                if (needed) {
-                    typeCob->addItem(QString( (char *)&(*thisPd).type[i]));
+    // Make entries in the combo box -- use only particle
+    // types that are really needed; otherwise the list
+    // gets too long
+    if (typeCob) {
+        typeCob->clear();
+        for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
+            // Check: is this particle type really needed?
+            bool needed = FALSE;
+            for (int j=0;j<(*ad).numberOfParticles;j++) {
+                if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i]) == TRUE) {
+                    // Yes it is needed: set a flag
+                    needed = TRUE;
+                    break;
                 }
             }
-            typeCob->setMinimumSize( typeCob->sizeHint() );
+
+            // Add the item to the list
+            if (needed) {
+                typeCob->addItem(QString( (char *)&(*thisPd).type[i]));
+            }
         }
+        typeCob->setMinimumSize( typeCob->sizeHint() );
     }
 
     // Sort the entries alphabetically, at least approximately
@@ -212,8 +175,7 @@ void TrackBoard::setData( void )
 
 
 // Set the particle type under consideration: adjust the toggle switch
-void TrackBoard::setType( void )
-{
+void TrackBoard::setType() {
     tag thisType;
     thisTypeIndex = -1;
 
@@ -234,8 +196,7 @@ void TrackBoard::setType( void )
 
 
 // Receive the current file list parameters 
-void TrackBoard::setFileListParam( const QString &fn )
-{
+void TrackBoard::setFileListParam( const QString &fn ) {
     // Adjust the caption of the board
     QString caption =  "AViz: Track Rendering Control ";
     caption.append(fn);
@@ -251,38 +212,30 @@ void TrackBoard::showTracks( void )
         showTracksPb->setText( "Show Tracks" );
 
         // Update the view parameters
-        if (mainForm) {
-            viewParam * vp = mainForm->getViewParam();
-            (*vp).showTracks = TRUE;
-        }
+        viewParam * vp = mainForm->getViewParam();
+        (*vp).showTracks = TRUE;
 
         // Read the current settings (the button is similar
         // to the apply button)
         this->readToggles();
 
         // Generate track data
-        if (mainForm)
-            mainForm->generateTracks();
+        mainForm->generateTracks();
 
         // Update the rendering
-        if (mainForm) {
-            mainForm->updateRendering();
-        }
+        mainForm->updateRendering();
+
     }
     else {
         // Change labeling of the button
         showTracksPb->setText( "Generate Tracks" );
 
         // Update the view parameters
-        if (mainForm) {
-            viewParam * vp = mainForm->getViewParam();
-            (*vp).showTracks = FALSE;
-        }
+        viewParam * vp = mainForm->getViewParam();
+        (*vp).showTracks = FALSE;
 
         // Update the rendering
-        if (mainForm) {
-            mainForm->updateRendering();
-        }
+        mainForm->updateRendering();
     }
 }
 
@@ -293,17 +246,17 @@ void TrackBoard::bstages( int radio )
     switch (radio) {
     case 0:
         // Update the view parameters
-        if (mainForm) {
-            viewParam * vp = mainForm->getViewParam();
-            (*vp).tRenderMode = ALL_STAGES;
-        }
+    {
+        viewParam * vp = mainForm->getViewParam();
+        (*vp).tRenderMode = ALL_STAGES;
+    }
         break;
     case 1:
         // Update the view parameters
-        if (mainForm) {
-            viewParam * vp = mainForm->getViewParam();
-            (*vp).tRenderMode = UP_TO_CURRENT;
-        }
+    {
+        viewParam * vp = mainForm->getViewParam();
+        (*vp).tRenderMode = UP_TO_CURRENT;
+    }
         break;
     }
 }
@@ -316,10 +269,8 @@ void TrackBoard::readToggles( void )
         (*thisPd).showTrack[thisTypeIndex] = showTypeTrackCb->isChecked();
     }
 
-    if (mainForm) {
-        viewParam * vp = mainForm->getViewParam();
-        (*vp).periodicBCTracks = periodicCb->isChecked();
-    }
+    viewParam * vp = mainForm->getViewParam();
+    (*vp).periodicBCTracks = periodicCb->isChecked();
 }
 
 
@@ -334,20 +285,16 @@ void TrackBoard::bdone()
     char * filename = (char *)malloc(BUFSIZ);
     sprintf(filename, "%s/.aviz/%s", getenv("HOME"), particleDataFile);
     if (saveParticleDataFunction( filename, thisPd ) ) {
-        if (mainForm)
-            mainForm->statusMessage( "Saved particle data in ", filename );
+        mainForm->statusMessage( "Saved particle data in ", filename );
     }
     free(filename);
 
     // Generate track data
-    if (mainForm)
-        mainForm->generateTracks();
+    mainForm->generateTracks();
 
     // Re-do the graphics, using the new particle data
-    if (mainForm)
-
-        // Hide now
-        hide();
+    // Hide now
+    hide();
 }
 
 
@@ -361,18 +308,15 @@ void TrackBoard::bapply()
     char * filename = (char *)malloc(BUFSIZ);
     sprintf(filename, "%s/.aviz/%s", getenv("HOME"), particleDataFile);
     if (saveParticleDataFunction( filename, thisPd ) ) {
-        if (mainForm)
-            mainForm->statusMessage( "Saved particle data in ", filename );
+        mainForm->statusMessage( "Saved particle data in ", filename );
     }
     free(filename);
 
     // Generate track data
-    if (mainForm)
-        mainForm->generateTracks();
+    mainForm->generateTracks();
 
     // Re-do the graphics, using the new particle data
-    if (mainForm)
-        mainForm->updateRendering();
+    mainForm->updateRendering();
 }
 
 

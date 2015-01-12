@@ -1023,8 +1023,7 @@ void MainForm::launchStretch() {
 // Callback function to launch the track board panel
 void MainForm::launchTrack(const QString &fn) {
     if (!trab) {
-        trab = new TrackBoard(this);
-        trab->setMainFormAddress(this);
+        trab = new TrackBoard(this/*mainForm*/, this/*parent*/);
     }
 
     // Get the current particle data and show
