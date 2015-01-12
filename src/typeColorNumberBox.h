@@ -37,23 +37,23 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // TypeColorNumberBox box widget
 class TypeColorNumberBox: public Q3HBox
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-        TypeColorNumberBox( QWidget * parent=0, const char * name=0, int thisMaxNumberOfColors=2 );
+    TypeColorNumberBox( QWidget * parent=0, const char * name=0, int thisMaxNumberOfColors=2 );
 
 public slots:
-        void setParticle( particleData *, int );
-        void readToggles( particleData *, int );
+    void setParticle( particleData *, int );
+    void readToggles( particleData *, int );
 
 private slots:
 
 private:
-	Q3ButtonGroup * number;
-	QRadioButton * one;
-	QRadioButton * two;
-	QRadioButton * three;
+    Q3ButtonGroup * number;
+    QRadioButton * one;
+    QRadioButton * two;
+    QRadioButton * three;
 
-	int maxNumberOfColors;
+    int maxNumberOfColors;
 };
 
 #endif // TYPECOLORNUBO_H
