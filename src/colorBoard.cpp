@@ -28,6 +28,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <Q3GridLayout>
 #include <Q3HBox>
+#include <Q3VBox>
 #include <QLabel>
 #include <QSlider>
 #include <QPushButton>

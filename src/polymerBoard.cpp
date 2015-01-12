@@ -26,12 +26,9 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "polymerBoard.h"
 
-#include <cmath>
-
-#include <Q3HBox>
-
 #include <QLabel>
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QGroupBox>
 #include <QButtonGroup>
 #include <QRadioButton>
@@ -39,63 +36,82 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QComboBox>
 #include <QCheckBox>
 
+#include "codeBox.h"
+#include "colorBoard.h"
+#include "colorLabel.h"
+#include "defaultParticles.h"
+#include "defaults.h"
+#include "fileFunctions.h"
+#include "mainForm.h"
+#include "positionBox.h"
+#include "propertyBox.h"
+#include "sizeBox.h"
+#include "widgets/doneapplycancelwidget.h"
+
 // Make a popup dialog box 
 PolymerBoard::PolymerBoard(QWidget * parent)
     : QDialog(parent, Qt::WType_TopLevel)
 {
     setWindowTitle( "AViz: Set Polymer Atom Types" );
 
-    // Create a hboxlayout that will fill the first row
-    hb1 = new Q3HBox( this, "hb1" );
+    {
+        // Create a hboxlayout that will fill the first row
+        hb1 = new QWidget(this);
 
-    // Create a label
-    QLabel * atomL = new QLabel( hb1, "atomL" );
-    atomL->setText( " Type: ");
+        // Create a combo box that will go into the
+        // second column; entries in the combo box will
+        // be made later
+        atomCob = new QComboBox();
+        connect( atomCob, SIGNAL(activated(int)), SLOT(setPolymerAtom()) );
 
-    // Create a combo box that will go into the
-    // second column; entries in the combo box will
-    // be made later
-    atomCob = new QComboBox(hb1);
+        // Add a check box button
+        showPolymerAtomCb = new QCheckBox("Show Polymer Atoms");
+        showPolymerAtomCb->setChecked(true);
+        connect( showPolymerAtomCb, SIGNAL(clicked()), this, SLOT(adjustPolymer()) );
 
-    // Define a callback for this combo box
-    connect( atomCob, SIGNAL(activated(int)), SLOT(setPolymerAtom()) );
+        QHBoxLayout *hbox = new QHBoxLayout(hb1);
+        hbox->addWidget(new QLabel(" Type: "));
+        hbox->addWidget(atomCob);
+        hbox->addStretch(1);
+        hbox->addWidget(showPolymerAtomCb);
+    }
 
-    // Create a placeholder
-    QLabel * emptyL0 = new QLabel( hb1, "emptyL0" );
-    emptyL0->setText("");
+    {
+        // Create a hboxlayout that will fill the next row
+        hb2 = new QWidget(this);
 
-    // Add a check box button
-    showPolymerAtomCb = new QCheckBox( hb1, "showAtom" );
-    showPolymerAtomCb->setText( "Show Polymer Atoms" );
-    showPolymerAtomCb->setChecked( TRUE );
+        // Add color labels
+        colorLabel0 = new ColorLabel(hb2);
+        colorLabel1 = new ColorLabel(hb2);
+        colorLabel2 = new ColorLabel(hb2);
+        colorLabel3 = new ColorLabel(hb2);
+        colorLabel4 = new ColorLabel(hb2);
+        colorLabel5 = new ColorLabel(hb2);
+        colorLabel0->setFixedHeight( LABEL_HEIGHT );
+        colorLabel1->setFixedHeight( LABEL_HEIGHT );
+        colorLabel2->setFixedHeight( LABEL_HEIGHT );
+        colorLabel3->setFixedHeight( LABEL_HEIGHT );
+        colorLabel4->setFixedHeight( LABEL_HEIGHT );
+        colorLabel5->setFixedHeight( LABEL_HEIGHT );
 
-    // Define a callback for this toggle switch
-    connect( showPolymerAtomCb, SIGNAL(clicked()), this, SLOT(adjustPolymer()) );
+        // Add a push button
+        colorButton = new QPushButton("Set Color...");
 
-    // Create a hboxlayout that will fill the next row
-    hb2 = new Q3HBox( this, "hb2" );
+        // Define a callback for this button
+        connect(colorButton, SIGNAL(clicked()), SLOT(setColorCb()));
 
-    // Add a label and color labels
-    colorL = new QLabel(" Color: ", hb2);
-    colorLabel0 = new ColorLabel(hb2);
-    colorLabel1 = new ColorLabel(hb2);
-    colorLabel2 = new ColorLabel(hb2);
-    colorLabel3 = new ColorLabel(hb2);
-    colorLabel4 = new ColorLabel(hb2);
-    colorLabel5 = new ColorLabel(hb2);
-    colorLabel0->setFixedHeight( LABEL_HEIGHT );
-    colorLabel1->setFixedHeight( LABEL_HEIGHT );
-    colorLabel2->setFixedHeight( LABEL_HEIGHT );
-    colorLabel3->setFixedHeight( LABEL_HEIGHT );
-    colorLabel4->setFixedHeight( LABEL_HEIGHT );
-    colorLabel5->setFixedHeight( LABEL_HEIGHT );
+        QHBoxLayout *hbox = new QHBoxLayout(hb2);
+        hbox->setSpacing(0);
+        hbox->addWidget(new QLabel(" Color: "));
+        hbox->addWidget(colorLabel0);
+        hbox->addWidget(colorLabel1);
+        hbox->addWidget(colorLabel2);
+        hbox->addWidget(colorLabel3);
+        hbox->addWidget(colorLabel4);
+        hbox->addWidget(colorLabel5);
+        hbox->addWidget(colorButton);
+    }
 
-    // Add a push button
-    colorButton = new QPushButton( hb2, "colorButton" );
-    colorButton->setText( "Set Color..." );
-
-    // Define a callback for this button
-    QObject::connect( colorButton, SIGNAL(clicked()), this, SLOT(setColorCb()) );
 
     // Create a hboxlayout that will fill the next row
     sizeBox = new SizeBox(this);
@@ -139,38 +155,23 @@ PolymerBoard::PolymerBoard(QWidget * parent)
     propertyBox = new PropertyBox(this);
     codeBox = new CodeBox(this);
 
-    // Create a hboxlayout that will fill the lowest row
-    hb5 = new Q3HBox( this, "hb5" );
+    {
+        hb5 = new QWidget(this);
 
-    // Create pushbuttons that will go into the lowest row
-    QPushButton * bonds = new QPushButton( hb5, "bonds" );
-    bonds->setText( "Bonds..." );
+        // Create pushbuttons that will go into the lowest row
+        QPushButton * bonds = new QPushButton("Bonds...");
+        connect( bonds, SIGNAL(clicked()), this, SLOT(bbonds()) );
 
-    // Define a callback for that button
-    QObject::connect( bonds, SIGNAL(clicked()), this, SLOT(bbonds()) );
+        DoneApplyCancelWidget *doneApplyCancel = new DoneApplyCancelWidget(this);
+        connect(doneApplyCancel, SIGNAL(done()), this, SLOT(bdone()) );
+        connect(doneApplyCancel, SIGNAL(applied()), this, SLOT(bapply()) );
+        connect(doneApplyCancel, SIGNAL(canceled()), this, SLOT(bcancel()));
 
-    // Create a placeholder
-    QLabel * emptyL1 = new QLabel( hb5, "emptyL1" );
-
-    QPushButton * done = new QPushButton( hb5, "done" );
-    done->setText( "Done" );
-
-    // Define a callback for that button
-    QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
-
-    QPushButton * apply = new QPushButton( hb5, "apply" );
-    apply->setText( "Apply" );
-
-    // Define a callback for that button
-    QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
-
-    QPushButton * cancel = new QPushButton( hb5, "cancel" );
-    cancel->setText( "Cancel" );
-
-    // Define a callback for that button
-    QObject::connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
-
-    hb5->setStretchFactor( emptyL1, 10 );
+        QHBoxLayout *hbox = new QHBoxLayout(hb5);
+        hbox->addWidget(bonds);
+        hbox->addStretch(1);
+        hbox->addWidget(doneApplyCancel);
+    }
 
     // Clear the board pointer
     polymerBox = NULL;

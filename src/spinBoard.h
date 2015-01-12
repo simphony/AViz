@@ -29,10 +29,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <QDialog>
 
-#include <q3hbox.h>
-
 #include "data.h"
-
 
 class MainForm;
 class CodeBox;
@@ -94,15 +91,14 @@ private:
     PositionBox * positionBox;
     PropertyBox * propertyBox;
     SizeBox * sizeBox;
-    Q3HBox * hb1;
-    Q3HBox * hb2;
+    QWidget * hb1;
+    QWidget * hb2;
     QWidget * hb4;
-    Q3HBox * hb5;
+    QWidget * hb5;
     QGridLayout * spinBox;
     QComboBox * spinCob;
     QCheckBox * showSpinCb;
     QLabel * modeL;
-    QLabel * colorL;
     ColorLabel * colorLabel0;
     ColorLabel * colorLabel1;
     ColorLabel * colorLabel2;

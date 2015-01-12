@@ -43,7 +43,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "codeBox.h"
 #include "fileFunctions.h"
 #include "sizeBox.h"
-#include "data.h"
 #include "positionBox.h"
 #include "propertyBox.h"
 #include "widgets/doneapplycancelwidget.h"

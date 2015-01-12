@@ -31,7 +31,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "lineTypeBox.h"
 
 #include <QDialog>
-#include <q3vbox.h>
 
 class MainForm;
 class ColorLabel;
@@ -92,15 +91,14 @@ private:
     PropertyBox * propertyBox;
     SizeBox * sizeBox;
     TypeColorNumberBox * typeColorNumberBox;
-    Q3HBox * hb1;
-    Q3HBox * hb2;
+    QWidget * hb1;
+    QWidget * hb2;
     QWidget * hb4;
-    Q3HBox * hb5;
+    QWidget * hb5;
     QGridLayout * lcBox;
     QComboBox * lcCob;
     QCheckBox * showLcCb;
     QLabel * modeL;
-    QLabel * colorL;
     ColorLabel * colorLabel0;
     ColorLabel * colorLabel1;
     ColorLabel * colorLabel2;

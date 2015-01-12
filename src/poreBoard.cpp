@@ -26,10 +26,19 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "poreBoard.h"
 
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QLabel>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QRadioButton>
+#include <QGroupBox>
+#include <QButtonGroup>
+
 #include "mainForm.h"
 #include "colorBoard.h"
 #include "colorLabel.h"
-
 #include "codeBox.h"
 #include "defaults.h"
 #include "lineTypeBox.h"
@@ -39,15 +48,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "typeColorNumberBox.h"
 #include "fileFunctions.h"
 #include "defaultParticles.h" // typeCopy, typeCmp
+#include "widgets/doneapplycancelwidget.h"
 
-#include <QPushButton>
-#include <QLabel>
-#include <QComboBox>
-#include <QCheckBox>
-#include <QRadioButton>
-#include <QGroupBox>
-#include <QButtonGroup>
-#include <QGridLayout>
 
 // Make a popup dialog box 
 PoreBoard::PoreBoard(QWidget * parent)
@@ -55,56 +57,66 @@ PoreBoard::PoreBoard(QWidget * parent)
 {
     setWindowTitle( "AViz: Set Pores" );
 
-    // Create a hboxlayout that will fill the first row
-    hb1 = new Q3HBox( this, "hb1" );
+    {
+        // Create a hboxlayout that will fill the first row
+        hb1 = new QWidget(this);
 
-    // Create a label
-    QLabel * poreL = new QLabel( hb1, "poreL" );
-    poreL->setText( " Type: ");
+        // Create a combo box that will go into the
+        // second column; entries in the combo box will
+        // be made later
+        poreCob = new QComboBox();
+        connect( poreCob, SIGNAL(activated(int)), SLOT(setPore()) );
 
-    // Create a combo box that will go into the
-    // second column; entries in the combo box will
-    // be made later
-    poreCob = new QComboBox(hb1);
+        // Add a check box button
+        showPoreCb = new QCheckBox("Show Pores");
+        showPoreCb->setChecked( TRUE );
 
-    // Define a callback for this combo box
-    connect( poreCob, SIGNAL(activated(int)), SLOT(setPore()) );
+        // Define a callback for this toggle switch
+        connect( showPoreCb, SIGNAL(clicked()), this, SLOT(adjustPore()) );
 
-    // Create a placeholder
-    QLabel * emptyL0 = new QLabel( hb1, "emptyL0" );
-    emptyL0->setText("");
+        QHBoxLayout *hbox = new QHBoxLayout(hb1);
+        hbox->addWidget(new QLabel(" Type: "));
+        hbox->addWidget(poreCob);
+        hbox->addStretch(1);
+        hbox->addWidget(showPoreCb);
+    }
 
-    // Add a check box button
-    showPoreCb = new QCheckBox( hb1, "showPore" );
-    showPoreCb->setText( "Show Pores" );
-    showPoreCb->setChecked( TRUE );
+    {
+        // Create a hboxlayout that will fill the next row
+        hb2 = new QWidget(this);
 
-    // Define a callback for this toggle switch
-    connect( showPoreCb, SIGNAL(clicked()), this, SLOT(adjustPore()) );
+        // Add color labels
+        colorLabel0 = new ColorLabel(hb2);
+        colorLabel1 = new ColorLabel(hb2);
+        colorLabel2 = new ColorLabel(hb2);
+        colorLabel3 = new ColorLabel(hb2);
+        colorLabel4 = new ColorLabel(hb2);
+        colorLabel5 = new ColorLabel(hb2);
+        colorLabel0->setFixedHeight( LABEL_HEIGHT );
+        colorLabel1->setFixedHeight( LABEL_HEIGHT );
+        colorLabel2->setFixedHeight( LABEL_HEIGHT );
+        colorLabel3->setFixedHeight( LABEL_HEIGHT );
+        colorLabel4->setFixedHeight( LABEL_HEIGHT );
+        colorLabel5->setFixedHeight( LABEL_HEIGHT );
 
-    // Create a hboxlayout that will fill the next row
-    hb2 = new Q3HBox( this, "hb2" );
+        // Add a push button
+        colorButton = new QPushButton("Set Color...");
 
-    // Add a label and color labels
-    colorL = new QLabel(" Color: ", hb2);
-    colorLabel0 = new ColorLabel(hb2);
-    colorLabel1 = new ColorLabel(hb2);
-    colorLabel2 = new ColorLabel(hb2);
-    colorLabel3 = new ColorLabel(hb2);
-    colorLabel4 = new ColorLabel(hb2);
-    colorLabel5 = new ColorLabel(hb2);
-    colorLabel0->setFixedHeight( LABEL_HEIGHT );
-    colorLabel1->setFixedHeight( LABEL_HEIGHT );
-    colorLabel2->setFixedHeight( LABEL_HEIGHT );
-    colorLabel3->setFixedHeight( LABEL_HEIGHT );
-    colorLabel4->setFixedHeight( LABEL_HEIGHT );
-    colorLabel5->setFixedHeight( LABEL_HEIGHT );
+        // Define a callback for this button
+        connect(colorButton, SIGNAL(clicked()), SLOT(setColorCb()));
 
-    // Add a push button
-    colorButton = new QPushButton("Set Color...", hb2);
+        QHBoxLayout *hbox = new QHBoxLayout(hb2);
+        hbox->setSpacing(0);
+        hbox->addWidget(new QLabel(" Color: "));
+        hbox->addWidget(colorLabel0);
+        hbox->addWidget(colorLabel1);
+        hbox->addWidget(colorLabel2);
+        hbox->addWidget(colorLabel3);
+        hbox->addWidget(colorLabel4);
+        hbox->addWidget(colorLabel5);
+        hbox->addWidget(colorButton);
+    }
 
-    // Define a callback for this button
-    QObject::connect( colorButton, SIGNAL(clicked()), this, SLOT(setColorCb()) );
 
     // Create a hboxlayout that will fill the next row
     sizeBox = new SizeBox(this);
@@ -152,32 +164,12 @@ PoreBoard::PoreBoard(QWidget * parent)
     // Create a box that will fill the next row
     lineTypeBox = new LineTypeBox( this );
 
-    // Create a hboxlayout that will fill the lowest row
-    hb5 = new Q3HBox( this, "hb5" );
-
-    // Create a placeholder
-    QLabel * emptyL1 = new QLabel( hb5, "emptyL1" );
-
-    // Create pushbuttons that will go into the lowest row
-    QPushButton * done = new QPushButton( hb5, "done" );
-    done->setText( "Done" );
-
-    // Define a callback for that button
-    QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
-
-    QPushButton * apply = new QPushButton( hb5, "apply" );
-    apply->setText( "Apply" );
-
-    // Define a callback for that button
-    QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
-
-    QPushButton * cancel = new QPushButton( hb5, "cancel" );
-    cancel->setText( "Cancel" );
-
-    // Define a callback for that button
-    QObject::connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
-
-    hb5->setStretchFactor( emptyL1, 10 );
+    {
+        hb5 = new DoneApplyCancelWidget(this);
+        connect(hb5, SIGNAL(done()), this, SLOT(bdone()) );
+        connect(hb5, SIGNAL(applied()), this, SLOT(bapply()) );
+        connect(hb5, SIGNAL(canceled()), this, SLOT(bcancel()));
+    }
 
     // Clear the board pointer
     poreBox = NULL;

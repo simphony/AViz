@@ -27,21 +27,9 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef POLYMB_H
 #define POLYMB_H 
 
-#include "codeBox.h"
-#include "colorBoard.h"
-#include "colorLabel.h"
-#include "data.h"
-#include "defaultParticles.h"
-#include "defaults.h"
-#include "fileFunctions.h"
-#include "mainForm.h"
-#include "positionBox.h"
-#include "propertyBox.h"
-#include "sizeBox.h"
-
 #include <QDialog>
 
-class Q3HBox;
+#include "data.h"
 
 class QGridLayout;
 class QGroupBox;
@@ -51,6 +39,14 @@ class QPushButton;
 class QComboBox;
 class QCheckBox;
 class QWidget;
+
+class MainForm;
+class ColorLabel;
+class ColorBoard;
+class CodeBox;
+class SizeBox;
+class PositionBox;
+class PropertyBox;
 
 // Polymer board dialog widget
 class PolymerBoard: public QDialog
@@ -95,16 +91,15 @@ private:
     PropertyBox * propertyBox;
     SizeBox * sizeBox;
     QGridLayout * polymerBox;
-    Q3HBox * hb1;
-    Q3HBox * hb2;
-    Q3HBox * hb3;
+    QWidget * hb1;
+    QWidget * hb2;
+    QWidget * hb3;
     QWidget * hb4;
-    Q3HBox * hb5;
+    QWidget * hb5;
     QComboBox * atomCob;
     QComboBox * styleCob;
     QCheckBox * showPolymerAtomCb;
     QLabel * modeL;
-    QLabel * colorL;
     QGroupBox * colorMode;
     QRadioButton * colorMode0;
     QRadioButton * colorMode1;
