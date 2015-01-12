@@ -47,6 +47,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QRadioButton>
 #include <QGroupBox>
 #include <QButtonGroup>
+#include <QGridLayout>
 
 // Make a popup dialog box 
 PoreBoard::PoreBoard(QWidget * parent)
@@ -214,12 +215,11 @@ void PoreBoard::setMainFormAddress( MainForm * thisMF )
 // Build the layout
 void PoreBoard::buildLayout( colorCriterion crit )
 {
-    int numCols = 6;
     int numRows = 7;
 
     // Destroy existing layout
     if (poreBox) {
-        poreBox->~Q3GridLayout();
+        poreBox->~QGridLayout();
     }
 
     // Destroy existing layout
@@ -227,15 +227,17 @@ void PoreBoard::buildLayout( colorCriterion crit )
     this->setFixedHeight( numRows*ROW_HEIGHT );
 
     // Insert a grid that will hold control buttons
-    poreBox = new Q3GridLayout( this, numRows, numCols, SPACE, SPACE, "poreBox" );
+    poreBox = new QGridLayout(this);
+    poreBox->setHorizontalSpacing(SPACE);
+    poreBox->setVerticalSpacing(SPACE);
 
     // Add components that are always needed
-    poreBox->addMultiCellWidget( hb1, 0, 0, 0, -1);
-    poreBox->addMultiCellWidget( hb2, 1, 1, 0, -1);
-    poreBox->addMultiCellWidget( sizeBox, 2, 2, 0, -1);
-    poreBox->addMultiCellWidget( hb4, 3, 3, 0, -1);
-    poreBox->addMultiCellWidget( lineTypeBox, numRows-2, numRows-2, 0, -1);
-    poreBox->addMultiCellWidget( hb5, numRows-1, numRows-1, 0, -1);
+    poreBox->addWidget(hb1, 0 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    poreBox->addWidget(hb2, 1 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    poreBox->addWidget(sizeBox, 2 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    poreBox->addWidget(hb4, 3 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    poreBox->addWidget(lineTypeBox, 5 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    poreBox->addWidget(hb5, 6 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
 
     // Add additional components
     switch (crit) {
@@ -244,28 +246,28 @@ void PoreBoard::buildLayout( colorCriterion crit )
         propertyBox->hide();
         codeBox->hide();
         typeColorNumberBox->show();
-        poreBox->addMultiCellWidget( typeColorNumberBox, 4, 4, 0, -1);
+        poreBox->addWidget(typeColorNumberBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     case POSITION:
         positionBox->show();
         propertyBox->hide();
         codeBox->hide();
         typeColorNumberBox->hide();
-        poreBox->addMultiCellWidget( positionBox, 4, 4, 0, -1);
+        poreBox->addWidget(positionBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     case PROPERTY:
         positionBox->hide();
         propertyBox->show();
         codeBox->hide();
         typeColorNumberBox->hide();
-        poreBox->addMultiCellWidget( propertyBox, 4, 4, 0, -1);
+        poreBox->addWidget(propertyBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     case COLORCODE:
         positionBox->hide();
         propertyBox->hide();
         codeBox->show();
         typeColorNumberBox->hide();
-        poreBox->addMultiCellWidget( codeBox, 4, 4, 0, -1);
+        poreBox->addWidget(codeBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     }
 

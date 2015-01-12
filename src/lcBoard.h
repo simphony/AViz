@@ -31,7 +31,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "lineTypeBox.h"
 
 #include <QDialog>
-#include <q3gridlayout.h>
 #include <q3vbox.h>
 
 class MainForm;
@@ -48,6 +47,7 @@ class QPushButton;
 class QRadioButton;
 class QComboBox;
 class QCheckBox;
+class QGridLayout;
 
 // Liquid crystal board dialog widget
 class LcBoard: public QDialog
@@ -96,7 +96,7 @@ private:
     Q3HBox * hb2;
     QWidget * hb4;
     Q3HBox * hb5;
-    Q3GridLayout * lcBox;
+    QGridLayout * lcBox;
     QComboBox * lcCob;
     QCheckBox * showLcCb;
     QLabel * modeL;

@@ -41,15 +41,16 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <QDialog>
 
-class Q3GridLayout;
 class Q3HBox;
 
+class QGridLayout;
 class QGroupBox;
 class QLabel;
 class QRadioButton;
 class QPushButton;
 class QComboBox;
 class QCheckBox;
+class QWidget;
 
 // Polymer board dialog widget
 class PolymerBoard: public QDialog
@@ -93,7 +94,7 @@ private:
     PositionBox * positionBox;
     PropertyBox * propertyBox;
     SizeBox * sizeBox;
-    Q3GridLayout * polymerBox;
+    QGridLayout * polymerBox;
     Q3HBox * hb1;
     Q3HBox * hb2;
     Q3HBox * hb3;

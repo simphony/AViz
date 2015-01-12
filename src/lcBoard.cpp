@@ -38,7 +38,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "fileFunctions.h"
 #include "defaultParticles.h" // typeCopy, typeCmp
 
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QLabel>
 #include <QComboBox>
 #include <QCheckBox>
@@ -216,12 +216,11 @@ void LcBoard::setMainFormAddress( MainForm * thisMF )
 // Build the layout
 void LcBoard::buildLayout( colorCriterion crit )
 {
-    int numCols = 6;
     int numRows = 7;
 
     // Destroy existing layout
     if (lcBox) {
-        lcBox->~Q3GridLayout();
+        lcBox->~QGridLayout();
     }
 
     // Destroy existing layout
@@ -229,15 +228,18 @@ void LcBoard::buildLayout( colorCriterion crit )
     this->setFixedHeight( numRows*ROW_HEIGHT );
 
     // Insert a grid that will hold control buttons
-    lcBox = new Q3GridLayout( this, numRows, numCols, SPACE, SPACE, "lcBox" );
+    lcBox = new QGridLayout(this);
+    lcBox->setHorizontalSpacing(SPACE);
+    lcBox->setVerticalSpacing(SPACE);
 
     // Add components that are always needed
-    lcBox->addMultiCellWidget( hb1, 0, 0, 0, -1);
-    lcBox->addMultiCellWidget( hb2, 1, 1, 0, -1);
-    lcBox->addMultiCellWidget( sizeBox, 2, 2, 0, -1);
-    lcBox->addMultiCellWidget( hb4, 3, 3, 0, -1);
-    lcBox->addMultiCellWidget( lineTypeBox, numRows-2, numRows-2, 0, -1);
-    lcBox->addMultiCellWidget( hb5, numRows-1, numRows-1, 0, -1);
+    lcBox->addWidget(hb1, 0 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    lcBox->addWidget(hb2, 1 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    lcBox->addWidget(sizeBox, 2 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    lcBox->addWidget(hb4, 3 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    lcBox->addWidget(lineTypeBox, 5 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    lcBox->addWidget(hb5, 6 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+
 
     // Add additional components
     switch (crit) {
@@ -246,29 +248,28 @@ void LcBoard::buildLayout( colorCriterion crit )
         propertyBox->hide();
         codeBox->hide();
         typeColorNumberBox->show();
-        lcBox->addMultiCellWidget( typeColorNumberBox, 4, 4, 0, -1);
+        lcBox->addWidget(typeColorNumberBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     case POSITION:
         positionBox->show();
         propertyBox->hide();
         codeBox->hide();
         typeColorNumberBox->hide();
-        lcBox->addMultiCellWidget( typeColorNumberBox, 4, 4, 0, -1);
-        lcBox->addMultiCellWidget( positionBox, 4, 4, 0, -1);
+        lcBox->addWidget(positionBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     case PROPERTY:
         positionBox->hide();
         propertyBox->show();
         codeBox->hide();
         typeColorNumberBox->hide();
-        lcBox->addMultiCellWidget( propertyBox, 4, 4, 0, -1);
+        lcBox->addWidget(propertyBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     case COLORCODE:
         positionBox->hide();
         propertyBox->hide();
         codeBox->show();
         typeColorNumberBox->hide();
-        lcBox->addMultiCellWidget( codeBox, 4, 4, 0, -1);
+        lcBox->addWidget(codeBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     }
 

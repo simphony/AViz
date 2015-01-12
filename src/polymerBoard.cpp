@@ -28,11 +28,10 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <cmath>
 
-#include <Q3GridLayout>
 #include <Q3HBox>
 
-
 #include <QLabel>
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QButtonGroup>
 #include <QRadioButton>
@@ -208,7 +207,6 @@ void PolymerBoard::setMainFormAddress( MainForm * thisMF )
 // Build the layout
 void PolymerBoard::buildLayout( colorCriterion crit ) 
 {
-    int numCols = 6;
     int numRows = 6;
 
     // Adjust the number of rows
@@ -224,14 +222,16 @@ void PolymerBoard::buildLayout( colorCriterion crit )
     this->setFixedHeight( numRows*ROW_HEIGHT );
 
     // Insert a grid that will hold control buttons
-    polymerBox = new Q3GridLayout( this, numRows, numCols, SPACE, SPACE, "polymerBox" );
+    polymerBox = new QGridLayout(this);
+    polymerBox->setHorizontalSpacing(SPACE);
+    polymerBox->setVerticalSpacing(SPACE);
 
     // Add components that are always needed
-    polymerBox->addMultiCellWidget( hb1, 0, 0, 0, -1);
-    polymerBox->addMultiCellWidget( hb2, 1, 1, 0, -1);
-    polymerBox->addMultiCellWidget( sizeBox, 2, 2, 0, -1);
-    polymerBox->addMultiCellWidget( hb4, 3, 3, 0, -1);
-    polymerBox->addMultiCellWidget( hb5, numRows-1, numRows-1, 0, -1);
+    polymerBox->addWidget(hb1, 0 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    polymerBox->addWidget(hb2, 1 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    polymerBox->addWidget(sizeBox, 2 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    polymerBox->addWidget(hb4, 3 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    polymerBox->addWidget(hb5, 5 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
 
     // Add additional components
     switch (crit) {
@@ -244,19 +244,19 @@ void PolymerBoard::buildLayout( colorCriterion crit )
         positionBox->show();
         propertyBox->hide();
         codeBox->hide();
-        polymerBox->addMultiCellWidget( positionBox, 4, 4, 0, -1);
+        polymerBox->addWidget(positionBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     case PROPERTY:
         positionBox->hide();
         propertyBox->show();
         codeBox->hide();
-        polymerBox->addMultiCellWidget( propertyBox, 4, 4, 0, -1);
+        polymerBox->addWidget(propertyBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     case COLORCODE:
         positionBox->hide();
         propertyBox->hide();
         codeBox->show();
-        polymerBox->addMultiCellWidget( codeBox, 4, 4, 0, -1);
+        polymerBox->addWidget(codeBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     }
 

@@ -215,6 +215,8 @@ void AtomBoard::buildLayout( colorCriterion crit )
 
     // Insert a grid that will hold control buttons
     atomBox = new QGridLayout(this);
+    atomBox->setHorizontalSpacing(SPACE);
+    atomBox->setVerticalSpacing(SPACE);
 
     // Add components that are always needed
     atomBox->addWidget(m_atomWidget, 0 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);

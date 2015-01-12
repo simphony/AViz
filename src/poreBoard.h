@@ -30,9 +30,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "data.h"
 
-#include <q3grid.h>
 #include <q3hbox.h>
-#include <Q3GridLayout>
 
 #include <QDialog>
 
@@ -46,12 +44,14 @@ class PropertyBox;
 class SizeBox;
 class TypeColorNumberBox;
 
+class QGridLayout;
 class QPushButton;
 class QLabel;
 class QComboBox;
 class QCheckBox;
 class QRadioButton;
 class QGroupBox;
+class QWidget;
 
 // Pore board dialog widget
 class PoreBoard: public QDialog
@@ -100,7 +100,7 @@ private:
     Q3HBox * hb2;
     QWidget * hb4;
     Q3HBox * hb5;
-    Q3GridLayout * poreBox;
+    QGridLayout * poreBox;
     QComboBox * poreCob;
     QCheckBox * showPoreCb;
     QLabel * modeL;

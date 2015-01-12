@@ -44,6 +44,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QPushButton>
 #include <QGroupBox>
 #include <QButtonGroup>
+#include <QGridLayout>
 
 // Make a popup dialog box 
 SpinBoard::SpinBoard(QWidget * parent)
@@ -214,7 +215,6 @@ void SpinBoard::setMainFormAddress( MainForm * thisMF )
 // Build the layout
 void SpinBoard::buildLayout( colorCriterion crit )
 {
-    int numCols = 6;
     int numRows = 7;
 
     // Adjust number of rows
@@ -223,19 +223,21 @@ void SpinBoard::buildLayout( colorCriterion crit )
 
     // Destroy existing layout
     if (spinBox) {
-        spinBox->~Q3GridLayout();
+        spinBox->~QGridLayout();
     }
 
     // Insert a grid that will hold control buttons
-    spinBox = new Q3GridLayout( this, numRows, numCols, SPACE, SPACE, "spinBox" );
+    spinBox = new QGridLayout(this);
+    spinBox->setHorizontalSpacing(SPACE);
+    spinBox->setVerticalSpacing(SPACE);
 
     // Add components that are always needed
-    spinBox->addMultiCellWidget( hb1, 0, 0, 0, -1);
-    spinBox->addMultiCellWidget( hb2, 1, 1, 0, -1);
-    spinBox->addMultiCellWidget( sizeBox, 2, 2, 0, -1);
-    spinBox->addMultiCellWidget( hb4, 3, 3, 0, -1);
-    spinBox->addMultiCellWidget( lineTypeBox, numRows-2, numRows-2, 0, -1);
-    spinBox->addMultiCellWidget( hb5, numRows-1, numRows-1, 0, -1);
+    spinBox->addWidget(hb1, 0 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    spinBox->addWidget(hb2, 1 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    spinBox->addWidget(sizeBox, 2 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    spinBox->addWidget(hb4, 3 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    spinBox->addWidget(lineTypeBox, 5 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+    spinBox->addWidget(hb5, 6 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
 
     // Add additional components
     switch (crit) {
@@ -248,19 +250,19 @@ void SpinBoard::buildLayout( colorCriterion crit )
         positionBox->show();
         propertyBox->hide();
         codeBox->hide();
-        spinBox->addMultiCellWidget( positionBox, 4, 4, 0, -1);
+        spinBox->addWidget(positionBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     case PROPERTY:
         positionBox->hide();
         propertyBox->show();
         codeBox->hide();
-        spinBox->addMultiCellWidget( propertyBox, 4, 4, 0, -1);
+        spinBox->addWidget(propertyBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     case COLORCODE:
         positionBox->hide();
         propertyBox->hide();
         codeBox->show();
-        spinBox->addMultiCellWidget( codeBox, 4, 4, 0, -1);
+        spinBox->addWidget(codeBox, 4 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
         break;
     }
 
