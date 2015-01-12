@@ -54,76 +54,76 @@ class QCheckBox;
 // Polymer board dialog widget
 class PolymerBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
     PolymerBoard(QWidget * parent=0);
 
 public slots:
-	void setMainFormAddress( MainForm * );
-	void setData();
-	void getColors( float, float, float, float, float, float );
-	void getColorBoardPos( int, int );
-	void setDotStyle();
-	void setLineStyle();
-	void setCubeStyle();
-	void setCylinderStyle();
-	void setConeStyle();
-	void setSphereStyle();
-	void setLowQuality();
-	void setHighQuality();
-	void setFinalQuality();
-	void closeColorBoard();
+    void setMainFormAddress( MainForm * );
+    void setData();
+    void getColors( float, float, float, float, float, float );
+    void getColorBoardPos( int, int );
+    void setDotStyle();
+    void setLineStyle();
+    void setCubeStyle();
+    void setCylinderStyle();
+    void setConeStyle();
+    void setSphereStyle();
+    void setLowQuality();
+    void setHighQuality();
+    void setFinalQuality();
+    void closeColorBoard();
 
 private slots:
-	void buildLayout( colorCriterion );
-	void setPolymerAtom();
-	void adjustPolymer();
-	void adjustCriterion();
-	void setColorCb();
-	void setColors();
-	void readToggles();
-	void bbonds();
-	void bdone();
-	void bapply();
-	void bcancel();
+    void buildLayout( colorCriterion );
+    void setPolymerAtom();
+    void adjustPolymer();
+    void adjustCriterion();
+    void setColorCb();
+    void setColors();
+    void readToggles();
+    void bbonds();
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	MainForm * mainForm;
-	CodeBox * codeBox;
-	PositionBox * positionBox;
-	PropertyBox * propertyBox;
-	SizeBox * sizeBox;
-	Q3GridLayout * polymerBox;
-	Q3HBox * hb1;
-	Q3HBox * hb2;
-	Q3HBox * hb3;
+    MainForm * mainForm;
+    CodeBox * codeBox;
+    PositionBox * positionBox;
+    PropertyBox * propertyBox;
+    SizeBox * sizeBox;
+    Q3GridLayout * polymerBox;
+    Q3HBox * hb1;
+    Q3HBox * hb2;
+    Q3HBox * hb3;
     QWidget * hb4;
-	Q3HBox * hb5;
-	QComboBox * atomCob;
-	QComboBox * styleCob;
-	QCheckBox * showPolymerAtomCb;
-	QLabel * modeL;
-	QLabel * colorL;
-        QGroupBox * colorMode;
-        QRadioButton * colorMode0;
-        QRadioButton * colorMode1;
-        QRadioButton * colorMode2;
-        QRadioButton * colorMode3;
-	ColorLabel * colorLabel0;
-        ColorLabel * colorLabel1;
-        ColorLabel * colorLabel2;
-        ColorLabel * colorLabel3;
-        ColorLabel * colorLabel4;
-        ColorLabel * colorLabel5;
-	QPushButton * colorButton;
-	ColorBoard * cb;
-	particleData * thisPd;
-	int thisPolymerAtomIndex;
-	char colors; 
-	int colorPosX, colorPosY;
-        polymerAtomRStyle polymerAtomRenderStyle;
-        quality renderQuality;
-	bool showColorBoard;
+    Q3HBox * hb5;
+    QComboBox * atomCob;
+    QComboBox * styleCob;
+    QCheckBox * showPolymerAtomCb;
+    QLabel * modeL;
+    QLabel * colorL;
+    QGroupBox * colorMode;
+    QRadioButton * colorMode0;
+    QRadioButton * colorMode1;
+    QRadioButton * colorMode2;
+    QRadioButton * colorMode3;
+    ColorLabel * colorLabel0;
+    ColorLabel * colorLabel1;
+    ColorLabel * colorLabel2;
+    ColorLabel * colorLabel3;
+    ColorLabel * colorLabel4;
+    ColorLabel * colorLabel5;
+    QPushButton * colorButton;
+    ColorBoard * cb;
+    particleData * thisPd;
+    int thisPolymerAtomIndex;
+    char colors;
+    int colorPosX, colorPosY;
+    polymerAtomRStyle polymerAtomRenderStyle;
+    quality renderQuality;
+    bool showColorBoard;
 };
 
 #endif // POLYMB_H
