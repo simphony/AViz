@@ -135,7 +135,7 @@ PoreBoard::PoreBoard(QWidget * parent)
 	positionBox = new PositionBox( this, "positionBox" );
 	propertyBox = new PropertyBox( this, "positionBox" );
     codeBox = new CodeBox(this);
-	typeColorNumberBox = new TypeColorNumberBox( this, "typeColorNumberBox", 2 );
+    typeColorNumberBox = new TypeColorNumberBox( this, 2 );
 
 	// Create a box that will fill the next row
     lineTypeBox = new LineTypeBox( this );

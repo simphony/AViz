@@ -26,58 +26,58 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "typeColorNumberBox.h"
 
-// Make a box 
-TypeColorNumberBox::TypeColorNumberBox( QWidget * parent, const char * name, int thisMaxNumberOfColors )
-    : Q3HBox( parent, name )
-{
-    // Create hboxlayouts that will fill the next row; these
-    // are shown only when appropriate
-    Q3HBox * typeColorNumberBox = new Q3HBox( this, "typeColorNumberBox" );
-    QLabel * numberL = new QLabel( typeColorNumberBox, "number" );
-    numberL->setText( " Type Colors: " );
+#include <QLabel>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QRadioButton>
 
-    // Register max number of color options
-    maxNumberOfColors = thisMaxNumberOfColors;
+TypeColorNumberBox::TypeColorNumberBox( QWidget * parent, int thisMaxNumberOfColors )
+    : QWidget(parent), maxNumberOfColors(thisMaxNumberOfColors) {
+    QHBoxLayout *hbox = new QHBoxLayout(this);
 
-    // Create radio box
-    number = new Q3ButtonGroup( maxNumberOfColors, Qt::Horizontal, typeColorNumberBox, "coordinate" );
-    one= new QRadioButton( number, "one" );
-    one->setText( "One" );
-    if (maxNumberOfColors > 1) {
-        two= new QRadioButton( number, "two" );
-        two->setText( "Two" );
+    hbox->addWidget(new QLabel(" Type Colors: "));
+
+    {
+        // Create group of radio buttons
+        QGroupBox *numberGroupBox = new QGroupBox();
+        hbox->addWidget(numberGroupBox);
+
+        QHBoxLayout *numberHBox = new QHBoxLayout(numberGroupBox);
+
+        one= new QRadioButton("One");
+        numberHBox->addWidget(one);
+
+        if (maxNumberOfColors > 1) {
+            two= new QRadioButton("Two");
+            numberHBox->addWidget(two);
+        }
+        if (maxNumberOfColors > 2) {
+            three= new QRadioButton("Three");
+            numberHBox->addWidget(three);
+        }
     }
-    if (maxNumberOfColors > 2) {
-        three= new QRadioButton( number, "three" );
-        three->setText( "Three" );
-    }
-    number->insert( one, 0 );
-    if (maxNumberOfColors > 1)
-        number->insert( two, 1 );
-    if (maxNumberOfColors > 2)
-        number->insert( three, 2 );
+
 }
 
 
 // Adjust the controls
-void TypeColorNumberBox::setParticle( particleData * thisPd, int thisIndex )
-{
+void TypeColorNumberBox::setParticle( particleData * thisPd, int thisIndex ) {
     if (thisIndex >= 0) {
         int typeColorNumber = (*thisPd).line[thisIndex].typeColorNumber;
         switch (typeColorNumber) {
         case 1:
-            one->setChecked( TRUE );
+            one->setChecked( true );
             break;
         case 2:
             if (maxNumberOfColors > 1)
-                two->setChecked( TRUE );
+                two->setChecked( true );
             break;
         case 3:
             if (maxNumberOfColors > 2)
-                three->setChecked( TRUE );
+                three->setChecked( true );
             break;
         default:
-            one->setChecked( TRUE );
+            one->setChecked( true );
             break;
         }
     }
@@ -85,21 +85,16 @@ void TypeColorNumberBox::setParticle( particleData * thisPd, int thisIndex )
 
 
 // Read the controls
-void TypeColorNumberBox::readToggles( particleData * thisPd, int thisIndex )
-{
+void TypeColorNumberBox::readToggles( particleData * thisPd, int thisIndex ) {
     if (thisIndex >= 0 && thisPd) {
-        if (one->isChecked() == TRUE) {
+        if (one->isChecked()) {
             (*thisPd).line[thisIndex].typeColorNumber = 1;
         }
-        if (maxNumberOfColors > 1) {
-            if (two->isChecked() == TRUE) {
-                (*thisPd).line[thisIndex].typeColorNumber = 2;
-            }
+        if (maxNumberOfColors > 1 && two->isChecked()) {
+            (*thisPd).line[thisIndex].typeColorNumber = 2;
         }
-        if (maxNumberOfColors > 2) {
-            if (three->isChecked() == TRUE) {
-                (*thisPd).line[thisIndex].typeColorNumber = 3;
-            }
+        if (maxNumberOfColors > 2 && three->isChecked()) {
+            (*thisPd).line[thisIndex].typeColorNumber = 3;
         }
     }
 }

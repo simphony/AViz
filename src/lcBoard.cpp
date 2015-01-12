@@ -137,7 +137,7 @@ LcBoard::LcBoard(QWidget * parent)
         positionBox = new PositionBox( this, "positionBox" );
         propertyBox = new PropertyBox( this, "positionBox" );
         codeBox = new CodeBox(this);
-        typeColorNumberBox = new TypeColorNumberBox( this, "typeColorNumberBox", 3 );
+        typeColorNumberBox = new TypeColorNumberBox( this, 3 );
 
         // Create a box that will fill the next row
         lineTypeBox = new LineTypeBox( this );
