@@ -43,36 +43,36 @@ class QLabel;
 // File list board dialog widget
 class TrackBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
     TrackBoard(QWidget * parent=0);
 
 public slots:
-	void setMainFormAddress( MainForm * );
-	void setFileListParam( const QString & );
-	void setData();
+    void setMainFormAddress( MainForm * );
+    void setFileListParam( const QString & );
+    void setData();
 
 private slots:
-	void showTracks();
-	void setType();
-	void bstages( int );
-	void readToggles();
-	void bdone();
-	void bapply();
-	void bcancel();
+    void showTracks();
+    void setType();
+    void bstages( int );
+    void readToggles();
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	MainForm * mainForm;
-	QComboBox * typeCob;
-	QLabel * trackRenderModeL;
-	Q3ButtonGroup * stages;
-	QRadioButton * allStagesRb;
-	QRadioButton * upToStagesRb;
-	QPushButton * showTracksPb;
-	QCheckBox * showTypeTrackCb;
-	QCheckBox * periodicCb;
-	particleData * thisPd;
-	int thisTypeIndex;
+    MainForm * mainForm;
+    QComboBox * typeCob;
+    QLabel * trackRenderModeL;
+    Q3ButtonGroup * stages;
+    QRadioButton * allStagesRb;
+    QRadioButton * upToStagesRb;
+    QPushButton * showTracksPb;
+    QCheckBox * showTypeTrackCb;
+    QCheckBox * periodicCb;
+    particleData * thisPd;
+    int thisTypeIndex;
 };
 
 #endif // TRACKB_H
