@@ -31,7 +31,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "lineTypeBox.h"
 
 #include <QDialog>
-#include <q3buttongroup.h>
 #include <q3gridlayout.h>
 #include <q3vbox.h>
 
@@ -95,7 +94,7 @@ private:
     TypeColorNumberBox * typeColorNumberBox;
     Q3HBox * hb1;
     Q3HBox * hb2;
-    Q3HBox * hb4;
+    QWidget * hb4;
     Q3HBox * hb5;
     Q3GridLayout * lcBox;
     QComboBox * lcCob;
@@ -109,8 +108,7 @@ private:
     ColorLabel * colorLabel4;
     ColorLabel * colorLabel5;
     QPushButton * colorButton;
-    Q3ButtonGroup * tipStyle;
-    Q3ButtonGroup * colorMode;
+    QGroupBox * colorMode;
     QRadioButton * colorMode0;
     QRadioButton * colorMode1;
     QRadioButton * colorMode2;

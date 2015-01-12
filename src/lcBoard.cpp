@@ -44,6 +44,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QCheckBox>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QGroupBox>
+#include <QButtonGroup>
 
 
 // Make a popup dialog box 
@@ -108,29 +110,39 @@ LcBoard::LcBoard(QWidget * parent)
 	// Create a hboxlayout that will fill the next row
         sizeBox = new SizeBox(this);
 
-	// Create a hboxlayout that will fill the next row
-	hb4 = new Q3HBox( this, "hb4" );
+        {
+            // Create a hboxlayout that will fill the next row
+            hb4 = new QWidget(this);
 
-	// Add radiobuttons and a label
-        modeL = new QLabel( hb4, "modeL" );
-	modeL->setText( " Color Criterion: " ); 
+            // Add radiobuttons and a label
+            modeL = new QLabel(" Color Criterion: ");
 
-	colorMode = new Q3ButtonGroup( 4, Qt::Horizontal, hb4, "colorMode" );
-	colorMode0 = new QRadioButton( colorMode, "type" );
-	colorMode0->setText( "Type" );
-	colorMode1 = new QRadioButton( colorMode, "position" );
-	colorMode1->setText( "Position" );
-	colorMode2 = new QRadioButton( colorMode, "property" );
-        colorMode2->setText( "Property" );
-	colorMode3 = new QRadioButton( colorMode, "colorcode" );
-        colorMode3->setText( "ColorCode" );
-	colorMode->insert( colorMode0, 0 );
-	colorMode->insert( colorMode1, 1 );
-	colorMode->insert( colorMode2, 2 );
-	colorMode->insert( colorMode3, 3 );
+            colorMode = new QGroupBox();
+            QHBoxLayout *colorModeLayout = new QHBoxLayout(colorMode);
 
-	// Define a callback for these radio buttons
-	connect( colorMode, SIGNAL(clicked(int)), this, SLOT(adjustCriterion()) );
+            colorMode0 = new QRadioButton("Type");
+            colorMode1 = new QRadioButton("Position");
+            colorMode2 = new QRadioButton("Property");
+            colorMode3 = new QRadioButton("ColorCode");
+            colorModeLayout->addWidget(colorMode0);
+            colorModeLayout->addWidget(colorMode1);
+            colorModeLayout->addWidget(colorMode2);
+            colorModeLayout->addWidget(colorMode3);
+
+            QButtonGroup *colorModeButtonGroup = new QButtonGroup(this);
+            colorModeButtonGroup->addButton(colorMode0);
+            colorModeButtonGroup->addButton(colorMode1);
+            colorModeButtonGroup->addButton(colorMode2);
+            colorModeButtonGroup->addButton(colorMode3);
+
+            // Define a callback for these radio buttons
+            connect(colorModeButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(adjustCriterion()) );
+
+            QHBoxLayout *hBox = new QHBoxLayout(hb4);
+            hBox->addWidget(modeL);
+            hBox->addWidget(colorMode);
+        }
+
 
         // Create hboxlayouts that will fill the next row; these
         // are shown only when appropriate
@@ -142,23 +154,23 @@ LcBoard::LcBoard(QWidget * parent)
         // Create a box that will fill the next row
         lineTypeBox = new LineTypeBox( this );
 
-	// Create a hboxlayout that will fill the lowest row
-	hb5 = new Q3HBox( this, "hb5" );
-	
-	// Create a placeholder 
-	QLabel * emptyL1 = new QLabel( hb5, "emptyL1" );
+    // Create a hboxlayout that will fill the lowest row
+    hb5 = new Q3HBox( this, "hb5" );
 
-	// Create pushbuttons that will go into the lowest row
-	QPushButton * done = new QPushButton( hb5, "done" );
-	done->setText( "Done" ); 
+    // Create a placeholder
+    QLabel * emptyL1 = new QLabel( hb5, "emptyL1" );
 
-	 // Define a callback for that button
+    // Create pushbuttons that will go into the lowest row
+    QPushButton * done = new QPushButton( hb5, "done" );
+    done->setText( "Done" );
+
+     // Define a callback for that button
         QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
 
-	QPushButton * apply = new QPushButton( hb5, "apply" );
-	apply->setText( "Apply" ); 
+    QPushButton * apply = new QPushButton( hb5, "apply" );
+    apply->setText( "Apply" );
 
-	 // Define a callback for that button
+     // Define a callback for that button
         QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
 
 	QPushButton * cancel = new QPushButton( hb5, "cancel" );

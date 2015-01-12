@@ -30,6 +30,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <Q3HBox>
 #include <QLabel>
 #include <QSlider>
+#include <QPushButton>
 
 #include "defaults.h"
 #include "atomBoard.h"

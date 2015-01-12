@@ -39,22 +39,17 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "propertyBox.h"
 #include "sizeBox.h"
 
-#include <q3buttongroup.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <q3hbox.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qspinbox.h>
-#include <qsizepolicy.h>
-#include <q3vbox.h>
-#include <qwidget.h>
+#include <QDialog>
 
 class Q3GridLayout;
+class Q3HBox;
 
+class QGroupBox;
+class QLabel;
+class QRadioButton;
+class QPushButton;
+class QComboBox;
+class QCheckBox;
 
 // Polymer board dialog widget
 class PolymerBoard: public QDialog
@@ -102,14 +97,14 @@ private:
 	Q3HBox * hb1;
 	Q3HBox * hb2;
 	Q3HBox * hb3;
-	Q3HBox * hb4;
+    QWidget * hb4;
 	Q3HBox * hb5;
 	QComboBox * atomCob;
 	QComboBox * styleCob;
 	QCheckBox * showPolymerAtomCb;
 	QLabel * modeL;
 	QLabel * colorL;
-        Q3ButtonGroup * colorMode;
+        QGroupBox * colorMode;
         QRadioButton * colorMode0;
         QRadioButton * colorMode1;
         QRadioButton * colorMode2;

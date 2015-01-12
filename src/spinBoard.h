@@ -29,7 +29,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <QDialog>
 
-#include <q3buttongroup.h>
 #include <q3grid.h>
 #include <q3hbox.h>
 #include <Q3GridLayout>
@@ -51,6 +50,7 @@ class QComboBox;
 class QLabel;
 class QRadioButton;
 class QPushButton;
+class QGroupBox;
 
 // Spin board dialog widget
 class SpinBoard: public QDialog
@@ -96,7 +96,7 @@ private:
     SizeBox * sizeBox;
     Q3HBox * hb1;
     Q3HBox * hb2;
-    Q3HBox * hb4;
+    QWidget * hb4;
     Q3HBox * hb5;
     Q3GridLayout * spinBox;
     QComboBox * spinCob;
@@ -110,7 +110,7 @@ private:
     ColorLabel * colorLabel4;
     ColorLabel * colorLabel5;
     QPushButton * colorButton;
-    Q3ButtonGroup * colorMode;
+    QGroupBox * colorMode;
     QRadioButton * colorMode0;
     QRadioButton * colorMode1;
     QRadioButton * colorMode2;
