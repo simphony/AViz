@@ -28,30 +28,26 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define GLCANVFR_H
 
 #include "data.h"
-#include "defaults.h"
-#include "mainForm.h"
-#include "parameterLimits.h"
-#include "SoQtThumbWheel.h"
 
-#include <q3hbox.h>
-#include <qgl.h>
-#include <qpixmap.h>
-#include <qtoolbutton.h>
-#include <qtimer.h>
-#include <q3vbox.h>
+#include <QWidget>
+#include <QPixmap>
 
+class QTimer;
+class QToolButton;
 class GLCanvasArea;
+class QFrame;
+
+class MainForm;
+class SoQtThumbWheel;
 
 // Frame widget containing the Open GL drawing area
-class GLCanvasFrame: public Q3VBox
+class GLCanvasFrame: public QWidget
 {
     Q_OBJECT
 
 public:
-    GLCanvasFrame(QWidget* parent);
+    GLCanvasFrame(MainForm *, QWidget* parent);
     ~GLCanvasFrame();
-
-    void setFormAddress(MainForm *);
 
 public slots:
     void updateView();
@@ -127,7 +123,7 @@ private slots:
 private:
     MainForm * mainForm;
     GLCanvasArea * drawArea;
-    Q3VBox * drawFrame;
+    QFrame * drawFrame;
     SoQtThumbWheel * tiltWheel;
     SoQtThumbWheel * rotWheel;
     SoQtThumbWheel * spinWheel;

@@ -67,8 +67,7 @@ MainForm::MainForm(QWidget *parent, AViz *aviz)
     QGridLayout *mainBox = new QGridLayout(this);
 
     // Create the OpenGL widget
-    glCanvasFrame = new GLCanvasFrame(this);
-    glCanvasFrame->setFormAddress(this);
+    glCanvasFrame = new GLCanvasFrame(this /*mainForm*/, this);
 
     // Make a box that will hold
     // a row of elements to define render quality
