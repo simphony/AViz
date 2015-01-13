@@ -29,10 +29,10 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <QDialog>
 
-class Q3GridLayout;
-class Q3HBox;
+class QGridLayout;
 class QLabel;
 class QSlider;
+class QWidget;
 
 class ColorLabel;
 class AtomBoard;
@@ -49,7 +49,7 @@ class ColorBoard: public QDialog
 public:
     ColorBoard( QWidget * parent=0);
 
-public slots:
+public:
     void buildLayout( char );
     void setAtomBoardAddress( AtomBoard * );
     void setSpinBoardAddress( SpinBoard * );
@@ -77,8 +77,7 @@ private:
     LcBoard * lcb;
     PolymerBoard * pob;
     PoreBoard * pb;
-    Q3GridLayout * colorBox;
-    Q3HBox * hb0, * hb1, * hb2, *hb9;
+    QWidget *hb0, *hb1, *hb2;
     QLabel * topL, * centerL, * bottomL;
     ColorLabel * colorLabel0;
     ColorLabel * colorLabel1;
@@ -92,9 +91,6 @@ private:
     float red0Org, red1Org, red2Org;
     float green0Org, green1Org, green2Org;
     float blue0Org, blue1Org, blue2Org;
-    int numRows;
-    int numCols;
-    int canvCol;
 };
 
 #endif // COLORB_H
