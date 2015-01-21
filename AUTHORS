@@ -1,11 +1,16 @@
 Authors
 -------
-Geri Wagner <gery@tx.technion.ac.il>
-Adham Hashinbon <XXXXXXXX>
-Yuval Shabo (Contrib) <shyuv@t2.technion.ac.il>
-Yoel Koenka (Contrib) <yoelk@tx.technion.ac.il>
+Geri Wagner <gery.wagner@swissrisk.com>
+Adham Hashinbon <adham.hashibon@iwm.fraunhofer.de>
+Yuval Shabo (Polymers)
+Yoel Koenka (Variable fovy and bond width) <yoel.koenka@gmail.com>
+
+Additional authors
+------------------
+Dan Peled (peledan at gmail.com) and Amihai Silverman (amihai@technion.ac.il)
+are the developers of the stereo version
+
 
 Documentation Contributors
 --------------------------
-Anastasia Sorkin <XXX>
-
+Anastasia Sorkin <ASorkin@ntu.edu.sg>
