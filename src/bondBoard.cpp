@@ -25,10 +25,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ***********************************************************************/
 
 #include "bondBoard.h"
-#include "floatSpin.h"
-#include "mainForm.h"
-#include "fileFunctions.h"
-#include "defaultParticles.h"
+
+#include <cmath>
 
 #include <q3buttongroup.h>
 #include <q3grid.h>
@@ -53,7 +51,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "./pixmaps/silverSquare2.xpm"
 #include "./pixmaps/bronzeSquare2.xpm"
 
-#include <cmath>
+#include "floatSpin.h"
+#include "mainForm.h"
+#include "fileFunctions.h"
+#include "defaultParticles.h"
+#include "widgets/doneapplycancelwidget.h"
 
 // Make a popup dialog box 
 BondBoard::BondBoard(QWidget * parent)
@@ -222,37 +224,17 @@ BondBoard::BondBoard(QWidget * parent)
 
     // Create a placeholder
     QLabel * emptyL0 = new QLabel( gr1, "emptyL1" );
-
-    // Create a hboxlayout that will fill the lowest row
-    Q3HBox * hb3 = new Q3HBox( this, "hb3" );
-    bondBox->addMultiCellWidget( hb3, numRows-1, numRows-1, 0, -1);
-
-
-
-    // Create a placeholder
-    QLabel * emptyL1 = new QLabel( hb3, "emptyL1" );
-
-    // Create pushbuttons that will go into the lowest row
-    QPushButton * done = new QPushButton( hb3, "done" );
-    done->setText( "Done" );
-
-    // Define a callback for that button
-    QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
-
-    QPushButton * apply = new QPushButton( hb3, "apply" );
-    apply->setText( "Apply" );
-
-    // Define a callback for that button
-    QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
-
-    QPushButton * cancel = new QPushButton( hb3, "cancel" );
-    cancel->setText( "Cancel" );
-
-    // Define a callback for that button
-    QObject::connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
-
-    hb3->setStretchFactor( emptyL1, 10 );
     hb1->setStretchFactor( emptyL0, 10 );
+
+    DoneApplyCancelWidget *doneApplyCancel = new DoneApplyCancelWidget(this);
+    connect(doneApplyCancel, SIGNAL(done()), this, SLOT(bdone()) );
+    connect(doneApplyCancel, SIGNAL(applied()), this, SLOT(bapply()) );
+    connect(doneApplyCancel, SIGNAL(canceled()), this, SLOT(bcancel()));
+    bondBox->addMultiCellWidget(doneApplyCancel, numRows-1, numRows-1, 0, -1);
+//TODO replace with
+//    bondBox->addWidget(doneApplyCancel, numRows-1 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, -1/*colSpan*/);
+
+    bondBox->addWidget(doneApplyCancel);
 
     // Set flags
     haveFEntry = FALSE;
