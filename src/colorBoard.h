@@ -29,10 +29,10 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include <QDialog>
 
-class Q3GridLayout;
-class Q3HBox;
+class QGridLayout;
 class QLabel;
 class QSlider;
+class QWidget;
 
 class ColorLabel;
 class AtomBoard;
@@ -41,38 +41,35 @@ class LcBoard;
 class PolymerBoard;
 class PoreBoard;
 
-// Note: Pointers to composite widgets are defined in 
-// mainForm.cpp and not here -- it causes problems 
-// regarding the mutual inclusion of  header files 
 
 // Color board dialog widget
 class ColorBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
     ColorBoard( QWidget * parent=0);
 
-public slots:
-	void buildLayout( char );
+public:
+    void buildLayout( char );
     void setAtomBoardAddress( AtomBoard * );
     void setSpinBoardAddress( SpinBoard * );
     void setLcBoardAddress( LcBoard * );
     void setPolymerBoardAddress( PolymerBoard * );
     void setPoreBoardAddress( PoreBoard * );
-	void setColor( float, float, float );
-	void setColor( float, float, float, float, float, float );
-	void setColor( float, float, float, float, float, float, float, float, float );
+    void setColor( float, float, float );
+    void setColor( float, float, float, float, float, float );
+    void setColor( float, float, float, float, float, float, float, float, float );
     void setLabel(const QString&);
     void setLabel(const QString&, const QString&);
     void setLabel(const QString&, const QString&, const QString&);
 
 private slots:
-	void adjustColor0();
-	void adjustColor1();
-	void adjustColor2();
-	void bdone();
-	void bapply();
-	void bcancel();
+    void adjustColor0();
+    void adjustColor1();
+    void adjustColor2();
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
     AtomBoard * ab;
@@ -80,24 +77,20 @@ private:
     LcBoard * lcb;
     PolymerBoard * pob;
     PoreBoard * pb;
-	Q3GridLayout * colorBox;
-	Q3HBox * hb0, * hb1, * hb2, *hb9;
-	QLabel * topL, * centerL, * bottomL;
-	ColorLabel * colorLabel0;
-	ColorLabel * colorLabel1;
-	ColorLabel * colorLabel2;
-	QSlider * redS0, * greenS0, * blueS0;
-	QSlider * redS1, * greenS1, * blueS1;
-	QSlider * redS2, * greenS2, * blueS2;
-	float red0, red1, red2; 
-	float green0, green1, green2; 
-	float blue0, blue1, blue2;	
-	float red0Org, red1Org, red2Org;
-	float green0Org, green1Org, green2Org;
-	float blue0Org, blue1Org, blue2Org;	
-	int numRows;
-	int numCols;
-	int canvCol;
+    QWidget *hb0, *hb1, *hb2;
+    QLabel * topL, * centerL, * bottomL;
+    ColorLabel * colorLabel0;
+    ColorLabel * colorLabel1;
+    ColorLabel * colorLabel2;
+    QSlider * redS0, * greenS0, * blueS0;
+    QSlider * redS1, * greenS1, * blueS1;
+    QSlider * redS2, * greenS2, * blueS2;
+    float red0, red1, red2;
+    float green0, green1, green2;
+    float blue0, blue1, blue2;
+    float red0Org, red1Org, red2Org;
+    float green0Org, green1Org, green2Org;
+    float blue0Org, blue1Org, blue2Org;
 };
 
 #endif // COLORB_H

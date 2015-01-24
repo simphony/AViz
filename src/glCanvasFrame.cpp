@@ -29,9 +29,16 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <cmath>
 
 #include <QLabel>
-#include <Q3Frame>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QToolButton>
+#include <QTimer>
 
+#include "defaults.h"
+#include "SoQtThumbWheel.h"
+#include "mainForm.h"
 #include "glCanvasArea.h"
+#include "parameterLimits.h" //DOLLY_MAX, DOLLY_MIN
 
 #include "./pixmaps/home.xpm"
 #include "./pixmaps/homenew.xpm"
@@ -62,223 +69,287 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "./pixmaps/eyeSeparationMinus.xpm"
 
 //  Framed canvas widget constructor and destructor
-GLCanvasFrame::GLCanvasFrame(QWidget* parent)
-    : Q3VBox(parent)
+GLCanvasFrame::GLCanvasFrame(MainForm *mainForm, QWidget* parent)
+    : QWidget(parent), mainForm(mainForm)
 {
     // Draw a frame in a new window
-    drawFrame = new Q3VBox( NULL, "drawFrame" );
-
-    drawFrame->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    drawFrame = new QFrame();
+    drawFrame->setContentsMargins(0,0,0,0);
+    drawFrame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     drawFrame->setLineWidth( 2 );
+
+    QVBoxLayout *drawFrameLayout = new QVBoxLayout(drawFrame);
+    drawFrameLayout->setSpacing(0);
+    drawFrameLayout->setContentsMargins(0,0,0,0);
+
 
     // Construct a horizontal box to contain the
     // drawing area and some controls
-    Q3HBox * hb0 = new Q3HBox( drawFrame, "hb0" );
+    QWidget * hb0 = new QWidget(drawFrame);
+    hb0->setContentsMargins(0,0,0,0);
+    drawFrameLayout->addWidget(hb0);
+
+    QHBoxLayout *hb0Layout = new QHBoxLayout(hb0);
+    hb0Layout->setSpacing(0);
+    hb0Layout->setContentsMargins(0,0,0,0);
+
+
     // Construct a vertical box to contain controls
-    Q3VBox * vb0 = new Q3VBox( hb0, "vb0" );
-    vb0->setFixedWidth( FRAME_WIDTH );
+    QWidget * vb0 = new QWidget(hb0);
+    vb0->setContentsMargins(0,0,0,0);
+    hb0Layout->addWidget(vb0);
+
 
     // Construct a drawing area widget; decorate it with a frame
-    Q3VBox * vb0Frame = new Q3VBox( hb0, "vb0Frame" );
-    vb0Frame->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    QFrame * vb0Frame = new QFrame();
+    vb0Frame->setContentsMargins(0,0,0,0);
+    hb0Layout->addWidget(vb0Frame);
+    vb0Frame->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     vb0Frame->setLineWidth( 2 );
+
+    QVBoxLayout *vb0FrameLayout = new QVBoxLayout(vb0Frame);
+    vb0FrameLayout->setSpacing(0);
+    vb0FrameLayout->setContentsMargins(0,0,0,0);
+
     drawArea = new GLCanvasArea(vb0Frame);
+    drawArea->setContentsMargins(0,0,0,0);
+    drawArea->setFormAddress( mainForm );
+    drawArea->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    vb0FrameLayout->addWidget(drawArea, 10 /*stretch*/);
 
-    // Construct a vertical box to contain controls
-    Q3VBox * vb1 = new Q3VBox( hb0, "vb1" );
-    vb1->setFixedWidth( FRAME_WIDTH );
+    {
 
-    // Now construct a horizontal box to contain more controls
-    Q3HBox * hb1 = new Q3HBox( drawFrame, "hb1" );
-    hb1->setFixedHeight( FRAME_WIDTH );
+        QVBoxLayout *vb0Layout = new QVBoxLayout(vb0);
+        vb0Layout->setSpacing(0);
+        vb0Layout->setContentsMargins(0,0,0,0);
 
-    // Add a control button that also serves as a label
-    z1Button = new QToolButton( vb0, "z1Button" );
-    z1Pixmap = QPixmap( spinRight_xpm );
-    z1RedPixmap = QPixmap( spinRightRed_xpm );
-    z1Button->setIcon( z1Pixmap );
-    z1Button->setAutoRepeat( TRUE );
-    connect( z1Button, SIGNAL(clicked()), SLOT(spin1()) );
+        // Add a control button that also serves as a label
+        z1Button = new QToolButton();
+        vb0Layout->addWidget(z1Button);
+        z1Pixmap = QPixmap( spinRight_xpm );
+        z1RedPixmap = QPixmap( spinRightRed_xpm );
+        z1Button->setIcon( z1Pixmap );
+        z1Button->setAutoRepeat( TRUE );
+        connect( z1Button, SIGNAL(clicked()), SLOT(spin1()) );
 
-    // Add spin control wheel
-    spinWheel =new SoQtThumbWheel(vb0);
-    spinWheel->setOrientation( SoQtThumbWheel::Vertical );
-    spinWheel->setFixedWidth( FRAME_WIDTH );
-    spinWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
-    QObject::connect(spinWheel, SIGNAL(wheelMoved(float)), this, SLOT(spinWheelMoved(float)));
+        // Add spin control wheel
+        spinWheel =new SoQtThumbWheel(vb0);
+        vb0Layout->addWidget(spinWheel);
+        spinWheel->setOrientation( SoQtThumbWheel::Vertical );
+        spinWheel->setFixedWidth( FRAME_WIDTH );
+        spinWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
+        connect(spinWheel, SIGNAL(wheelMoved(float)), this, SLOT(spinWheelMoved(float)));
 
-    // Add a control button that also serves as a label
-    z2Button = new QToolButton( vb0 );
-    z2Pixmap = QPixmap( spinLeft_xpm );
-    z2RedPixmap = QPixmap( spinLeftRed_xpm );
-    z2Button->setIcon( z2Pixmap );
-    z2Button->setAutoRepeat( TRUE );
-    connect( z2Button, SIGNAL(clicked()), SLOT(spin2()) );
+        // Add a control button that also serves as a label
+        z2Button = new QToolButton();
+        vb0Layout->addWidget(z2Button);
+        z2Pixmap = QPixmap( spinLeft_xpm );
+        z2RedPixmap = QPixmap( spinLeftRed_xpm );
+        z2Button->setIcon( z2Pixmap );
+        z2Button->setAutoRepeat( TRUE );
+        connect( z2Button, SIGNAL(clicked()), SLOT(spin2()) );
 
-    // Add a placeholder
-    QLabel * emptyL0 = new QLabel( vb0, "emptyL0" );
-    emptyL0->setText("");
+        // Add a placeholder
+        vb0Layout->addStretch(10);
 
-    // Add a control button that also serves as a label
-    y1Button = new QToolButton( vb0 );
-    y1Pixmap = QPixmap( up_xpm );
-    y1RedPixmap = QPixmap( upRed_xpm );
-    y1Button->setIcon( y1Pixmap );
-    y1Button->setAutoRepeat( TRUE );
-    connect( y1Button, SIGNAL(clicked()), SLOT(tilt1()) );
+        // Add a control button that also serves as a label
+        y1Button = new QToolButton();
+        vb0Layout->addWidget(y1Button);
+        y1Pixmap = QPixmap( up_xpm );
+        y1RedPixmap = QPixmap( upRed_xpm );
+        y1Button->setIcon( y1Pixmap );
+        y1Button->setAutoRepeat( TRUE );
+        connect( y1Button, SIGNAL(clicked()), SLOT(tilt1()) );
 
-    // Add tilt control wheel
-    tiltWheel =new SoQtThumbWheel(vb0);
-    tiltWheel->setOrientation( SoQtThumbWheel::Vertical );
-    tiltWheel->setFixedWidth( FRAME_WIDTH );
-    tiltWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
-    QObject::connect(tiltWheel, SIGNAL(wheelMoved(float)), this, SLOT(tiltWheelMoved(float)));
+        // Add tilt control wheel
+        tiltWheel =new SoQtThumbWheel();
+        vb0Layout->addWidget(tiltWheel);
+        tiltWheel->setOrientation( SoQtThumbWheel::Vertical );
+        tiltWheel->setFixedWidth( FRAME_WIDTH );
+        tiltWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
+        connect(tiltWheel, SIGNAL(wheelMoved(float)), this, SLOT(tiltWheelMoved(float)));
 
-    // Add a control button that also serves as a label
-    y2Button = new QToolButton( vb0, "y2Button" );
-    y2Pixmap = QPixmap( down_xpm );
-    y2RedPixmap = QPixmap( downRed_xpm );
-    y2Button->setIcon( y2Pixmap );
-    y2Button->setAutoRepeat( TRUE );
-    connect( y2Button, SIGNAL(clicked()), SLOT(tilt2()) );
+        // Add a control button that also serves as a label
+        y2Button = new QToolButton();
+        vb0Layout->addWidget(y2Button);
+        y2Pixmap = QPixmap( down_xpm );
+        y2RedPixmap = QPixmap( downRed_xpm );
+        y2Button->setIcon( y2Pixmap );
+        y2Button->setAutoRepeat( TRUE );
+        connect( y2Button, SIGNAL(clicked()), SLOT(tilt2()) );
+    }
 
-    // Add a placeholder
-    QLabel * emptyL2 = new QLabel( hb1, "emptyL2" );
-    emptyL2->setText("");
-    emptyL2->setFixedWidth( FRAME_WIDTH );
+    {
 
-    // Add a control button that also serves as a label
-    x1Button = new QToolButton( hb1, "x1Button" );
-    x1Pixmap = QPixmap( left_xpm );
-    x1RedPixmap = QPixmap( leftRed_xpm );
-    x1Button->setIcon( x1Pixmap );
-    x1Button->setAutoRepeat( TRUE );
-    connect( x1Button, SIGNAL(clicked()), SLOT(rot1()) );
+        // Now construct a horizontal box to contain more controls
+        QWidget * hb1 = new QWidget(drawFrame);
+        hb1->setContentsMargins(0,0,0,0);
+        drawFrameLayout->addWidget(hb1);
 
-    // Add rotation control wheel
-    rotWheel =new SoQtThumbWheel(hb1);
-    rotWheel->setOrientation( SoQtThumbWheel::Horizontal );
-    rotWheel->setFixedHeight( FRAME_WIDTH );
-    rotWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
-    QObject::connect(rotWheel, SIGNAL(wheelMoved(float)), this, SLOT(rotWheelMoved(float)));
+        QHBoxLayout *hb1Layout = new QHBoxLayout(hb1);
+        hb1Layout->setSpacing(0);
+        hb1Layout->setContentsMargins(0,0,0,0);
 
-    // Add a control button that also serves as a label
-    x2Button = new QToolButton( hb1, "x2Button" );
-    x2Pixmap = QPixmap( right_xpm );
-    x2RedPixmap = QPixmap( rightRed_xpm );
-    x2Button->setIcon( x2Pixmap );
-    x2Button->setAutoRepeat( TRUE );
-    connect( x2Button, SIGNAL(clicked()), SLOT(rot2()) );
+        // Add a placeholder
+        QLabel * emptyL2 = new QLabel("");
+        hb1Layout->addWidget(emptyL2, 10 /*stretch*/);
+        emptyL2->setFixedWidth( FRAME_WIDTH );
 
-    // Add a placeholder
-    QLabel * emptyL1 = new QLabel( hb1, "emptyL1" );
-    emptyL1->setText("");
+        // Add a control button that also serves as a label
+        x1Button = new QToolButton();
+        hb1Layout->addWidget(x1Button);
+        x1Pixmap = QPixmap( left_xpm );
+        x1RedPixmap = QPixmap( leftRed_xpm );
+        x1Button->setIcon( x1Pixmap );
+        x1Button->setAutoRepeat( TRUE );
+        connect( x1Button, SIGNAL(clicked()), SLOT(rot1()) );
 
-    // Insert a button to lock the controls and switch to
-    // auto motion mode
-    autoButton = new QToolButton( hb1, "autoButton" );
-    autoPixmap = QPixmap( auto_xpm );
-    autoRedPixmap = QPixmap( autoRed_xpm );
-    autoButton->setIcon( autoPixmap );
-    autoButton->setCheckable(true);
-    connect( autoButton, SIGNAL(clicked()), this, SLOT(autoButtonCB()) );
+        // Add rotation control wheel
+        rotWheel =new SoQtThumbWheel(hb1);
+        hb1Layout->addWidget(rotWheel);
+        rotWheel->setOrientation( SoQtThumbWheel::Horizontal );
+        rotWheel->setFixedHeight( FRAME_WIDTH );
+        rotWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
+        connect(rotWheel, SIGNAL(wheelMoved(float)), this, SLOT(rotWheelMoved(float)));
 
-    // Add a placeholder
-    QLabel * emptyL1a = new QLabel( hb1, "emptyL1a" );
-    emptyL1a->setText("");
-    emptyL1a->setFixedWidth( FRAME_WIDTH );
+        // Add a control button that also serves as a label
+        x2Button = new QToolButton();
+        hb1Layout->addWidget(x2Button);
+        x2Pixmap = QPixmap( right_xpm );
+        x2RedPixmap = QPixmap( rightRed_xpm );
+        x2Button->setIcon( x2Pixmap );
+        x2Button->setAutoRepeat( TRUE );
+        connect( x2Button, SIGNAL(clicked()), SLOT(rot2()) );
 
-    // Add home button
-    setHomeButton = new QToolButton( vb1, "setHomeButton" );
-    setHomePixmap = QPixmap( home_xpm );
-    setHomeButton->setIcon( setHomePixmap );
-    connect( setHomeButton, SIGNAL(clicked()), SLOT(setHome()) );
+        // Add a placeholder
+        hb1Layout->addStretch(1);
 
-    // Add set home button
-    setNewHomeButton = new QToolButton( vb1, "setNewHomeButton" );
-    setNewHomePixmap = QPixmap( homenew_xpm );
-    setNewHomeButton->setIcon( setNewHomePixmap );
-    connect( setNewHomeButton, SIGNAL(clicked()), SLOT(setNewHome()) );
+        // Insert a button to lock the controls and switch to
+        // auto motion mode
+        autoButton = new QToolButton();
+        hb1Layout->addWidget(autoButton);
+        autoPixmap = QPixmap( auto_xpm );
+        autoRedPixmap = QPixmap( autoRed_xpm );
+        autoButton->setIcon( autoPixmap );
+        autoButton->setCheckable(true);
+        connect( autoButton, SIGNAL(clicked()), this, SLOT(autoButtonCB()) );
 
-    // Add ortho perspective button
-    parallelButton = new QToolButton( vb1, "parallelButton" );
-    parallelPixmap = QPixmap( parallel_xpm );
-    parallelButton->setIcon( parallelPixmap );
-    parallelButton->setCheckable(true);
-    connect( parallelButton, SIGNAL(clicked()), SLOT(setParallel()) );
 
-    // Add 3D perspective button
-    perspectiveButton = new QToolButton( vb1, "perspectiveButton" );
-    perspectivePixmap = QPixmap( perspective_xpm );
-    perspectiveButton->setIcon( perspectivePixmap );
-    perspectiveButton->setCheckable(true);
-    connect( perspectiveButton, SIGNAL(clicked()), SLOT(setPerspective()) );
+        // Add a placeholder
+        QLabel * emptyL1a = new QLabel("");
+        emptyL1a->setFixedWidth(FRAME_WIDTH);
+        hb1Layout->addWidget(emptyL1a);
+    }
 
-    // Add background buttons
-    blackBackgroundButton = new QToolButton( vb1, "blackBackgroundButton" );
-    blackBackgroundPixmap = QPixmap( blackBackground_xpm );
-    blackBackgroundButton->setIcon( blackBackgroundPixmap );
-    blackBackgroundButton->setCheckable(true);
-    connect( blackBackgroundButton, SIGNAL(clicked()), SLOT(setBlackBackground()) );
 
-    whiteBackgroundButton = new QToolButton( vb1, "whitekBackgroundButton" );
-    whiteBackgroundPixmap = QPixmap( whiteBackground_xpm );
-    whiteBackgroundButton->setIcon( whiteBackgroundPixmap );
-    whiteBackgroundButton->setCheckable(true);
-    connect( whiteBackgroundButton, SIGNAL(clicked()), SLOT(setWhiteBackground()) );
+    {
+        // Construct a vertical box to contain controls
+        QWidget * vb1 = new QWidget();
+        vb1->setContentsMargins(0,0,0,0);
+        hb0Layout->addWidget(vb1);
 
-    // Add stereo vision enable/disable button
-    stereoVisionButton = new QToolButton( vb1, "stereoVisionButton" );
-    stereoVisionPixmap = QPixmap( stereoVisionEn_xpm );
-    stereoVisionButton->setIcon( stereoVisionPixmap );
-    stereoVisionButton->setCheckable(true);
-    connect( stereoVisionButton, SIGNAL(clicked()), SLOT(toggleStereoVision()) );
+        QVBoxLayout *vb1Layout = new QVBoxLayout(vb1);
+        vb1Layout->setSpacing(0);
+        vb1Layout->setContentsMargins(0,0,0,0);
 
-    // Add eyes separation "plus" button
-    eyeSeparationPlusButton = new QToolButton( vb1, "eyeSeparationPlusButton" );
-    eyeSeparationPlusPixmap = QPixmap( eyeSeparationPlus_xpm );
-    eyeSeparationPlusButton->setIcon( eyeSeparationPlusPixmap );
-    eyeSeparationPlusButton->setAutoRepeat( TRUE );
-    connect( eyeSeparationPlusButton, SIGNAL(clicked()), SLOT(eyeSeparationPlus()) );
+        // Add home button
+        setHomeButton = new QToolButton();
+        vb1Layout->addWidget(setHomeButton);
+        setHomePixmap = QPixmap( home_xpm );
+        setHomeButton->setIcon( setHomePixmap );
+        connect( setHomeButton, SIGNAL(clicked()), SLOT(setHome()) );
 
-    // Add eyes separation "minus" button
-    eyeSeparationMinusButton = new QToolButton( vb1, "eyeSeparationMinusButton" );
-    eyeSeparationMinusPixmap = QPixmap( eyeSeparationMinus_xpm );
-    eyeSeparationMinusButton->setIcon( eyeSeparationMinusPixmap );
-    eyeSeparationMinusButton->setAutoRepeat( TRUE );
-    connect( eyeSeparationMinusButton, SIGNAL(clicked()), SLOT(eyeSeparationMinus()) );
+        // Add set home button
+        setNewHomeButton = new QToolButton();
+        vb1Layout->addWidget(setNewHomeButton);
+        setNewHomePixmap = QPixmap( homenew_xpm );
+        setNewHomeButton->setIcon( setNewHomePixmap );
+        connect( setNewHomeButton, SIGNAL(clicked()), SLOT(setNewHome()) );
 
-    // Add a placeholder
-    QLabel * emptyL3 = new QLabel( vb1, "emptyL3" );
-    emptyL3->setText("");
+        // Add ortho perspective button
+        parallelButton = new QToolButton();
+        vb1Layout->addWidget(parallelButton);
+        parallelPixmap = QPixmap( parallel_xpm );
+        parallelButton->setIcon( parallelPixmap );
+        parallelButton->setCheckable(true);
+        connect( parallelButton, SIGNAL(clicked()), SLOT(setParallel()) );
 
-    // Add a control button that also serves as a label
-    dolly2Button = new QToolButton( vb1, "dolly2Button" );
-    dolly2Pixmap = QPixmap( dollyOut_xpm );
-    dolly2RedPixmap = QPixmap( dollyOutRed_xpm );
-    dolly2Button->setIcon( dolly2Pixmap );
-    dolly2Button->setAutoRepeat( TRUE );
-    connect( dolly2Button, SIGNAL(clicked()), SLOT(dolly2()) );
+        // Add 3D perspective button
+        perspectiveButton = new QToolButton();
+        vb1Layout->addWidget(perspectiveButton);
+        perspectivePixmap = QPixmap( perspective_xpm );
+        perspectiveButton->setIcon( perspectivePixmap );
+        perspectiveButton->setCheckable(true);
+        connect( perspectiveButton, SIGNAL(clicked()), SLOT(setPerspective()) );
 
-    // Add dolly control wheel
-    dollyWheel =new SoQtThumbWheel(vb1);
-    dollyWheel->setOrientation( SoQtThumbWheel::Vertical );
-    dollyWheel->setFixedWidth( FRAME_WIDTH );
-    dollyWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
-    QObject::connect(dollyWheel, SIGNAL(wheelMoved(float)), this, SLOT(dollyWheelMoved(float)));
+        // Add background buttons
+        blackBackgroundButton = new QToolButton();
+        vb1Layout->addWidget(blackBackgroundButton);
+        blackBackgroundPixmap = QPixmap( blackBackground_xpm );
+        blackBackgroundButton->setIcon( blackBackgroundPixmap );
+        blackBackgroundButton->setCheckable(true);
+        connect( blackBackgroundButton, SIGNAL(clicked()), SLOT(setBlackBackground()) );
 
-    // Add a control button that also serves as a label
-    dolly1Button = new QToolButton( vb1, "dolly1Button" );
-    dolly1Pixmap = QPixmap( dollyIn_xpm );
-    dolly1RedPixmap = QPixmap( dollyInRed_xpm );
-    dolly1Button->setIcon( dolly1Pixmap );
-    dolly1Button->setAutoRepeat( TRUE );
-    connect( dolly1Button, SIGNAL(clicked()), SLOT(dolly1()) );
+        whiteBackgroundButton = new QToolButton();
+        vb1Layout->addWidget(whiteBackgroundButton);
+        whiteBackgroundPixmap = QPixmap( whiteBackground_xpm );
+        whiteBackgroundButton->setIcon( whiteBackgroundPixmap );
+        whiteBackgroundButton->setCheckable(true);
+        connect( whiteBackgroundButton, SIGNAL(clicked()), SLOT(setWhiteBackground()) );
 
-    vb0->setStretchFactor( emptyL0, 10 );
-    hb1->setStretchFactor( emptyL1, 10 );
-    hb1->setStretchFactor( emptyL2, 10 );
-    vb1->setStretchFactor( emptyL3, 10 );
+        // Add stereo vision enable/disable button
+        stereoVisionButton = new QToolButton();
+        vb1Layout->addWidget(stereoVisionButton);
+        stereoVisionPixmap = QPixmap( stereoVisionEn_xpm );
+        stereoVisionButton->setIcon( stereoVisionPixmap );
+        stereoVisionButton->setCheckable(true);
+        connect( stereoVisionButton, SIGNAL(clicked()), SLOT(toggleStereoVision()) );
+
+        // Add eyes separation "plus" button
+        eyeSeparationPlusButton = new QToolButton();
+        vb1Layout->addWidget(eyeSeparationPlusButton);
+        eyeSeparationPlusPixmap = QPixmap( eyeSeparationPlus_xpm );
+        eyeSeparationPlusButton->setIcon( eyeSeparationPlusPixmap );
+        eyeSeparationPlusButton->setAutoRepeat( TRUE );
+        connect( eyeSeparationPlusButton, SIGNAL(clicked()), SLOT(eyeSeparationPlus()) );
+
+        // Add eyes separation "minus" button
+        eyeSeparationMinusButton = new QToolButton();
+        vb1Layout->addWidget(eyeSeparationMinusButton);
+        eyeSeparationMinusPixmap = QPixmap( eyeSeparationMinus_xpm );
+        eyeSeparationMinusButton->setIcon( eyeSeparationMinusPixmap );
+        eyeSeparationMinusButton->setAutoRepeat( TRUE );
+        connect( eyeSeparationMinusButton, SIGNAL(clicked()), SLOT(eyeSeparationMinus()) );
+
+        // Add a placeholder
+        vb1Layout->addStretch(10);
+
+        // Add a control button that also serves as a label
+        dolly2Button = new QToolButton();
+        vb1Layout->addWidget(dolly2Button);
+        dolly2Pixmap = QPixmap( dollyOut_xpm );
+        dolly2RedPixmap = QPixmap( dollyOutRed_xpm );
+        dolly2Button->setIcon( dolly2Pixmap );
+        dolly2Button->setAutoRepeat( TRUE );
+        connect( dolly2Button, SIGNAL(clicked()), SLOT(dolly2()) );
+
+        // Add dolly control wheel
+        dollyWheel =new SoQtThumbWheel(vb1);
+        vb1Layout->addWidget(dollyWheel);
+        dollyWheel->setOrientation( SoQtThumbWheel::Vertical );
+        dollyWheel->setFixedWidth( FRAME_WIDTH );
+        dollyWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
+        connect(dollyWheel, SIGNAL(wheelMoved(float)), this, SLOT(dollyWheelMoved(float)));
+
+        // Add a control button that also serves as a label
+        dolly1Button = new QToolButton();
+        vb1Layout->addWidget(dolly1Button);
+        dolly1Pixmap = QPixmap( dollyIn_xpm );
+        dolly1RedPixmap = QPixmap( dollyInRed_xpm );
+        dolly1Button->setIcon( dolly1Pixmap );
+        dolly1Button->setAutoRepeat( TRUE );
+        connect( dolly1Button, SIGNAL(clicked()), SLOT(dolly1()) );
+    }
 
     // Construct timers
     rotTimer1 = new QTimer( this );
@@ -289,9 +360,6 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
     spinTimer2 = new QTimer( this );
     zoomTimer1 = new QTimer( this );
     zoomTimer2 = new QTimer( this );
-
-    // Reset the pointer to main form
-    mainForm = NULL;
 
     // Reset a flag
     autoMode = FALSE;
@@ -305,17 +373,6 @@ GLCanvasFrame::GLCanvasFrame(QWidget* parent)
 
 GLCanvasFrame::~GLCanvasFrame()
 {
-}
-
-
-// Set a pointer to the main form
-void GLCanvasFrame::setFormAddress( MainForm * thisForm )
-{
-    mainForm = thisForm;
-
-    // Pass this on
-    if (drawArea)
-        drawArea->setFormAddress( mainForm );
 }
 
 
@@ -1529,11 +1586,9 @@ void GLCanvasFrame::adjustButtons()
 void GLCanvasFrame::updateRendering( void )
 {
     // Refresh the graphics
-    if (drawArea)
         drawArea->updateGL();
 
     // Update boards
-    if (mainForm)
         mainForm->updateExplicitBoard();
 }
 
@@ -1542,14 +1597,12 @@ void GLCanvasFrame::updateRendering( void )
 // drawing
 void GLCanvasFrame::setViewParam( viewParam vp )
 {
-    if (drawArea)
         drawArea->setViewParam( vp );
 
     // Adjust button settings
     this->adjustButtons();
 
     // Update boards
-    if (mainForm)
         mainForm->updateExplicitBoard();
 }
 
@@ -1558,7 +1611,6 @@ void GLCanvasFrame::setViewParam( viewParam vp )
 // (overloaded function)
 void GLCanvasFrame::snapRendering( void )
 {
-    if (drawArea)
         drawArea->snapRendering();
 }
 
@@ -1567,7 +1619,6 @@ void GLCanvasFrame::snapRendering( void )
 // (overloaded function)
 void GLCanvasFrame::snapRendering( const char * filename )
 {
-    if (drawArea)
         drawArea->snapRendering( filename );
 }
 
@@ -1575,48 +1626,36 @@ void GLCanvasFrame::snapRendering( const char * filename )
 // Return a pointer to the current aggregate data 
 aggregateData * GLCanvasFrame::getAggregateData( void )
 {
-    if (drawArea)
         return drawArea->getAggregateData();
-    else
-        return NULL;
 }
 
 
 // Return a pointer to the view parameters currently used
 viewParam * GLCanvasFrame::getViewParam( void ) 
 {
-    if (drawArea)
         return drawArea->getViewParam();
-    else
-        return NULL;
+
 }
 
 
 // Return a pointer to the view object structure currently used
 viewObject * GLCanvasFrame::getViewObject( void ) 
 {
-    if (drawArea)
+
         return drawArea->getViewObject();
-    else
-        return NULL;
 }
 
 
 // Return a pointer to the particle data currently used 
 particleData * GLCanvasFrame::getParticleData( void )
 {
-    if (drawArea)
         return drawArea->getParticleData();
-    else
-        return NULL;
 }
 
 
 // Return a pointer to the track data currently used 
 trackData * GLCanvasFrame::getTrackData( void )
 {
-    if (drawArea)
+
         return drawArea->getTrackData();
-    else
-        return NULL;
 }
