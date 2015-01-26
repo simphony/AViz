@@ -119,8 +119,8 @@ BondBoard::BondBoard(MainForm *mainForm, QWidget * parent)
 
         // Define a callback for these radio buttons
         QButtonGroup *bondModeButtonGroup = new QButtonGroup();
-        bondModeButtonGroup->addButton(bondMode0);
-        bondModeButtonGroup->addButton(bondMode1);
+        bondModeButtonGroup->addButton(bondMode0, 0);
+        bondModeButtonGroup->addButton(bondMode1, 1);
         connect( bondModeButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(setBond(int)) );
     }
 
