@@ -32,24 +32,23 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QDialog>
 
 class MainForm;
-
 class QFSpinBox;
+
 class QRadioButton;
 class QSpinBox;
 class QLabel;
 class QCheckBox;
 class QComboBox;
-class Q3ButtonGroup;
+class QGroupBox;
 
 // Bond board dialog widget
 class BondBoard: public QDialog
 {
     Q_OBJECT
 public:
-    BondBoard( QWidget * parent=0);
+    BondBoard(MainForm *, QWidget * parent=0);
 
-public slots:
-    void setMainFormAddress( MainForm * );
+public:
     void setData();
 
 private slots:
@@ -67,9 +66,9 @@ private:
     MainForm * mainForm;
     QComboBox * fParticleCob;
     QComboBox * tParticleCob;
-    Q3ButtonGroup * bondMode;
-    Q3ButtonGroup * bondColor;
-    Q3ButtonGroup * bondThickness;
+    QGroupBox * bondMode;
+    QGroupBox * bondColor;
+    QGroupBox * bondThickness;
     QRadioButton * bondMode0;
     QRadioButton * bondMode1;
     QRadioButton * bondColor0;

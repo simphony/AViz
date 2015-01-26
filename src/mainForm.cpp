@@ -871,8 +871,7 @@ void MainForm::launchAtoms() {
 // Callback function to launch the bond settings panel
 void MainForm::launchBonds() {
     if (!bb) {
-        bb = new BondBoard(this);
-        bb->setMainFormAddress( this );
+        bb = new BondBoard(this/*mainForm*/, this/*parent*/);
     }
 
     // Adjust the controls and show
