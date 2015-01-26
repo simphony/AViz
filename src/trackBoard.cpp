@@ -85,8 +85,8 @@ TrackBoard::TrackBoard(MainForm* mainForm, QWidget * parent)
         hbox->addWidget(upToStagesRb);
 
         QButtonGroup *stagesButtonGroup = new QButtonGroup(stages);
-        stagesButtonGroup->addButton(allStagesRb);
-        stagesButtonGroup->addButton(upToStagesRb);
+        stagesButtonGroup->addButton(allStagesRb, 0);
+        stagesButtonGroup->addButton(upToStagesRb, 1);
 
         // Define a callback for these radio buttons
         connect( stagesButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(bstages(int)) );

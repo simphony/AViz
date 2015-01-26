@@ -80,8 +80,8 @@ FileListBoard::FileListBoard(MainForm * mainForm, QWidget * parent)
 
     // Define a callback for these radio buttons
     QButtonGroup *directionButtonGroup = new QButtonGroup(this);
-    directionButtonGroup->addButton(forwardRb);
-    directionButtonGroup->addButton(backwardRb);
+    directionButtonGroup->addButton(forwardRb, 0);
+    directionButtonGroup->addButton(backwardRb, 1);
     connect(directionButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(bdirection(int)) );
 
     // Create pushbuttons to jump to start
