@@ -51,8 +51,7 @@ CustomFileDialog::CustomFileDialog( )
     QPushButton * genFileListPb = new QPushButton(this);
 	genFileListPb->setText( "Generate File List" );
     layout()->addWidget(genFileListPb);
-    int result = connect(genFileListPb, SIGNAL(clicked()), SLOT(generateFileList()));
-    Q_UNUSED(result);
+    connect(genFileListPb, SIGNAL(clicked()), SLOT(generateFileList()));
 }
 
 CustomFileDialog::~CustomFileDialog() {
