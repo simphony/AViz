@@ -38,27 +38,25 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "messageBox.h"
 #include "version.h"
 
-#include <qapplication.h>
-#include <q3mainwindow.h>
-#include <qmenubar.h>
-#include <q3popupmenu.h>
-#include <qstatusbar.h>
-#include <q3popupmenu.h>
-#include <qtimer.h>
+#include <QMainWindow>
+#include <QTimer>
 
 #include <sys/stat.h>
 #include <time.h>
 
-class AViz: public Q3MainWindow 
+class QAction;
+
+class AViz: public QMainWindow
 {
 	Q_OBJECT
 public:
 	AViz();
 	~AViz();
 
+    fileType isFileType();
+
 public slots:
 	void setFileType( fileType );
-	fileType isFileType();
 	void readFile( const QString & );
 	void setDefaults();
 	void setDefaults( char * );
@@ -82,8 +80,6 @@ public slots:
 	void setLcMenus();
 	void setPolymerMenus();
 	void setPoreMenus();
-
-protected:
 
 private slots:
 	void openXYZ();
@@ -132,32 +128,33 @@ private slots:
 	void keepWatchNow();
 
 private:
-	MainForm * mf;
-	Q3PopupMenu * file;
-	Q3PopupMenu * elements;
-	Q3PopupMenu * view;
-	Q3PopupMenu * settings;
-	Q3PopupMenu * data;
-	Q3PopupMenu * help;
-	Q3PopupMenu * openfile;
-	Q3PopupMenu * elementsAtoms;
-	Q3PopupMenu * elementsPolymers;
-	Q3PopupMenu * viewpoint;
-	Q3PopupMenu * viewmode;
-	Q3PopupMenu * background;
-	QTimer * watchTimer; 
-	int atomsId;
-	int spinsId;
-	int liquidCrystalsId;
-	int polymersId;
-	int poresId;
-	int usePerspectiveId, useOrthoId;
-	int backgroundBlackId, backgroundWhiteId;
-	int showHideAxesId;
-	int showHideContourId;
-	int onlyContourId;
-	int inOutWatchModeId;
-	bool inWatchMode;
+    enum ElementType {
+        ET_ATOM,
+        ET_SPIN,
+        ET_LIQUID_CRYSTALS,
+        ET_POLYMERS,
+        ET_PORES
+    };
+
+private:
+    /// enables menu items related to particlular element
+    void enableElement(ElementType);
+
+private:
+    MainForm *m_mainForm;
+    QTimer *m_watchTimer;
+    QMenu *m_atomsMenu;
+    QAction *m_spinsAction;
+    QAction *m_liquidCrystalsAction;
+    QMenu *m_polymersMenu;
+    QAction *m_poresAction;
+    QAction *m_usePerspectiveAction;
+    QAction *m_useOrthoAction;
+    QAction *m_showHideAxesAction;
+    QAction *m_showHideContourAction;
+    QAction *m_onlyContourAction;
+    QAction *m_inOutWatchModelAction;
+    bool m_inWatchMode;
 };
 
 

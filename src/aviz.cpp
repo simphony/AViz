@@ -26,155 +26,142 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "aviz.h"
 
-#include <Q3PopupMenu>
+#include <QMenu>
+#include <QMenuBar>
 #include <QFileDialog>
+#include <QApplication>
 
 // Constructor and deconstructor of main widget
 AViz::AViz() 
-    : Q3MainWindow( NULL, "aviz", Qt::WDestructiveClose )
+    : QMainWindow( NULL, Qt::WDestructiveClose )
 {
+    // Make menus in menubar
+    QMenu *file = menuBar()->addMenu("&File");
+    QMenu *elements = menuBar()->addMenu( "&Elements");
+    QMenu *view = menuBar()->addMenu( "&View");
+    QMenu *settings = menuBar()->addMenu( "&Settings");
+    QMenu *data = menuBar()->addMenu("&Data");
+    menuBar()->addSeparator();
+    QMenu *help = menuBar()->addMenu("&Help");
 
-	// Make a cascade menu to read files
-	openfile = new Q3PopupMenu( this );
-	openfile->insertItem( "Open XYZ File...", this, SLOT(openXYZ()) );
-	openfile->insertItem( "Open File List...", this, SLOT(openList()) );
-	openfile->insertItem( "Open ViewParam File...", this, SLOT(openViewParam()) );
+    // Make a cascade menu to read files
+    QMenu *openfile = file->addMenu("&Open");
+    openfile->addAction("Open XYZ File...", this, SLOT(openXYZ()));
+    openfile->addAction("Open File List...", this, SLOT(openList()));
+    openfile->addAction("Open ViewParam File...", this, SLOT(openViewParam()));
 
-	// Make a general file menu 
-	file = new Q3PopupMenu( this );
-	file->insertItem( "&Open", openfile);
-	file->insertItem( "Save ViewParam File...", this, SLOT(saveViewParam()) );
-	file->insertSeparator();
-	file->insertItem( "File List...", this, SLOT(launchFileList()) );
-	file->insertItem( "Animation...", this, SLOT(launchAnimation()) );
-	file->insertSeparator();
-	inOutWatchModeId = file->insertItem( "Watch XYZ File", this, SLOT(watchFile()) );
-	file->insertSeparator();
-	file->insertItem( "Snap PNG File...", this, SLOT(savePNGFile()) );
-	file->insertSeparator();
-	file->insertItem( "Set Default View Param", this, SLOT(setDefaultView()));
-	file->insertSeparator();
-	file->insertItem( "E&xit",  qApp, SLOT(quit()), Qt::CTRL+Qt::Key_Q );
 
-	// Make a cascade menu to set standard view points
-	viewpoint = new Q3PopupMenu( this );
-	viewpoint->insertItem( "Explicit...", this, SLOT(launchExplicit()) );
-	viewpoint->insertSeparator();
-	viewpoint->insertItem( "Default View", this, SLOT(setDefaults()) );
-	viewpoint->insertSeparator();
-	viewpoint->insertItem( "View XY +", this, SLOT(viewXYPlus()) );
-	viewpoint->insertItem( "View XY -", this, SLOT(viewXYMinus()) );
-	viewpoint->insertSeparator();
-	viewpoint->insertItem( "View XZ +", this, SLOT(viewXZPlus()) );
-	viewpoint->insertItem( "View XZ -", this, SLOT(viewXZMinus()) );
-	viewpoint->insertSeparator();
-	viewpoint->insertItem( "View YZ +", this, SLOT(viewYZPlus()) );
-	viewpoint->insertItem( "View YZ -", this, SLOT(viewYZMinus()) );
 
-	// Make a submenu for atom specifications 
-	elementsAtoms = new Q3PopupMenu( this );
-	elementsAtoms->insertItem( "Atoms/Molecules...", this, SLOT(launchAtoms()) );
-	elementsAtoms->insertItem( "Bonds...", this, SLOT(launchBonds()) );
+    file->addAction( "Save ViewParam File...", this, SLOT(saveViewParam()) );
+    file->addSeparator();
+    file->addAction( "File List...", this, SLOT(launchFileList()) );
+    file->addAction( "Animation...", this, SLOT(launchAnimation()) );
+    file->addSeparator();
+    m_inOutWatchModelAction = file->addAction( "Watch XYZ File", this, SLOT(watchFile()) );
+    file->addSeparator();
+    file->addAction( "Snap PNG File...", this, SLOT(savePNGFile()) );
+    file->addSeparator();
+    file->addAction( "Set Default View Param", this, SLOT(setDefaultView()));
+    file->addSeparator();
+    file->addAction( "E&xit", qApp, SLOT(quit()), Qt::CTRL+Qt::Key_Q );
 
-	// Make a submenu for polymer specifications 
-	elementsPolymers = new Q3PopupMenu( this );
-	elementsPolymers->insertItem( "Polymers...", this, SLOT(launchPolymers()) );
-	elementsPolymers->insertItem( "Bonds...", this, SLOT(launchBonds()) );
+    // Make a general view menu
+    QMenu *viewpoint = view->addMenu("Set &Viewpoint");
+    view->addAction( "Clipping...", this, SLOT(launchClip()) );
+    view->addAction( "Slicing...", this, SLOT(launchSlice()) );
 
-	// Make a general elements menu
-	elements = new Q3PopupMenu( this );
-	atomsId = elements->insertItem( "Atoms...", elementsAtoms );
-	spinsId = elements->insertItem( "Spins...", this, SLOT(launchSpins()) );
-	liquidCrystalsId = elements->insertItem( "Liquid Crystals...", this, SLOT(launchLiquidCrystals()) );
-	polymersId = elements->insertItem( "Polymers...", elementsPolymers);
-	poresId = elements->insertItem( "Pores ...", this, SLOT(launchPores()) );
-	elements->insertItem( "Lights...", this, SLOT(launchLights()) );
-	elements->insertItem( "Annotation...", this, SLOT(launchAnnotation()) );
+    // Make a cascade menu to set standard view points
+    viewpoint->addAction( "Explicit...", this, SLOT(launchExplicit()) );
+    viewpoint->addSeparator();
+    viewpoint->addAction( "Default View", this, SLOT(setDefaults()) );
+    viewpoint->addSeparator();
+    viewpoint->addAction( "View XY +", this, SLOT(viewXYPlus()) );
+    viewpoint->addAction( "View XY -", this, SLOT(viewXYMinus()) );
+    viewpoint->addSeparator();
+    viewpoint->addAction( "View XZ +", this, SLOT(viewXZPlus()) );
+    viewpoint->addAction( "View XZ -", this, SLOT(viewXZMinus()) );
+    viewpoint->addSeparator();
+    viewpoint->addAction( "View YZ +", this, SLOT(viewYZPlus()) );
+    viewpoint->addAction( "View YZ -", this, SLOT(viewYZMinus()) );
 
-	// Make a general view menu 
-	view = new Q3PopupMenu( this );
-	view->insertItem( "Set &Viewpoint", viewpoint );
-	view->insertItem( "Clipping...", this, SLOT(launchClip()) );
-	view->insertItem( "Slicing...", this, SLOT(launchSlice()) );
 
-	// Make a general settings menu 
-	settings = new Q3PopupMenu( this );
-	showHideAxesId = settings->insertItem( "Hide Axes", this, SLOT(showHideAxesCB()) );
-	showHideContourId = settings->insertItem( "Hide Contour", this, SLOT(showHideContourCB()) );
-	onlyContourId = settings->insertItem( "Only Contour", this, SLOT(onlyContourCB()) );
+    // Fill a general elements menu
+    m_atomsMenu = elements->addMenu("Atoms...");
 
-	// Make a general data menu 
-	data = new Q3PopupMenu( this );
-	data->insertItem( "&Translate...", this, SLOT(launchTranslation()) );
-	data->insertSeparator();
-	data->insertItem( "Swap XY", this, SLOT(swapXY()) );
-	data->insertItem( "Swap XZ", this, SLOT(swapXZ()) );
-	data->insertItem( "Swap YZ", this, SLOT(swapYZ()) );
-	data->insertSeparator();
-	data->insertItem( "Mirror X", this, SLOT(mirrorX()) );
-	data->insertItem( "Mirror Y", this, SLOT(mirrorY()) );
-	data->insertItem( "Mirror Z", this, SLOT(mirrorZ()) );
-	data->insertSeparator();
-	data->insertItem( "Stretch XYZ...", this, SLOT(launchStretch()) );
+    // Make a submenu for atom specifications
+    m_atomsMenu->addAction( "Atoms/Molecules...", this, SLOT(launchAtoms()) );
+    m_atomsMenu->addAction( "Bonds...", this, SLOT(launchBonds()) );
 
-	// Make a general help menu 
-	help = new Q3PopupMenu( this );
-	help->insertItem( "&About", this, SLOT(about()), Qt::CTRL+Qt::Key_H );
-	help->insertItem( "License", this, SLOT(license()) );
-	help->insertItem( "Distribution", this, SLOT(distribute()) );
+    m_spinsAction = elements->addAction( "Spins...", this, SLOT(launchSpins()) );
+    m_liquidCrystalsAction = elements->addAction( "Liquid Crystals...", this, SLOT(launchLiquidCrystals()) );
+    m_polymersMenu = elements->addMenu( "Polymers...");
+    m_poresAction = elements->addAction( "Pores ...", this, SLOT(launchPores()) );
+    elements->addAction( "Lights...", this, SLOT(launchLights()) );
+    elements->addAction( "Annotation...", this, SLOT(launchAnnotation()) );
 
-	menuBar()->insertItem( "&File", file );
-	menuBar()->insertItem( "&Elements", elements);
-	menuBar()->insertItem( "&View", view);
-	menuBar()->insertItem( "&Settings", settings);
-	menuBar()->insertItem( "&Data", data);
-	menuBar()->insertSeparator();
-	menuBar()->insertItem( "&Help", help );
-	menuBar()->setSeparator( QMenuBar::InWindowsStyle );
+    // fill submenu for polymer specifications
+    m_polymersMenu->addAction( "Polymers...", this, SLOT(launchPolymers()) );
+    m_polymersMenu->addAction( "Bonds...", this, SLOT(launchBonds()) );
+
+
+    // fill a general settings menu
+    m_showHideAxesAction = settings->addAction( "Hide Axes", this, SLOT(showHideAxesCB()) );
+    m_showHideContourAction = settings->addAction( "Hide Contour", this, SLOT(showHideContourCB()) );
+    m_onlyContourAction = settings->addAction( "Only Contour", this, SLOT(onlyContourCB()) );
+
+    // fill a general data menu
+    data->addAction( "&Translate...", this, SLOT(launchTranslation()) );
+    data->addSeparator();
+    data->addAction( "Swap XY", this, SLOT(swapXY()) );
+    data->addAction( "Swap XZ", this, SLOT(swapXZ()) );
+    data->addAction( "Swap YZ", this, SLOT(swapYZ()) );
+    data->addSeparator();
+    data->addAction( "Mirror X", this, SLOT(mirrorX()) );
+    data->addAction( "Mirror Y", this, SLOT(mirrorY()) );
+    data->addAction( "Mirror Z", this, SLOT(mirrorZ()) );
+    data->addSeparator();
+    data->addAction( "Stretch XYZ...", this, SLOT(launchStretch()) );
+
+    // fill a general help menu
+    help->addAction( "&About", this, SLOT(about()), Qt::CTRL+Qt::Key_H );
+    help->addAction( "License", this, SLOT(license()) );
+    help->addAction( "Distribution", this, SLOT(distribute()) );
 
     // Now construct the main form
     // (Note having aviz as paramter for MainForm ctor
     // is "This is an ugly hack, intended to propagate the
     // address of the calling class")
-    mf = new MainForm(this/*parent*/, this /*aviz*/);
-    setCentralWidget(mf);
+    m_mainForm = new MainForm(this/*parent*/, this /*aviz*/);
+    setCentralWidget(m_mainForm);
 
     // Construct a timer
-    watchTimer = new QTimer( this, "watchTimer" );
+    m_watchTimer = new QTimer(this);
 
     // Set initial settings
-    this->setAtomMenus();
+    setAtomMenus();
 }
 
 
 // Destructor
-AViz::~AViz()
-{
+AViz::~AViz() {
     
 }
 
 
 // Set the file type to be used during reading or writing files
-void AViz::setFileType( fileType thisFt )
-{
-	
-	if (mf) 
-		mf->setFileType( thisFt );
+void AViz::setFileType(fileType thisFt) {
+    m_mainForm->setFileType( thisFt );
 }
 
 
 // Get the file type to be used during reading or writing files
-fileType AViz::isFileType( void )
-{
-	if (mf) 
-		return (mf)->isFileType();
-	else
-		return UNKNOWN;
+fileType AViz::isFileType() {
+    return (m_mainForm)->isFileType();
 }
 
 
 // Open a XYZ coordinate file
-void AViz::openXYZ( void ) {
+void AViz::openXYZ() {
     // Prepare reading of a coordinate file
     setFileType( XYZ_FILE );
 
@@ -187,7 +174,7 @@ void AViz::openXYZ( void ) {
 
 
 // Open a list of coordinate files
-void AViz::openList( void ) {
+void AViz::openList() {
     // Prepare reading of a list of coordinate files
     setFileType( ANIMATION);
 
@@ -203,7 +190,7 @@ void AViz::openList( void ) {
 
 
 // Read the parameters defining view parameters
-void AViz::openViewParam( void ) {
+void AViz::openViewParam() {
     // Prepare reading of a view parameters file
     setFileType( VP_FILE );
 
@@ -218,7 +205,7 @@ void AViz::openViewParam( void ) {
 
 
 // Save the parameters defining view parameters
-void AViz::saveViewParam( void ) {
+void AViz::saveViewParam() {
     // Prepare writing of a view parameters files
     setFileType( VP_FILE );
 
@@ -234,261 +221,223 @@ void AViz::saveViewParam( void ) {
 
 
 // Save the parameters defining default view parameters
-void AViz::setDefaultView( void )
-{
-	char * filename = (char *)malloc( BUFSIZ );
+void AViz::setDefaultView() {
+    char * filename = (char *)malloc( BUFSIZ );
 
-        // Prepare writing of a view parameter file
-        this->setFileType( VP_FILE );
-	
-	// Write the file now in the home directory
-	sprintf( filename, "%s/.aviz/%s", getenv("HOME"), defaultViewParamFile);
-	writeFile( filename );
+    // Prepare writing of a view parameter file
+    setFileType( VP_FILE );
 
-        free(filename);
+    // Write the file now in the home directory
+    sprintf( filename, "%s/.aviz/%s", getenv("HOME"), defaultViewParamFile);
+    writeFile( filename );
+
+    free(filename);
 }
 
 
 // Set factory defaults (overloaded function)
-void AViz::setDefaults( void )
-{
-	char * filename = (char *)malloc( BUFSIZ );
-        struct stat * buf = (struct stat *)malloc( sizeof(struct stat) );
-	particleData * thisPd;
-	viewParam thisVp;
-        bool atomExistFlag = FALSE;
-	bool defaultExistFlag = FALSE;
+void AViz::setDefaults() {
+    char * filename = (char *)malloc( BUFSIZ );
+    struct stat * buf = (struct stat *)malloc( sizeof(struct stat) );
+    particleData * thisPd;
+    viewParam thisVp;
+    bool atomExistFlag =false;
+    bool defaultExistFlag =false;
 
-	// Get a pointer to the particle data
-	if (mf) 
-		thisPd = mf->getParticleData();
-	else {
-		printf ("Error: cannot get pointer to particle data.  Abort.\n");
-		exit(0);
-	}
+    // Get a pointer to the particle data
 
-        // Always start by setting default values
-        useDefaultParticleData( thisPd );
+    thisPd = m_mainForm->getParticleData();
 
-        // Is there a particle data file in the home directory?
-        sprintf( filename, "%s/.aviz/%s", getenv("HOME"), particleDataFile );
-        if (!stat( (const char *)filename, buf )) {
-                // A atom data file exists in the home directory --
-                // read it
-		atomExistFlag = TRUE;
-                if (!openParticleDataFunction( filename, thisPd )) {
-                        // Read failed: use built-in defaults
-			if (mf)
-				mf->statusMessage( "Could not read %s -- using defaults.", filename);
-                        printf("Could not load %s -- using defaults.\n", filename);
-		}
+    // Always start by setting default values
+    useDefaultParticleData( thisPd );
+
+    // Is there a particle data file in the home directory?
+    sprintf( filename, "%s/.aviz/%s", getenv("HOME"), particleDataFile );
+    if (!stat( (const char *)filename, buf )) {
+        // A atom data file exists in the home directory --
+        // read it
+        atomExistFlag = true;
+        if (!openParticleDataFunction( filename, thisPd )) {
+            // Read failed: use built-in defaults
+
+            m_mainForm->statusMessage( "Could not read %s -- using defaults.", filename);
+            printf("Could not load %s -- using defaults.\n", filename);
         }
-	
-	// If no atom data file exists, use built-in defaults
-        if (atomExistFlag == FALSE) {
-		if (mf)
-			mf->statusMessage( "Could not stat %s -- using defaults.", filename);
-		printf("Could not stat %s -- using defaults.\n", filename);
-	}
+    }
 
-	// Is there a default view param file in the home directory?
-	sprintf( filename, "%s/.aviz/%s", getenv("HOME"), defaultViewParamFile);
-        if (!stat( (const char *)filename, buf )) {
-		// A default view param file exists in the home directory --
-		// read it
-		defaultExistFlag = TRUE;
-		if (openViewParamFunction( (const char *)filename, &thisVp )) {
-			// If successful, send the parameters to the main form
-			if (mf) 
-				mf->setDefaults( thisVp, (const char *)filename );
-		}
-		else {
-			if (mf) 
-				mf->statusMessage( "Could not read %s -- using defaults.", filename);
-			printf("Could not load %s -- using defaults.\n", filename);
-			// Use factory defaults if this failed
-			if (mf) 
-				mf->setDefaults();
-		}
-	}
+    // If no atom data file exists, use built-in defaults
+    if (!atomExistFlag) {
+        m_mainForm->statusMessage( "Could not stat %s -- using defaults.", filename);
+        printf("Could not stat %s -- using defaults.\n", filename);
+    }
 
-	// If now default view param file exists, use factory defaults
-	if (defaultExistFlag == FALSE) {
-		if (mf) 
-			mf->statusMessage( "Could not stat %s -- using defaults.", filename);
-		printf("Could not stat %s -- using defaults.\n", filename);
+    // Is there a default view param file in the home directory?
+    sprintf( filename, "%s/.aviz/%s", getenv("HOME"), defaultViewParamFile);
+    if (!stat( (const char *)filename, buf )) {
+        // A default view param file exists in the home directory --
+        // read it
+        defaultExistFlag = true;
+        if (openViewParamFunction( (const char *)filename, &thisVp )) {
+            // If successful, send the parameters to the main form
 
-		// Use factory defaults if this failed
-		if (mf) 
-			mf->setDefaults();
-	}
+            m_mainForm->setDefaults( thisVp, (const char *)filename );
+        }
+        else {
+            m_mainForm->statusMessage( "Could not read %s -- using defaults.", filename);
+            printf("Could not load %s -- using defaults.\n", filename);
+            // Use factory defaults if this failed
+            m_mainForm->setDefaults();
+        }
+    }
 
-        free(filename);
-        free(buf);
+    // If now default view param file exists, use factory defaults
+    if (!defaultExistFlag) {
+        m_mainForm->statusMessage( "Could not stat %s -- using defaults.", filename);
+        printf("Could not stat %s -- using defaults.\n", filename);
+
+        // Use factory defaults if this failed
+        m_mainForm->setDefaults();
+    }
+
+    free(filename);
+    free(buf);
 }
 
 
 // Set factory defaults (overloaded function)
-void AViz::setDefaults( char * filename0 )
-{
-	char * filename1 = (char *)malloc( BUFSIZ );
-        struct stat * buf = (struct stat *)malloc( sizeof(struct stat) );
-	particleData * thisPd;
-	viewParam thisVp;
-        bool atomExistFlag = FALSE;
+void AViz::setDefaults(char * filename0) {
+    char * filename1 = (char *)malloc( BUFSIZ );
+    struct stat * buf = (struct stat *)malloc( sizeof(struct stat) );
+    particleData * thisPd;
+    viewParam thisVp;
+    bool atomExistFlag =false;
 
-	// Get a pointer to the particle data
-	if (mf) 
-		thisPd = mf->getParticleData();
-	else {
-		printf ("Error: cannot get pointer to particle data.  Abort.\n");
-		exit(0);
-	}
+    // Get a pointer to the particle data
+    thisPd = m_mainForm->getParticleData();
 
-        // Always start by allocating memory and setting default values
-        useDefaultParticleData( thisPd );
+    // Always start by allocating memory and setting default values
+    useDefaultParticleData( thisPd );
 
-        // Is there a particle data file in the home directory?
-        sprintf( filename1, "%s/.aviz/%s", getenv("HOME"), particleDataFile );
-        if (!stat( (const char *)filename1, buf )) {
-                // A atom data file exists in the home directory --
-                // read it
-		atomExistFlag = TRUE;
-                if (!openParticleDataFunction( filename1, thisPd )) {
-                        // Read failed: use built-in defaults
-			if (mf)
-				mf->statusMessage( "Could not read %s -- using defaults.", filename1 );
-                        printf("Could not read %s -- using defaults.\n", filename1);
-		}
+    // Is there a particle data file in the home directory?
+    sprintf( filename1, "%s/.aviz/%s", getenv("HOME"), particleDataFile );
+    if (!stat( (const char *)filename1, buf )) {
+        // A atom data file exists in the home directory --
+        // read it
+        atomExistFlag = true;
+        if (!openParticleDataFunction( filename1, thisPd )) {
+            // Read failed: use built-in defaults
+            m_mainForm->statusMessage( "Could not read %s -- using defaults.", filename1 );
+            printf("Could not read %s -- using defaults.\n", filename1);
         }
-	
-	// If no atom/spin data file exists, use built-in defaults
-        if (atomExistFlag == FALSE) {
-		if (mf)
-			mf->statusMessage( "Could not stat %s -- using defaults.", filename1);
-		printf("Could not stat %s -- using defaults.\n", filename1);
-	}
+    }
 
-	// Read the specified view parameters 
-	if (openViewParamFunction( (const char *)filename0, &thisVp )) {
+    // If no atom/spin data file exists, use built-in defaults
+    if (!atomExistFlag) {
+        m_mainForm->statusMessage( "Could not stat %s -- using defaults.", filename1);
+        printf("Could not stat %s -- using defaults.\n", filename1);
+    }
 
-		// If successful, send them on to the main form
-		if (mf) 
-			mf->setDefaults( thisVp, (const char *)filename0 );
-	}
-	else {
-		if (mf) 
-			mf->statusMessage( "Could not load", (const char *)filename0 );
-		printf( "Could not load %s\n", (const char *)filename0 );
+    // Read the specified view parameters
+    if (openViewParamFunction( (const char *)filename0, &thisVp )) {
 
-		// Use factory defaults if this failed
-		if (mf) 
-			mf->setDefaults();
-	}
+        // If successful, send them on to the main form
+        m_mainForm->setDefaults( thisVp, (const char *)filename0 );
+    }
+    else {
+        m_mainForm->statusMessage( "Could not load", (const char *)filename0 );
+        printf( "Could not load %s\n", (const char *)filename0 );
 
-        free(filename1);
-        free(buf);
+        // Use factory defaults if this failed
+        m_mainForm->setDefaults();
+    }
+
+    free(filename1);
+    free(buf);
 }
 
 
 // Read a file
 void AViz::readFile( const QString &fn )
 {
-	// Check if the file type was set correctly, based on 
-	// file name 
-	if ( strstr((const char *)fn, ".xyz")) 
-		this->setFileType( XYZ_FILE );
-	if ( strstr((const char *)fn, "filelist.dat") || !strstr((const char *)fn, ".")) 
-		this->setFileType( ANIMATION );
-	if ( strstr((const char *)fn, ".vpm")) 
-		this->setFileType( VP_FILE );
+    // Check if the file type was set correctly, based on
+    // file name
+    if ( strstr((const char *)fn, ".xyz"))
+        setFileType( XYZ_FILE );
+    if ( strstr((const char *)fn, "filelist.dat") || !strstr((const char *)fn, "."))
+        setFileType( ANIMATION );
+    if ( strstr((const char *)fn, ".vpm"))
+        setFileType( VP_FILE );
 
-	if (mf) {
-		mf->readFile( fn );
+    m_mainForm->readFile( fn );
 
-		// Launch the file list board upon reading 
-		// a list of files
-		if (this->isFileType() == ANIMATION) {
-			mf->launchFileList( fn );
-		}
-	}
+    // Launch the file list board upon reading
+    // a list of files
+    if (isFileType() == ANIMATION) {
+        m_mainForm->launchFileList( fn );
+    }
+
 }
 
 
 // Write a file
 void AViz::writeFile( const QString &fn )
 {
-	if (mf) 
-		mf->writeFile( fn );
+    m_mainForm->writeFile( fn );
 }
 
 
-// Go in and out of watch mode
-void AViz::watchFile( void )
-{
-	switch (inWatchMode) {
-		case FALSE:
-			// Start the timer, using the command-line callback
-			this->setWatchMode();
+// toggle watch mode
+void AViz::watchFile() {
+    if (!m_inWatchMode) {
+        // Start the timer, using the command-line callback
+        setWatchMode();
 
-			// Write a message	
-			if (mf) {	
-				aggregateData * ad = mf->getAggregateData();
-				mf->statusMessage( "Start watching file", (*ad).filename );
-			}
+        // Write a message
+        aggregateData * ad = m_mainForm->getAggregateData();
+        m_mainForm->statusMessage( "Start watching file", (*ad).filename );
 
-			// Adjust the menu entry
-			file->changeItem( inOutWatchModeId, "Stop Watching" );
+        // Adjust the menu entry
+        m_inOutWatchModelAction->setText("Stop Watching");
+    }  else {
+        // Stop the timer
+        m_watchTimer->stop();
 
-			// Set a flag
-			inWatchMode = TRUE;
-		break;	
-		case TRUE:	
-			// Stop the timer
-        		watchTimer->stop();
+        // Write a message
+        aggregateData * ad = m_mainForm->getAggregateData();
+        m_mainForm->statusMessage( "Stop watching file", (*ad).filename );
 
-			// Write a message	
-			if (mf) {	
-				aggregateData * ad = mf->getAggregateData();
-				mf->statusMessage( "Stop watching file", (*ad).filename );
-			}
+        // Adjust the menu entry
+        m_inOutWatchModelAction->setText("Watch XYZ File..." );
+    }
 
-			// Adjust the menu entry
-			file->changeItem( inOutWatchModeId, "Watch XYZ File..." );
-			// Reset a flag
-			inWatchMode = FALSE;
-		break;
-	}
+    m_inWatchMode = !m_inWatchMode;
 }
 
 
 // Show the file list panel
-void AViz::launchFileList( void )
-{
-	if (mf) 
-		mf->launchFileList();
+void AViz::launchFileList() {
+    m_mainForm->launchFileList();
 }
 
 
 // Show the animation panel -- a convenience function
-void AViz::launchAnimation( void )
+void AViz::launchAnimation()
 {
-	AnimationBoard * ab = new AnimationBoard();
-	ab->show();
+    AnimationBoard * ab = new AnimationBoard();
+    ab->show();
 }
 
 
 // Help callback function
 void AViz::about() {
-	// Launch a message box
+    // Launch a message box
     MessageBox *mb = new MessageBox(VERSION_STRING, this);
-	mb->show();
+    mb->show();
 }
 
 
 // Help callback function
-void AViz::license()
-{
+void AViz::license() {
     // Launch a message box
     MessageBox *mb = new MessageBox(SHORT_LICENSE_STRING, this);
     mb->show();
@@ -512,763 +461,620 @@ void AViz::distribute()
 
 
 // Callback function to set fixed view parameters
-void AViz::viewXYPlus( void )
-{
-	if (mf) 
-		mf->setViewXYPlus();
+void AViz::viewXYPlus() {
+    m_mainForm->setViewXYPlus();
 }
 
 
 // Callback function to set fixed view parameters
-void AViz::viewXYMinus( void )
-{
-	if (mf) 
-		mf->setViewXYMinus();
+void AViz::viewXYMinus() {
+    m_mainForm->setViewXYMinus();
 }
 
 
 // Callback function to set fixed view parameters
-void AViz::viewXZPlus( void )
-{
-	if (mf) 
-		mf->setViewXZPlus();
+void AViz::viewXZPlus() {
+    m_mainForm->setViewXZPlus();
 }
 
 
 // Callback function to set fixed view parameters
-void AViz::viewXZMinus( void )
-{
-	if (mf) 
-		mf->setViewXZMinus();
+void AViz::viewXZMinus() {
+    m_mainForm->setViewXZMinus();
 }
 
 
 // Callback function to set fixed view parameters
-void AViz::viewYZPlus( void )
-{
-	if (mf) 
-		mf->setViewYZPlus();
+void AViz::viewYZPlus() {
+    m_mainForm->setViewYZPlus();
 }
 
 
 // Callback function to set fixed view parameters
-void AViz::viewYZMinus( void )
-{
-	if (mf) 
-		mf->setViewYZMinus();
+void AViz::viewYZMinus() {
+    m_mainForm->setViewYZMinus();
 }
 
 
 // Command function to start auto rot/tilt/spin
-void AViz::startAutoRot( void )
-{
-        if (mf) {
-	        // Read the current view parameters
-	        viewParam * thisVp = mf->getViewParam();
-		(*thisVp).autoRot1 = TRUE;
-		mf->setAutoAndStart( (*thisVp) );
-	}
+void AViz::startAutoRot() {
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
+    thisVp->autoRot1 = true;
+    m_mainForm->setAutoAndStart( (*thisVp) );
+
 }
 
 
 // Command function to start auto rot/tilt/spin
-void AViz::startAutoTilt( void )
-{
-        if (mf) {
-	        // Read the current view parameters
-	        viewParam * thisVp = mf->getViewParam();
-		(*thisVp).autoTilt1 = TRUE;
-		mf->setAutoAndStart( (*thisVp) );
-	}
+void AViz::startAutoTilt() {
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
+    (*thisVp).autoTilt1 = true;
+    m_mainForm->setAutoAndStart( (*thisVp) );
 }
 
 
 // Command function to start auto rot/tilt/spin
-void AViz::startAutoSpin( void )
-{
-        if (mf) {
-	        // Read the current view parameters
-	        viewParam * thisVp = mf->getViewParam();
-		(*thisVp).autoSpin1 = TRUE;
-		mf->setAutoAndStart( (*thisVp) );
-	}
+void AViz::startAutoSpin() {
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
+    (*thisVp).autoSpin1 = true;
+    m_mainForm->setAutoAndStart( (*thisVp) );
+
 }
 
 
 // Command line function to start auto zooming
-void AViz::startAutoZoom( void )
-{
-        if (mf) {
-	        // Read the current view parameters
-	        viewParam * thisVp = mf->getViewParam();
-		(*thisVp).autoZoom1 = TRUE;
-		mf->setAutoAndStart( (*thisVp) );
-	}
+void AViz::startAutoZoom() {
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
+    (*thisVp).autoZoom1 = true;
+    m_mainForm->setAutoAndStart( (*thisVp) );
 }
 
 
 // Command line function to start auto snapping
-void AViz::startAutoSnap( void )
-{
-        if (mf) {
-                // Read the current view parameters
-                viewParam * thisVp = mf->getViewParam();
-                (*thisVp).autoSnap = TRUE;
-                mf->setAutoAndStart( (*thisVp) );
-        }
+void AViz::startAutoSnap() {
+
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
+    (*thisVp).autoSnap = true;
+    m_mainForm->setAutoAndStart( (*thisVp) );
+
 }
 
 
 // Command line function to read a file list
-void AViz::useFileList( char * ptr )
-{
-        // Prepare reading of a list of coordinate files
-        this->setFileType( ANIMATION);
+void AViz::useFileList(char * ptr) {
+    // Prepare reading of a list of coordinate files
+    setFileType( ANIMATION);
 
-	// Read the list and produce the file list board
-	QString fl = ptr;
-	this->readFile( fl );
+    // Read the list and produce the file list board
+    QString fl = ptr;
+    readFile( fl );
 }
 
 
 // Command line function to set rendering mode
-void AViz::setRenderMode( char * ptr )
-{
-	if (mf) {
-		// Read the current view parameters
-		viewParam * thisVp = mf->getViewParam();				
-	        // Set a new render mode and refresh drawing
-		if (strcmp( ptr, "atom" ) == 0) {
-			(*thisVp).renderMode = ATOMS;
-			this->setAtomMenus();
-		}
-		if (strcmp( ptr, "spin" ) == 0) {
-			(*thisVp).renderMode = SPINS;
-			this->setSpinMenus();
-		}
-		if (strcmp( ptr, "liquidcrystal" ) == 0) {
-			(*thisVp).renderMode = LIQUID_CRYSTALS;
-			this->setLcMenus();
-		}
-		if (strcmp( ptr, "polymer" ) == 0) {
-			(*thisVp).renderMode = POLYMERS;
-			this->setPolymerMenus();
-		}
-		if (strcmp( ptr, "pore" ) == 0) {
-			(*thisVp).renderMode = PORES;
-			this->setPoreMenus();
-		}
+void AViz::setRenderMode(char * ptr) {
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
+    // Set a new render mode and refresh drawing
+    if (strcmp( ptr, "atom" ) == 0) {
+        (*thisVp).renderMode = ATOMS;
+        setAtomMenus();
+    }
+    if (strcmp( ptr, "spin" ) == 0) {
+        (*thisVp).renderMode = SPINS;
+        setSpinMenus();
+    }
+    if (strcmp( ptr, "liquidcrystal" ) == 0) {
+        (*thisVp).renderMode = LIQUID_CRYSTALS;
+        setLcMenus();
+    }
+    if (strcmp( ptr, "polymer" ) == 0) {
+        (*thisVp).renderMode = POLYMERS;
+        setPolymerMenus();
+    }
+    if (strcmp( ptr, "pore" ) == 0) {
+        (*thisVp).renderMode = PORES;
+        setPoreMenus();
+    }
 
-                mf->setViewParam( (*thisVp) );
-		mf->updateView();
-                mf->updateRendering();
-        }
+    m_mainForm->setViewParam( (*thisVp) );
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
 }
 
 
 // Command line function to set rendering style
-void AViz::setRenderStyle( char * ptr )
-{
-	if (mf) {
-		// Read the current view parameters
-		viewParam * thisVp = mf->getViewParam();				
-	        // Set a new render style and refresh drawing.
-		if (strcmp( ptr, "dots" ) == 0) {
-			(*thisVp).atomRenderStyle = ADOT;
-			(*thisVp).spinRenderStyle = SDOT;
-			(*thisVp).lcRenderStyle = LDOT;
-			(*thisVp).poreRenderStyle = PDOT;
-		}
-		if (strcmp( ptr, "lines" ) == 0) {
-			(*thisVp).atomRenderStyle = ALINE;
-			(*thisVp).spinRenderStyle = SLINE;
-			(*thisVp).lcRenderStyle = LLINE;
-			(*thisVp).poreRenderStyle = PLINE;
-		}
-		if (strcmp( ptr, "cubes" ) == 0) {
-			(*thisVp).atomRenderStyle = ACUBE;
-			(*thisVp).spinRenderStyle = SCUBE;
-			(*thisVp).lcRenderStyle = LCUBE;
-			(*thisVp).poreRenderStyle = PCUBE;
-		}
-		if (strcmp( ptr, "cones" ) == 0) {
-			(*thisVp).atomRenderStyle = ACONE;
-			(*thisVp).spinRenderStyle = SCONE;
-			(*thisVp).lcRenderStyle = LCONE;
-			(*thisVp).poreRenderStyle = PCONE;
-		}
-		if (strcmp( ptr, "cylinders" ) == 0) {
-			(*thisVp).atomRenderStyle = ACYLINDER;
-			(*thisVp).spinRenderStyle = SCYLINDER;
-			(*thisVp).lcRenderStyle = LCYLINDER;
-			(*thisVp).poreRenderStyle = PCYLINDER;
-		}
-		if (strcmp( ptr, "spheres" ) == 0) {
-			(*thisVp).atomRenderStyle = ASPHERE;
-			(*thisVp).spinRenderStyle = SSPHERE;
-			(*thisVp).lcRenderStyle = LSPHERE;
-			(*thisVp).poreRenderStyle = PSPHERE;
-		}
+void AViz::setRenderStyle(char * ptr) {
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
+    // Set a new render style and refresh drawing.
+    if (strcmp( ptr, "dots" ) == 0) {
+        (*thisVp).atomRenderStyle = ADOT;
+        (*thisVp).spinRenderStyle = SDOT;
+        (*thisVp).lcRenderStyle = LDOT;
+        (*thisVp).poreRenderStyle = PDOT;
+    }
+    if (strcmp( ptr, "lines" ) == 0) {
+        (*thisVp).atomRenderStyle = ALINE;
+        (*thisVp).spinRenderStyle = SLINE;
+        (*thisVp).lcRenderStyle = LLINE;
+        (*thisVp).poreRenderStyle = PLINE;
+    }
+    if (strcmp( ptr, "cubes" ) == 0) {
+        (*thisVp).atomRenderStyle = ACUBE;
+        (*thisVp).spinRenderStyle = SCUBE;
+        (*thisVp).lcRenderStyle = LCUBE;
+        (*thisVp).poreRenderStyle = PCUBE;
+    }
+    if (strcmp( ptr, "cones" ) == 0) {
+        (*thisVp).atomRenderStyle = ACONE;
+        (*thisVp).spinRenderStyle = SCONE;
+        (*thisVp).lcRenderStyle = LCONE;
+        (*thisVp).poreRenderStyle = PCONE;
+    }
+    if (strcmp( ptr, "cylinders" ) == 0) {
+        (*thisVp).atomRenderStyle = ACYLINDER;
+        (*thisVp).spinRenderStyle = SCYLINDER;
+        (*thisVp).lcRenderStyle = LCYLINDER;
+        (*thisVp).poreRenderStyle = PCYLINDER;
+    }
+    if (strcmp( ptr, "spheres" ) == 0) {
+        (*thisVp).atomRenderStyle = ASPHERE;
+        (*thisVp).spinRenderStyle = SSPHERE;
+        (*thisVp).lcRenderStyle = LSPHERE;
+        (*thisVp).poreRenderStyle = PSPHERE;
+    }
 
-                mf->setViewParam( (*thisVp) );
-		mf->updateView();
-                mf->updateRendering();
-	}
+    m_mainForm->setViewParam( (*thisVp) );
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
 }
 
 
 // Command line function to set rendering mode
-void AViz::setRenderQuality( char * ptr )
-{
-	if (mf) {
-        	// Read the current view parameters
-	        viewParam * thisVp = mf->getViewParam();
+void AViz::setRenderQuality(char * ptr) {
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
 
-	        // Set a new render mode and refresh drawing
-	        if (strcmp( ptr, "low" ) == 0) {
-			(*thisVp).renderQuality = LOW;
-		}
-	        if (strcmp( ptr, "high" ) == 0) {
-	                (*thisVp).renderQuality = HIGH;
-	        }
-	        if (strcmp( ptr, "final" ) == 0) {
-	                (*thisVp).renderQuality = FINAL;
-	        }
-	
-                mf->setViewParam( (*thisVp) );
-		mf->updateView();
-                mf->updateRendering();
-        }
+    // Set a new render mode and refresh drawing
+    if (strcmp( ptr, "low" ) == 0) {
+        (*thisVp).renderQuality = LOW;
+    }
+    if (strcmp( ptr, "high" ) == 0) {
+        (*thisVp).renderQuality = HIGH;
+    }
+    if (strcmp( ptr, "final" ) == 0) {
+        (*thisVp).renderQuality = FINAL;
+    }
+
+    m_mainForm->setViewParam( (*thisVp) );
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
 }
 
 
-// Command line function to set rendering size 
-void AViz::setRenderSize( int size )
-{
-        if (mf) {
-	        // Read the current view parameters
-	        viewParam * thisVp = mf->getViewParam();
-	
-		(*thisVp).renderSize = (double)size/100.0;
+// Command line function to set rendering size
+void AViz::setRenderSize(int size) {
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
 
-                mf->setViewParam( (*thisVp) );
-		mf->updateView();
-                mf->updateRendering();
-        }
+    (*thisVp).renderSize = (double)size/100.0;
+
+    m_mainForm->setViewParam( (*thisVp) );
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
 }
 
 // Command line function to set the annotation string
-void AViz::setAnnotationString( char* annotationString )
-{
-        if (mf) {
-	        // Read the current view parameters
-	        viewParam * thisVp = mf->getViewParam();
+void AViz::setAnnotationString(char* annotationString) {
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
 
-		strcpy((*thisVp).annotationText, annotationString);
+    strcpy((*thisVp).annotationText, annotationString);
 
-                mf->setViewParam( (*thisVp) );
-		mf->updateView();
-                mf->updateRendering();
-        }
+    m_mainForm->setViewParam( (*thisVp) );
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
+
 }
 
 // Save a PNG screenshot file
-void AViz::savePNGFile( void ) {
+void AViz::savePNGFile() {
     setFileType( PNG_FILE );
 
-	// Launch a standard file selector
+    // Launch a standard file selector
     QFileDialog * fd = new QFileDialog();
     fd->setModal(true);
     fd->setFileMode(QFileDialog::AnyFile);
     fd->setNameFilter("PNG image files (*.png)");
-	connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(snapFile(const QString&)) );
-	fd->show();
+    connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(snapFile(const QString&)) );
+    fd->show();
 }
-
 
 // Snap a PNG screenshot file
-void AViz::snapFile( const QString &fn )
-{
-        if (mf) {
-                mf->updateRendering();
-                mf->snapRendering( fn );
-        }
+void AViz::snapFile( const QString &fn ) {
+    m_mainForm->updateRendering();
+    m_mainForm->snapRendering( fn );
 }
 
-
 // Command line function to trigger screen shot
-void AViz::setSnap( void )
-{
-	QTimer * snapTimer = new QTimer( this, "snapTimer" );
-	connect(snapTimer, SIGNAL(timeout()), this, SLOT(setSnapNow()) );
+void AViz::setSnap() {
+    QTimer * snapTimer = new QTimer(this);
+    connect(snapTimer, SIGNAL(timeout()), this, SLOT(setSnapNow()) );
 
-	// Wait 1 s to have the rendering completed and 
-	// then take a screen shot
-       	snapTimer->start( 1000, TRUE );
+    // Wait 1 s to have the rendering completed and
+    // then take a screen shot
+    snapTimer->setSingleShot(true);
+    snapTimer->start( 1000);
 }
 
 
 // Command line function to trigger screen shot and exit
-void AViz::setSnapq( void )
-{
-        QTimer * snapTimer = new QTimer( this, "snapTimer" );
-        connect(snapTimer, SIGNAL(timeout()), this, SLOT(setSnapqNow()) );
+void AViz::setSnapq() {
+    QTimer * snapTimer = new QTimer(this);
+    connect(snapTimer, SIGNAL(timeout()), this, SLOT(setSnapqNow()) );
 
-	// Wait 1 s to have the rendering completed;
-	// then take a screen shot and exit
-        snapTimer->start( 1000, TRUE );
+    // Wait 1 s to have the rendering completed;
+    // then take a screen shot and exit
+    snapTimer->setSingleShot(true);
+    snapTimer->start(1000);
 }
 
 
 // Used to trigger screen shot
-void AViz::setSnapNow( void )
-{
-        if (mf) {
-                mf->updateRendering();
-                mf->snapRendering();
-        }
+void AViz::setSnapNow() {
+    m_mainForm->updateRendering();
+    m_mainForm->snapRendering();
+
 }
 
 
 // Used to trigger screen shot and exit
-void AViz::setSnapqNow( void )
-{
-        if (mf) {
-                mf->updateRendering();
-                mf->snapRendering();
-        }
+void AViz::setSnapqNow() {
+    m_mainForm->updateRendering();
+    m_mainForm->snapRendering();
 
-	// Exit now
-	exit(0);
+    // Exit now
+    exit(0);
 }
 
 
-// Command line function to set watch file mode, with 
+// Command line function to set watch file mode, with
 // automatic update of the rendering upon changes
-void AViz::setWatchMode( void )
-{
-        connect(watchTimer, SIGNAL(timeout()), this, SLOT(keepWatchNow()) );
+void AViz::setWatchMode() {
+    connect(m_watchTimer, SIGNAL(timeout()), this, SLOT(keepWatchNow()) );
 
-        // Wait 10 s and check repeatedly if the file has been modified
-        watchTimer->start( 10000, FALSE );
+    // Wait 10 s and check repeatedly if the file has been modified
+    m_watchTimer->setSingleShot(false);
+    m_watchTimer->start(10000);
 
-	// Set a flag
-	inWatchMode = TRUE;
+    // Set a flag
+    m_inWatchMode = true;
+}
+
+void AViz::enableElement(ElementType type) {
+    m_atomsMenu->setEnabled(type == AViz::ET_ATOM);
+    m_spinsAction->setEnabled(type == AViz::ET_SPIN);
+    m_liquidCrystalsAction->setEnabled(type == AViz::ET_LIQUID_CRYSTALS);
+    m_polymersMenu->setEnabled(type == AViz::ET_POLYMERS);
+    m_poresAction->setEnabled(type == AViz::ET_PORES);
+}
+
+void AViz::setAtomMenus() {
+    enableElement(AViz::ET_ATOM);
+}
+
+void AViz::setSpinMenus() {
+    enableElement(AViz::ET_SPIN);
+}
+
+void AViz::setLcMenus() {
+    enableElement(AViz::ET_LIQUID_CRYSTALS);
+}
+
+void AViz::setPolymerMenus() {
+    enableElement(AViz::ET_POLYMERS);
+}
+
+void AViz::setPoreMenus() {
+    enableElement(AViz::ET_PORES);
 }
 
 
-// Adjust the menu entries
-void AViz::setAtomMenus( void )
-{
-	elements->setItemEnabled( atomsId, TRUE );
-	elements->setItemEnabled( spinsId, FALSE );
-	elements->setItemEnabled( liquidCrystalsId, FALSE );
-	elements->setItemEnabled( polymersId, FALSE );
-	elements->setItemEnabled( poresId, FALSE );
-}
-
-
-// Adjust the menu entries
-void AViz::setSpinMenus( void )
-{
-	elements->setItemEnabled( atomsId, FALSE );
-	elements->setItemEnabled( spinsId, TRUE );
-	elements->setItemEnabled( liquidCrystalsId, FALSE );
-	elements->setItemEnabled( polymersId, FALSE );
-	elements->setItemEnabled( poresId, FALSE );
-}
-
-
-// Adjust the menu entries
-void AViz::setLcMenus( void )
-{
-	elements->setItemEnabled( atomsId, FALSE );
-	elements->setItemEnabled( spinsId, FALSE );
-	elements->setItemEnabled( liquidCrystalsId, TRUE );
-	elements->setItemEnabled( polymersId, FALSE );
-	elements->setItemEnabled( poresId, FALSE );
-}
-
-// Adjust the menu entries
-void AViz::setPolymerMenus( void )
-{
-	elements->setItemEnabled( atomsId, FALSE );
-	elements->setItemEnabled( spinsId, FALSE );
-	elements->setItemEnabled( liquidCrystalsId, FALSE );
-	elements->setItemEnabled( polymersId, TRUE );
-	elements->setItemEnabled( poresId, FALSE );
-}
-
-
-// Adjust the menu entries
-void AViz::setPoreMenus( void )
-{
-	elements->setItemEnabled( atomsId, FALSE );
-	elements->setItemEnabled( spinsId, FALSE );
-	elements->setItemEnabled( liquidCrystalsId, FALSE );
-	elements->setItemEnabled( polymersId, FALSE );
-	elements->setItemEnabled( poresId, TRUE );
-}
-
-
-// Used to trigger updates of the rendering upon change of 
+// Used to trigger updates of the rendering upon change of
 // current XYZ file
-void AViz::keepWatchNow( void )
-{
-	char * filename = (char *)malloc( BUFSIZ );
-        struct stat * buf = (struct stat *)malloc( sizeof(struct stat) );
-//	time_t last_access;
-//	time_t last_modification;
-	time_t last_change;
-	time_t now = time( NULL );
+void AViz::keepWatchNow() {
+    char * filename = (char *)malloc( BUFSIZ );
+    struct stat * buf = (struct stat *)malloc( sizeof(struct stat) );
+    //	time_t last_access;
+    //	time_t last_modification;
+    time_t last_change;
+    time_t now = time( NULL );
 
-	// Get the current data set and retrieve filename
-        if (mf) {
-		aggregateData * ad = mf->getAggregateData();
+    // Get the current data set and retrieve filename
+    aggregateData * ad = m_mainForm->getAggregateData();
 
-        	sprintf( filename, "./%s", (*ad).filename);
-	        if (!stat( (const char *)filename, buf ) ) {
-//			last_access = (*buf).st_atime;
-//			last_modification = (*buf).st_mtime;
-			last_change = (*buf).st_ctime;
+    sprintf( filename, "./%s", (*ad).filename);
+    if (!stat( (const char *)filename, buf ) ) {
+        //			last_access = (*buf).st_atime;
+        //			last_modification = (*buf).st_mtime;
+        last_change = (*buf).st_ctime;
 
-			// Was the file was modified during the last cycle?
-			if (last_change > now-10) {
-				// Yes: update rendering
-				this->readFile( (*ad).filename );
-				mf->updateRendering();
+        // Was the file was modified during the last cycle?
+        if (last_change > now-10) {
+            // Yes: update rendering
+            readFile( (*ad).filename );
+            m_mainForm->updateRendering();
 
-				mf->statusMessage( "Updating rendering...");
-			}	
-			else {
-				// No: do nothing
-				mf->statusMessage( "Watching XYZ file", (*ad).filename );
-			}
-		}
-	}	
+            m_mainForm->statusMessage( "Updating rendering...");
+        }
+        else {
+            // No: do nothing
+            m_mainForm->statusMessage( "Watching XYZ file", (*ad).filename );
+        }
+    }
 
-	free(filename);
-        free(buf);
+    free(filename);
+    free(buf);
 }
 
 
 // Callback function to launch the atoms settings panel
-void AViz::launchAtoms( void )
-{
-	if (mf) 
-		mf->launchAtoms();
+void AViz::launchAtoms() {
+    m_mainForm->launchAtoms();
 }
 
 
 // Callback function to launch the annotation settings panel
-void AViz::launchAnnotation( void )
-{
-	if (mf) 
-		mf->launchAnnotation();
+void AViz::launchAnnotation() {
+    m_mainForm->launchAnnotation();
 }
 
 
 // Callback function to launch the bond settings panel
-void AViz::launchBonds( void )
-{
-	if (mf) 
-		mf->launchBonds();
+void AViz::launchBonds() {
+    m_mainForm->launchBonds();
 }
 
 
 // Callback function to launch the clip settings panel
-void AViz::launchClip( void )
-{
-	if (mf) 
-		mf->launchClip();
+void AViz::launchClip() {
+    m_mainForm->launchClip();
 }
 
 
 // Callback function to launch the explicit view point settings panel
-void AViz::launchExplicit( void )
-{
-	if (mf) 
-		mf->launchExplicit();
+void AViz::launchExplicit() {
+    m_mainForm->launchExplicit();
 }
 
 
 // Callback function to launch the lights settings panel
-void AViz::launchLights( void )
-{
-	if (mf) 
-		mf->launchLights();
+void AViz::launchLights() {
+    m_mainForm->launchLights();
 }
 
 
 // Callback function to launch the liquid crystal settings panel
-void AViz::launchLiquidCrystals( void )
-{
-	if (mf) 
-		mf->launchLiquidCrystals();
+void AViz::launchLiquidCrystals() {
+    m_mainForm->launchLiquidCrystals();
 }
 
 
 // Callback function to launch the slicing settings panel
-void AViz::launchSlice( void )
-{
-	if (mf) 
-		mf->launchSlice();
+void AViz::launchSlice() {
+    m_mainForm->launchSlice();
 }
 
 
 // Callback function to launch the spin settings panel
-void AViz::launchSpins( void )
-{
-	if (mf) 
-		mf->launchSpins();
+void AViz::launchSpins() {
+    m_mainForm->launchSpins();
 }
 
 
 // Callback function to launch the stretch settings panel
 // (to manipulate data)
-void AViz::launchStretch( void )
-{
-	if (mf) 
-		mf->launchStretch();
+void AViz::launchStretch() {
+    m_mainForm->launchStretch();
 }
 
 
 // Callback function to launch the polymers settings panel
-void AViz::launchPolymers( void )
-{
-	if (mf) 
-		mf->launchPolymers();
+void AViz::launchPolymers() {
+    m_mainForm->launchPolymers();
 }
 
 
 // Callback function to launch the pore settings panel
-void AViz::launchPores( void )
-{
-	if (mf) 
-		mf->launchPores();
+void AViz::launchPores() {
+    m_mainForm->launchPores();
 }
 
 
 // Callback function to launch the translation settings panel
-void AViz::launchTranslation( void )
-{
-	if (mf) 
-		mf->launchTranslation();
+void AViz::launchTranslation() {
+    m_mainForm->launchTranslation();
 }
 
 
 // Show or hide axes
-void AViz::showHideAxesCB( void )
-{
-	if (mf) {
-	        // Read the current view parameters
-	        viewParam * thisVp = mf->getViewParam();
+void AViz::showHideAxesCB() {
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
 
-		// Toggle the axes flag
-		if ((*thisVp).showAxes == TRUE) {
-			(*thisVp).showAxes = FALSE;
-			settings->changeItem( showHideAxesId, "Show Axes" );
-		}
-		else {
-			(*thisVp).showAxes = TRUE;
-			settings->changeItem( showHideAxesId, "Hide Axes" );
-		}
+    // Toggle the axes flag
+    if ((*thisVp).showAxes) {
+        (*thisVp).showAxes =false;
+        m_showHideAxesAction->setText("Show Axes");
+    }
+    else {
+        (*thisVp).showAxes = true;
+        m_showHideAxesAction->setText("Hide Axes");
+    }
 
-		// Update the rendering
-		mf->setViewParam( (*thisVp) );
-		mf->updateView();
-		mf->updateRendering();
-	}
+    // Update the rendering
+    m_mainForm->setViewParam( (*thisVp) );
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
 }
 
 
 // Show or hide the contour
-void AViz::showHideContourCB( void )
-{
-	if (mf) {
-	        // Read the current view parameters
-	        viewParam * thisVp = mf->getViewParam();
+void AViz::showHideContourCB() {
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
 
-		// Toggle the show contour flag
-		if ((*thisVp).showContour == TRUE) {
-			(*thisVp).showContour = FALSE;
-			settings->changeItem( showHideContourId, "Show Contour" );
-			settings->setItemEnabled( onlyContourId, FALSE );
-		}
-		else {
-			(*thisVp).showContour = TRUE;
-			settings->changeItem( showHideContourId, "Hide Contour" );
-			settings->setItemEnabled( onlyContourId, TRUE );
-		}
+    // Toggle the show contour flag and update realted menu actions
+    m_showHideContourAction->setText(thisVp->showContour ? "Show Contour" : "Hide Contour");
+    m_onlyContourAction->setEnabled(thisVp->showContour);
+    thisVp->showContour = !thisVp->showContour;
 
-		// Update the rendering
-		mf->setViewParam( (*thisVp) );
-		mf->updateView();
-		mf->updateRendering();
-	}
+    // Update the rendering
+    m_mainForm->setViewParam( (*thisVp) );
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
 }
 
 
 // Draw only contour or draw all the scene
-void AViz::onlyContourCB( void )
-{
-	if (mf) {
-	        // Read the current view parameters
-	        viewParam * thisVp = mf->getViewParam();
+void AViz::onlyContourCB() {
+    // Read the current view parameters
+    viewParam * thisVp = m_mainForm->getViewParam();
 
-		// Toggle the show contour flag
-		if ((*thisVp).onlyContour == TRUE) {
-			(*thisVp).onlyContour = FALSE;
-			settings->changeItem( onlyContourId, "Only Contour" );
-			settings->setItemEnabled( showHideContourId, TRUE );
-		}
-		else {
-			(*thisVp).onlyContour = TRUE;
-			settings->changeItem( onlyContourId, "Contour And Particles" );
-			settings->setItemEnabled( showHideContourId, FALSE );
-		}
+    // Toggle the onlycontour flag and update related menu actions
+    m_showHideContourAction->setText(thisVp->onlyContour ? "Only Contour" : "Contour And Particles");
+    m_showHideContourAction->setEnabled(thisVp->onlyContour);
+    thisVp->onlyContour = !thisVp->onlyContour;
 
-		// Update the rendering
-		mf->setViewParam( (*thisVp) );
-		mf->updateView();
-		mf->updateRendering();
-	}
+    // Update the rendering
+    m_mainForm->setViewParam( (*thisVp) );
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
 }
 
 
 // Callback function to manipulate data
-void AViz::swapXY( void )
-{
-	if (mf) {
-		// Write a message
-		mf->statusMessage( "Swapping X <-> Y" );
+void AViz::swapXY() {
+    // Write a message
+    m_mainForm->statusMessage( "Swapping X <-> Y" );
 
-		// Get local copy of the current data set
-		aggregateData * ad = mf->getAggregateData();
+    // Get local copy of the current data set
+    aggregateData * ad = m_mainForm->getAggregateData();
 
-		// Swap now
-		for (int i=0;i<(*ad).numberOfParticles;i++) {
-			float tmp = (*ad).particles[i].x;
-			(*ad).particles[i].x = (*ad).particles[i].y;
-			(*ad).particles[i].y = tmp;
-		}
-
-		// Let this be the current aggregate and render
-		mf->updateView();
-		mf->updateRendering();
-	}
-}
-
-
-// Callback function to manipulate data
-void AViz::swapXZ( void )
-{
-	if (mf) {
-		// Write a message
-		mf->statusMessage( "Swapping X <-> Z" );
-
-		// Get local copy of the current data set
-		aggregateData * ad = mf->getAggregateData();
-
-		// Swap now
-		for (int i=0;i<(*ad).numberOfParticles;i++) {
-			float tmp = (*ad).particles[i].x;
-			(*ad).particles[i].x = (*ad).particles[i].z;
-			(*ad).particles[i].z = tmp;
-		}
-
-		// Let this be the current aggregate and render
-		mf->updateView();
-		mf->updateRendering();
-	}
-}
-
-
-// Callback function to manipulate data
-void AViz::swapYZ( void )
-{
-	if (mf) {
-		// Write a message
-		mf->statusMessage( "Swapping Y <-> Z" );
-
-		// Get local copy of the current data set
-		aggregateData * ad = mf->getAggregateData();
-
-		// Swap now
-		for (int i=0;i<(*ad).numberOfParticles;i++) {
-			float tmp = (*ad).particles[i].y;
-			(*ad).particles[i].y = (*ad).particles[i].z;
-			(*ad).particles[i].z = tmp;
-		}
-
-		// Let this be the current aggregate and render
-		mf->updateView();
-		mf->updateRendering();
-	}
-}
-
-
-// Callback function to manipulate data
-void AViz::mirrorX( void )
-{
-	if (mf) {
-		// Write a message
-		mf->statusMessage( "Mirroring X -> -X" );
-
-		// Get local copy of the current data set
-		aggregateData * ad = mf->getAggregateData();
-
-		// Mirror now
-		for (int i=0;i<(*ad).numberOfParticles;i++) {
-			(*ad).particles[i].x *= (-1.0);
-		}
-
-		// Let this be the current aggregate and render
-		mf->updateView();
-		mf->updateRendering();
-	}
-}
-
-
-// Callback function to manipulate data
-void AViz::mirrorY( void )
-{
-	if (mf) {
-		// Write a message
-		mf->statusMessage( "Mirroring Y -> -Y" );
-
-		// Get local copy of the current data set
-		aggregateData * ad = mf->getAggregateData();
-
-		// Mirror now
-		for (int i=0;i<(*ad).numberOfParticles;i++) {
-			(*ad).particles[i].y *= (-1.0);
-		}
-
-		// Let this be the current aggregate and render
-		mf->updateView();
-		mf->updateRendering();
-	}
-}
-
-
-// Callback function to manipulate data
-void AViz::mirrorZ( void )
-{
-    if (mf) {
-        // Write a message
-		mf->statusMessage( "Mirroring Z -> -Z" );
-
-		// Get local copy of the current data set
-		aggregateData * ad = mf->getAggregateData();
-
-		// Mirror now
-		for (int i=0;i<(*ad).numberOfParticles;i++) {
-			(*ad).particles[i].z *= (-1.0);
-		}
-
-		// Let this be the current aggregate and render
-		mf->updateView();
-		mf->updateRendering();
+    // Swap now
+    for (int i=0;i<(*ad).numberOfParticles;i++) {
+        float tmp = (*ad).particles[i].x;
+        (*ad).particles[i].x = (*ad).particles[i].y;
+        (*ad).particles[i].y = tmp;
     }
+
+    // Let this be the current aggregate and render
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
+}
+
+
+// Callback function to manipulate data
+void AViz::swapXZ() {
+    // Write a message
+    m_mainForm->statusMessage( "Swapping X <-> Z" );
+
+    // Get local copy of the current data set
+    aggregateData * ad = m_mainForm->getAggregateData();
+
+    // Swap now
+    for (int i=0;i<(*ad).numberOfParticles;i++) {
+        float tmp = (*ad).particles[i].x;
+        (*ad).particles[i].x = (*ad).particles[i].z;
+        (*ad).particles[i].z = tmp;
+    }
+
+    // Let this be the current aggregate and render
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
+}
+
+
+// Callback function to manipulate data
+void AViz::swapYZ() {
+    // Write a message
+    m_mainForm->statusMessage( "Swapping Y <-> Z" );
+
+    // Get local copy of the current data set
+    aggregateData * ad = m_mainForm->getAggregateData();
+
+    // Swap now
+    for (int i=0;i<(*ad).numberOfParticles;i++) {
+        float tmp = (*ad).particles[i].y;
+        (*ad).particles[i].y = (*ad).particles[i].z;
+        (*ad).particles[i].z = tmp;
+    }
+
+    // Let this be the current aggregate and render
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
+}
+
+
+// Callback function to manipulate data
+void AViz::mirrorX() {
+    // Write a message
+    m_mainForm->statusMessage( "Mirroring X -> -X" );
+
+    // Get local copy of the current data set
+    aggregateData * ad = m_mainForm->getAggregateData();
+
+    // Mirror now
+    for (int i=0;i<(*ad).numberOfParticles;i++) {
+        (*ad).particles[i].x *= (-1.0);
+    }
+
+    // Let this be the current aggregate and render
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
+}
+
+
+// Callback function to manipulate data
+void AViz::mirrorY() {
+    // Write a message
+    m_mainForm->statusMessage( "Mirroring Y -> -Y" );
+
+    // Get local copy of the current data set
+    aggregateData * ad = m_mainForm->getAggregateData();
+
+    // Mirror now
+    for (int i=0;i<(*ad).numberOfParticles;i++) {
+        (*ad).particles[i].y *= (-1.0);
+    }
+
+    // Let this be the current aggregate and render
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
+
+}
+
+
+// Callback function to manipulate data
+void AViz::mirrorZ() {
+    // Write a message
+    m_mainForm->statusMessage( "Mirroring Z -> -Z" );
+
+    // Get local copy of the current data set
+    aggregateData * ad = m_mainForm->getAggregateData();
+
+    // Mirror now
+    for (int i=0;i<(*ad).numberOfParticles;i++) {
+        (*ad).particles[i].z *= (-1.0);
+    }
+
+    // Let this be the current aggregate and render
+    m_mainForm->updateView();
+    m_mainForm->updateRendering();
 }
