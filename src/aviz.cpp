@@ -26,10 +26,21 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "aviz.h"
 
+#include <sys/stat.h>
+
 #include <QMenu>
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QApplication>
+#include <QTimer>
+
+#include "animationBoard.h"
+#include "customFileDialog.h"
+#include "defaultParticles.h"
+#include "license.h"
+#include "mainForm.h"
+#include "messageBox.h"
+#include "version.h"
 
 // Constructor and deconstructor of main widget
 AViz::AViz() 

@@ -27,24 +27,15 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef AVIZ_H
 #define AVIZ_H
 
-#include "animationBoard.h"
-#include "customFileDialog.h"
-#include "data.h"
-#include "defaults.h"
-#include "defaultParticles.h"
-#include "fileFunctions.h"
-#include "license.h"
-#include "mainForm.h"
-#include "messageBox.h"
-#include "version.h"
-
 #include <QMainWindow>
-#include <QTimer>
 
-#include <sys/stat.h>
-#include <time.h>
+#include "fileFunctions.h"
 
 class QAction;
+class QTimer;
+class QMenu;
+
+class MainForm;
 
 class AViz: public QMainWindow
 {
