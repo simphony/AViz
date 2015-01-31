@@ -336,16 +336,6 @@ particleData * GLCanvasArea::getParticleData( void )
     return &pd;
 }
 
-
-// Complete the current color definitions 
-void GLCanvasArea::readParticleData( void )
-{
-    // Make sure that colors are defined for all atom
-    // types
-    this->completeParticleData();
-}
-
-
 // Make sure that the current color definitions are adequate
 // for the current set of particles
 void GLCanvasArea::completeParticleData( void )

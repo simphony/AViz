@@ -60,16 +60,17 @@ public slots:
     viewObject * getViewObject( void );
     particleData * getParticleData( void );
     trackData * getTrackData( void );
-    void readParticleData( void );
 
-private slots:
+protected:
+    virtual void initializeGL();
+    virtual void mousePressEvent( QMouseEvent * );
+    virtual void mouseReleaseEvent( QMouseEvent * );
+    virtual void mouseMoveEvent( QMouseEvent * );
+    virtual void paintGL();
+    virtual void resizeGL( int w, int h );
+
+private:
     void recompileObjects( void );
-    void initializeGL();
-    void mousePressEvent( QMouseEvent * );
-    void mouseReleaseEvent( QMouseEvent * );
-    void mouseMoveEvent( QMouseEvent * );
-    void paintGL();
-    void resizeGL( int w, int h );
     void completeParticleData( void );
     void makeLights();
     void antiAliasing( bool );
