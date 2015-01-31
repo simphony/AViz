@@ -112,7 +112,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define SPACE_CHAR 32
 #define PI 3.1415927
 #define TWO_PI 6.28318530
-#define INFINITY 10000.0
 #define DELTAEPS 1.0E-10
 #define SCEPS 0.0000001
 #define SLICEEPS 0.1;

@@ -27,6 +27,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "glCanvasFrame.h"
 
 #include <cmath>
+#include <limits>
 
 #include <QLabel>
 #include <QFrame>
@@ -410,29 +411,29 @@ viewObject GLCanvasFrame::getObjectData()
 {
     viewObject vo;
 
-    float xmin = INFINITY;
-    float ymin = INFINITY;
-    float zmin = INFINITY;
-    float xmax = -INFINITY;
-    float ymax = -INFINITY;
-    float zmax = -INFINITY;
+    float xmin = std::numeric_limits<float>::max();
+    float ymin = std::numeric_limits<float>::max();
+    float zmin = std::numeric_limits<float>::max();
+    float xmax = -std::numeric_limits<float>::max();
+    float ymax = -std::numeric_limits<float>::max();
+    float zmax = -std::numeric_limits<float>::max();
 
-    float p1min = INFINITY;
-    float p2min = INFINITY;
-    float p3min = INFINITY;
-    float p4min = INFINITY;
-    float p5min = INFINITY;
-    float p6min = INFINITY;
-    float p7min = INFINITY;
-    float p8min = INFINITY;
-    float p1max = -INFINITY;
-    float p2max = -INFINITY;
-    float p3max = -INFINITY;
-    float p4max = -INFINITY;
-    float p5max = -INFINITY;
-    float p6max = -INFINITY;
-    float p7max = -INFINITY;
-    float p8max = -INFINITY;
+    float p1min = std::numeric_limits<float>::max();
+    float p2min = std::numeric_limits<float>::max();
+    float p3min = std::numeric_limits<float>::max();
+    float p4min = std::numeric_limits<float>::max();
+    float p5min = std::numeric_limits<float>::max();
+    float p6min = std::numeric_limits<float>::max();
+    float p7min = std::numeric_limits<float>::max();
+    float p8min = std::numeric_limits<float>::max();
+    float p1max = -std::numeric_limits<float>::max();
+    float p2max = -std::numeric_limits<float>::max();
+    float p3max = -std::numeric_limits<float>::max();
+    float p4max = -std::numeric_limits<float>::max();
+    float p5max = -std::numeric_limits<float>::max();
+    float p6max = -std::numeric_limits<float>::max();
+    float p7max = -std::numeric_limits<float>::max();
+    float p8max = -std::numeric_limits<float>::max();
 
     // Get the current aggregate data
     if (drawArea) {
