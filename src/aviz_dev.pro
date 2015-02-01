@@ -2,8 +2,7 @@ TEMPLATE        = app
 TARGET          = aviz
 CONFIG          += qt opengl warn_on thread debug
 QMAKE_CXXFLAGS  = -O2
-QT +=  opengl qt3support 
-DEFINES = QT3_SUPPORT_WARNINGS
+QT +=  opengl
 LIBS += -lX11 -lpng -lGLU
 HEADERS		= SoAnyThumbWheel.h \
 		  SoQtThumbWheel.h \

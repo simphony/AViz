@@ -372,11 +372,11 @@ void AViz::readFile( const QString &fn )
 {
     // Check if the file type was set correctly, based on
     // file name
-    if ( strstr((const char *)fn, ".xyz"))
+    if ( strstr(qPrintable(fn), ".xyz"))
         setFileType( XYZ_FILE );
-    if ( strstr((const char *)fn, "filelist.dat") || !strstr((const char *)fn, "."))
+    if ( strstr(qPrintable(fn), "filelist.dat") || !strstr(qPrintable(fn), "."))
         setFileType( ANIMATION );
-    if ( strstr((const char *)fn, ".vpm"))
+    if ( strstr(qPrintable(fn), ".vpm"))
         setFileType( VP_FILE );
 
     m_mainForm->readFile( fn );
