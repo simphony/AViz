@@ -381,6 +381,8 @@ void AViz::readFile( const QString &fn )
 
     m_mainForm->readFile( fn );
 
+    m_mainForm->updateRendering();
+
     // Launch the file list board upon reading
     // a list of files
     if (isFileType() == ANIMATION) {
