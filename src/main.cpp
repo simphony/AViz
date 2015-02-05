@@ -257,7 +257,6 @@ int main( int argc, char ** argv )
 	printf( "%s \n", START_STRING );
 
 	// Manage the panel 
-	a.setMainWidget( av );
 	av->setGeometry(0, FRAME_SIZE+FRAME_WIDTH+3, av->sizeHint().width(), av->sizeHint().height()); 
 	av->show();
 
