@@ -31,6 +31,7 @@ static const char rcsid[] =
 #include <QPaintEvent>
 #include <QPixmap>
 #include <QMouseEvent>
+#include <QPalette>
 
 #include "SoAnyThumbWheel.h"
 #include "SoQtThumbWheel.h"
@@ -96,7 +97,6 @@ SoQtThumbWheel::paintEvent(
   QPainter p( this );
   QRect paintRect = event->rect();
   p.setClipRect(paintRect);
-  QColorGroup g = QColorGroup(palette());
 
   int w, d;
   if ( this->orient == SoQtThumbWheel::Vertical ) {
@@ -121,8 +121,8 @@ SoQtThumbWheel::paintEvent(
                    this->width() - 2*SHADEBORDERWIDTH,
                    this->height() - 2*SHADEBORDERWIDTH );
 
-  qDrawShadePanel( &p, 0, 0, this->width(), this->height(),
-                   g, FALSE, SHADEBORDERWIDTH, NULL );
+  qDrawShadePanel(&p, 0, 0, this->width(), this->height(),
+                  palette(), false, SHADEBORDERWIDTH);
 
   if ( this->orient == Vertical ) {
     wheelrect.setTop(    wheelrect.top() + 5 );
