@@ -1,11 +1,13 @@
 TEMPLATE        = app
 TARGET          = aviz
-GIT_REVISION = $$system($$quote(git describe))
-DEFINES += $$quote(GIT_REVISION=\'\"$$GIT_REVISION\"\')
 CONFIG          += qt opengl warn_on thread debug
 QMAKE_CXXFLAGS  = -O2
 QT +=  opengl
 LIBS += -lX11 -lpng -lGLU
+
+GIT_REVISION = $$system($$quote(git describe))
+DEFINES += $$quote(GIT_REVISION=\'\"$$GIT_REVISION\"\')
+
 HEADERS		= SoAnyThumbWheel.h \
 		  SoQtThumbWheel.h \
 		  animationBoard.h \
