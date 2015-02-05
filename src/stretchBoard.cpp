@@ -39,7 +39,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Make a popup dialog box 
 StretchBoard::StretchBoard(MainForm *mainForm, QWidget * parent)
-    : QDialog(parent, Qt::WType_TopLevel),
+    : QDialog(parent),
       m_mainForm(mainForm), stretchChange(false) {
     setWindowTitle( "AViz: Set Data Stretching" );
 

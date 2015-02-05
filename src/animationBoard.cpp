@@ -41,7 +41,7 @@ const int MIN_FILE_LINE_WIDTH = 500;
 
 // Make a popup dialog box
 AnimationBoard::AnimationBoard(QWidget * parent)
-    : QDialog(parent, Qt::WType_TopLevel),
+    : QDialog(parent),
       haveTarget(false) {
     setWindowTitle("AViz: Animation Generator");
 

@@ -40,7 +40,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Make a popup dialog box 
 ClipBoard::ClipBoard(MainForm *mainForm, QWidget * parent)
-    : QDialog(parent, Qt::WType_TopLevel ), mainForm(mainForm){
+    : QDialog(parent), mainForm(mainForm){
     setWindowTitle( "AViz: Set Clipping" );
 
     QGridLayout * grid = new QGridLayout(this);

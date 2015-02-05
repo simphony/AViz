@@ -50,7 +50,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 // Make a popup dialog box 
 PolymerBoard::PolymerBoard(QWidget * parent)
-    : QDialog(parent, Qt::WType_TopLevel)
+    : QDialog(parent)
 {
     setWindowTitle( "AViz: Set Polymer Atom Types" );
 

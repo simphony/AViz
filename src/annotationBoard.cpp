@@ -49,7 +49,7 @@ QSpinBox* createPositionSpinBox(QWidget* parent) {
 
 // Make a popup dialog box that will hold a vertical row of buttons
 AnnotationBoard::AnnotationBoard(QWidget * parent, MainForm *mainForm)
-    : QDialog(parent, Qt::WType_TopLevel), mainForm(mainForm) {
+    : QDialog(parent), mainForm(mainForm) {
     setWindowTitle("AViz: Set Annotation");
 
     QVBoxLayout *vbox = new QVBoxLayout(this);

@@ -40,7 +40,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <cmath>
 
 LightsBoard::LightsBoard(MainForm * mainForm, QWidget * parent)
-    : QDialog( parent, Qt::WType_TopLevel ), m_mainForm(mainForm)
+    : QDialog( parent), m_mainForm(mainForm)
 {
     setWindowTitle( "AViz: Set Lights" );
 

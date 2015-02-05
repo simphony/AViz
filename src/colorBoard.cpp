@@ -95,7 +95,7 @@ QSlider* createHorizontalSlider() {
 // buildLayout.  The argument indicates how many 
 // colors should be specified (1, 2, or 3)	
 ColorBoard::ColorBoard(QWidget * parent)
-    : QDialog(parent, Qt::WType_TopLevel )
+    : QDialog(parent)
 {
     setWindowTitle( "AViz: Set Colors" );
 

@@ -32,7 +32,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QPushButton>
 
 MessageBox::MessageBox(const QString &message, QWidget * parent)
-    : QDialog( parent, Qt::WType_TopLevel ) {
+    : QDialog( parent) {
     setWindowTitle( "AViz: Message" );
 
     // delete when closed

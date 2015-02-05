@@ -59,7 +59,7 @@ ColorLabel* createColorLabel(QHBoxLayout* layout, QWidget *parent) {
 
 // Make a popup dialog box 
 AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
-    : QDialog( parent, Qt::WType_TopLevel ),
+    : QDialog( parent ),
       mainForm(mainForm)
 {
     setWindowTitle( "AViz: Set Atom Types" );
