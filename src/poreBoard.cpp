@@ -264,7 +264,7 @@ void PoreBoard::buildLayout( colorCriterion crit ) {
 // Get the current particle data from main form, register
 // it using a local copy,  and prepare a list of particle
 // types; this function is called each time the board is launched
-void PoreBoard::setData( void )
+void PoreBoard::setData()
 {
     aggregateData * ad = NULL;
     tag tmp;
@@ -325,7 +325,7 @@ void PoreBoard::setData( void )
 
 
 // Set the pore under consideration: adjust the toggle switch
-void PoreBoard::setPore( void )
+void PoreBoard::setPore()
 {
     tag thisPore;
     thisPoreIndex = -1;
@@ -416,7 +416,7 @@ void PoreBoard::setPore( void )
 
 // Adjust the pore switch settings, using the local
 // copy of the particle data structure 
-void PoreBoard::adjustPore( void )
+void PoreBoard::adjustPore()
 {
     // Read the toggle switch values and
     // update the particle data entry
@@ -443,7 +443,7 @@ void PoreBoard::adjustPore( void )
 
 // Adjust the pore switch settings, using the local
 // copy of the particle data structure
-void PoreBoard::adjustCriterion( void )
+void PoreBoard::adjustCriterion()
 {
     this->readToggles();
     this->setPore();
@@ -451,7 +451,7 @@ void PoreBoard::adjustCriterion( void )
 
 
 // Read the toggle switches and the emission text window
-void PoreBoard::readToggles( void )
+void PoreBoard::readToggles()
 {
     if (thisPoreIndex >= 0) {
         // Read the toggle switch values and
@@ -754,7 +754,7 @@ void PoreBoard::getColors( float r0, float g0, float b0, float r1, float g1, flo
 
 
 // Adjust the board
-void PoreBoard::setDotStyle( void )
+void PoreBoard::setDotStyle()
 {
     poreRenderStyle = PDOT;
     sizeBox->setDisabled( TRUE );
@@ -762,7 +762,7 @@ void PoreBoard::setDotStyle( void )
 
 
 // Adjust the board
-void PoreBoard::setLineStyle( void )
+void PoreBoard::setLineStyle()
 {
     poreRenderStyle = PLINE;
     sizeBox->setDisabled( FALSE );
@@ -771,7 +771,7 @@ void PoreBoard::setLineStyle( void )
 
 
 // Adjust the board
-void PoreBoard::setCubeStyle( void )
+void PoreBoard::setCubeStyle()
 {
     poreRenderStyle = PCUBE;
     sizeBox->setDisabled( FALSE );
@@ -780,7 +780,7 @@ void PoreBoard::setCubeStyle( void )
 
 
 // Adjust the board
-void PoreBoard::setCylinderStyle( void )
+void PoreBoard::setCylinderStyle()
 {
     poreRenderStyle = PCYLINDER;
     sizeBox->setDisabled( FALSE );
@@ -789,7 +789,7 @@ void PoreBoard::setCylinderStyle( void )
 
 
 // Adjust the board
-void PoreBoard::setConeStyle( void )
+void PoreBoard::setConeStyle()
 {
     poreRenderStyle = PCONE;
     sizeBox->setDisabled( FALSE );
@@ -798,7 +798,7 @@ void PoreBoard::setConeStyle( void )
 
 
 // Adjust the board
-void PoreBoard::setSphereStyle( void )
+void PoreBoard::setSphereStyle()
 {
     poreRenderStyle = PSPHERE;
     sizeBox->setDisabled( FALSE );
@@ -807,28 +807,28 @@ void PoreBoard::setSphereStyle( void )
 
 
 // Adjust the board
-void PoreBoard::setLowQuality( void )
+void PoreBoard::setLowQuality()
 {
     renderQuality = LOW;
 }
 
 
 // Adjust the board
-void PoreBoard::setHighQuality( void )
+void PoreBoard::setHighQuality()
 {
     renderQuality = HIGH;
 }
 
 
 // Adjust the board
-void PoreBoard::setFinalQuality( void )
+void PoreBoard::setFinalQuality()
 {
     renderQuality = FINAL;
 }
 
 
 // Set a flag when the color board is closed
-void PoreBoard::closeColorBoard( void )
+void PoreBoard::closeColorBoard()
 {
     showColorBoard = FALSE;
 

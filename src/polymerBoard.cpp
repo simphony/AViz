@@ -259,7 +259,7 @@ void PolymerBoard::buildLayout( colorCriterion crit ) {
 // Get the current particle data from main form, register
 // it using a local copy,  and prepare a list of particle
 // types; this function is called each time the board is launched
-void PolymerBoard::setData( void )
+void PolymerBoard::setData()
 {
     aggregateData * ad = NULL;
     tag tmp;
@@ -320,7 +320,7 @@ void PolymerBoard::setData( void )
 
 
 // Set the atom type under consideration: adjust the toggle switch
-void PolymerBoard::setPolymerAtom( void )
+void PolymerBoard::setPolymerAtom()
 {
     tag thisAtom;
     thisPolymerAtomIndex = -1;
@@ -409,7 +409,7 @@ void PolymerBoard::setPolymerAtom( void )
 
 // Adjust the settings, using the local
 // copy of the particle data structure 
-void PolymerBoard::adjustPolymer( void )
+void PolymerBoard::adjustPolymer()
 {
     // Read the toggle switch values and
     // update the particle data entry
@@ -436,7 +436,7 @@ void PolymerBoard::adjustPolymer( void )
 
 
 // Adjust the board after change of color criterion
-void PolymerBoard::adjustCriterion( void )
+void PolymerBoard::adjustCriterion()
 {
     this->readToggles();
     this->setPolymerAtom();
@@ -444,7 +444,7 @@ void PolymerBoard::adjustCriterion( void )
 
 
 // Read the toggle switches
-void PolymerBoard::readToggles( void )
+void PolymerBoard::readToggles()
 {
     if (thisPolymerAtomIndex >= 0) {
         // Read the settings and
@@ -649,7 +649,7 @@ void PolymerBoard::getColors( float r0, float g0, float b0, float r1, float g1, 
 
 
 // Adjust the board
-void PolymerBoard::setDotStyle( void )
+void PolymerBoard::setDotStyle()
 {	
     polymerAtomRenderStyle = PADOT;
     sizeBox->setDisabled( TRUE );
@@ -657,7 +657,7 @@ void PolymerBoard::setDotStyle( void )
 
 
 // Adjust the board
-void PolymerBoard::setLineStyle( void )
+void PolymerBoard::setLineStyle()
 {	
     polymerAtomRenderStyle = PALINE;
     sizeBox->setDisabled( TRUE );
@@ -665,7 +665,7 @@ void PolymerBoard::setLineStyle( void )
 
 
 // Adjust the board
-void PolymerBoard::setCubeStyle( void )
+void PolymerBoard::setCubeStyle()
 {	
     polymerAtomRenderStyle = PACUBE;
     sizeBox->setDisabled( FALSE );
@@ -673,7 +673,7 @@ void PolymerBoard::setCubeStyle( void )
 
 
 // Adjust the board
-void PolymerBoard::setCylinderStyle( void )
+void PolymerBoard::setCylinderStyle()
 {	
     polymerAtomRenderStyle = PACYLINDER;
     sizeBox->setDisabled( FALSE );
@@ -681,7 +681,7 @@ void PolymerBoard::setCylinderStyle( void )
 
 
 // Adjust the board
-void PolymerBoard::setConeStyle( void )
+void PolymerBoard::setConeStyle()
 {	
     polymerAtomRenderStyle = PACONE;
     sizeBox->setDisabled( FALSE );
@@ -689,7 +689,7 @@ void PolymerBoard::setConeStyle( void )
 
 
 // Adjust the board
-void PolymerBoard::setSphereStyle( void )
+void PolymerBoard::setSphereStyle()
 {	
     polymerAtomRenderStyle = PASPHERE;
     sizeBox->setDisabled( FALSE );
@@ -697,28 +697,28 @@ void PolymerBoard::setSphereStyle( void )
 
 
 // Adjust the board
-void PolymerBoard::setLowQuality( void )
+void PolymerBoard::setLowQuality()
 {
     renderQuality = LOW;
 }
 
 
 // Adjust the board
-void PolymerBoard::setHighQuality( void )
+void PolymerBoard::setHighQuality()
 {
     renderQuality = HIGH;
 }
 
 
 // Adjust the board
-void PolymerBoard::setFinalQuality( void )
+void PolymerBoard::setFinalQuality()
 {
     renderQuality = FINAL;
 }
 
 
 // Set a flag when the color board is closed
-void PolymerBoard::closeColorBoard( void )
+void PolymerBoard::closeColorBoard()
 {
     showColorBoard = FALSE;
 

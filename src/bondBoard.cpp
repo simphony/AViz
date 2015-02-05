@@ -252,7 +252,7 @@ BondBoard::BondBoard(MainForm *mainForm, QWidget * parent)
 // it using a local copy,  and prepare a list of particle
 // types; this function is called each time the color
 // board is launched
-void BondBoard::setData( void )
+void BondBoard::setData()
 {
     int i;
     aggregateData * ad = NULL;
@@ -386,7 +386,7 @@ void BondBoard::setData( void )
 
 
 // Set the atom under consideration: adjust the toggle switches
-void BondBoard::setFAtom( void )
+void BondBoard::setFAtom()
 {
     // Find out what combination of atoms is set
     if (haveFEntry)
@@ -420,7 +420,7 @@ void BondBoard::setFAtom( void )
 
 
 // Set the atom under consideration: adjust the toggle switch
-void BondBoard::setTAtom( void )
+void BondBoard::setTAtom()
 {
     // Find out what combination of atoms is set
     if (haveFEntry)
@@ -590,7 +590,7 @@ void BondBoard::setToggles( int thisAtom, int neighborAtom )
 
 
 // Read the current settings
-void BondBoard::readToggles( void ) 
+void BondBoard::readToggles() 
 {
     int i;
     int fAtom = -1;

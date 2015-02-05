@@ -252,7 +252,7 @@ SoQtThumbWheel::getNormalizedValue(int pos) const
 
 /*
 int
-SoQtThumbWheel::getWheelLength(void) const
+SoQtThumbWheel::getWheelLength() const
 {
   return this->orient == SoQtThumbWheel::Vertical ?
     this->height() : this->width();
@@ -268,7 +268,7 @@ SoQtThumbWheel::orientedCoord(const QPoint &p) const
 */
 
 QSize
-SoQtThumbWheel::sizeHint(void) const
+SoQtThumbWheel::sizeHint() const
 {
   const int length = 88;
   int thick = 24;
@@ -280,13 +280,13 @@ SoQtThumbWheel::sizeHint(void) const
 } // sizeHint()
 
 SoQtThumbWheel::Orientation
-SoQtThumbWheel::orientation(void) const
+SoQtThumbWheel::orientation() const
 {
   return this->orient;
 } // orientation()
 
 float
-SoQtThumbWheel::value(void) const
+SoQtThumbWheel::value() const
 {
   return this->wheelValue;
 } // value()

@@ -205,7 +205,7 @@ void SliceBoard::sliceChangedZ()
 
 
 // Read the current clip settings
-void SliceBoard::registerSettings( void )
+void SliceBoard::registerSettings()
 {
     // Get the current settings
     viewParam * vp = mainForm->getViewParam( );

@@ -257,7 +257,7 @@ void SpinBoard::buildLayout( colorCriterion crit ) {
 // Get the current particle data from main form, register
 // it using a local copy,  and prepare a list of particle
 // types; this function is called each time the board is launched
-void SpinBoard::setData( void )
+void SpinBoard::setData()
 {
     aggregateData * ad = NULL;
     tag tmp;
@@ -318,7 +318,7 @@ void SpinBoard::setData( void )
 
 
 // Set the spin under consideration: adjust the toggle switch
-void SpinBoard::setSpin( void )
+void SpinBoard::setSpin()
 {
     tag thisSpin;
     thisSpinIndex = -1;
@@ -408,7 +408,7 @@ void SpinBoard::setSpin( void )
 
 // Adjust the spin switch settings, using the local
 // copy of the particle data structure 
-void SpinBoard::adjustSpin( void )
+void SpinBoard::adjustSpin()
 {
     // Read the toggle switch values and
     // update the particle data entry
@@ -435,7 +435,7 @@ void SpinBoard::adjustSpin( void )
 
 // Adjust the spin switch settings, using the local
 // copy of the particle data structure
-void SpinBoard::adjustCriterion( void )
+void SpinBoard::adjustCriterion()
 {
     this->readToggles();
     this->setSpin();
@@ -443,7 +443,7 @@ void SpinBoard::adjustCriterion( void )
 
 
 // Read the toggle switches and the emission text window
-void SpinBoard::readToggles( void )
+void SpinBoard::readToggles()
 {
     if (thisSpinIndex >= 0) {
         // Read the toggle switch values and
@@ -650,7 +650,7 @@ void SpinBoard::getColors( float r0, float g0, float b0, float r1, float g1, flo
 }
 
 // Adjust the board
-void SpinBoard::setDotStyle( void )
+void SpinBoard::setDotStyle()
 {
     spinRenderStyle = SDOT;
     sizeBox->setDisabled( TRUE );
@@ -658,7 +658,7 @@ void SpinBoard::setDotStyle( void )
 
 
 // Adjust the board
-void SpinBoard::setLineStyle( void )
+void SpinBoard::setLineStyle()
 {
     spinRenderStyle = SLINE;
     sizeBox->setDisabled( TRUE );
@@ -667,7 +667,7 @@ void SpinBoard::setLineStyle( void )
 
 
 // Adjust the board
-void SpinBoard::setCubeStyle( void )
+void SpinBoard::setCubeStyle()
 {
     spinRenderStyle = SCUBE;
     sizeBox->setDisabled( FALSE );
@@ -676,7 +676,7 @@ void SpinBoard::setCubeStyle( void )
 
 
 // Adjust the board
-void SpinBoard::setCylinderStyle( void )
+void SpinBoard::setCylinderStyle()
 {
     spinRenderStyle = SCYLINDER;
     sizeBox->setDisabled( FALSE );
@@ -685,7 +685,7 @@ void SpinBoard::setCylinderStyle( void )
 
 
 // Adjust the board
-void SpinBoard::setConeStyle( void )
+void SpinBoard::setConeStyle()
 {
     spinRenderStyle = SCONE;
     sizeBox->setDisabled( FALSE );
@@ -694,7 +694,7 @@ void SpinBoard::setConeStyle( void )
 
 
 // Adjust the board
-void SpinBoard::setSphereStyle( void )
+void SpinBoard::setSphereStyle()
 {
     spinRenderStyle = SSPHERE;
     sizeBox->setDisabled( FALSE );
@@ -703,28 +703,28 @@ void SpinBoard::setSphereStyle( void )
 
 
 // Adjust the board
-void SpinBoard::setLowQuality( void )
+void SpinBoard::setLowQuality()
 {
     renderQuality = LOW;
 }
 
 
 // Adjust the board
-void SpinBoard::setHighQuality( void )
+void SpinBoard::setHighQuality()
 {
     renderQuality = HIGH;
 }
 
 
 // Adjust the board
-void SpinBoard::setFinalQuality( void )
+void SpinBoard::setFinalQuality()
 {
     renderQuality = FINAL;
 }
 
 
 // Set a flag when the color board is closed
-void SpinBoard::closeColorBoard( void )
+void SpinBoard::closeColorBoard()
 {
     showColorBoard = FALSE;
 

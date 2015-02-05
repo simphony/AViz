@@ -110,7 +110,7 @@ void StretchBoard::stretchChanged()
 
 
 // Read the current settings
-void StretchBoard::registerSettings( void ) {
+void StretchBoard::registerSettings() {
     // Get the current settings
     viewParam * vp = m_mainForm->getViewParam( );
 

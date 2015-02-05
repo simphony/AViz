@@ -42,16 +42,16 @@ public:
 
   SoQtThumbWheel(QWidget * parent = 0);
   SoQtThumbWheel(Orientation, QWidget * parent = 0);
-  ~SoQtThumbWheel(void);
+  ~SoQtThumbWheel();
 
   void setOrientation( Orientation );
-  Orientation orientation(void) const;
+  Orientation orientation() const;
 
   void setValue( float value );
-  float value(void) const;
+  float value() const;
 
   void setEnabled( bool enable );
-  bool isEnabled(void) const;
+  bool isEnabled() const;
 
   enum boundaryHandling {
     CLAMP,
@@ -59,14 +59,14 @@ public:
     ACCUMULATE
   };
   void setRangeBoundaryHandling( boundaryHandling handling );
-  boundaryHandling getRangeBoundaryHandling(void) const;
+  boundaryHandling getRangeBoundaryHandling() const;
 
-  QSize sizeHint(void) const;
+  QSize sizeHint() const;
 
 signals:
-  void wheelPressed(void);
+  void wheelPressed();
   void wheelMoved(float value);
-  void wheelReleased(void);
+  void wheelReleased();
 
 protected:
   void paintEvent(QPaintEvent *);

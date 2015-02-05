@@ -52,14 +52,14 @@ public slots:
     void setViewObjectAndRecompile( viewObject );
     void setViewParam( viewParam );
 
-    void snapRendering( void );
+    void snapRendering();
     void snapRendering( const char * filename );
 
     aggregateData * getAggregateData();
-    viewParam * getViewParam( void );
-    viewObject * getViewObject( void );
-    particleData * getParticleData( void );
-    trackData * getTrackData( void );
+    viewParam * getViewParam();
+    viewObject * getViewObject();
+    particleData * getParticleData();
+    trackData * getTrackData();
 
 protected:
     virtual void initializeGL();
@@ -70,15 +70,15 @@ protected:
     virtual void resizeGL( int w, int h );
 
 private:
-    void recompileObjects( void );
-    void completeParticleData( void );
+    void recompileObjects();
+    void completeParticleData();
     void makeLights();
     void antiAliasing( bool );
     void drawContourBox();
     void drawAxes();
     void drawAxesAnnotation();
     void drawAnnotation();
-    bool simpleRendering( void );
+    bool simpleRendering();
     GLuint makeRasterFont( int );
     void printString(char *string, GLuint base );
     void drawSlicingPlanes();

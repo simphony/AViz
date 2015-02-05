@@ -378,7 +378,7 @@ GLCanvasFrame::~GLCanvasFrame()
 
 
 // Find new view object data and recompile aggregated data
-void GLCanvasFrame::updateView( void )
+void GLCanvasFrame::updateView()
 {
     viewObject thisVo = this->getObjectData();
 
@@ -391,7 +391,7 @@ void GLCanvasFrame::updateView( void )
 
 // Recompile aggregate data without changing the view object data
 // (useful for sequences)
-void GLCanvasFrame::updateViewWithoutViewObjectChange( void )
+void GLCanvasFrame::updateViewWithoutViewObjectChange()
 {
 
     if (drawArea) {
@@ -608,7 +608,7 @@ void GLCanvasFrame::rotWheelMoved( float r )
 
 // Respond to frame button click
 // and do rotation steps
-void GLCanvasFrame::rot1( void )
+void GLCanvasFrame::rot1()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -640,7 +640,7 @@ void GLCanvasFrame::rot1( void )
 
 
 // Do a single rotation step
-void GLCanvasFrame::rot1SingleStep( void )
+void GLCanvasFrame::rot1SingleStep()
 {	
     this->rotStep( 0, MIN_REPEAT );
 
@@ -650,7 +650,7 @@ void GLCanvasFrame::rot1SingleStep( void )
 
 // Respond to frame button click
 // and do rotation steps
-void GLCanvasFrame::rot2( void )
+void GLCanvasFrame::rot2()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -682,7 +682,7 @@ void GLCanvasFrame::rot2( void )
 
 
 // Do a single rotation step
-void GLCanvasFrame::rot2SingleStep( void )
+void GLCanvasFrame::rot2SingleStep()
 {	
     this->rotStep( 1, MIN_REPEAT );
 
@@ -712,7 +712,7 @@ void GLCanvasFrame::tiltWheelMoved( float r )
 
 // Respond to frame button click
 // and do tilt steps
-void GLCanvasFrame::tilt1( void )
+void GLCanvasFrame::tilt1()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -744,7 +744,7 @@ void GLCanvasFrame::tilt1( void )
 
 
 // Do a single tilt step
-void GLCanvasFrame::tilt1SingleStep( void )
+void GLCanvasFrame::tilt1SingleStep()
 {	
     this->tiltStep( 1, MIN_REPEAT );
 
@@ -754,7 +754,7 @@ void GLCanvasFrame::tilt1SingleStep( void )
 
 // Respond to frame button click
 // and do tilt steps
-void GLCanvasFrame::tilt2( void )
+void GLCanvasFrame::tilt2()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -786,7 +786,7 @@ void GLCanvasFrame::tilt2( void )
 
 
 // Do a single tilt step
-void GLCanvasFrame::tilt2SingleStep( void )
+void GLCanvasFrame::tilt2SingleStep()
 {	
     this->tiltStep( 0, MIN_REPEAT );
 
@@ -816,7 +816,7 @@ void GLCanvasFrame::spinWheelMoved( float r )
 
 // Respond to frame button click
 // and do spin steps
-void GLCanvasFrame::spin1( void )
+void GLCanvasFrame::spin1()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -848,7 +848,7 @@ void GLCanvasFrame::spin1( void )
 
 
 // Do a single spin step
-void GLCanvasFrame::spin1SingleStep( void )
+void GLCanvasFrame::spin1SingleStep()
 {	
     this->spinStep( 0, MIN_REPEAT );
 
@@ -858,7 +858,7 @@ void GLCanvasFrame::spin1SingleStep( void )
 
 // Respond to frame button click
 // and do spin steps
-void GLCanvasFrame::spin2( void )
+void GLCanvasFrame::spin2()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -890,7 +890,7 @@ void GLCanvasFrame::spin2( void )
 
 
 // Do a single spin step
-void GLCanvasFrame::spin2SingleStep( void )
+void GLCanvasFrame::spin2SingleStep()
 {	
     this->spinStep( 1, MIN_REPEAT );
 
@@ -920,7 +920,7 @@ void GLCanvasFrame::dollyWheelMoved( float r )
 
 // Respond to frame button click
 // and do zoom steps
-void GLCanvasFrame::dolly1( void )
+void GLCanvasFrame::dolly1()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -951,7 +951,7 @@ void GLCanvasFrame::dolly1( void )
 }
 
 // Do a single zoom step
-void GLCanvasFrame::dolly1SingleStep( void )
+void GLCanvasFrame::dolly1SingleStep()
 {	
     this->zoomStep( 0, MIN_ZOOM_REPEAT );
 
@@ -961,7 +961,7 @@ void GLCanvasFrame::dolly1SingleStep( void )
 
 // Respond to frame button click
 // and do zoom steps
-void GLCanvasFrame::dolly2( void )
+void GLCanvasFrame::dolly2()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -993,7 +993,7 @@ void GLCanvasFrame::dolly2( void )
 
 
 // Do a single zoom step
-void GLCanvasFrame::dolly2SingleStep( void )
+void GLCanvasFrame::dolly2SingleStep()
 {	
     this->zoomStep( 1, MIN_ZOOM_REPEAT );
 
@@ -1223,7 +1223,7 @@ void GLCanvasFrame::computeTransformation( double delta, double w1, double w2, d
 
 // Respond to frame button click:
 // Switch to default view point
-void GLCanvasFrame::setHome( void )
+void GLCanvasFrame::setHome()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -1239,7 +1239,7 @@ void GLCanvasFrame::setHome( void )
 
 // Respond to frame button click
 // Define new default view point
-void GLCanvasFrame::setNewHome( void )
+void GLCanvasFrame::setNewHome()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -1254,7 +1254,7 @@ void GLCanvasFrame::setNewHome( void )
 
 
 // Respond to frame button click
-void GLCanvasFrame::setParallel( void )
+void GLCanvasFrame::setParallel()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -1267,7 +1267,7 @@ void GLCanvasFrame::setParallel( void )
 }
 
 // Respond to frame button click
-void GLCanvasFrame::setPerspective( void )
+void GLCanvasFrame::setPerspective()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -1281,7 +1281,7 @@ void GLCanvasFrame::setPerspective( void )
 
 
 // Respond to frame button click
-void GLCanvasFrame::setBlackBackground( void )
+void GLCanvasFrame::setBlackBackground()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -1294,7 +1294,7 @@ void GLCanvasFrame::setBlackBackground( void )
 
 
 // Respond to frame button click
-void GLCanvasFrame::setWhiteBackground( void )
+void GLCanvasFrame::setWhiteBackground()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -1306,7 +1306,7 @@ void GLCanvasFrame::setWhiteBackground( void )
 }
 
 // Respond to stereo vision button click
-void GLCanvasFrame::toggleStereoVision( void )
+void GLCanvasFrame::toggleStereoVision()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -1319,7 +1319,7 @@ void GLCanvasFrame::toggleStereoVision( void )
 
 
 // Respond to eye separaion plus button click
-void GLCanvasFrame::eyeSeparationPlus( void )
+void GLCanvasFrame::eyeSeparationPlus()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -1328,7 +1328,7 @@ void GLCanvasFrame::eyeSeparationPlus( void )
 }
 
 // Respond to eye separaion minus button click
-void GLCanvasFrame::eyeSeparationMinus( void )
+void GLCanvasFrame::eyeSeparationMinus()
 {	
     viewParam * vp = this->getViewParam();
 
@@ -1341,7 +1341,7 @@ void GLCanvasFrame::eyeSeparationMinus( void )
 
 
 // Prepare auto mode
-void GLCanvasFrame::autoButtonCB( void )
+void GLCanvasFrame::autoButtonCB()
 {
     viewParam * vp = this->getViewParam();
 
@@ -1474,7 +1474,7 @@ void GLCanvasFrame::setAuto( viewParam vp )
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoRot1( void )
+void GLCanvasFrame::startAutoRot1()
 {
     // Start the rotation
     connect(rotTimer1, SIGNAL(timeout()), this, SLOT(rot1SingleStep()) );
@@ -1483,7 +1483,7 @@ void GLCanvasFrame::startAutoRot1( void )
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoRot2( void )
+void GLCanvasFrame::startAutoRot2()
 {
     // Start the rotation
     connect(rotTimer2, SIGNAL(timeout()), this, SLOT(rot2SingleStep()) );
@@ -1491,7 +1491,7 @@ void GLCanvasFrame::startAutoRot2( void )
 }
 
 // Start auto motion state
-void GLCanvasFrame::startAutoTilt1( void )
+void GLCanvasFrame::startAutoTilt1()
 {
     // Start the tilting
     connect(tiltTimer1, SIGNAL(timeout()), this, SLOT(tilt1SingleStep()) );
@@ -1500,7 +1500,7 @@ void GLCanvasFrame::startAutoTilt1( void )
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoTilt2( void )
+void GLCanvasFrame::startAutoTilt2()
 {
     // Start the tilting
     connect(tiltTimer2, SIGNAL(timeout()), this, SLOT(tilt2SingleStep()) );
@@ -1509,7 +1509,7 @@ void GLCanvasFrame::startAutoTilt2( void )
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoSpin1( void )
+void GLCanvasFrame::startAutoSpin1()
 {
     // Start the spinning
     connect(spinTimer1, SIGNAL(timeout()), this, SLOT(spin1SingleStep()) );
@@ -1518,7 +1518,7 @@ void GLCanvasFrame::startAutoSpin1( void )
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoSpin2( void )
+void GLCanvasFrame::startAutoSpin2()
 {
     // Start the spinning
     connect(spinTimer2, SIGNAL(timeout()), this, SLOT(spin1SingleStep()) );
@@ -1527,7 +1527,7 @@ void GLCanvasFrame::startAutoSpin2( void )
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoZoom1( void )
+void GLCanvasFrame::startAutoZoom1()
 {
     // Start the zooming
     connect(zoomTimer1, SIGNAL(timeout()), this, SLOT(dolly1SingelStep()) );
@@ -1536,7 +1536,7 @@ void GLCanvasFrame::startAutoZoom1( void )
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoZoom2( void )
+void GLCanvasFrame::startAutoZoom2()
 {
     // Start the zooming
     connect(zoomTimer2, SIGNAL(timeout()), this, SLOT(dolly2SingleStep()) );
@@ -1584,13 +1584,13 @@ void GLCanvasFrame::adjustButtons()
 
 
 // Update the drawing without recompiling
-void GLCanvasFrame::updateRendering( void )
+void GLCanvasFrame::updateRendering()
 {
     // Refresh the graphics
-        drawArea->updateGL();
+    drawArea->updateGL();
 
     // Update boards
-        mainForm->updateExplicitBoard();
+    mainForm->updateExplicitBoard();
 }
 
 
@@ -1598,21 +1598,21 @@ void GLCanvasFrame::updateRendering( void )
 // drawing
 void GLCanvasFrame::setViewParam( viewParam vp )
 {
-        drawArea->setViewParam( vp );
+    drawArea->setViewParam( vp );
 
     // Adjust button settings
     this->adjustButtons();
 
     // Update boards
-        mainForm->updateExplicitBoard();
+    mainForm->updateExplicitBoard();
 }
 
 
 // Create an image file from the current rendering
 // (overloaded function)
-void GLCanvasFrame::snapRendering( void )
+void GLCanvasFrame::snapRendering()
 {
-        drawArea->snapRendering();
+    drawArea->snapRendering();
 }
 
 
@@ -1620,43 +1620,37 @@ void GLCanvasFrame::snapRendering( void )
 // (overloaded function)
 void GLCanvasFrame::snapRendering( const char * filename )
 {
-        drawArea->snapRendering( filename );
+    drawArea->snapRendering( filename );
 }
 
 
 // Return a pointer to the current aggregate data 
-aggregateData * GLCanvasFrame::getAggregateData( void )
+aggregateData * GLCanvasFrame::getAggregateData()
 {
-        return drawArea->getAggregateData();
+    return drawArea->getAggregateData();
 }
 
 
 // Return a pointer to the view parameters currently used
-viewParam * GLCanvasFrame::getViewParam( void ) 
-{
-        return drawArea->getViewParam();
-
+viewParam * GLCanvasFrame::getViewParam() {
+   return drawArea->getViewParam();
 }
 
 
 // Return a pointer to the view object structure currently used
-viewObject * GLCanvasFrame::getViewObject( void ) 
-{
-
-        return drawArea->getViewObject();
+viewObject * GLCanvasFrame::getViewObject() {
+    return drawArea->getViewObject();
 }
 
 
 // Return a pointer to the particle data currently used 
-particleData * GLCanvasFrame::getParticleData( void )
-{
-        return drawArea->getParticleData();
+particleData * GLCanvasFrame::getParticleData() {
+    return drawArea->getParticleData();
 }
 
 
 // Return a pointer to the track data currently used 
-trackData * GLCanvasFrame::getTrackData( void )
+trackData * GLCanvasFrame::getTrackData()
 {
-
-        return drawArea->getTrackData();
+    return drawArea->getTrackData();
 }

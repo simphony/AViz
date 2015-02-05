@@ -122,7 +122,7 @@ void GLCanvasArea::setViewObjectAndRecompile( viewObject thisVo )
 
 // Recompile the drawing lists after object parameters have 
 // been changed
-void GLCanvasArea::recompileObjects( void )
+void GLCanvasArea::recompileObjects()
 {
     // Clear all lists
     if (glIsList(singleAtoms))
@@ -248,7 +248,7 @@ void GLCanvasArea::recompileObjects( void )
 
 // Create an image file from the current rendering
 // (overloaded function)
-void GLCanvasArea::snapRendering( void )
+void GLCanvasArea::snapRendering()
 {
     char * filename = (char *)malloc( BUFSIZ );
 
@@ -308,14 +308,14 @@ void GLCanvasArea::setViewParam( viewParam thisVp )
 
 
 // Return a pointer to the molecule data currently used in the rendering
-aggregateData * GLCanvasArea::getAggregateData( void ) 
+aggregateData * GLCanvasArea::getAggregateData() 
 {
     return &ad;
 }
 
 
 // Return a pointer to the view parameters currently used in the rendering
-viewParam * GLCanvasArea::getViewParam( void ) 
+viewParam * GLCanvasArea::getViewParam() 
 {
     return &vp;
 }
@@ -323,7 +323,7 @@ viewParam * GLCanvasArea::getViewParam( void )
 
 // Return a pointer to the view object structure currently used 
 // in the rendering
-viewObject * GLCanvasArea::getViewObject( void ) 
+viewObject * GLCanvasArea::getViewObject() 
 {
     return &vo;
 }
@@ -331,14 +331,14 @@ viewObject * GLCanvasArea::getViewObject( void )
 
 // Return a pointer to the particle data structure currently 
 // used in the rendering
-particleData * GLCanvasArea::getParticleData( void ) 
+particleData * GLCanvasArea::getParticleData() 
 {
     return &pd;
 }
 
 // Make sure that the current color definitions are adequate
 // for the current set of particles
-void GLCanvasArea::completeParticleData( void )
+void GLCanvasArea::completeParticleData()
 {
     // Go through the entire set of particles and compare
     // types with known color types
@@ -599,7 +599,7 @@ void GLCanvasArea::mouseMoveEvent( QMouseEvent * qme )
 
 
 // Respond to exposing: draw now
-void GLCanvasArea::paintGL( void )
+void GLCanvasArea::paintGL()
 {
 
     double scaleFact = (double)this->width() / (double)this->height();
@@ -848,7 +848,7 @@ void GLCanvasArea::paintGL( void )
 
 
 // Init the canvas
-void GLCanvasArea::initializeGL( void )
+void GLCanvasArea::initializeGL()
 {
 
     if (this->isValid()) {
@@ -875,7 +875,7 @@ void GLCanvasArea::resizeGL( int w, int h )
 
 
 // Position the light(s) 
-void GLCanvasArea::makeLights( void )
+void GLCanvasArea::makeLights()
 {
     GLdouble mvmatrix[16], projmatrix[16];
     GLint viewport[4];
@@ -1068,7 +1068,7 @@ void GLCanvasArea::antiAliasing( bool antiAlias )
 
 
 // Draw a box indicating the contours of the data set
-void GLCanvasArea::drawContourBox( void )
+void GLCanvasArea::drawContourBox()
 {
     // Set line width
     glLineWidth( 2.0 );
@@ -1132,7 +1132,7 @@ void GLCanvasArea::drawContourBox( void )
 
 
 // Draw three lines indicating the xyz axes
-void GLCanvasArea::drawAxes( void )
+void GLCanvasArea::drawAxes()
 {
     GLdouble mvmatrix[16], projmatrix[16];
     GLint viewport[4];
@@ -1181,7 +1181,7 @@ void GLCanvasArea::drawAxes( void )
 
 
 // Draw three labels indicating the xyz axes
-void GLCanvasArea::drawAxesAnnotation( void )
+void GLCanvasArea::drawAxesAnnotation()
 {
     GLdouble mvmatrix[16], projmatrix[16];
     GLint viewport[4];
@@ -1251,7 +1251,7 @@ void GLCanvasArea::drawAxesAnnotation( void )
 
 
 // Draw the annotation
-void GLCanvasArea::drawAnnotation( void )
+void GLCanvasArea::drawAnnotation()
 {
     static GLuint myAnnotationFont1 = 0;
     static GLuint myAnnotationFont2 = 0;
@@ -1326,7 +1326,7 @@ void GLCanvasArea::printString(char *string, GLuint thisFont )
 
 
 // Draw slicing planes
-void GLCanvasArea::drawSlicingPlanes( void )
+void GLCanvasArea::drawSlicingPlanes()
 {
     float xmin = vo.xmin;
     float xmax = vo.xmax;
@@ -1418,7 +1418,7 @@ void GLCanvasArea::drawSlicingPlanes( void )
 
 // Find out if the scene is simple, involving only lines and dots, 
 // or complex
-bool GLCanvasArea::simpleRendering( void )
+bool GLCanvasArea::simpleRendering()
 {
     bool simple = FALSE;
 
@@ -1646,7 +1646,7 @@ GLuint GLCanvasArea::makeBondsObject( bool onlyWithinMolecule )
 
 // Generate an OpenGL display list for the object to be shown 
 // (here dots indicating positions in the data set)
-GLuint GLCanvasArea::makeDotsObject( void )
+GLuint GLCanvasArea::makeDotsObject()
 {
     bool isInList;
     int i;
@@ -1712,7 +1712,7 @@ GLuint GLCanvasArea::makeDotsObject( void )
 
 // Generate an OpenGL display list for the object to be shown 
 // (here spheres indicating positions in the data set)
-GLuint GLCanvasArea::makeSpheresObject( void )
+GLuint GLCanvasArea::makeSpheresObject()
 {
     bool isInList;
     int i;
@@ -1817,7 +1817,7 @@ GLuint GLCanvasArea::makeSpheresObject( void )
 
 // Generate an OpenGL display list for the object to be shown 
 // (here cubes indicating the atom positions in the data set)
-GLuint GLCanvasArea::makeCubesObject( void )
+GLuint GLCanvasArea::makeCubesObject()
 {
     bool isInList;
     int i;
@@ -1887,7 +1887,7 @@ GLuint GLCanvasArea::makeCubesObject( void )
 
 // Generate an OpenGL display list for the object to be shown 
 // (here pins indicating positions and directions in the data set)
-GLuint GLCanvasArea::makePinsObject( void )
+GLuint GLCanvasArea::makePinsObject()
 {
     bool isInList;
     int i;
@@ -2633,7 +2633,7 @@ GLuint GLCanvasArea::makeCylindersObject( bool adjustLength )
 
 // Return a pointer to the track data structure currently used in the
 // rendering
-trackData * GLCanvasArea::getTrackData( void )
+trackData * GLCanvasArea::getTrackData()
 {
     return &td;
 }
@@ -2641,7 +2641,7 @@ trackData * GLCanvasArea::getTrackData( void )
 
 // Generate an OpenGL display list for the object to be shown 
 // (here lines indicating particle tracks the data set)
-GLuint GLCanvasArea::makeTracksObject( void )
+GLuint GLCanvasArea::makeTracksObject()
 {
     bool isInList;
     int i;

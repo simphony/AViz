@@ -174,7 +174,7 @@ void LightsBoard::setLights( viewParam vp )
 
 
 // Read the current settings
-void LightsBoard::registerSettings( void )
+void LightsBoard::registerSettings()
 {
     // Get the current settings
     viewParam * vp = m_mainForm->getViewParam( );

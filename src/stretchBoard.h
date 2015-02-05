@@ -45,11 +45,11 @@ public slots:
     void setData( viewParam );
 
 private slots:
-    void stretchChanged( void );
-    void registerSettings( void );
-    void doResetX( void );
-    void doResetY( void );
-    void doResetZ( void );
+    void stretchChanged();
+    void registerSettings();
+    void doResetX();
+    void doResetY();
+    void doResetZ();
     void bdone();
     void bapply();
     void bcancel();

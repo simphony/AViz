@@ -114,7 +114,7 @@ void TranslationBoard::setData( viewParam vp ) {
 
 
 // Read the current settings
-void TranslationBoard::registerSettings( void ) {
+void TranslationBoard::registerSettings() {
     // Get the current settings
     viewParam * vp = mainForm->getViewParam( );
 
@@ -129,7 +129,7 @@ void TranslationBoard::registerSettings( void ) {
 
 
 // Reset the translations
-void TranslationBoard::doReset( void ) {
+void TranslationBoard::doReset() {
     viewParam thisVp;
 
     thisVp.panX = thisVp.panY = thisVp.panZ = 0.0;

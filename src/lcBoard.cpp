@@ -260,7 +260,7 @@ void LcBoard::buildLayout( colorCriterion crit ) {
 // Get the current particle data from main form, register
 // it using a local copy,  and prepare a list of particle
 // types; this function is called each time the board is launched
-void LcBoard::setData( void )
+void LcBoard::setData()
 {
     aggregateData * ad = NULL;
     tag tmp;
@@ -321,7 +321,7 @@ void LcBoard::setData( void )
 
 
 // Set the liquid crystal under consideration: adjust the toggle switch
-void LcBoard::setLc( void )
+void LcBoard::setLc()
 {
     tag thisLc;
     thisLcIndex = -1;
@@ -409,7 +409,7 @@ void LcBoard::setLc( void )
 
 // Adjust the liquid crystal switch settings, using the local
 // copy of the particle data structure 
-void LcBoard::adjustLc( void )
+void LcBoard::adjustLc()
 {
     // Read the toggle switch values and
     // update the atom data entry
@@ -436,7 +436,7 @@ void LcBoard::adjustLc( void )
 
 // Adjust the atom switch settings, using the local
 // copy of the atom data structure
-void LcBoard::adjustCriterion( void )
+void LcBoard::adjustCriterion()
 {
     this->readToggles();
     this->setLc();
@@ -444,7 +444,7 @@ void LcBoard::adjustCriterion( void )
 
 
 // Read the toggle switches and the emission text window
-void LcBoard::readToggles( void )
+void LcBoard::readToggles()
 {
     if (thisLcIndex >= 0) {
         // Read the settings and
@@ -795,7 +795,7 @@ void LcBoard::getColors( float r0, float g0, float b0, float r1, float g1, float
 
 
 // Adjust the board
-void LcBoard::setDotStyle( void )
+void LcBoard::setDotStyle()
 {
     lcRenderStyle = LDOT;
     sizeBox->setDisabled( TRUE );
@@ -804,7 +804,7 @@ void LcBoard::setDotStyle( void )
 
 
 // Adjust the board
-void LcBoard::setLineStyle( void )
+void LcBoard::setLineStyle()
 {
     lcRenderStyle = LLINE;
     sizeBox->setDisabled( TRUE );
@@ -813,7 +813,7 @@ void LcBoard::setLineStyle( void )
 
 
 // Adjust the board
-void LcBoard::setCubeStyle( void )
+void LcBoard::setCubeStyle()
 {
     lcRenderStyle = LCUBE;
     sizeBox->setDisabled( FALSE );
@@ -822,7 +822,7 @@ void LcBoard::setCubeStyle( void )
 
 
 // Adjust the board
-void LcBoard::setCylinderStyle( void )
+void LcBoard::setCylinderStyle()
 {
     lcRenderStyle = LCYLINDER;
     sizeBox->setDisabled( FALSE );
@@ -831,7 +831,7 @@ void LcBoard::setCylinderStyle( void )
 
 
 // Adjust the board
-void LcBoard::setConeStyle( void )
+void LcBoard::setConeStyle()
 {
     lcRenderStyle = LCONE;
     sizeBox->setDisabled( FALSE );
@@ -840,7 +840,7 @@ void LcBoard::setConeStyle( void )
 
 
 // Adjust the board
-void LcBoard::setSphereStyle( void )
+void LcBoard::setSphereStyle()
 {
     lcRenderStyle = LSPHERE;
     sizeBox->setDisabled( FALSE );
@@ -849,28 +849,28 @@ void LcBoard::setSphereStyle( void )
 
 
 // Adjust the board
-void LcBoard::setLowQuality( void )
+void LcBoard::setLowQuality()
 {
     renderQuality = LOW;
 }
 
 
 // Adjust the board
-void LcBoard::setHighQuality( void )
+void LcBoard::setHighQuality()
 {
     renderQuality = HIGH;
 }
 
 
 // Adjust the board
-void LcBoard::setFinalQuality( void )
+void LcBoard::setFinalQuality()
 {
     renderQuality = FINAL;
 }
 
 
 // Set a flag when the color board is closed
-void LcBoard::closeColorBoard( void )
+void LcBoard::closeColorBoard()
 {
     showColorBoard = FALSE;
 

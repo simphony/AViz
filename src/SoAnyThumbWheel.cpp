@@ -668,6 +668,6 @@ SoAnyThumbWheel::DrawEnabledWheel(
 // ************************************************************************
 
 #if SOQT_DEBUG
-static const char * getSoAnyThumbWheelRCSId(void) { return rcsid; }
+static const char * getSoAnyThumbWheelRCSId() { return rcsid; }
 #endif // SOQT_DEBUG
 

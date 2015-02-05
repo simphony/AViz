@@ -408,7 +408,7 @@ void ColorBoard::setLabel(const QString& label1, const QString& label2, const QS
 
 
 // Adjust the color settings
-void ColorBoard::adjustColor0( void )
+void ColorBoard::adjustColor0()
 {
     int redi, greeni, bluei;
 
@@ -437,7 +437,7 @@ void ColorBoard::adjustColor0( void )
 
 // Adjust the color settings, using the local
 // copy of the atom/spin color data structure
-void ColorBoard::adjustColor1( void )
+void ColorBoard::adjustColor1()
 {
     int redi, greeni, bluei;
 
@@ -466,7 +466,7 @@ void ColorBoard::adjustColor1( void )
 
 // Adjust the color settings, using the local
 // copy of the atom/spin color data structure
-void ColorBoard::adjustColor2( void )
+void ColorBoard::adjustColor2()
 {
     int redi, greeni, bluei;
 

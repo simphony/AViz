@@ -252,7 +252,7 @@ void AtomBoard::buildLayout( colorCriterion crit )  {
 // Get the current particle data from main form, register
 // it using a local copy,  and prepare a list of particle
 // types; this function is called each time the board is launched
-void AtomBoard::setData( void )
+void AtomBoard::setData()
 {
     aggregateData * ad = NULL;
     tag tmp;
@@ -313,7 +313,7 @@ void AtomBoard::setData( void )
 
 
 // Set the atom type under consideration: adjust the toggle switch
-void AtomBoard::setAtom( void )
+void AtomBoard::setAtom()
 {
     tag thisAtom;
     thisAtomIndex = -1;
@@ -427,7 +427,7 @@ void AtomBoard::adjustAtom() {
 
 
 // Adjust the board after change of color criterion
-void AtomBoard::adjustCriterion( void )
+void AtomBoard::adjustCriterion()
 {
     this->readToggles();
     this->setAtom();
@@ -435,7 +435,7 @@ void AtomBoard::adjustCriterion( void )
 
 
 // Read the toggle switches
-void AtomBoard::readToggles( void )
+void AtomBoard::readToggles()
 {
     if (thisAtomIndex >= 0) {
         // Read the settings and
@@ -641,7 +641,7 @@ void AtomBoard::getColors( float r0, float g0, float b0, float r1, float g1, flo
 
 
 // Adjust the board
-void AtomBoard::setDotStyle( void )
+void AtomBoard::setDotStyle()
 {	
     atomRenderStyle = ADOT;
     sizeBox->setDisabled(true);
@@ -649,7 +649,7 @@ void AtomBoard::setDotStyle( void )
 
 
 // Adjust the board
-void AtomBoard::setLineStyle( void )
+void AtomBoard::setLineStyle()
 {	
     atomRenderStyle = ALINE;
     sizeBox->setDisabled(true);
@@ -657,7 +657,7 @@ void AtomBoard::setLineStyle( void )
 
 
 // Adjust the board
-void AtomBoard::setCubeStyle( void )
+void AtomBoard::setCubeStyle()
 {	
     atomRenderStyle = ACUBE;
     sizeBox->setDisabled(false);
@@ -665,7 +665,7 @@ void AtomBoard::setCubeStyle( void )
 
 
 // Adjust the board
-void AtomBoard::setCylinderStyle( void )
+void AtomBoard::setCylinderStyle()
 {	
     atomRenderStyle = ACYLINDER;
     sizeBox->setDisabled(false);
@@ -673,7 +673,7 @@ void AtomBoard::setCylinderStyle( void )
 
 
 // Adjust the board
-void AtomBoard::setConeStyle( void )
+void AtomBoard::setConeStyle()
 {	
     atomRenderStyle = ACONE;
     sizeBox->setDisabled(false);
@@ -681,7 +681,7 @@ void AtomBoard::setConeStyle( void )
 
 
 // Adjust the board
-void AtomBoard::setSphereStyle( void )
+void AtomBoard::setSphereStyle()
 {	
     atomRenderStyle = ASPHERE;
     sizeBox->setDisabled(false);
@@ -689,28 +689,28 @@ void AtomBoard::setSphereStyle( void )
 
 
 // Adjust the board
-void AtomBoard::setLowQuality( void )
+void AtomBoard::setLowQuality()
 {
     renderQuality = LOW;
 }
 
 
 // Adjust the board
-void AtomBoard::setHighQuality( void )
+void AtomBoard::setHighQuality()
 {
     renderQuality = HIGH;
 }
 
 
 // Adjust the board
-void AtomBoard::setFinalQuality( void )
+void AtomBoard::setFinalQuality()
 {
     renderQuality = FINAL;
 }
 
 
 // Set a flag when the color board is closed
-void AtomBoard::closeColorBoard( void )
+void AtomBoard::closeColorBoard()
 {
     showColorBoard = FALSE;
 

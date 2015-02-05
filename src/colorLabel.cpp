@@ -54,7 +54,7 @@ void ColorLabel::setColor( float red, float green, float blue )
 
 
 // Set colors that indicate that the label is not active
-void ColorLabel::switchOff( void ) {
+void ColorLabel::switchOff() {
 	setPalette( QPalette( QColor( 255, 255, 255 ) ) );
 }
 

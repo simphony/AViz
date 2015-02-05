@@ -49,7 +49,7 @@ public:
 
 public:
     void setFileListParam( int, int, const QString & );
-    void resetKeepViewScale( void );
+    void resetKeepViewScale();
 
 private slots:
     void showCurrentFile();

@@ -78,7 +78,7 @@ private slots:
     void buildLayout( colorCriterion );
     void setPore();
     void adjustPore();
-    void adjustCriterion( void );
+    void adjustCriterion();
     void setColorCb();
     void setColors();
     void readToggles();

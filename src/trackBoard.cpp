@@ -205,7 +205,7 @@ void TrackBoard::setFileListParam( const QString &fn ) {
 
 
 // Activate track rendering
-void TrackBoard::showTracks( void )
+void TrackBoard::showTracks()
 {
     if (showTracksPb->isChecked()) {
         // Change labeling of the button
@@ -263,7 +263,7 @@ void TrackBoard::bstages( int radio )
 
 
 // Read the toggle switches
-void TrackBoard::readToggles( void )
+void TrackBoard::readToggles()
 {
     if (thisTypeIndex >= 0) {
         (*thisPd).showTrack[thisTypeIndex] = showTypeTrackCb->isChecked();
