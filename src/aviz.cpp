@@ -443,7 +443,7 @@ void AViz::launchAnimation()
 // Help callback function
 void AViz::about() {
     // Launch a message box
-    MessageBox *mb = new MessageBox(VERSION_STRING, this);
+    MessageBox *mb = new MessageBox(VERSION_INFO_STRING, this);
     mb->show();
 }
 

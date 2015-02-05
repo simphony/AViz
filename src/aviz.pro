@@ -4,6 +4,11 @@ CONFIG          += qt opengl warn_on release thread
 QMAKE_CXXFLAGS  = -O2
 QT +=  opengl 
 LIBS += -lX11 -lpng -lGLU
+GIT_REVISION = $$system($$quote(git describe))
+DEFINES += $$quote(GIT_REVISION=\'\"$$GIT_REVISION\"\')
+
+QMAKE_SUBSTITUTES += $$PWD/version_git.h.in
+
 HEADERS		= SoAnyThumbWheel.h \
 		  SoQtThumbWheel.h \
 		  animationBoard.h \

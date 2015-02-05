@@ -1,5 +1,7 @@
 TEMPLATE        = app
 TARGET          = aviz
+GIT_REVISION = $$system($$quote(git describe))
+DEFINES += $$quote(GIT_REVISION=\'\"$$GIT_REVISION\"\')
 CONFIG          += qt opengl warn_on thread debug
 QMAKE_CXXFLAGS  = -O2
 QT +=  opengl

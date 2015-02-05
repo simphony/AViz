@@ -104,7 +104,7 @@ int main( int argc, char ** argv )
 			return 0;
 	        }
 		else if (strcmp( *ptr, "-version" ) == 0 || strcmp( *ptr, "-v" ) == 0) {
-			printf( "AViz version %s \n", VERSION_STRING );
+            printf( "AViz version %s \n", VERSION_INFO_STRING );
 			return 0;
         	}
 		else if (strcmp( *ptr, "-license" ) == 0) {

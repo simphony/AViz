@@ -31,6 +31,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #define START_STRING \
 THIS_VERSION\
+"From revision " GIT_REVISION "\n"\
 "(C) 2001 - 2003\nComputational Physics Group Technion, Haifa Israel\n"\
 "\n"\
 "AViz comes with ABSOLUTELY NO WARRANTY; for details click on Help/License\n"\
@@ -40,6 +41,13 @@ THIS_VERSION\
 
 #define VERSION_STRING \
 THIS_VERSION\
+"(C) 2001 - 2003 Computational Physics Group Israel Institute of Technology\n"\
+"Technion, 32000 Haifa Israel\n"\
+"Geri Wagner, Adham Hashibon"
+
+#define VERSION_INFO_STRING \
+THIS_VERSION\
+"From revision " GIT_REVISION "\n"\
 "(C) 2001 - 2003 Computational Physics Group Israel Institute of Technology\n"\
 "Technion, 32000 Haifa Israel\n"\
 "Geri Wagner, Adham Hashibon"
