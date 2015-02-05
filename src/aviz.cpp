@@ -960,7 +960,7 @@ void AViz::onlyContourCB() {
     viewParam * thisVp = m_mainForm->getViewParam();
 
     // Toggle the onlycontour flag and update related menu actions
-    m_showHideContourAction->setText(thisVp->onlyContour ? "Only Contour" : "Contour And Particles");
+    m_onlyContourAction->setText(thisVp->onlyContour ? "Only Contour" : "Contour And Particles");
     m_showHideContourAction->setEnabled(thisVp->onlyContour);
     thisVp->onlyContour = !thisVp->onlyContour;
 
