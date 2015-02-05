@@ -42,9 +42,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "messageBox.h"
 #include "version.h"
 
-// Constructor and deconstructor of main widget
 AViz::AViz() 
-    : QMainWindow( NULL, Qt::WDestructiveClose )
+    : QMainWindow()
 {
     // Make menus in menubar
     QMenu *file = menuBar()->addMenu("&File");
