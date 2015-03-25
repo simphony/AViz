@@ -26,61 +26,66 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "positionBox.h"
 
-// Make a box 
-PositionBox::PositionBox( QWidget * parent, const char * name )
-    : QHBox( parent, name )
-{
-	// Create hboxlayouts that will fill the next row; these
-	// are shown only when appropriate
-	QHBox * positionBox = new QHBox( this, "positionBox" );
-        QLabel * posL = new QLabel( positionBox, "posL" );
-	posL->setText( " Coordinate: " ); 
+#include <QHBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QRadioButton>
 
-	coordinate = new QButtonGroup( 3, QGroupBox::Horizontal, positionBox, "coordinate" );
-	xcoord = new QRadioButton( coordinate, "x" );
-	xcoord->setText( "X" );
-	ycoord = new QRadioButton( coordinate, "y" );
-	ycoord->setText( "Y" );
-	zcoord = new QRadioButton( coordinate, "z" );
-	zcoord->setText( "Z" );
-	coordinate->insert( xcoord, 0 );
-	coordinate->insert( ycoord, 1 );
-	coordinate->insert( zcoord, 2 );
+// Make a box 
+PositionBox::PositionBox(QWidget * parent)
+    : QWidget(parent)
+{
+    // Create hboxlayouts that will fill the next row; these
+    // are shown only when appropriate
+    QHBoxLayout *positionBox = new QHBoxLayout(this);
+    positionBox->addWidget(new QLabel(" Coordinate: "));
+
+    QGroupBox *coordinate = new QGroupBox();
+    positionBox->addWidget(coordinate);
+
+    xcoord = new QRadioButton("X", coordinate);
+    ycoord = new QRadioButton("Y", coordinate);
+    zcoord = new QRadioButton("Z", coordinate);
+
+    QHBoxLayout *hBox = new QHBoxLayout(coordinate);
+    hBox->addWidget(xcoord);
+    hBox->addWidget(ycoord);
+    hBox->addWidget(zcoord);
 }
 
 
 // Adjust the controls
 void PositionBox::setParticle( particleData * thisPd, int thisIndex )
 {
-	if (thisIndex >= 0) {
-		colorCriterionPos colorCritPos = (*thisPd).colorCritPos[thisIndex];
-		switch (colorCritPos) {
-			case XPOS:
-				xcoord->setChecked( TRUE );
-			break;
-			case YPOS:
-				ycoord->setChecked( TRUE );
-			break;
-			case ZPOS:
-				zcoord->setChecked( TRUE );
-			break;
-		}
-	}
+    if (thisIndex >= 0) {
+        colorCriterionPos colorCritPos = (*thisPd).colorCritPos[thisIndex];
+        switch (colorCritPos) {
+        case XPOS:
+            xcoord->setChecked( TRUE );
+            break;
+        case YPOS:
+            ycoord->setChecked( TRUE );
+            break;
+        case ZPOS:
+            zcoord->setChecked( TRUE );
+            break;
+        }
+    }
 }
 
 
 // Read the controls
 void PositionBox::readToggles( particleData * thisPd, int thisIndex )
 {
-	if (thisIndex >= 0 && thisPd) {
-	        if (xcoord->isChecked() == TRUE) {
-	                (*thisPd).colorCritPos[thisIndex] = XPOS;
-	        }
-	        if (ycoord->isChecked() == TRUE) {
-	                (*thisPd).colorCritPos[thisIndex] = YPOS;
-	        }
-	        if (zcoord->isChecked() == TRUE) {
-	                (*thisPd).colorCritPos[thisIndex] = ZPOS;
-	        }
-	}
+    if (thisIndex >= 0 && thisPd) {
+        if (xcoord->isChecked() == TRUE) {
+            (*thisPd).colorCritPos[thisIndex] = XPOS;
+        }
+        if (ycoord->isChecked() == TRUE) {
+            (*thisPd).colorCritPos[thisIndex] = YPOS;
+        }
+        if (zcoord->isChecked() == TRUE) {
+            (*thisPd).colorCritPos[thisIndex] = ZPOS;
+        }
+    }
 }

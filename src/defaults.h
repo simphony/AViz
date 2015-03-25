@@ -35,17 +35,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define PHI 250.0
 #define THETA 0.0
 #define CHI 0.0
-#define X 70.0
-#define Y 0.0
-#define Z 50.0
 #define DOLLY 1.0
 #define SIZE 1.0
 #define BOND_MINLENGTH 0.0
 #define BOND_MAXLENGTH 10.0
 #define BDIAMETER 0.1
-
-#define FALSE 0
-#define TRUE 1
 
 // Max number of atom types
 #define ATOMS_MAX 256
@@ -115,12 +109,9 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define unidentified "?? 0.5 0.5 0.5"   // Used if identification of type fails
 
 // Miscellaneous definitions
-#define FALSE 0
-#define TRUE 1
 #define SPACE_CHAR 32
 #define PI 3.1415927
 #define TWO_PI 6.28318530
-#define INFINITY 10000.0
 #define DELTAEPS 1.0E-10
 #define SCEPS 0.0000001
 #define SLICEEPS 0.1;

@@ -25,72 +25,26 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ***********************************************************************/
 
 #include "messageBox.h"
+#include "defaults.h" // SPACE
 
-// Make a popup dialog box 
-MessageBox::MessageBox( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
-{
-	this->setCaption( "AViz: Message" );
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QPushButton>
 
-	// Insert a grid that will hold a label 
-	// and a button
-	const int numCols = 1;
-        const int numRows = 2;
-        QGridLayout * messageBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "messageBox" );
+MessageBox::MessageBox(const QString &message, QWidget * parent)
+    : QDialog( parent) {
+    setWindowTitle( "AViz: Message" );
 
-	// Create a hbox that will contain a label 
-	QHBox * hb1 = new QHBox( this, "hb1" );
-	hb1->setMargin( SPACE );
-	messageBox->addWidget( hb1, 0, 0 );
+    // delete when closed
+    setAttribute(Qt::WA_DeleteOnClose);
 
-	// Create a label
-	messageL = new QLabel( hb1, "messageL" );
+    QPushButton *ok = new QPushButton("OK");
+    ok->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    connect(ok, SIGNAL(clicked()), this, SLOT(close()));
 
-	// Create a hbox that will contain a button
-	QHBox * hb2 = new QHBox( this, "hb2" );
-	hb2->setMargin( SPACE );
-	messageBox->addWidget( hb2, 1, 0 );
-
-	// Create a placeholder 
-	QLabel * emptyL1 = new QLabel( hb2, "emptyL1" );
-
-	// Create a pushbutton that will go into the lowest row
-	QPushButton * ok = new QPushButton( hb2, "ok" );
-	ok->setText( "OK" ); 
-
-	 // Define a callback for that button
-        QObject::connect( ok, SIGNAL(clicked()), this, SLOT(ok()) );
-
-	// Create a placeholder 
-	QLabel * emptyL2 = new QLabel( hb2, "emptyL2" );
-
-	hb2->setStretchFactor( emptyL1, 10 );
-	hb2->setStretchFactor( emptyL2, 10 );
-}
-
-
-// Set the label text
-void MessageBox::setText( char * mess )
-{
-	if (messageL) 
-		messageL->setText( mess );
-}
-
-
-// Set the label text (overloaded function)
-void MessageBox::setText( char * mess1, char * mess2 )
-{
-	char * buffer = (char *)malloc(BUFSIZ);
-	sprintf(buffer, "%s %s", mess1, mess2);
-	if (messageL) 
-		messageL->setText( buffer );
-	free(buffer);	
-}
-
-
-// Hide the board
-void MessageBox::ok()
-{
-	// Hide now
-        hide();
+    QVBoxLayout *vbox = new QVBoxLayout(this);
+    vbox->setMargin(SPACE);
+    vbox->addWidget(new QLabel(message));
+    vbox->addStretch(1);
+    vbox->addWidget(ok, 0 /*stretch*/, Qt::AlignHCenter);
 }

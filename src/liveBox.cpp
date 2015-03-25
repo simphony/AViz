@@ -26,74 +26,52 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "liveBox.h"
 
+#include <QHBoxLayout>
+#include <QPushButton>
+
+#include "mainForm.h"
+
+
 // Make a box that will hold a horizontal row of buttons, used to 
 // take snapshots of the scene
-LiveBox::LiveBox( QWidget * parent, const char * name )
-    : QHBox( parent, name )
+LiveBox::LiveBox(MainForm *mainForm, QWidget *parent)
+    : QWidget(parent), mainForm(mainForm)
 {
-	// Create some space
-	this->setMargin( 0 );
+    // Insert pushbuttons
+    QPushButton *snapPb = new QPushButton("Snap" );
 
-	// Insert pushbuttons 
-	snapPb = new QPushButton( this, "Snap" );
-	snapPb->setText( "Snap" );
-	
-	autoSnapPb= new QPushButton( this, "AutoSnap" );
-	autoSnapPb->setText( "AutoSnap" );
-	autoSnapPb->setToggleButton( TRUE );
-	
-	// Define callbacks for these pushbuttons
-	connect( snapPb, SIGNAL(clicked()), this, SLOT(snapCB()) );
-	connect( autoSnapPb, SIGNAL(clicked()), this, SLOT(autoSnapCB()) );
+    autoSnapPb= new QPushButton("AutoSnap");
+    autoSnapPb->setCheckable(true);
 
-	// Reset the form pointer
-	mainForm = NULL;
+    // Define callbacks for these pushbuttons
+    connect( snapPb, SIGNAL(clicked()), this, SLOT(snapCB()) );
+    connect( autoSnapPb, SIGNAL(clicked()), this, SLOT(autoSnapCB()) );
+
+    QHBoxLayout *hbox = new QHBoxLayout(this);
+    hbox->setMargin( 0 );
+    hbox->addWidget(snapPb);
+    hbox->addWidget(autoSnapPb);
 }
-
-
-// Set a pointer to the main form
-void LiveBox::setFormAddress( MainForm * thisForm )
-{
-        mainForm = thisForm;
-}
-
 
 // Trigger a snapshot
-void LiveBox::snapCB( void )
-{
-        if (mainForm)
-                mainForm->snapRendering();
+void LiveBox::snapCB() {
+    mainForm->snapRendering();
 }
-
 
 // Set a flag 
-void LiveBox::autoSnapCB( void )
-{
-        if (mainForm) {
-		viewParam * vp = mainForm->getViewParam();
-
-		(*vp).autoSnap = this->getAutoSnap();
-	}
+void LiveBox::autoSnapCB() {
+    viewParam * vp = mainForm->getViewParam();
+    (*vp).autoSnap = this->getAutoSnap();
 }
-
 
 // Start auto snap mode at start-up -- simply indicate this by 
 // the button state
-void LiveBox::startAutoSnap( void )
-{
-	this->autoSnapPb->setOn( TRUE );	
-	
+void LiveBox::startAutoSnap() {
+    this->autoSnapPb->setChecked(true);
 }
 
 // Return the auto snap button toggle state
-bool LiveBox::getAutoSnap( void )
+bool LiveBox::getAutoSnap()
 {
-        return autoSnapPb->isOn( );
-}
-
-
-// Give size hints and define size policy
-QSizePolicy LiveBox::sizePolicy() const
-{
-	return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding);
+    return autoSnapPb->isChecked();
 }

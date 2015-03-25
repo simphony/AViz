@@ -28,69 +28,54 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define FILELB_H 
 
 #include "data.h"
-#include "defaults.h"
-#include "fileFunctions.h"
-#include "mainForm.h"
 
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qsizepolicy.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qwidget.h>
+#include <QDialog>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <unistd.h>
+class QRadioButton;
+class QLineEdit;
+class QCheckBox;
+class QTimer;
+
+class MainForm;
 
 // File list board dialog widget
 class FileListBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	FileListBoard( QWidget * parent=0, const char * name=0 );
+    FileListBoard(MainForm *, QWidget * parent);
 
-        enum listDirection{ FORWARD, BACKWARD }; // Define directions
+    enum listDirection{ FORWARD, BACKWARD }; // Define directions
 
-public slots:
-	void setMainFormAddress( MainForm * );
-	void setFileListParam( int, int, const QString & );
-	void resetKeepViewScale( void );
+public:
+    void setFileListParam( int, int, const QString & );
+    void resetKeepViewScale();
 
 private slots:
-	void showCurrentFile();
-	void keepViewScaleChanged();
-	void launchTrack();
-	void bsingleStep();
-	void bfastStep();
-	void bcycle();
-	void start();
-	void end();
-	void bdirection( int );
-	listDirection getDirection();
-	void bdone();
+    void showCurrentFile();
+    void keepViewScaleChanged();
+    void launchTrack();
+    void bsingleStep();
+    void bfastStep();
+    void bcycle();
+    void start();
+    void end();
+    void bdirection( int );
+    listDirection getDirection();
+    void bdone();
 
 private:
-	MainForm * mainForm;
-	QButtonGroup * direction;
-	QRadioButton * forwardRb;
-	QRadioButton * backwardRb;
-	QLineEdit * fileLine;
-	QCheckBox * keepViewScaleCb;
-	QTimer * cycleTimer;
-	int numberOfFiles;
-	int currentFile;
-	listDirection thisDirection;
-	bool cycleMode;
-	QString fileListName;
-	bool haveFileList;
+    MainForm * mainForm;
+    QRadioButton * forwardRb;
+    QLineEdit * fileLine;
+    QCheckBox * keepViewScaleCb;
+    QTimer * cycleTimer;
+    int numberOfFiles;
+    int currentFile;
+    listDirection thisDirection;
+    bool cycleMode;
+    QString fileListName;
+    bool haveFileList;
 };
 
 #endif // FILELB_H

@@ -27,53 +27,39 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef STRETCHB_H
 #define STRETCHB_H 
 
+#include <QDialog>
+
 #include "data.h"
-#include "floatSpin.h"
-#include "mainForm.h"
-#include "parameterLimits.h"
 
-#include <qbuttongroup.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qsizepolicy.h>
-#include <qwidget.h>
-
-#include <stdio.h>
-#include <math.h>
+class QFSpinBox;
+class MainForm;
 
 // Stretch board dialog widget
 class StretchBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	StretchBoard( QWidget * parent=0, const char * name=0 );
+    StretchBoard(MainForm * , QWidget * parent=0);
 
 public slots:
-	void setMainFormAddress( MainForm * );
-	void setData( viewParam );
+    void setData( viewParam );
 
 private slots:
-	void stretchChanged( void );
-	void registerSettings( void );
-	void doResetX( void );
-	void doResetY( void );
-	void doResetZ( void );
-	void bdone();
-	void bapply();
-	void bcancel();
+    void stretchChanged();
+    void registerSettings();
+    void doResetX();
+    void doResetY();
+    void doResetZ();
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	MainForm * mainForm;
-	QFSpinBox * stretchSBX;
-	QFSpinBox * stretchSBY;
-	QFSpinBox * stretchSBZ;
-        bool stretchChange;
+    MainForm *m_mainForm;
+    QFSpinBox * stretchSBX;
+    QFSpinBox * stretchSBY;
+    QFSpinBox * stretchSBZ;
+    bool stretchChange;
 };
 
 #endif // STRETCHB_H

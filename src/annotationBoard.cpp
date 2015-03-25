@@ -26,159 +26,114 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "annotationBoard.h"
 
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+
+#include "mainForm.h"
+#include "widgets/doneapplycancelwidget.h"
+
+namespace {
+QSpinBox* createPositionSpinBox(QWidget* parent) {
+    QSpinBox *sb = new QSpinBox(parent);
+    sb->setMinimum(0);
+    sb->setMaximum(1000);
+    sb->setSingleStep(10);
+    return sb;
+}
+}
+
 // Make a popup dialog box that will hold a vertical row of buttons
-AnnotationBoard::AnnotationBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
-{
-	this->setCaption( "AViz: Set Annotation" );
+AnnotationBoard::AnnotationBoard(QWidget * parent, MainForm *mainForm)
+    : QDialog(parent), mainForm(mainForm) {
+    setWindowTitle("AViz: Set Annotation");
 
-	// Insert a grid that will hold sliders and text windoes,
-	// plus a row of control buttons
-	const int numCols = 7;
-        const int numRows = 3;
-        QGridLayout * annotBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "annotBox" );
-	
-	// Create a label
-	QLabel * textL = new QLabel( this, "textL" );
-	textL->setText( "Annotation:" ); 
-	annotBox->addWidget( textL, 0, 0);
+    QVBoxLayout *vbox = new QVBoxLayout(this);
 
-	// Create a text window
-	annotationTextLe = new QLineEdit( this, "annotationText" );
-	annotBox->addMultiCellWidget( annotationTextLe, 0, 0, 1, numCols-3);
+    {
+        // Create a annotation line edit and check box
+        annotationTextLe = new QLineEdit(this);
+        showAnnotationCb = new QCheckBox("Show Annotation", this);
 
-	// Create a check box
-	showAnnotationCb = new QCheckBox( this, "showAnnotation" );
-	showAnnotationCb->setText( "Show Annotation" );
-	annotBox->addMultiCellWidget( showAnnotationCb, 0, 0, numCols-2, -1);
+        QWidget *w = new QWidget();
+        QHBoxLayout *layout = new QHBoxLayout(w);
+        layout->addWidget(new QLabel("Annotation:"), 0 /*stretch*/, Qt::AlignRight);
+        layout->addWidget(annotationTextLe, 1 /*stretch*/);
+        layout->addWidget(showAnnotationCb, 0 /*stretch*/, Qt::AlignRight);
+        vbox->addWidget(w);
+    }
 
-	// Create three sliders and labels
-	QLabel * sizeL = new QLabel( this, "sizeL" );
-	sizeL->setText( "Size:" ); 
-	annotBox->addWidget( sizeL, 1, 1);
+    {   // create size and position (x,y) input widgets
+        annotationSizeSb = new QSpinBox(this);
+        annotationSizeSb->setMinimum(1);
+        annotationSizeSb->setMaximum(4);
+        annotationSizeSb->setSingleStep(1);
 
-	annotationSizeSb = new QSpinBox( this, "annotationSizeSl" );
-	annotationSizeSb->setMinValue( 1 );
-	annotationSizeSb->setMaxValue( 4 );
-	annotationSizeSb->setLineStep( 1 );
-	annotBox->addWidget( annotationSizeSb, 1, 2);
+        annotationXSb = createPositionSpinBox(this);
+        annotationYSb = createPositionSpinBox(this);
 
-	QLabel * xL = new QLabel( this, "xL" );
-	xL->setText( "X Position:" ); 
-	annotBox->addWidget( xL, 1, 3);
+        QWidget *w = new QWidget();
+        QGridLayout *layout = new QGridLayout(w);
+        layout->addWidget(new QLabel("Size:"), 0, 0, Qt::AlignRight);
+        layout->addWidget(annotationSizeSb, 0, 1);
+        layout->addWidget(new QLabel("X Position:"), 0, 2, Qt::AlignRight);
+        layout->addWidget(annotationXSb, 0, 3);
+        layout->addWidget(new QLabel("Y Position:"), 0, 4, Qt::AlignRight);
+        layout->addWidget(annotationYSb, 0, 5);
+        vbox->addWidget(w);
+    }
 
-	annotationXSb = new QSpinBox( this, "xSl" );
-	annotationXSb->setMinValue( 0 );
-	annotationXSb->setMaxValue( 1000 );
-	annotationXSb->setLineStep( 10 );
-	annotBox->addWidget( annotationXSb, 1, 4);
-
-	QLabel * yL = new QLabel( this, "yL" );
-	yL->setText( "Y Position:" ); 
-	annotBox->addWidget( yL, 1, 5);
-
-	annotationYSb = new QSpinBox( this, "ySl" );
-	annotationYSb->setMinValue( 0 );
-	annotationYSb->setMaxValue( 1000 );
-	annotationYSb->setLineStep( 10 );
-	annotBox->addWidget( annotationYSb, 1, 6);
-
-	QHBox * hb = new QHBox( this, "hb" );
-	annotBox->addMultiCellWidget( hb, numRows-1, numRows-1, 0, -1);
-	
-	// Create a placeholder 
-	QLabel * emptyL = new QLabel( hb, "emptyL" );
-
-	// Create pushbuttons that will go into the lowest row
-	QPushButton * done = new QPushButton( hb, "done" );
-	done->setText( "Done" ); 
-
-	 // Define a callback for that button
-        QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
-
-	QPushButton * apply = new QPushButton( hb, "apply" );
-	apply->setText( "Apply" ); 
-
-	 // Define a callback for that button
-        QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
-
-	QPushButton * cancel = new QPushButton( hb, "cancel" );
-	cancel->setText( "Cancel" ); 
-
-	 // Define a callback for that button
-        QObject::connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
-
-	hb->setStretchFactor( emptyL, 10 );
+    DoneApplyCancelWidget *doneApplyCancel = new DoneApplyCancelWidget(this);
+    connect(doneApplyCancel, SIGNAL(done()), this, SLOT(bdone()) );
+    connect(doneApplyCancel, SIGNAL(applied()), this, SLOT(applySettings()) );
+    connect(doneApplyCancel, SIGNAL(canceled()), this, SLOT(hide()));
+    vbox->addStretch(1);
+    vbox->addWidget(doneApplyCancel);
 }
-
-
-// Set a pointer to the main form
-void AnnotationBoard::setMainFormAddress( MainForm * thisMF )
-{
-	mainForm = thisMF;
-}
-
 
 // Get the current view settings from main form, register
 // it using a local copy, and update the settings
-void AnnotationBoard::setAnnotation( viewParam vp )
-{
-	annotationTextLe->setText( vp.annotationText );
-	showAnnotationCb->setChecked( vp.showAnnotation );
-	annotationSizeSb->setValue( vp.annotationSize );
-	annotationXSb->setValue( vp.annotationCoordX );
-	annotationYSb->setValue( vp.annotationCoordY );
+void AnnotationBoard::setAnnotation(const viewParam& vp) {
+    annotationTextLe->setText(vp.annotationText);
+    showAnnotationCb->setChecked(vp.showAnnotation);
+    annotationSizeSb->setValue(vp.annotationSize);
+    annotationXSb->setValue(vp.annotationCoordX);
+    annotationYSb->setValue(vp.annotationCoordY);
 }
 
 
 // Register the current settings
-void AnnotationBoard::registerSettings( void )
-{
-	// Get the current settings 
-	if (mainForm) {
-		viewParam * vp = mainForm->getViewParam( );
+void AnnotationBoard::registerSettings() {
+    // Update the view parameters with
+    // the current settings
 
-		// Update the values
-		QString text = annotationTextLe->text();
-		sprintf( (*vp).annotationText, "%s", (const char *)text );
-		(*vp).showAnnotation = showAnnotationCb->isChecked();
-		(*vp).annotationSize = annotationSizeSb->value();
-		(*vp).annotationCoordX = annotationXSb->value();
-		(*vp).annotationCoordY = annotationYSb->value();
-	}
+    viewParam * vp = mainForm->getViewParam();
+
+    // Update the values
+    QString text = annotationTextLe->text();
+    sprintf((*vp).annotationText, "%s", qPrintable(text));
+    (*vp).showAnnotation = showAnnotationCb->isChecked();
+    (*vp).annotationSize = annotationSizeSb->value();
+    (*vp).annotationCoordX = annotationXSb->value();
+    (*vp).annotationCoordY = annotationYSb->value();
 }
 
 
-// Complete the annotation setting
-void AnnotationBoard::bdone()
-{
-	this->registerSettings();
-
-	// Re-do the graphics, using the new view settings
-	if (mainForm) {
-		mainForm->updateRendering();
-	}
-
-	// Hide now
-        hide();
+// Apply the annotation setting and hide dialog
+void AnnotationBoard::bdone() {
+    applySettings();
+    hide();
 }
 
 
 // Accept the annotation setting
-void AnnotationBoard::bapply()
-{
-	this->registerSettings();
+void AnnotationBoard::applySettings() {
+    registerSettings();
 
-	// Re-do the graphics, using the new view settings
-	if (mainForm) {
-		mainForm->updateRendering();
-	}
-}
-
-
-// Cancel the annotation setting: hide the board
-void AnnotationBoard::bcancel()
-{
-	// Hide now
-	hide();
+    // Re-do the graphics, using the new view settings
+    mainForm->updateRendering();
 }

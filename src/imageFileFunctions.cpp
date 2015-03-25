@@ -26,7 +26,10 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "imageFileFunctions.h"
 
-#include <png.h>	// Best kept away from header file!
+#include <png.h>
+#include <stdlib.h>
+#include <cstring>
+#include <sys/stat.h>
 
 // Return a suitable filename
 void getImageFilename( char * datafile, char * filename )
@@ -129,7 +132,7 @@ bool writePNGImage( const char * filename, char * comment, int thisWidth, int th
 			fclose(out);
 			free(row_pointers);
 			free(img);
-			return FALSE;
+            return false;
    		}
 
 		// Allocate/initialize the image information data
@@ -139,7 +142,7 @@ bool writePNGImage( const char * filename, char * comment, int thisWidth, int th
 			png_destroy_write_struct(&png_ptr,  (png_infopp)NULL);
 			free(row_pointers);
 			free(img);
-			return FALSE;
+            return false;
    		}
 
 		// Set error handling
@@ -149,7 +152,7 @@ bool writePNGImage( const char * filename, char * comment, int thisWidth, int th
 			png_destroy_write_struct(&png_ptr, &info_ptr);
 			free(row_pointers);
 			free(img);
-			return FALSE;
+            return false;
    		}
 
 		// I/O initialization function
@@ -196,9 +199,9 @@ bool writePNGImage( const char * filename, char * comment, int thisWidth, int th
 		// Close the file 
 		fclose(out);
 
-		return TRUE;
+        return true;
         }
         else {
-		return FALSE;
+        return false;
         }
 }

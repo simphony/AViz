@@ -27,44 +27,27 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef AVIZ_H
 #define AVIZ_H
 
-#include "animationBoard.h"
-#include "customFileDialog.h"
-#include "data.h"
-#include "defaults.h"
-#include "defaultParticles.h"
+#include <QMainWindow>
+
 #include "fileFunctions.h"
-#include "license.h"
-#include "mainForm.h"
-#include "memoryFunctions.h"
-#include "messageBox.h"
-#include "version.h"
 
-#include <qapplication.h>
-#include <qfiledialog.h>
-#include <qmainwindow.h>
-#include <qmessagebox.h>
-#include <qmenubar.h>
-#include <qpopupmenu.h>
-#include <qstatusbar.h>
-#include <qpopupmenu.h>
-#include <qtimer.h>
+class QAction;
+class QTimer;
+class QMenu;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <time.h>
+class MainForm;
 
-class AViz: public QMainWindow 
+class AViz: public QMainWindow
 {
 	Q_OBJECT
 public:
 	AViz();
 	~AViz();
 
+    fileType isFileType();
+
 public slots:
 	void setFileType( fileType );
-	fileType isFileType();
 	void readFile( const QString & );
 	void setDefaults();
 	void setDefaults( char * );
@@ -88,8 +71,6 @@ public slots:
 	void setLcMenus();
 	void setPolymerMenus();
 	void setPoreMenus();
-
-protected:
 
 private slots:
 	void openXYZ();
@@ -138,32 +119,33 @@ private slots:
 	void keepWatchNow();
 
 private:
-	MainForm * mf;
-	QPopupMenu * file;
-	QPopupMenu * elements;
-	QPopupMenu * view;
-	QPopupMenu * settings;
-	QPopupMenu * data;
-	QPopupMenu * help;
-	QPopupMenu * openfile;
-	QPopupMenu * elementsAtoms;
-	QPopupMenu * elementsPolymers;
-	QPopupMenu * viewpoint;
-	QPopupMenu * viewmode;
-	QPopupMenu * background;
-	QTimer * watchTimer; 
-	int atomsId;
-	int spinsId;
-	int liquidCrystalsId;
-	int polymersId;
-	int poresId;
-	int usePerspectiveId, useOrthoId;
-	int backgroundBlackId, backgroundWhiteId;
-	int showHideAxesId;
-	int showHideContourId;
-	int onlyContourId;
-	int inOutWatchModeId;
-	bool inWatchMode;
+    enum ElementType {
+        ET_ATOM,
+        ET_SPIN,
+        ET_LIQUID_CRYSTALS,
+        ET_POLYMERS,
+        ET_PORES
+    };
+
+private:
+    /// enables menu items related to particlular element
+    void enableElement(ElementType);
+
+private:
+    MainForm *m_mainForm;
+    QTimer *m_watchTimer;
+    QMenu *m_atomsMenu;
+    QAction *m_spinsAction;
+    QAction *m_liquidCrystalsAction;
+    QMenu *m_polymersMenu;
+    QAction *m_poresAction;
+    QAction *m_usePerspectiveAction;
+    QAction *m_useOrthoAction;
+    QAction *m_showHideAxesAction;
+    QAction *m_showHideContourAction;
+    QAction *m_onlyContourAction;
+    QAction *m_inOutWatchModelAction;
+    bool m_inWatchMode;
 };
 
 

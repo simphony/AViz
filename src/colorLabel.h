@@ -27,33 +27,22 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef COLORL_H
 #define COLORL_H 
 
-#include "defaults.h"
- 
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qslider.h>
 #include <qwidget.h>
-
-#include <stdio.h>
-#include <math.h>
 
 // Color label class definition
 class ColorLabel: public QWidget
 {
     Q_OBJECT
 public:
-	ColorLabel( QWidget *parent=0, const char *name=0 );
-        QSizePolicy sizePolicy() const;
-        QSize minimumSizeHint() const;
-
-public slots:
-	void setColor( float, float, float );
-	void switchOff( void );
+    /// create ColorLabel with grey color
+    ColorLabel(QWidget *parent=0);
 
 protected:
-	void paintEvent( QPaintEvent * );
+    virtual QSize minimumSizeHint() const;
+
+public slots:
+    void setColor( float, float, float );
+    void switchOff();
 };
 
 

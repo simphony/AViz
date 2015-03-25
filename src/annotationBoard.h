@@ -24,48 +24,49 @@ Contact address: Computational Physics Group, Dept. of Physics,
                  gery@tx.technion.ac.il
 ***********************************************************************/
 
-#ifndef ANNOTB_H
-#define ANNOTB_H 
+#ifndef ANNOTATION_BOARD_H
+#define ANNOTATION_BOARD_H
+
+#include <QDialog>
 
 #include "data.h"
-#include "mainForm.h"
 
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qgrid.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qvbox.h>
-#include <qwidget.h>
+class QCheckBox;
+class QLineEdit;
+class QSpinBox;
+
+class MainForm;
 
 
-// Annotation board dialog widget
-class AnnotationBoard: public QDialog
-{
-	Q_OBJECT
+/*! @class AnnotationBoard
+    @brief Annotation dialog where annotation text can be configured
+*/
+class AnnotationBoard: public QDialog {
+    Q_OBJECT
 public:
-	AnnotationBoard( QWidget * parent=0, const char * name=0 );
+    AnnotationBoard(QWidget *parent, MainForm *);
 
 public slots:
-	void setMainFormAddress( MainForm * );
-	void setAnnotation( viewParam );
+    void setAnnotation(const viewParam&);
 
 private slots:
-	void registerSettings();
-	void bdone();
-	void bapply();
-	void bcancel();
+    /// handle when done is clicked (apply and close)
+    void bdone();
+
+    /// apply the settings
+    void applySettings();
 
 private:
-	MainForm * mainForm;
-	QCheckBox * showAnnotationCb;
-	QLineEdit * annotationTextLe;
-	QSpinBox * annotationXSb;
-	QSpinBox * annotationYSb;
-	QSpinBox * annotationSizeSb;
+    /// register the current annotation-related view parameters
+    void registerSettings();
+
+private:
+    MainForm * mainForm;
+    QCheckBox * showAnnotationCb;
+    QLineEdit * annotationTextLe;
+    QSpinBox * annotationXSb;
+    QSpinBox * annotationYSb;
+    QSpinBox * annotationSizeSb;
 };
 
 #endif // ANNOTB_H

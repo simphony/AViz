@@ -27,91 +27,70 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef COLORB_H
 #define COLORB_H 
 
-#include "colorLabel.h"
-#include "data.h"
-#include "defaults.h"
-#include "defaultParticles.h"
-#include "fileFunctions.h"
-#include "memoryFunctions.h"
+#include <QDialog>
 
-#include <qcombobox.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qslider.h>
-#include <qvbox.h>
-#include <qwidget.h>
+class QGridLayout;
+class QLabel;
+class QSlider;
+class QWidget;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <sys/stat.h>
-#include <unistd.h>
+class ColorLabel;
+class AtomBoard;
+class SpinBoard;
+class LcBoard;
+class PolymerBoard;
+class PoreBoard;
 
-// Note: Pointers to composite widgets are defined in 
-// mainForm.cpp and not here -- it causes problems 
-// regarding the mutual inclusion of  header files 
 
 // Color board dialog widget
 class ColorBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ColorBoard( QWidget * parent=0, const char * name=0 );
+    ColorBoard( QWidget * parent=0);
 
-public slots:
-	void buildLayout( char );
-	void setAtomBoardAddress( char * );
-	void setSpinBoardAddress( char * );
-	void setLcBoardAddress( char * );
-	void setPolymerBoardAddress( char * );
-	void setPoreBoardAddress( char * );
-	void setColor( float, float, float );
-	void setColor( float, float, float, float, float, float );
-	void setColor( float, float, float, float, float, float, float, float, float );
-	void setLabel( char * );
-	void setLabel( char *, char * );
-	void setLabel( char *, char *, char * );
+public:
+    void buildLayout( char );
+    void setAtomBoardAddress( AtomBoard * );
+    void setSpinBoardAddress( SpinBoard * );
+    void setLcBoardAddress( LcBoard * );
+    void setPolymerBoardAddress( PolymerBoard * );
+    void setPoreBoardAddress( PoreBoard * );
+    void setColor( float, float, float );
+    void setColor( float, float, float, float, float, float );
+    void setColor( float, float, float, float, float, float, float, float, float );
+    void setLabel(const QString&);
+    void setLabel(const QString&, const QString&);
+    void setLabel(const QString&, const QString&, const QString&);
 
 private slots:
-	void adjustColor0();
-	void adjustColor1();
-	void adjustColor2();
-	void bdone();
-	void bapply();
-	void bcancel();
+    void adjustColor0();
+    void adjustColor1();
+    void adjustColor2();
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	QWidget * ab;
-	QWidget * sb;
-	QWidget * lcb;
-	QWidget * pob;
-	QWidget * pb;
-	QGridLayout * colorBox;
-	QHBox * hb0, * hb1, * hb2, *hb9;
-	QLabel *atomL; 
-	QLabel * topL, * centerL, * bottomL;
-	ColorLabel * colorLabel0;
-	ColorLabel * colorLabel1;
-	ColorLabel * colorLabel2;
-	QComboBox * atomSpinCob;
-	QSlider * redS0, * greenS0, * blueS0;
-	QSlider * redS1, * greenS1, * blueS1;
-	QSlider * redS2, * greenS2, * blueS2;
-	float red0, red1, red2; 
-	float green0, green1, green2; 
-	float blue0, blue1, blue2;	
-	float red0Org, red1Org, red2Org;
-	float green0Org, green1Org, green2Org;
-	float blue0Org, blue1Org, blue2Org;	
-	int numRows;
-	int numCols;
-	int canvCol;
+    AtomBoard * ab;
+    SpinBoard * sb;
+    LcBoard * lcb;
+    PolymerBoard * pob;
+    PoreBoard * pb;
+    QWidget *hb0, *hb1, *hb2;
+    QLabel * topL, * centerL, * bottomL;
+    ColorLabel * colorLabel0;
+    ColorLabel * colorLabel1;
+    ColorLabel * colorLabel2;
+    QSlider * redS0, * greenS0, * blueS0;
+    QSlider * redS1, * greenS1, * blueS1;
+    QSlider * redS2, * greenS2, * blueS2;
+    float red0, red1, red2;
+    float green0, green1, green2;
+    float blue0, blue1, blue2;
+    float red0Org, red1Org, red2Org;
+    float green0Org, green1Org, green2Org;
+    float blue0Org, blue1Org, blue2Org;
 };
 
 #endif // COLORB_H

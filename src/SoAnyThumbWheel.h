@@ -28,8 +28,8 @@
 
 class SoAnyThumbWheel {
 public:
-  SoAnyThumbWheel(void);
-  ~SoAnyThumbWheel(void);
+  SoAnyThumbWheel();
+  ~SoAnyThumbWheel();
 
   enum RenderDirection {
     VERTICAL, HORIZONTAL
@@ -47,7 +47,7 @@ public:
   void SetColorFactors( float light, float front, float normal, float shade );
   void GetColorFactors( float & light, float & front, float & normal, float & shade );
 
-  int BitmapsRequired(void) const;
+  int BitmapsRequired() const;
   void DrawBitmap( int number, void * bitmap, RenderDirection direction );
   float CalculateValue( float origValue, int origPosition, int deltaPosition );
   int GetBitmapForValue( float value, WheelState state );
@@ -60,21 +60,21 @@ public:
   };
 
   void SetGraphicsByteOrder( const GraphicsByteOrder byteorder );
-  GraphicsByteOrder GetGraphicsByteOrder(void) const;
+  GraphicsByteOrder GetGraphicsByteOrder() const;
 
   enum WheelMotionMethod {
     UNIFORM, AUTHENTIC
   };
 
   void SetWheelMotionMethod( const WheelMotionMethod method );
-  WheelMotionMethod GetWheelMotionMethod(void) const;
+  WheelMotionMethod GetWheelMotionMethod() const;
 
   enum WheelRangeBoundaryHandling {
     MODULATE, ACCUMULATE, CLAMP
   };
 
   void SetWheelRangeBoundaryHandling( const WheelRangeBoundaryHandling handling );
-  WheelRangeBoundaryHandling GetWheelRangeBoundaryHandling(void) const;
+  WheelRangeBoundaryHandling GetWheelRangeBoundaryHandling() const;
 
 private:
   unsigned int swapWord(unsigned int) const;
@@ -87,7 +87,7 @@ private:
   WheelRangeBoundaryHandling  handling;
   WheelMotionMethod           method;
 
-  void Validate(void);
+  void Validate();
 
   enum Tables {
     SIN,

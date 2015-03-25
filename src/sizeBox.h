@@ -27,38 +27,33 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef SIZEBO_H
 #define SIZEBO_H 
 
-#include "data.h"
+#include <QWidget>
 
-#include <qbuttongroup.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qwidget.h>
+#include "data.h"  // particleData
 
-#include <stdio.h>
+class QLabel;
+class QRadioButton;
+class QGroupBox;
 
 // Size box widget
-class SizeBox: public QHBox
+class SizeBox: public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	SizeBox( QWidget * parent=0, const char * name=0 );
+    SizeBox(QWidget * parent=0);
 
-public slots:
-	void setParticle( particleData *, int );
-	void readToggles( particleData *, int );
-	void setDisabled( bool );
-
-private slots:
+public:
+    void setParticle( particleData *, int );
+    void readToggles( particleData *, int );
 
 private:
-	QLabel * sizeL;
-	QButtonGroup * rSize;
-        QRadioButton * rSize0;
-        QRadioButton * rSize1;
-        QRadioButton * rSize2;
-        QRadioButton * rSize3;
-        QRadioButton * rSize4;
+    QLabel * sizeL;
+    QGroupBox * rSize;
+    QRadioButton * rSize0;
+    QRadioButton * rSize1;
+    QRadioButton * rSize2;
+    QRadioButton * rSize3;
+    QRadioButton * rSize4;
 };
 
 #endif // SIZEBO_H

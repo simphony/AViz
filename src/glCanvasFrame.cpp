@@ -26,6 +26,21 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "glCanvasFrame.h"
 
+#include <cmath>
+#include <limits>
+
+#include <QLabel>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QToolButton>
+#include <QTimer>
+
+#include "defaults.h"
+#include "SoQtThumbWheel.h"
+#include "mainForm.h"
+#include "glCanvasArea.h"
+#include "parameterLimits.h" //DOLLY_MAX, DOLLY_MIN
+
 #include "./pixmaps/home.xpm"
 #include "./pixmaps/homenew.xpm"
 #include "./pixmaps/parallel.xpm"
@@ -55,245 +70,305 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "./pixmaps/eyeSeparationMinus.xpm"
 
 //  Framed canvas widget constructor and destructor
-GLCanvasFrame::GLCanvasFrame( QWidget* parent, const char* name )
-    : QVBox( parent, name )
+GLCanvasFrame::GLCanvasFrame(MainForm *mainForm, QWidget* parent)
+    : QWidget(parent), mainForm(mainForm)
 {
-	// Draw a frame in a new window
-	drawFrame = new QVBox( NULL, "drawFrame" );
+    // Draw a frame in a new window
+    drawFrame = new QFrame();
+    drawFrame->setContentsMargins(0,0,0,0);
+    drawFrame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    drawFrame->setLineWidth( 2 );
 
-        drawFrame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-        drawFrame->setLineWidth( 2 );
+    QVBoxLayout *drawFrameLayout = new QVBoxLayout(drawFrame);
+    drawFrameLayout->setSpacing(0);
+    drawFrameLayout->setContentsMargins(0,0,0,0);
 
-	// Construct a horizontal box to contain the 
-	// drawing area and some controls
-	QHBox * hb0 = new QHBox( drawFrame, "hb0" );
-	// Construct a vertical box to contain controls	
-	QVBox * vb0 = new QVBox( hb0, "vb0" );
-	vb0->setFixedWidth( FRAME_WIDTH );
 
-	// Construct a drawing area widget; decorate it with a frame 
-	QVBox * vb0Frame = new QVBox( hb0, "vb0Frame" );
-        vb0Frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-        vb0Frame->setLineWidth( 2 );
-	drawArea = NULL;
-	drawArea = new GLCanvasArea( vb0Frame, "glCanvasArea" );
+    // Construct a horizontal box to contain the
+    // drawing area and some controls
+    QWidget * hb0 = new QWidget(drawFrame);
+    hb0->setContentsMargins(0,0,0,0);
+    drawFrameLayout->addWidget(hb0);
 
-	// Construct a vertical box to contain controls	
-	QVBox * vb1 = new QVBox( hb0, "vb1" );
-	vb1->setFixedWidth( FRAME_WIDTH );
+    QHBoxLayout *hb0Layout = new QHBoxLayout(hb0);
+    hb0Layout->setSpacing(0);
+    hb0Layout->setContentsMargins(0,0,0,0);
 
-	// Now construct a horizontal box to contain more controls
-	QHBox * hb1 = new QHBox( drawFrame, "hb1" );
-	hb1->setFixedHeight( FRAME_WIDTH );
 
-	// Add a control button that also serves as a label
-	z1Button = new QToolButton( vb0, "z1Button" );
+    // Construct a vertical box to contain controls
+    QWidget * vb0 = new QWidget(hb0);
+    vb0->setContentsMargins(0,0,0,0);
+    hb0Layout->addWidget(vb0);
+
+
+    // Construct a drawing area widget; decorate it with a frame
+    QFrame * vb0Frame = new QFrame();
+    vb0Frame->setContentsMargins(0,0,0,0);
+    hb0Layout->addWidget(vb0Frame);
+    vb0Frame->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    vb0Frame->setLineWidth( 2 );
+
+    QVBoxLayout *vb0FrameLayout = new QVBoxLayout(vb0Frame);
+    vb0FrameLayout->setSpacing(0);
+    vb0FrameLayout->setContentsMargins(0,0,0,0);
+
+    drawArea = new GLCanvasArea(vb0Frame);
+    drawArea->setContentsMargins(0,0,0,0);
+    drawArea->setFormAddress( mainForm );
+    drawArea->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    vb0FrameLayout->addWidget(drawArea, 10 /*stretch*/);
+
+    {
+
+        QVBoxLayout *vb0Layout = new QVBoxLayout(vb0);
+        vb0Layout->setSpacing(0);
+        vb0Layout->setContentsMargins(0,0,0,0);
+
+        // Add a control button that also serves as a label
+        z1Button = new QToolButton();
+        vb0Layout->addWidget(z1Button);
         z1Pixmap = QPixmap( spinRight_xpm );
         z1RedPixmap = QPixmap( spinRightRed_xpm );
-        z1Button->setPixmap( z1Pixmap );
+        z1Button->setIcon( z1Pixmap );
         z1Button->setAutoRepeat( TRUE );
         connect( z1Button, SIGNAL(clicked()), SLOT(spin1()) );
 
-	// Add spin control wheel
-	spinWheel =new SoQtThumbWheel(vb0, "spinWheel");
-	spinWheel->setOrientation( SoQtThumbWheel::Vertical );
-	spinWheel->setFixedWidth( FRAME_WIDTH );
-	spinWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
-	QObject::connect(spinWheel, SIGNAL(wheelMoved(float)), this, SLOT(spinWheelMoved(float)));
+        // Add spin control wheel
+        spinWheel =new SoQtThumbWheel(vb0);
+        vb0Layout->addWidget(spinWheel);
+        spinWheel->setOrientation( SoQtThumbWheel::Vertical );
+        spinWheel->setFixedWidth( FRAME_WIDTH );
+        spinWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
+        connect(spinWheel, SIGNAL(wheelMoved(float)), this, SLOT(spinWheelMoved(float)));
 
-	// Add a control button that also serves as a label
-	z2Button = new QToolButton( vb0, "z2Button" );
+        // Add a control button that also serves as a label
+        z2Button = new QToolButton();
+        vb0Layout->addWidget(z2Button);
         z2Pixmap = QPixmap( spinLeft_xpm );
         z2RedPixmap = QPixmap( spinLeftRed_xpm );
-        z2Button->setPixmap( z2Pixmap );
+        z2Button->setIcon( z2Pixmap );
         z2Button->setAutoRepeat( TRUE );
         connect( z2Button, SIGNAL(clicked()), SLOT(spin2()) );
 
-	// Add a placeholder
-	QLabel * emptyL0 = new QLabel( vb0, "emptyL0" );
-	emptyL0->setText("");
+        // Add a placeholder
+        vb0Layout->addStretch(10);
 
-	// Add a control button that also serves as a label
-	y1Button = new QToolButton( vb0, "y1Button" );
+        // Add a control button that also serves as a label
+        y1Button = new QToolButton();
+        vb0Layout->addWidget(y1Button);
         y1Pixmap = QPixmap( up_xpm );
         y1RedPixmap = QPixmap( upRed_xpm );
-        y1Button->setPixmap( y1Pixmap );
+        y1Button->setIcon( y1Pixmap );
         y1Button->setAutoRepeat( TRUE );
         connect( y1Button, SIGNAL(clicked()), SLOT(tilt1()) );
 
-	// Add tilt control wheel
-	tiltWheel =new SoQtThumbWheel(vb0, "tiltWheel");
-	tiltWheel->setOrientation( SoQtThumbWheel::Vertical );
-	tiltWheel->setFixedWidth( FRAME_WIDTH );
-	tiltWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
-	QObject::connect(tiltWheel, SIGNAL(wheelMoved(float)), this, SLOT(tiltWheelMoved(float)));
+        // Add tilt control wheel
+        tiltWheel =new SoQtThumbWheel();
+        vb0Layout->addWidget(tiltWheel);
+        tiltWheel->setOrientation( SoQtThumbWheel::Vertical );
+        tiltWheel->setFixedWidth( FRAME_WIDTH );
+        tiltWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
+        connect(tiltWheel, SIGNAL(wheelMoved(float)), this, SLOT(tiltWheelMoved(float)));
 
-	// Add a control button that also serves as a label
-	y2Button = new QToolButton( vb0, "y2Button" );
+        // Add a control button that also serves as a label
+        y2Button = new QToolButton();
+        vb0Layout->addWidget(y2Button);
         y2Pixmap = QPixmap( down_xpm );
         y2RedPixmap = QPixmap( downRed_xpm );
-        y2Button->setPixmap( y2Pixmap );
+        y2Button->setIcon( y2Pixmap );
         y2Button->setAutoRepeat( TRUE );
         connect( y2Button, SIGNAL(clicked()), SLOT(tilt2()) );
+    }
 
-	// Add a placeholder
-	QLabel * emptyL2 = new QLabel( hb1, "emptyL2" );
-	emptyL2->setText("");
-	emptyL2->setFixedWidth( FRAME_WIDTH );
+    {
 
-	// Add a control button that also serves as a label
-	x1Button = new QToolButton( hb1, "x1Button" );
+        // Now construct a horizontal box to contain more controls
+        QWidget * hb1 = new QWidget(drawFrame);
+        hb1->setContentsMargins(0,0,0,0);
+        drawFrameLayout->addWidget(hb1);
+
+        QHBoxLayout *hb1Layout = new QHBoxLayout(hb1);
+        hb1Layout->setSpacing(0);
+        hb1Layout->setContentsMargins(0,0,0,0);
+
+        // Add a placeholder
+        QLabel * emptyL2 = new QLabel("");
+        hb1Layout->addWidget(emptyL2, 10 /*stretch*/);
+        emptyL2->setFixedWidth( FRAME_WIDTH );
+
+        // Add a control button that also serves as a label
+        x1Button = new QToolButton();
+        hb1Layout->addWidget(x1Button);
         x1Pixmap = QPixmap( left_xpm );
         x1RedPixmap = QPixmap( leftRed_xpm );
-        x1Button->setPixmap( x1Pixmap );
+        x1Button->setIcon( x1Pixmap );
         x1Button->setAutoRepeat( TRUE );
         connect( x1Button, SIGNAL(clicked()), SLOT(rot1()) );
 
-	// Add rotation control wheel
-	rotWheel =new SoQtThumbWheel(hb1, "rotWheel");
-	rotWheel->setOrientation( SoQtThumbWheel::Horizontal );
-	rotWheel->setFixedHeight( FRAME_WIDTH );
-	rotWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
-	QObject::connect(rotWheel, SIGNAL(wheelMoved(float)), this, SLOT(rotWheelMoved(float)));
+        // Add rotation control wheel
+        rotWheel =new SoQtThumbWheel(hb1);
+        hb1Layout->addWidget(rotWheel);
+        rotWheel->setOrientation( SoQtThumbWheel::Horizontal );
+        rotWheel->setFixedHeight( FRAME_WIDTH );
+        rotWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
+        connect(rotWheel, SIGNAL(wheelMoved(float)), this, SLOT(rotWheelMoved(float)));
 
-	// Add a control button that also serves as a label
-	x2Button = new QToolButton( hb1, "x2Button" );
+        // Add a control button that also serves as a label
+        x2Button = new QToolButton();
+        hb1Layout->addWidget(x2Button);
         x2Pixmap = QPixmap( right_xpm );
         x2RedPixmap = QPixmap( rightRed_xpm );
-        x2Button->setPixmap( x2Pixmap );
+        x2Button->setIcon( x2Pixmap );
         x2Button->setAutoRepeat( TRUE );
         connect( x2Button, SIGNAL(clicked()), SLOT(rot2()) );
 
-	// Add a placeholder
-	QLabel * emptyL1 = new QLabel( hb1, "emptyL1" );
-	emptyL1->setText("");
+        // Add a placeholder
+        hb1Layout->addStretch(1);
 
-        // Insert a button to lock the controls and switch to 
-	// auto motion mode
-        autoButton = new QToolButton( hb1, "autoButton" );
+        // Insert a button to lock the controls and switch to
+        // auto motion mode
+        autoButton = new QToolButton();
+        hb1Layout->addWidget(autoButton);
         autoPixmap = QPixmap( auto_xpm );
         autoRedPixmap = QPixmap( autoRed_xpm );
-        autoButton->setPixmap( autoPixmap );
-	autoButton->setToggleButton( TRUE );
+        autoButton->setIcon( autoPixmap );
+        autoButton->setCheckable(true);
         connect( autoButton, SIGNAL(clicked()), this, SLOT(autoButtonCB()) );
 
-	// Add a placeholder
-	QLabel * emptyL1a = new QLabel( hb1, "emptyL1a" );
-	emptyL1a->setText("");
-	emptyL1a->setFixedWidth( FRAME_WIDTH );
 
-	// Add home button
-	setHomeButton = new QToolButton( vb1, "setHomeButton" );
+        // Add a placeholder
+        QLabel * emptyL1a = new QLabel("");
+        emptyL1a->setFixedWidth(FRAME_WIDTH);
+        hb1Layout->addWidget(emptyL1a);
+    }
+
+
+    {
+        // Construct a vertical box to contain controls
+        QWidget * vb1 = new QWidget();
+        vb1->setContentsMargins(0,0,0,0);
+        hb0Layout->addWidget(vb1);
+
+        QVBoxLayout *vb1Layout = new QVBoxLayout(vb1);
+        vb1Layout->setSpacing(0);
+        vb1Layout->setContentsMargins(0,0,0,0);
+
+        // Add home button
+        setHomeButton = new QToolButton();
+        vb1Layout->addWidget(setHomeButton);
         setHomePixmap = QPixmap( home_xpm );
-        setHomeButton->setPixmap( setHomePixmap );
+        setHomeButton->setIcon( setHomePixmap );
         connect( setHomeButton, SIGNAL(clicked()), SLOT(setHome()) );
 
-	// Add set home button
-	setNewHomeButton = new QToolButton( vb1, "setNewHomeButton" );
+        // Add set home button
+        setNewHomeButton = new QToolButton();
+        vb1Layout->addWidget(setNewHomeButton);
         setNewHomePixmap = QPixmap( homenew_xpm );
-        setNewHomeButton->setPixmap( setNewHomePixmap );
+        setNewHomeButton->setIcon( setNewHomePixmap );
         connect( setNewHomeButton, SIGNAL(clicked()), SLOT(setNewHome()) );
 
-	// Add ortho perspective button
-	parallelButton = new QToolButton( vb1, "parallelButton" );
+        // Add ortho perspective button
+        parallelButton = new QToolButton();
+        vb1Layout->addWidget(parallelButton);
         parallelPixmap = QPixmap( parallel_xpm );
-        parallelButton->setPixmap( parallelPixmap );
-	parallelButton->setToggleButton( TRUE );
+        parallelButton->setIcon( parallelPixmap );
+        parallelButton->setCheckable(true);
         connect( parallelButton, SIGNAL(clicked()), SLOT(setParallel()) );
 
-	// Add 3D perspective button
-	perspectiveButton = new QToolButton( vb1, "perspectiveButton" );
+        // Add 3D perspective button
+        perspectiveButton = new QToolButton();
+        vb1Layout->addWidget(perspectiveButton);
         perspectivePixmap = QPixmap( perspective_xpm );
-        perspectiveButton->setPixmap( perspectivePixmap );
-	perspectiveButton->setToggleButton( TRUE );
+        perspectiveButton->setIcon( perspectivePixmap );
+        perspectiveButton->setCheckable(true);
         connect( perspectiveButton, SIGNAL(clicked()), SLOT(setPerspective()) );
 
-	// Add background buttons
-	blackBackgroundButton = new QToolButton( vb1, "blackBackgroundButton" );
+        // Add background buttons
+        blackBackgroundButton = new QToolButton();
+        vb1Layout->addWidget(blackBackgroundButton);
         blackBackgroundPixmap = QPixmap( blackBackground_xpm );
-        blackBackgroundButton->setPixmap( blackBackgroundPixmap );
-	blackBackgroundButton->setToggleButton( TRUE );
+        blackBackgroundButton->setIcon( blackBackgroundPixmap );
+        blackBackgroundButton->setCheckable(true);
         connect( blackBackgroundButton, SIGNAL(clicked()), SLOT(setBlackBackground()) );
 
-	whiteBackgroundButton = new QToolButton( vb1, "whitekBackgroundButton" );
+        whiteBackgroundButton = new QToolButton();
+        vb1Layout->addWidget(whiteBackgroundButton);
         whiteBackgroundPixmap = QPixmap( whiteBackground_xpm );
-        whiteBackgroundButton->setPixmap( whiteBackgroundPixmap );
-	whiteBackgroundButton->setToggleButton( TRUE );
+        whiteBackgroundButton->setIcon( whiteBackgroundPixmap );
+        whiteBackgroundButton->setCheckable(true);
         connect( whiteBackgroundButton, SIGNAL(clicked()), SLOT(setWhiteBackground()) );
-	
-	// Add stereo vision enable/disable button
-	stereoVisionButton = new QToolButton( vb1, "stereoVisionButton" );
+
+        // Add stereo vision enable/disable button
+        stereoVisionButton = new QToolButton();
+        vb1Layout->addWidget(stereoVisionButton);
         stereoVisionPixmap = QPixmap( stereoVisionEn_xpm );
-        stereoVisionButton->setPixmap( stereoVisionPixmap ); 
-	stereoVisionButton->setToggleButton( TRUE );
+        stereoVisionButton->setIcon( stereoVisionPixmap );
+        stereoVisionButton->setCheckable(true);
         connect( stereoVisionButton, SIGNAL(clicked()), SLOT(toggleStereoVision()) );
 
-	// Add eyes separation "plus" button
-	eyeSeparationPlusButton = new QToolButton( vb1, "eyeSeparationPlusButton" );
+        // Add eyes separation "plus" button
+        eyeSeparationPlusButton = new QToolButton();
+        vb1Layout->addWidget(eyeSeparationPlusButton);
         eyeSeparationPlusPixmap = QPixmap( eyeSeparationPlus_xpm );
-        eyeSeparationPlusButton->setPixmap( eyeSeparationPlusPixmap );
-	eyeSeparationPlusButton->setAutoRepeat( TRUE ); 
+        eyeSeparationPlusButton->setIcon( eyeSeparationPlusPixmap );
+        eyeSeparationPlusButton->setAutoRepeat( TRUE );
         connect( eyeSeparationPlusButton, SIGNAL(clicked()), SLOT(eyeSeparationPlus()) );
 
-	// Add eyes separation "minus" button
-	eyeSeparationMinusButton = new QToolButton( vb1, "eyeSeparationMinusButton" );
-        eyeSeparationMinusPixmap = QPixmap( eyeSeparationMinus_xpm ); 
-        eyeSeparationMinusButton->setPixmap( eyeSeparationMinusPixmap );
-	eyeSeparationMinusButton->setAutoRepeat( TRUE ); 
+        // Add eyes separation "minus" button
+        eyeSeparationMinusButton = new QToolButton();
+        vb1Layout->addWidget(eyeSeparationMinusButton);
+        eyeSeparationMinusPixmap = QPixmap( eyeSeparationMinus_xpm );
+        eyeSeparationMinusButton->setIcon( eyeSeparationMinusPixmap );
+        eyeSeparationMinusButton->setAutoRepeat( TRUE );
         connect( eyeSeparationMinusButton, SIGNAL(clicked()), SLOT(eyeSeparationMinus()) );
 
-	// Add a placeholder
-	QLabel * emptyL3 = new QLabel( vb1, "emptyL3" );
-	emptyL3->setText("");
-	
-	// Add a control button that also serves as a label
-	dolly2Button = new QToolButton( vb1, "dolly2Button" );
+        // Add a placeholder
+        vb1Layout->addStretch(10);
+
+        // Add a control button that also serves as a label
+        dolly2Button = new QToolButton();
+        vb1Layout->addWidget(dolly2Button);
         dolly2Pixmap = QPixmap( dollyOut_xpm );
         dolly2RedPixmap = QPixmap( dollyOutRed_xpm );
-        dolly2Button->setPixmap( dolly2Pixmap );
+        dolly2Button->setIcon( dolly2Pixmap );
         dolly2Button->setAutoRepeat( TRUE );
         connect( dolly2Button, SIGNAL(clicked()), SLOT(dolly2()) );
 
-	// Add dolly control wheel
-	dollyWheel =new SoQtThumbWheel(vb1, "dollyWheel");
-	dollyWheel->setOrientation( SoQtThumbWheel::Vertical );
-	dollyWheel->setFixedWidth( FRAME_WIDTH );
-	dollyWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
-	QObject::connect(dollyWheel, SIGNAL(wheelMoved(float)), this, SLOT(dollyWheelMoved(float)));
+        // Add dolly control wheel
+        dollyWheel =new SoQtThumbWheel(vb1);
+        vb1Layout->addWidget(dollyWheel);
+        dollyWheel->setOrientation( SoQtThumbWheel::Vertical );
+        dollyWheel->setFixedWidth( FRAME_WIDTH );
+        dollyWheel->setRangeBoundaryHandling( SoQtThumbWheel::ACCUMULATE );
+        connect(dollyWheel, SIGNAL(wheelMoved(float)), this, SLOT(dollyWheelMoved(float)));
 
-	// Add a control button that also serves as a label
-	dolly1Button = new QToolButton( vb1, "dolly1Button" );
+        // Add a control button that also serves as a label
+        dolly1Button = new QToolButton();
+        vb1Layout->addWidget(dolly1Button);
         dolly1Pixmap = QPixmap( dollyIn_xpm );
         dolly1RedPixmap = QPixmap( dollyInRed_xpm );
-        dolly1Button->setPixmap( dolly1Pixmap );
+        dolly1Button->setIcon( dolly1Pixmap );
         dolly1Button->setAutoRepeat( TRUE );
         connect( dolly1Button, SIGNAL(clicked()), SLOT(dolly1()) );
+    }
 
-	vb0->setStretchFactor( emptyL0, 10 );
-	hb1->setStretchFactor( emptyL1, 10 );
-	hb1->setStretchFactor( emptyL2, 10 );
-	vb1->setStretchFactor( emptyL3, 10 );
+    // Construct timers
+    rotTimer1 = new QTimer( this );
+    rotTimer2 = new QTimer( this );
+    tiltTimer1 = new QTimer( this );
+    tiltTimer2 = new QTimer( this );
+    spinTimer1 = new QTimer( this );
+    spinTimer2 = new QTimer( this );
+    zoomTimer1 = new QTimer( this );
+    zoomTimer2 = new QTimer( this );
 
-        // Construct timers
-        rotTimer1 = new QTimer( this );
-        rotTimer2 = new QTimer( this );
-        tiltTimer1 = new QTimer( this );
-        tiltTimer2 = new QTimer( this );
-        spinTimer1 = new QTimer( this );
-        spinTimer2 = new QTimer( this );
-        zoomTimer1 = new QTimer( this );
-        zoomTimer2 = new QTimer( this );
+    // Reset a flag
+    autoMode = FALSE;
 
-	// Reset the pointer to main form
-	mainForm = NULL;
-
-	// Reset a flag
-	autoMode = FALSE;
-
-	// Show the new window
-	drawFrame->setGeometry( 0, 0, FRAME_SIZE, FRAME_SIZE );
-	drawFrame->show();
-	drawFrame->raise();
+    // Show the new window
+    drawFrame->setGeometry( 0, 0, FRAME_SIZE, FRAME_SIZE );
+    drawFrame->show();
+    drawFrame->raise();
 }
 
 
@@ -302,41 +377,30 @@ GLCanvasFrame::~GLCanvasFrame()
 }
 
 
-// Set a pointer to the main form
-void GLCanvasFrame::setFormAddress( MainForm * thisForm )
-{
-        mainForm = thisForm;
-
-	// Pass this on
-	if (drawArea) 
-		drawArea->setFormAddress( mainForm );
-}
-
-
 // Find new view object data and recompile aggregated data
-void GLCanvasFrame::updateView( void )
+void GLCanvasFrame::updateView()
 {
-	viewObject thisVo = this->getObjectData();
+    viewObject thisVo = this->getObjectData();
 
-	// Cause a recompile of the drawing lists
-	if (drawArea) {
-		drawArea->setViewObjectAndRecompile( thisVo );
-	}
+    // Cause a recompile of the drawing lists
+    if (drawArea) {
+        drawArea->setViewObjectAndRecompile( thisVo );
+    }
 }
 
 
 // Recompile aggregate data without changing the view object data
 // (useful for sequences)
-void GLCanvasFrame::updateViewWithoutViewObjectChange( void )
+void GLCanvasFrame::updateViewWithoutViewObjectChange()
 {
 
-	if (drawArea) {
-		// Read current view object...
-		viewObject * thisVo = drawArea->getViewObject();
+    if (drawArea) {
+        // Read current view object...
+        viewObject * thisVo = drawArea->getViewObject();
 
-		// ..and cause a recompile of the drawing lists
-		drawArea->setViewObjectAndRecompile( (*thisVo) );
-	}
+        // ..and cause a recompile of the drawing lists
+        drawArea->setViewObjectAndRecompile( (*thisVo) );
+    }
 }
 
 
@@ -345,179 +409,179 @@ void GLCanvasFrame::updateViewWithoutViewObjectChange( void )
 // and maxima and minima of properties
 viewObject GLCanvasFrame::getObjectData()
 {
-	viewObject vo;
+    viewObject vo;
 
-	float xmin = INFINITY;
-	float ymin = INFINITY;
-	float zmin = INFINITY;
-	float xmax = -INFINITY;
-	float ymax = -INFINITY;
-	float zmax = -INFINITY;
+    float xmin = std::numeric_limits<float>::max();
+    float ymin = std::numeric_limits<float>::max();
+    float zmin = std::numeric_limits<float>::max();
+    float xmax = -std::numeric_limits<float>::max();
+    float ymax = -std::numeric_limits<float>::max();
+    float zmax = -std::numeric_limits<float>::max();
 
-	float p1min = INFINITY;
-	float p2min = INFINITY;
-	float p3min = INFINITY;
-	float p4min = INFINITY;
-	float p5min = INFINITY;
-	float p6min = INFINITY;
-	float p7min = INFINITY;
-	float p8min = INFINITY;
-	float p1max = -INFINITY;
-	float p2max = -INFINITY;
-	float p3max = -INFINITY;
-	float p4max = -INFINITY;
-	float p5max = -INFINITY;
-	float p6max = -INFINITY;
-	float p7max = -INFINITY;
-	float p8max = -INFINITY;
+    float p1min = std::numeric_limits<float>::max();
+    float p2min = std::numeric_limits<float>::max();
+    float p3min = std::numeric_limits<float>::max();
+    float p4min = std::numeric_limits<float>::max();
+    float p5min = std::numeric_limits<float>::max();
+    float p6min = std::numeric_limits<float>::max();
+    float p7min = std::numeric_limits<float>::max();
+    float p8min = std::numeric_limits<float>::max();
+    float p1max = -std::numeric_limits<float>::max();
+    float p2max = -std::numeric_limits<float>::max();
+    float p3max = -std::numeric_limits<float>::max();
+    float p4max = -std::numeric_limits<float>::max();
+    float p5max = -std::numeric_limits<float>::max();
+    float p6max = -std::numeric_limits<float>::max();
+    float p7max = -std::numeric_limits<float>::max();
+    float p8max = -std::numeric_limits<float>::max();
 
-	// Get the current aggregate data
-	if (drawArea) {
-		aggregateData * ad = drawArea->getAggregateData();
+    // Get the current aggregate data
+    if (drawArea) {
+        aggregateData * ad = drawArea->getAggregateData();
 
-		// Find the min and max extensions
-		for (int i=0;i<(*ad).numberOfParticles;i++) {
-			if ((*ad).particles[i].x < xmin) 
-				xmin = (*ad).particles[i].x;
-			if ((*ad).particles[i].y < ymin) 
-				ymin = (*ad).particles[i].y;
-			if ((*ad).particles[i].z < zmin) 
-				zmin = (*ad).particles[i].z;
-			if ((*ad).particles[i].x > xmax) 
-				xmax = (*ad).particles[i].x;
-			if ((*ad).particles[i].y > ymax) 
-				ymax = (*ad).particles[i].y;
-			if ((*ad).particles[i].z > zmax) 
-				zmax = (*ad).particles[i].z;
-			if ((*ad).particles[i].prop2 < p2min) 
-				p2min = (*ad).particles[i].prop2;
-			if ((*ad).particles[i].prop3 < p3min) 
-				p3min = (*ad).particles[i].prop3;
-			if ((*ad).particles[i].prop4 < p4min) 
-				p4min = (*ad).particles[i].prop4;
-			if ((*ad).particles[i].prop5 < p5min) 
-				p5min = (*ad).particles[i].prop5;
-			if ((*ad).particles[i].prop6 < p6min) 
-				p6min = (*ad).particles[i].prop6;
-			if ((*ad).particles[i].prop7 < p7min) 
-				p7min = (*ad).particles[i].prop7;
-			if ((*ad).particles[i].prop8 < p8min) 
-				p8min = (*ad).particles[i].prop8;
-	
-			if ((*ad).particles[i].prop1 > p1max) 
-				p1max = (*ad).particles[i].prop1;
-			if ((*ad).particles[i].prop2 > p2max) 
-				p2max = (*ad).particles[i].prop2;
-			if ((*ad).particles[i].prop3 > p3max) 
-				p3max = (*ad).particles[i].prop3;
-			if ((*ad).particles[i].prop4 > p4max) 
-				p4max = (*ad).particles[i].prop4;
-			if ((*ad).particles[i].prop5 > p5max) 
-				p5max = (*ad).particles[i].prop5;
-			if ((*ad).particles[i].prop6 > p6max) 
-				p6max = (*ad).particles[i].prop6;
-			if ((*ad).particles[i].prop7 > p7max) 
-				p7max = (*ad).particles[i].prop7;
-			if ((*ad).particles[i].prop8 > p8max) 
-				p8max = (*ad).particles[i].prop8;
-		}
-	}
+        // Find the min and max extensions
+        for (int i=0;i<(*ad).numberOfParticles;i++) {
+            if ((*ad).particles[i].x < xmin)
+                xmin = (*ad).particles[i].x;
+            if ((*ad).particles[i].y < ymin)
+                ymin = (*ad).particles[i].y;
+            if ((*ad).particles[i].z < zmin)
+                zmin = (*ad).particles[i].z;
+            if ((*ad).particles[i].x > xmax)
+                xmax = (*ad).particles[i].x;
+            if ((*ad).particles[i].y > ymax)
+                ymax = (*ad).particles[i].y;
+            if ((*ad).particles[i].z > zmax)
+                zmax = (*ad).particles[i].z;
+            if ((*ad).particles[i].prop2 < p2min)
+                p2min = (*ad).particles[i].prop2;
+            if ((*ad).particles[i].prop3 < p3min)
+                p3min = (*ad).particles[i].prop3;
+            if ((*ad).particles[i].prop4 < p4min)
+                p4min = (*ad).particles[i].prop4;
+            if ((*ad).particles[i].prop5 < p5min)
+                p5min = (*ad).particles[i].prop5;
+            if ((*ad).particles[i].prop6 < p6min)
+                p6min = (*ad).particles[i].prop6;
+            if ((*ad).particles[i].prop7 < p7min)
+                p7min = (*ad).particles[i].prop7;
+            if ((*ad).particles[i].prop8 < p8min)
+                p8min = (*ad).particles[i].prop8;
 
-	vo.xmin = xmin;
-	vo.ymin = ymin;
-	vo.zmin = zmin;
-	vo.xmax = xmax;
-	vo.ymax = ymax;
-	vo.zmax = zmax;
+            if ((*ad).particles[i].prop1 > p1max)
+                p1max = (*ad).particles[i].prop1;
+            if ((*ad).particles[i].prop2 > p2max)
+                p2max = (*ad).particles[i].prop2;
+            if ((*ad).particles[i].prop3 > p3max)
+                p3max = (*ad).particles[i].prop3;
+            if ((*ad).particles[i].prop4 > p4max)
+                p4max = (*ad).particles[i].prop4;
+            if ((*ad).particles[i].prop5 > p5max)
+                p5max = (*ad).particles[i].prop5;
+            if ((*ad).particles[i].prop6 > p6max)
+                p6max = (*ad).particles[i].prop6;
+            if ((*ad).particles[i].prop7 > p7max)
+                p7max = (*ad).particles[i].prop7;
+            if ((*ad).particles[i].prop8 > p8max)
+                p8max = (*ad).particles[i].prop8;
+        }
+    }
 
-	vo.deltax = vo.xmax-vo.xmin;
-	vo.deltay = vo.ymax-vo.ymin;
-	vo.deltaz = vo.zmax-vo.zmin;
+    vo.xmin = xmin;
+    vo.ymin = ymin;
+    vo.zmin = zmin;
+    vo.xmax = xmax;
+    vo.ymax = ymax;
+    vo.zmax = zmax;
 
-	vo.p1min = p1min;
-	vo.p2min = p2min;
-	vo.p3min = p3min;
-	vo.p4min = p4min;
-	vo.p5min = p5min;
-	vo.p6min = p6min;
-	vo.p7min = p7min;
-	vo.p8min = p7min;
-	vo.p1max = p1max;
-	vo.p2max = p2max;
-	vo.p3max = p3max;
-	vo.p4max = p4max;
-	vo.p5max = p5max;
-	vo.p6max = p6max;
-	vo.p7max = p7max;
-	vo.p8max = p8max;
+    vo.deltax = vo.xmax-vo.xmin;
+    vo.deltay = vo.ymax-vo.ymin;
+    vo.deltaz = vo.zmax-vo.zmin;
 
-	vo.deltap1 = vo.p1max-vo.p1min;
-	vo.deltap2 = vo.p2max-vo.p2min;
-	vo.deltap3 = vo.p3max-vo.p3min;
-	vo.deltap4 = vo.p4max-vo.p4min;
-	vo.deltap5 = vo.p5max-vo.p5min;
-	vo.deltap6 = vo.p6max-vo.p6min;
-	vo.deltap7 = vo.p7max-vo.p7min;
-	vo.deltap8 = vo.p8max-vo.p8min;
+    vo.p1min = p1min;
+    vo.p2min = p2min;
+    vo.p3min = p3min;
+    vo.p4min = p4min;
+    vo.p5min = p5min;
+    vo.p6min = p6min;
+    vo.p7min = p7min;
+    vo.p8min = p7min;
+    vo.p1max = p1max;
+    vo.p2max = p2max;
+    vo.p3max = p3max;
+    vo.p4max = p4max;
+    vo.p5max = p5max;
+    vo.p6max = p6max;
+    vo.p7max = p7max;
+    vo.p8max = p8max;
 
-	if (vo.deltax < DELTAEPS) 
-		vo.deltax = DELTAEPS;
-	if (vo.deltay < DELTAEPS) 
-		vo.deltay = DELTAEPS;
-	if (vo.deltaz < DELTAEPS) 
-		vo.deltaz = DELTAEPS;
+    vo.deltap1 = vo.p1max-vo.p1min;
+    vo.deltap2 = vo.p2max-vo.p2min;
+    vo.deltap3 = vo.p3max-vo.p3min;
+    vo.deltap4 = vo.p4max-vo.p4min;
+    vo.deltap5 = vo.p5max-vo.p5min;
+    vo.deltap6 = vo.p6max-vo.p6min;
+    vo.deltap7 = vo.p7max-vo.p7min;
+    vo.deltap8 = vo.p8max-vo.p8min;
 
-	if (vo.deltap1 < DELTAEPS) 
-		vo.deltap1 = DELTAEPS;
-	if (vo.deltap2 < DELTAEPS) 
-		vo.deltap2 = DELTAEPS;
-	if (vo.deltap3 < DELTAEPS) 
-		vo.deltap3 = DELTAEPS;
-	if (vo.deltap4 < DELTAEPS) 
-		vo.deltap4 = DELTAEPS;
-	if (vo.deltap5 < DELTAEPS) 
-		vo.deltap5 = DELTAEPS;
-	if (vo.deltap6 < DELTAEPS) 
-		vo.deltap6 = DELTAEPS;
-	if (vo.deltap7 < DELTAEPS) 
-		vo.deltap7 = DELTAEPS;
-	if (vo.deltap8 < DELTAEPS) 
-		vo.deltap8 = DELTAEPS;
+    if (vo.deltax < DELTAEPS)
+        vo.deltax = DELTAEPS;
+    if (vo.deltay < DELTAEPS)
+        vo.deltay = DELTAEPS;
+    if (vo.deltaz < DELTAEPS)
+        vo.deltaz = DELTAEPS;
 
-	vo.xyzmin = vo.xmin;
-	if (vo.ymin < vo.xyzmin) 
-		vo.xyzmin = vo.ymin;
-	if (vo.zmin < vo.xyzmin) 
-		vo.xyzmin = vo.zmin;
+    if (vo.deltap1 < DELTAEPS)
+        vo.deltap1 = DELTAEPS;
+    if (vo.deltap2 < DELTAEPS)
+        vo.deltap2 = DELTAEPS;
+    if (vo.deltap3 < DELTAEPS)
+        vo.deltap3 = DELTAEPS;
+    if (vo.deltap4 < DELTAEPS)
+        vo.deltap4 = DELTAEPS;
+    if (vo.deltap5 < DELTAEPS)
+        vo.deltap5 = DELTAEPS;
+    if (vo.deltap6 < DELTAEPS)
+        vo.deltap6 = DELTAEPS;
+    if (vo.deltap7 < DELTAEPS)
+        vo.deltap7 = DELTAEPS;
+    if (vo.deltap8 < DELTAEPS)
+        vo.deltap8 = DELTAEPS;
 
-	vo.xyzmax = vo.xmax;
-	if (vo.ymax > vo.xyzmax) 
-		vo.xyzmax = vo.ymax;
-	if (vo.zmax > vo.xyzmax) 
-		vo.xyzmax = vo.zmax;
+    vo.xyzmin = vo.xmin;
+    if (vo.ymin < vo.xyzmin)
+        vo.xyzmin = vo.ymin;
+    if (vo.zmin < vo.xyzmin)
+        vo.xyzmin = vo.zmin;
 
-	// Find the max extension of the faces
-	vo.maxXYExtension = (vo.xmax-vo.xmin);
-	if ((vo.ymax-vo.ymin) > vo.maxXYExtension) 
-		vo.maxXYExtension = (vo.ymax-vo.ymin);
-	vo.maxXZExtension = (vo.xmax-vo.xmin);
-	if ((vo.zmax-vo.zmin) > vo.maxXZExtension) 
-		vo.maxXZExtension = (vo.zmax-vo.zmin);
-	vo.maxYZExtension = (vo.ymax-vo.ymin);
-	if ((vo.zmax-vo.zmin) > vo.maxYZExtension) 
-		vo.maxYZExtension = (vo.zmax-vo.zmin);
-	vo.maxExtension = vo.maxXYExtension;
-	if (vo.maxXZExtension > vo.maxExtension) 
-		vo.maxExtension = vo.maxXZExtension;
-	if (vo.maxYZExtension > vo.maxExtension) 
-		vo.maxExtension = vo.maxYZExtension;
+    vo.xyzmax = vo.xmax;
+    if (vo.ymax > vo.xyzmax)
+        vo.xyzmax = vo.ymax;
+    if (vo.zmax > vo.xyzmax)
+        vo.xyzmax = vo.zmax;
 
-	// Find the center of the system
-	vo.centerx = (vo.xmax+vo.xmin)/2.0;
-	vo.centery = (vo.ymax+vo.ymin)/2.0;
-	vo.centerz = (vo.zmax+vo.zmin)/2.0;
+    // Find the max extension of the faces
+    vo.maxXYExtension = (vo.xmax-vo.xmin);
+    if ((vo.ymax-vo.ymin) > vo.maxXYExtension)
+        vo.maxXYExtension = (vo.ymax-vo.ymin);
+    vo.maxXZExtension = (vo.xmax-vo.xmin);
+    if ((vo.zmax-vo.zmin) > vo.maxXZExtension)
+        vo.maxXZExtension = (vo.zmax-vo.zmin);
+    vo.maxYZExtension = (vo.ymax-vo.ymin);
+    if ((vo.zmax-vo.zmin) > vo.maxYZExtension)
+        vo.maxYZExtension = (vo.zmax-vo.zmin);
+    vo.maxExtension = vo.maxXYExtension;
+    if (vo.maxXZExtension > vo.maxExtension)
+        vo.maxExtension = vo.maxXZExtension;
+    if (vo.maxYZExtension > vo.maxExtension)
+        vo.maxExtension = vo.maxYZExtension;
 
-	return vo;
+    // Find the center of the system
+    vo.centerx = (vo.xmax+vo.xmin)/2.0;
+    vo.centery = (vo.ymax+vo.ymin)/2.0;
+    vo.centerz = (vo.zmax+vo.zmin)/2.0;
+
+    return vo;
 }
 
 
@@ -525,104 +589,104 @@ viewObject GLCanvasFrame::getObjectData()
 // and do rotation steps
 void GLCanvasFrame::rotWheelMoved( float r )
 {
-	static float oldValue = 0.0;
+    static float oldValue = 0.0;
 
-	float diff = r - oldValue;
-	float adiff = fabs(diff);
+    float diff = r - oldValue;
+    float adiff = fabs(diff);
 
-	if (diff > 0.0) 
-		this->rotStep( 1, (int)floor(WHEEL_REPEAT*adiff+0.5) );
-	else 
-		this->rotStep( 0, (int)floor(WHEEL_REPEAT*adiff+0.5) );
+    if (diff > 0.0)
+        this->rotStep( 1, (int)floor(WHEEL_REPEAT*adiff+0.5) );
+    else
+        this->rotStep( 0, (int)floor(WHEEL_REPEAT*adiff+0.5) );
 
 
-	this->updateRendering();
-	
-	oldValue = r;
+    this->updateRendering();
+
+    oldValue = r;
 }
 
 
 // Respond to frame button click
 // and do rotation steps
-void GLCanvasFrame::rot1( void )
+void GLCanvasFrame::rot1()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-	// Change pixmap in auto mode while button is pressed,
-	// and do rotation steps
-	if (autoMode) {
-		switch (x1Button->isOn()) {
-			case TRUE:
-        			x1Button->setPixmap( x1RedPixmap );
+    // Change pixmap in auto mode while button is pressed,
+    // and do rotation steps
+    if (autoMode) {
+        switch (x1Button->isChecked()) {
+        case TRUE:
+            x1Button->setIcon( x1RedPixmap );
 
-				// Start the rotation
-				connect(rotTimer1, SIGNAL(timeout()), this, SLOT(rot1SingleStep()) );
-				rotTimer1->start( 40 );
-				(*vp).autoRot1 = TRUE;
-			break;
-			case FALSE:
-        			x1Button->setPixmap( x1Pixmap );
+            // Start the rotation
+            connect(rotTimer1, SIGNAL(timeout()), this, SLOT(rot1SingleStep()) );
+            rotTimer1->start( 40 );
+            (*vp).autoRot1 = TRUE;
+            break;
+        case FALSE:
+            x1Button->setIcon( x1Pixmap );
 
-				// End the rotation
-	                        rotTimer1->stop();
-	                        (*vp).autoRot1 = FALSE;
-			break;
-		}
-	}
-	else {
-		this->rot1SingleStep();
-	}
+            // End the rotation
+            rotTimer1->stop();
+            (*vp).autoRot1 = FALSE;
+            break;
+        }
+    }
+    else {
+        this->rot1SingleStep();
+    }
 }
 
 
 // Do a single rotation step
-void GLCanvasFrame::rot1SingleStep( void )
+void GLCanvasFrame::rot1SingleStep()
 {	
-	this->rotStep( 0, MIN_REPEAT );
+    this->rotStep( 0, MIN_REPEAT );
 
-	this->updateRendering();
+    this->updateRendering();
 }
 
 
 // Respond to frame button click
 // and do rotation steps
-void GLCanvasFrame::rot2( void )
+void GLCanvasFrame::rot2()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-	// Change pixmap in auto mode while button is pressed,
-	// and do rotation steps
-	if (autoMode) {
-		switch (x2Button->isOn()) {
-			case TRUE:
-        			x2Button->setPixmap( x2RedPixmap );
+    // Change pixmap in auto mode while button is pressed,
+    // and do rotation steps
+    if (autoMode) {
+        switch (x2Button->isChecked()) {
+        case TRUE:
+            x2Button->setIcon( x2RedPixmap );
 
-				// Start the rotation
-				connect(rotTimer2, SIGNAL(timeout()), this, SLOT(rot2SingleStep()) );
-				rotTimer2->start( 40 );
-				(*vp).autoRot2 = TRUE;
-			break;
-			case FALSE:
-        			x2Button->setPixmap( x2Pixmap );
+            // Start the rotation
+            connect(rotTimer2, SIGNAL(timeout()), this, SLOT(rot2SingleStep()) );
+            rotTimer2->start( 40 );
+            (*vp).autoRot2 = TRUE;
+            break;
+        case FALSE:
+            x2Button->setIcon( x2Pixmap );
 
-	                       // End the rotation
-	                        rotTimer2->stop();
-	                        (*vp).autoRot2 = FALSE;
-			break;
-		}
-	}
-	else {
-		this->rot2SingleStep();
-	}
+            // End the rotation
+            rotTimer2->stop();
+            (*vp).autoRot2 = FALSE;
+            break;
+        }
+    }
+    else {
+        this->rot2SingleStep();
+    }
 }
 
 
 // Do a single rotation step
-void GLCanvasFrame::rot2SingleStep( void )
+void GLCanvasFrame::rot2SingleStep()
 {	
-	this->rotStep( 1, MIN_REPEAT );
+    this->rotStep( 1, MIN_REPEAT );
 
-	this->updateRendering();
+    this->updateRendering();
 }
 
 
@@ -630,103 +694,103 @@ void GLCanvasFrame::rot2SingleStep( void )
 // and do tilt steps
 void GLCanvasFrame::tiltWheelMoved( float r )
 {
-	static float oldValue = 0.0;
+    static float oldValue = 0.0;
 
-	float diff = r - oldValue;
-	float adiff = fabs(diff);
+    float diff = r - oldValue;
+    float adiff = fabs(diff);
 
-	if (diff > 0.0) 
-		this->tiltStep( 0, (int)floor(WHEEL_REPEAT*adiff+0.5) );
-	else 
-		this->tiltStep( 1, (int)floor(WHEEL_REPEAT*adiff+0.5) );
+    if (diff > 0.0)
+        this->tiltStep( 0, (int)floor(WHEEL_REPEAT*adiff+0.5) );
+    else
+        this->tiltStep( 1, (int)floor(WHEEL_REPEAT*adiff+0.5) );
 
-	this->updateRendering();
-	
-	oldValue = r;
+    this->updateRendering();
+
+    oldValue = r;
 }
 
 
 // Respond to frame button click
 // and do tilt steps
-void GLCanvasFrame::tilt1( void )
+void GLCanvasFrame::tilt1()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-	// Change pixmap in auto mode while button is pressed,
-	// and do tilt steps
-	if (autoMode) {
-		switch (y1Button->isOn()) {
-			case TRUE:
-        			y1Button->setPixmap( y1RedPixmap );
+    // Change pixmap in auto mode while button is pressed,
+    // and do tilt steps
+    if (autoMode) {
+        switch (y1Button->isChecked()) {
+        case TRUE:
+            y1Button->setIcon( y1RedPixmap );
 
-				// Start the tilt 
-				connect(tiltTimer1, SIGNAL(timeout()), this, SLOT(tilt1SingleStep()) );
-				tiltTimer1->start( 40 );
-				(*vp).autoTilt1 = TRUE;
-			break;
-			case FALSE:
-        			y1Button->setPixmap( y1Pixmap );
+            // Start the tilt
+            connect(tiltTimer1, SIGNAL(timeout()), this, SLOT(tilt1SingleStep()) );
+            tiltTimer1->start( 40 );
+            (*vp).autoTilt1 = TRUE;
+            break;
+        case FALSE:
+            y1Button->setIcon( y1Pixmap );
 
-				// End the tilt 
-	                        tiltTimer1->stop();
-	                        (*vp).autoTilt1 = FALSE;
-			break;
-		}
-	}
-	else {
-		this->tilt1SingleStep();
-	}
+            // End the tilt
+            tiltTimer1->stop();
+            (*vp).autoTilt1 = FALSE;
+            break;
+        }
+    }
+    else {
+        this->tilt1SingleStep();
+    }
 }
 
 
 // Do a single tilt step
-void GLCanvasFrame::tilt1SingleStep( void )
+void GLCanvasFrame::tilt1SingleStep()
 {	
-	this->tiltStep( 1, MIN_REPEAT );
+    this->tiltStep( 1, MIN_REPEAT );
 
-	this->updateRendering();
+    this->updateRendering();
 }
 
 
 // Respond to frame button click
 // and do tilt steps
-void GLCanvasFrame::tilt2( void )
+void GLCanvasFrame::tilt2()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-	// Change pixmap in auto mode while button is pressed,
-	// and do tilt steps
-	if (autoMode) {
-		switch (y2Button->isOn()) {
-			case TRUE:
-        			y2Button->setPixmap( y2RedPixmap );
+    // Change pixmap in auto mode while button is pressed,
+    // and do tilt steps
+    if (autoMode) {
+        switch (y2Button->isChecked()) {
+        case TRUE:
+            y2Button->setIcon( y2RedPixmap );
 
-				// Start the tilt 
-				connect(tiltTimer2, SIGNAL(timeout()), this, SLOT(tilt2SingleStep()) );
-				tiltTimer2->start( 40 );
-				(*vp).autoTilt2 = TRUE;
-			break;
-			case FALSE:
-        			y2Button->setPixmap( y2Pixmap );
+            // Start the tilt
+            connect(tiltTimer2, SIGNAL(timeout()), this, SLOT(tilt2SingleStep()) );
+            tiltTimer2->start( 40 );
+            (*vp).autoTilt2 = TRUE;
+            break;
+        case FALSE:
+            y2Button->setIcon( y2Pixmap );
 
-				// End the tilt 
-	                        tiltTimer2->stop();
-	                        (*vp).autoTilt2 = FALSE;
-			break;
-		}
-	}
-	else {
-		this->tilt2SingleStep();
-	}
+            // End the tilt
+            tiltTimer2->stop();
+            (*vp).autoTilt2 = FALSE;
+            break;
+        }
+    }
+    else {
+        this->tilt2SingleStep();
+    }
 }
 
 
 // Do a single tilt step
-void GLCanvasFrame::tilt2SingleStep( void )
+void GLCanvasFrame::tilt2SingleStep()
 {	
-	this->tiltStep( 0, MIN_REPEAT );
+    this->tiltStep( 0, MIN_REPEAT );
 
-	this->updateRendering();
+    this->updateRendering();
 }
 
 
@@ -734,103 +798,103 @@ void GLCanvasFrame::tilt2SingleStep( void )
 // and do spin steps
 void GLCanvasFrame::spinWheelMoved( float r )
 {
-	static float oldValue = 0.0;
+    static float oldValue = 0.0;
 
-	float diff = r - oldValue;
-	float adiff = fabs(diff);
+    float diff = r - oldValue;
+    float adiff = fabs(diff);
 
-	if (diff > 0.0) 
-		this->spinStep( 1, (int)floor(WHEEL_REPEAT*adiff+0.5) );
-	else 
-		this->spinStep( 0, (int)floor(WHEEL_REPEAT*adiff+0.5) );
+    if (diff > 0.0)
+        this->spinStep( 1, (int)floor(WHEEL_REPEAT*adiff+0.5) );
+    else
+        this->spinStep( 0, (int)floor(WHEEL_REPEAT*adiff+0.5) );
 
-	this->updateRendering();
-	
-	oldValue = r;
+    this->updateRendering();
+
+    oldValue = r;
 }
 
 
 // Respond to frame button click
 // and do spin steps
-void GLCanvasFrame::spin1( void )
+void GLCanvasFrame::spin1()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-	// Change pixmap in auto mode while button is pressed,
-	// and do spin steps
-	if (autoMode) {
-		switch (z1Button->isOn()) {
-			case TRUE:
-        			z1Button->setPixmap( z1RedPixmap );
+    // Change pixmap in auto mode while button is pressed,
+    // and do spin steps
+    if (autoMode) {
+        switch (z1Button->isChecked()) {
+        case TRUE:
+            z1Button->setIcon( z1RedPixmap );
 
-				// Start the spin 
-				connect(spinTimer1, SIGNAL(timeout()), this, SLOT(spin1SingleStep()) );
-				spinTimer1->start( 40 );
-				(*vp).autoSpin1 = TRUE;
-			break;
-			case FALSE:
-        			z1Button->setPixmap( z1Pixmap );
+            // Start the spin
+            connect(spinTimer1, SIGNAL(timeout()), this, SLOT(spin1SingleStep()) );
+            spinTimer1->start( 40 );
+            (*vp).autoSpin1 = TRUE;
+            break;
+        case FALSE:
+            z1Button->setIcon( z1Pixmap );
 
-				// End the spin
-	                        spinTimer1->stop();
-	                        (*vp).autoSpin1 = FALSE;
-			break;
-		}
-	}
-	else {
-		this->spin1SingleStep();
-	}
+            // End the spin
+            spinTimer1->stop();
+            (*vp).autoSpin1 = FALSE;
+            break;
+        }
+    }
+    else {
+        this->spin1SingleStep();
+    }
 }
 
 
 // Do a single spin step
-void GLCanvasFrame::spin1SingleStep( void )
+void GLCanvasFrame::spin1SingleStep()
 {	
-	this->spinStep( 0, MIN_REPEAT );
+    this->spinStep( 0, MIN_REPEAT );
 
-	this->updateRendering();
+    this->updateRendering();
 }
 
 
 // Respond to frame button click
 // and do spin steps
-void GLCanvasFrame::spin2( void )
+void GLCanvasFrame::spin2()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-	// Change pixmap in auto mode while button is pressed,
-	// and do spin steps
-	if (autoMode) {
-		switch (z2Button->isOn()) {
-			case TRUE:
-        			z2Button->setPixmap( z2RedPixmap );
+    // Change pixmap in auto mode while button is pressed,
+    // and do spin steps
+    if (autoMode) {
+        switch (z2Button->isChecked()) {
+        case TRUE:
+            z2Button->setIcon( z2RedPixmap );
 
-				// Start the spin 
-				connect(spinTimer2, SIGNAL(timeout()), this, SLOT(spin2SingleStep()) );
-				spinTimer2->start( 40 );
-				(*vp).autoSpin2 = TRUE;
-			break;
-			case FALSE:
-        			z2Button->setPixmap( z2Pixmap );
+            // Start the spin
+            connect(spinTimer2, SIGNAL(timeout()), this, SLOT(spin2SingleStep()) );
+            spinTimer2->start( 40 );
+            (*vp).autoSpin2 = TRUE;
+            break;
+        case FALSE:
+            z2Button->setIcon( z2Pixmap );
 
-				// End the spin
-	                        spinTimer2->stop();
-	                        (*vp).autoSpin2 = FALSE;
-			break;
-		}
-	}
-	else {
-		this->spin2SingleStep();
-	}
+            // End the spin
+            spinTimer2->stop();
+            (*vp).autoSpin2 = FALSE;
+            break;
+        }
+    }
+    else {
+        this->spin2SingleStep();
+    }
 }
 
 
 // Do a single spin step
-void GLCanvasFrame::spin2SingleStep( void )
+void GLCanvasFrame::spin2SingleStep()
 {	
-	this->spinStep( 1, MIN_REPEAT );
+    this->spinStep( 1, MIN_REPEAT );
 
-	this->updateRendering();
+    this->updateRendering();
 }
 
 
@@ -838,102 +902,102 @@ void GLCanvasFrame::spin2SingleStep( void )
 // and do zoom steps
 void GLCanvasFrame::dollyWheelMoved( float r )
 {
-	static float oldValue = 0.0;
+    static float oldValue = 0.0;
 
-	float diff = r - oldValue;
-	float adiff = fabs(diff);
+    float diff = r - oldValue;
+    float adiff = fabs(diff);
 
-	if (diff > 0.0) 
-		this->zoomStep( 0, (int)floor(WHEEL_REPEAT*adiff+0.5) );
-	else 
-		this->zoomStep( 1, (int)floor(WHEEL_REPEAT*adiff+0.5) );
+    if (diff > 0.0)
+        this->zoomStep( 0, (int)floor(WHEEL_REPEAT*adiff+0.5) );
+    else
+        this->zoomStep( 1, (int)floor(WHEEL_REPEAT*adiff+0.5) );
 
-	this->updateRendering();
-	
-	oldValue = r;
+    this->updateRendering();
+
+    oldValue = r;
 }
 
 
 // Respond to frame button click
 // and do zoom steps
-void GLCanvasFrame::dolly1( void )
+void GLCanvasFrame::dolly1()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-	// Change pixmap in auto mode while button is pressed,
-	// and do zoom steps
-	if (autoMode) {
-		switch (dolly1Button->isOn()) {
-			case TRUE:
-        			dolly1Button->setPixmap( dolly1RedPixmap );
+    // Change pixmap in auto mode while button is pressed,
+    // and do zoom steps
+    if (autoMode) {
+        switch (dolly1Button->isChecked()) {
+        case TRUE:
+            dolly1Button->setIcon( dolly1RedPixmap );
 
-				// Start the zoom 
-				connect(zoomTimer1, SIGNAL(timeout()), this, SLOT(dolly1SingleStep()) );
-				zoomTimer1->start( 40 );
-				(*vp).autoZoom1 = TRUE;
-			break;
-			case FALSE:
-        			dolly1Button->setPixmap( dolly1Pixmap );
+            // Start the zoom
+            connect(zoomTimer1, SIGNAL(timeout()), this, SLOT(dolly1SingleStep()) );
+            zoomTimer1->start( 40 );
+            (*vp).autoZoom1 = TRUE;
+            break;
+        case FALSE:
+            dolly1Button->setIcon( dolly1Pixmap );
 
-				// End the zoom 
-	                        zoomTimer1->stop();
-	                        (*vp).autoZoom1 = FALSE;
-			break;
-		}
-	}
-	else {
-		this->dolly1SingleStep();
-	}
+            // End the zoom
+            zoomTimer1->stop();
+            (*vp).autoZoom1 = FALSE;
+            break;
+        }
+    }
+    else {
+        this->dolly1SingleStep();
+    }
 }
 
 // Do a single zoom step
-void GLCanvasFrame::dolly1SingleStep( void )
+void GLCanvasFrame::dolly1SingleStep()
 {	
-	this->zoomStep( 0, MIN_ZOOM_REPEAT );
+    this->zoomStep( 0, MIN_ZOOM_REPEAT );
 
-	this->updateRendering();
+    this->updateRendering();
 }
 
 
 // Respond to frame button click
 // and do zoom steps
-void GLCanvasFrame::dolly2( void )
+void GLCanvasFrame::dolly2()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-	// Change pixmap in auto mode while button is pressed,
-	// and do zoom steps
-	if (autoMode) {
-		switch (dolly2Button->isOn()) {
-			case TRUE:
-        			dolly2Button->setPixmap( dolly2RedPixmap );
+    // Change pixmap in auto mode while button is pressed,
+    // and do zoom steps
+    if (autoMode) {
+        switch (dolly2Button->isChecked()) {
+        case TRUE:
+            dolly2Button->setIcon( dolly2RedPixmap );
 
-				// Start the zoom 
-				connect(zoomTimer2, SIGNAL(timeout()), this, SLOT(dolly2SingleStep()) );
-				zoomTimer2->start( 40 );
-				(*vp).autoZoom2 = TRUE;
-			break;
-			case FALSE:
-        			dolly2Button->setPixmap( dolly2Pixmap );
+            // Start the zoom
+            connect(zoomTimer2, SIGNAL(timeout()), this, SLOT(dolly2SingleStep()) );
+            zoomTimer2->start( 40 );
+            (*vp).autoZoom2 = TRUE;
+            break;
+        case FALSE:
+            dolly2Button->setIcon( dolly2Pixmap );
 
-				// End the zoom 
-	                        zoomTimer2->stop();
-	                        (*vp).autoZoom2 = FALSE;
-			break;
-		}
-	}
-	else {
-		this->dolly2SingleStep();
-	}
+            // End the zoom
+            zoomTimer2->stop();
+            (*vp).autoZoom2 = FALSE;
+            break;
+        }
+    }
+    else {
+        this->dolly2SingleStep();
+    }
 }
 
 
 // Do a single zoom step
-void GLCanvasFrame::dolly2SingleStep( void )
+void GLCanvasFrame::dolly2SingleStep()
 {	
-	this->zoomStep( 1, MIN_ZOOM_REPEAT );
+    this->zoomStep( 1, MIN_ZOOM_REPEAT );
 
-	this->updateRendering();
+    this->updateRendering();
 }
 
 
@@ -941,23 +1005,23 @@ void GLCanvasFrame::dolly2SingleStep( void )
 // (overloaded function)
 void GLCanvasFrame::rotStep( char mdir )
 {
-	viewParam * vp = this->getViewParam();
-        double delta, deltaPhi, deltaTheta, deltaChi;
+    viewParam * vp = this->getViewParam();
+    double delta, deltaPhi, deltaTheta, deltaChi;
 
-        if (mdir) {
-                delta = 1.0;
-        }
-        else {
-                delta = -1.0;
-        }
+    if (mdir) {
+        delta = 1.0;
+    }
+    else {
+        delta = -1.0;
+    }
 
-        // The components of the angular velocity along the fixed
-        // space axis must be (0 0 1) -- this corresponds to rotating.
-	computeTransformation( delta, 0.0, 0.0, 1.0, &deltaPhi, &deltaTheta, &deltaChi );
+    // The components of the angular velocity along the fixed
+    // space axis must be (0 0 1) -- this corresponds to rotating.
+    computeTransformation( delta, 0.0, 0.0, 1.0, &deltaPhi, &deltaTheta, &deltaChi );
 
-        (*vp).phi += deltaPhi;
-        (*vp).theta += deltaTheta;
-        (*vp).chi += deltaChi;
+    (*vp).phi += deltaPhi;
+    (*vp).theta += deltaTheta;
+    (*vp).chi += deltaChi;
 }
 
 
@@ -965,8 +1029,8 @@ void GLCanvasFrame::rotStep( char mdir )
 // (overloaded function)
 void GLCanvasFrame::rotStep( char mdir, int n )
 {
-	for (int i=0;i<n;i++) 
-		this->rotStep( mdir );	
+    for (int i=0;i<n;i++)
+        this->rotStep( mdir );
 }
 
 
@@ -974,23 +1038,23 @@ void GLCanvasFrame::rotStep( char mdir, int n )
 // (overloaded function)
 void GLCanvasFrame::tiltStep( char mdir )
 {
-	viewParam * vp = this->getViewParam();
-        double delta, deltaPhi, deltaTheta, deltaChi;
+    viewParam * vp = this->getViewParam();
+    double delta, deltaPhi, deltaTheta, deltaChi;
 
-        if (mdir) {
-                delta = 0.01;
-        }
-        else {
-                delta = -0.01;
-        }
+    if (mdir) {
+        delta = 0.01;
+    }
+    else {
+        delta = -0.01;
+    }
 
-        // The components of the angular velocity along the fixed
-        // space axis must be (1 0 0) -- this corresponds to tilting.
-	computeTransformation( delta, 1.0, 0.0, 0.0, &deltaPhi, &deltaTheta, &deltaChi );
+    // The components of the angular velocity along the fixed
+    // space axis must be (1 0 0) -- this corresponds to tilting.
+    computeTransformation( delta, 1.0, 0.0, 0.0, &deltaPhi, &deltaTheta, &deltaChi );
 
-        (*vp).phi += deltaPhi;
-        (*vp).theta += deltaTheta;
-        (*vp).chi += deltaChi;
+    (*vp).phi += deltaPhi;
+    (*vp).theta += deltaTheta;
+    (*vp).chi += deltaChi;
 }
 
 
@@ -998,31 +1062,31 @@ void GLCanvasFrame::tiltStep( char mdir )
 // (overloaded function)
 void GLCanvasFrame::tiltStep( char mdir, int n )
 {
-	for (int i=0;i<n;i++) 
-		this->tiltStep( mdir );	
+    for (int i=0;i<n;i++)
+        this->tiltStep( mdir );
 }
 
 // Do one spin step forward or backward
 // (overoaded function)
 void GLCanvasFrame::spinStep( char mdir )
 {
-	viewParam * vp = this->getViewParam();
-	double delta, deltaPhi, deltaTheta, deltaChi;
+    viewParam * vp = this->getViewParam();
+    double delta, deltaPhi, deltaTheta, deltaChi;
 
-        if (mdir) {
-                delta = 0.01;
-        }
-        else {
-                delta = -0.01;
-        }
+    if (mdir) {
+        delta = 0.01;
+    }
+    else {
+        delta = -0.01;
+    }
 
-        // The components of the angular velocity along the fixed
-        // space axis must be (0 1 0) -- this corresponds to spinning.
-	computeTransformation( delta, 0.0, 1.0, 0.0, &deltaPhi, &deltaTheta, &deltaChi );
+    // The components of the angular velocity along the fixed
+    // space axis must be (0 1 0) -- this corresponds to spinning.
+    computeTransformation( delta, 0.0, 1.0, 0.0, &deltaPhi, &deltaTheta, &deltaChi );
 
-        (*vp).phi += deltaPhi;
-        (*vp).theta += deltaTheta;
-        (*vp).chi += deltaChi;
+    (*vp).phi += deltaPhi;
+    (*vp).theta += deltaTheta;
+    (*vp).chi += deltaChi;
 }
 
 
@@ -1030,8 +1094,8 @@ void GLCanvasFrame::spinStep( char mdir )
 // (overloaded function)
 void GLCanvasFrame::spinStep( char mdir, int n )
 {
-        for (int i=0;i<n;i++)
-                this->spinStep( mdir );
+    for (int i=0;i<n;i++)
+        this->spinStep( mdir );
 }
 
 
@@ -1039,17 +1103,17 @@ void GLCanvasFrame::spinStep( char mdir, int n )
 // (overloaded function)
 void GLCanvasFrame::zoomStep( char mdir )
 {
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-        if (mdir)
-                (*vp).dolly -= 1.0;
-        else
-                (*vp).dolly += 1.0;
+    if (mdir)
+        (*vp).dolly -= 1.0;
+    else
+        (*vp).dolly += 1.0;
 
-        if ((*vp).dolly > DOLLY_MAX)
-                (*vp).dolly = DOLLY_MAX;
-        if ((*vp).dolly < DOLLY_MIN)
-                (*vp).dolly = DOLLY_MIN;
+    if ((*vp).dolly > DOLLY_MAX)
+        (*vp).dolly = DOLLY_MAX;
+    if ((*vp).dolly < DOLLY_MIN)
+        (*vp).dolly = DOLLY_MIN;
 }
 
 
@@ -1057,8 +1121,8 @@ void GLCanvasFrame::zoomStep( char mdir )
 // (overloaded function)
 void GLCanvasFrame::zoomStep( char mdir, int n )
 {
-        for (int i=0;i<n;i++)
-                this->zoomStep( mdir );
+    for (int i=0;i<n;i++)
+        this->zoomStep( mdir );
 }
 
 
@@ -1067,298 +1131,298 @@ void GLCanvasFrame::zoomStep( char mdir, int n )
 // given in the arguments and is expected to be a unit vector
 void GLCanvasFrame::computeTransformation( double delta, double w1, double w2, double w3, double * deltaPhi, double * deltaTheta, double * deltaChi)
 {
-	viewParam * vp = this->getViewParam();
-	double norm2, factor = 1.0;
-        double phiRad = (double)(*vp).phi*PI/180.0;
-        double thetaRad = (double)(*vp).theta*PI/180.0;
-//	double chiRad = (double)(*vp).chi*PI/180.0;
+    viewParam * vp = this->getViewParam();
+    double norm2, factor = 1.0;
+    double phiRad = (double)(*vp).phi*PI/180.0;
+    double thetaRad = (double)(*vp).theta*PI/180.0;
+    //	double chiRad = (double)(*vp).chi*PI/180.0;
 
-        // The components of the angular velocity along the fixed
-        // space axis are
-        //      w1 = cos(phi)(theta') + sin(theta)sin(phi)(chi')
-        //      w2 = sin(phi)(theta') - sin(theta)cos(phi)(chi')
-        //      w3 = (phi') + cos(theta)(chi')
-        // where (x') is the time derivative (i.e., the delta)
+    // The components of the angular velocity along the fixed
+    // space axis are
+    //      w1 = cos(phi)(theta') + sin(theta)sin(phi)(chi')
+    //      w2 = sin(phi)(theta') - sin(theta)cos(phi)(chi')
+    //      w3 = (phi') + cos(theta)(chi')
+    // where (x') is the time derivative (i.e., the delta)
 
-        // Tilting (direction vector [1 0 0] and Spinning 
-	// (directon vector [0 1 0]) is achieved by changing all three angles 
-	// simultaneously.  For rotation (direction vector [0 0 1]), it is 
-	// sufficient to change only phi
-        if (fabs(tan(thetaRad)) > SCEPS)
-                (*deltaPhi) = -w1*delta/tan(thetaRad)*sin(phiRad) + w2*delta/tan(thetaRad)*cos(phiRad) + w3*delta;
-        else
-                (*deltaPhi) = -w1*delta/SCEPS*sin(phiRad) + w2*delta/SCEPS*cos(phiRad) + w3*delta;
+    // Tilting (direction vector [1 0 0] and Spinning
+    // (directon vector [0 1 0]) is achieved by changing all three angles
+    // simultaneously.  For rotation (direction vector [0 0 1]), it is
+    // sufficient to change only phi
+    if (fabs(tan(thetaRad)) > SCEPS)
+        (*deltaPhi) = -w1*delta/tan(thetaRad)*sin(phiRad) + w2*delta/tan(thetaRad)*cos(phiRad) + w3*delta;
+    else
+        (*deltaPhi) = -w1*delta/SCEPS*sin(phiRad) + w2*delta/SCEPS*cos(phiRad) + w3*delta;
 
-        (*deltaTheta) = w1*delta*cos(phiRad) + w2*delta*sin(phiRad);
+    (*deltaTheta) = w1*delta*cos(phiRad) + w2*delta*sin(phiRad);
 
-        if (fabs(sin(thetaRad)) > SCEPS)
-                (*deltaChi) = w1*delta/sin(thetaRad)*sin(phiRad) - w2*delta/sin(thetaRad)*cos(phiRad);
-        else
-                (*deltaChi) = w1*delta/SCEPS*sin(phiRad) - w2*delta/SCEPS*cos(phiRad);
+    if (fabs(sin(thetaRad)) > SCEPS)
+        (*deltaChi) = w1*delta/sin(thetaRad)*sin(phiRad) - w2*delta/sin(thetaRad)*cos(phiRad);
+    else
+        (*deltaChi) = w1*delta/SCEPS*sin(phiRad) - w2*delta/SCEPS*cos(phiRad);
 
-	if ((*deltaPhi) > 0.0) {	
-		double phiMod = floor((*deltaPhi)/TWO_PI);
-		(*deltaPhi) -= phiMod*TWO_PI;
-	}
-	else {
-		double phiMod = floor(-(*deltaPhi)/TWO_PI);
-		(*deltaPhi) += phiMod*TWO_PI;
-	}
-	if ((*deltaTheta) > 0.0) {	
-		double thetaMod = floor((*deltaTheta)/TWO_PI);
-		(*deltaTheta) -= thetaMod*TWO_PI;
-	}
-	else {
-		double thetaMod = floor(-(*deltaTheta)/TWO_PI);
-		(*deltaTheta) += thetaMod*TWO_PI;
-	}
-	if ((*deltaChi) > 0.0) {	
-		double chiMod = floor((*deltaChi)/TWO_PI);
-		(*deltaChi) -= chiMod*TWO_PI;
-	}
-	else {
-		double chiMod = floor(-(*deltaChi)/TWO_PI);
-		(*deltaChi) += chiMod*TWO_PI;
-	}
+    if ((*deltaPhi) > 0.0) {
+        double phiMod = floor((*deltaPhi)/TWO_PI);
+        (*deltaPhi) -= phiMod*TWO_PI;
+    }
+    else {
+        double phiMod = floor(-(*deltaPhi)/TWO_PI);
+        (*deltaPhi) += phiMod*TWO_PI;
+    }
+    if ((*deltaTheta) > 0.0) {
+        double thetaMod = floor((*deltaTheta)/TWO_PI);
+        (*deltaTheta) -= thetaMod*TWO_PI;
+    }
+    else {
+        double thetaMod = floor(-(*deltaTheta)/TWO_PI);
+        (*deltaTheta) += thetaMod*TWO_PI;
+    }
+    if ((*deltaChi) > 0.0) {
+        double chiMod = floor((*deltaChi)/TWO_PI);
+        (*deltaChi) -= chiMod*TWO_PI;
+    }
+    else {
+        double chiMod = floor(-(*deltaChi)/TWO_PI);
+        (*deltaChi) += chiMod*TWO_PI;
+    }
 
-        norm2 = (*deltaPhi)*(*deltaPhi) + (*deltaTheta)*(*deltaTheta) + (*deltaChi)*(*deltaChi);
-	if (norm2 > 0.0) {
-	        // The components should be constant 
-		if (fabs(w1) > fabs(w2) && fabs(w1) > fabs(w3)) {
-		        double neww1 = cos(phiRad)*(*deltaTheta)/sqrt(norm2) + sin(thetaRad)*sin(phiRad)*(*deltaChi)/sqrt(norm2);
+    norm2 = (*deltaPhi)*(*deltaPhi) + (*deltaTheta)*(*deltaTheta) + (*deltaChi)*(*deltaChi);
+    if (norm2 > 0.0) {
+        // The components should be constant
+        if (fabs(w1) > fabs(w2) && fabs(w1) > fabs(w3)) {
+            double neww1 = cos(phiRad)*(*deltaTheta)/sqrt(norm2) + sin(thetaRad)*sin(phiRad)*(*deltaChi)/sqrt(norm2);
 
-		        if (fabs(neww1) > SCEPS)
-		                factor = 1.0/fabs(neww1);
-		        else
-		                factor = 1.0/SCEPS;
-		}
+            if (fabs(neww1) > SCEPS)
+                factor = 1.0/fabs(neww1);
+            else
+                factor = 1.0/SCEPS;
+        }
 
-		if (fabs(w2) > fabs(w1) && fabs(w2) > fabs(w3)) {
-		        double neww2 = sin(phiRad)*(*deltaTheta)/sqrt(norm2) - sin(thetaRad)*cos(phiRad)*(*deltaChi)/sqrt(norm2);
-		        if (fabs(neww2) > SCEPS)
-		                factor = 1.0/fabs(neww2);
-		        else
-		                factor = 1.0/SCEPS;
-		} 
+        if (fabs(w2) > fabs(w1) && fabs(w2) > fabs(w3)) {
+            double neww2 = sin(phiRad)*(*deltaTheta)/sqrt(norm2) - sin(thetaRad)*cos(phiRad)*(*deltaChi)/sqrt(norm2);
+            if (fabs(neww2) > SCEPS)
+                factor = 1.0/fabs(neww2);
+            else
+                factor = 1.0/SCEPS;
+        }
 
-		if (fabs(w3) > fabs(w1) && fabs(w3) > fabs(w2)) {
-		        double neww3 = (*deltaPhi)/sqrt(norm2) + cos(thetaRad)*(*deltaChi)/sqrt(norm2);
+        if (fabs(w3) > fabs(w1) && fabs(w3) > fabs(w2)) {
+            double neww3 = (*deltaPhi)/sqrt(norm2) + cos(thetaRad)*(*deltaChi)/sqrt(norm2);
 
-		        if (fabs(neww3) > SCEPS)
-		                factor = 1.0/fabs(neww3);
-		        else
-				factor = 1.0/SCEPS;
-		}
+            if (fabs(neww3) > SCEPS)
+                factor = 1.0/fabs(neww3);
+            else
+                factor = 1.0/SCEPS;
+        }
 
-	        (*deltaPhi) /= (sqrt(norm2)/factor);
-	        (*deltaTheta) /= (sqrt(norm2)/factor);
-	        (*deltaChi) /= (sqrt(norm2)/factor);
-	}
+        (*deltaPhi) /= (sqrt(norm2)/factor);
+        (*deltaTheta) /= (sqrt(norm2)/factor);
+        (*deltaChi) /= (sqrt(norm2)/factor);
+    }
 }
 
 
 // Respond to frame button click:
 // Switch to default view point
-void GLCanvasFrame::setHome( void )
+void GLCanvasFrame::setHome()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-        (*vp).phi = (*vp).phiHome;
-        (*vp).theta = (*vp).thetaHome;
-        (*vp).chi = (*vp).chiHome;
-        (*vp).dolly = (*vp).dollyHome;
-        (*vp).fovy = (*vp).fovyHome;
+    (*vp).phi = (*vp).phiHome;
+    (*vp).theta = (*vp).thetaHome;
+    (*vp).chi = (*vp).chiHome;
+    (*vp).dolly = (*vp).dollyHome;
+    (*vp).fovy = (*vp).fovyHome;
 
-	this->updateRendering();
+    this->updateRendering();
 }
 
 
 // Respond to frame button click
 // Define new default view point
-void GLCanvasFrame::setNewHome( void )
+void GLCanvasFrame::setNewHome()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-        (*vp).phiHome = (*vp).phi;
-        (*vp).thetaHome = (*vp).theta;
-        (*vp).chiHome = (*vp).chi;
-        (*vp).dollyHome = (*vp).dolly;
-        (*vp).fovyHome = (*vp).fovy;
+    (*vp).phiHome = (*vp).phi;
+    (*vp).thetaHome = (*vp).theta;
+    (*vp).chiHome = (*vp).chi;
+    (*vp).dollyHome = (*vp).dolly;
+    (*vp).fovyHome = (*vp).fovy;
 
-	this->updateRendering();
+    this->updateRendering();
 }
 
 
 // Respond to frame button click
-void GLCanvasFrame::setParallel( void )
+void GLCanvasFrame::setParallel()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-       	(*vp).viewMode = ORTHO;
-	this->setHome();
-	this->updateRendering();
+    (*vp).viewMode = ORTHO;
+    this->setHome();
+    this->updateRendering();
 
-	// Adjust button settings
-	this->adjustButtons();
+    // Adjust button settings
+    this->adjustButtons();
 }
 
 // Respond to frame button click
-void GLCanvasFrame::setPerspective( void )
+void GLCanvasFrame::setPerspective()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-       	(*vp).viewMode = PERSPECTIVE;
-	this->setHome();
-	this->updateRendering();
+    (*vp).viewMode = PERSPECTIVE;
+    this->setHome();
+    this->updateRendering();
 
-	// Adjust button settings
-	this->adjustButtons();
-}
-
-
-// Respond to frame button click
-void GLCanvasFrame::setBlackBackground( void )
-{	
-	viewParam * vp = this->getViewParam();
-
-        (*vp).background = BGBLACK;
-	this->updateRendering();
-
-	// Adjust button settings
-	this->adjustButtons();
+    // Adjust button settings
+    this->adjustButtons();
 }
 
 
 // Respond to frame button click
-void GLCanvasFrame::setWhiteBackground( void )
+void GLCanvasFrame::setBlackBackground()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-        (*vp).background = BGWHITE;
-	this->updateRendering();
+    (*vp).background = BGBLACK;
+    this->updateRendering();
 
-	// Adjust button settings
-	this->adjustButtons();
+    // Adjust button settings
+    this->adjustButtons();
+}
+
+
+// Respond to frame button click
+void GLCanvasFrame::setWhiteBackground()
+{	
+    viewParam * vp = this->getViewParam();
+
+    (*vp).background = BGWHITE;
+    this->updateRendering();
+
+    // Adjust button settings
+    this->adjustButtons();
 }
 
 // Respond to stereo vision button click
-void GLCanvasFrame::toggleStereoVision( void )
+void GLCanvasFrame::toggleStereoVision()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-        (*vp).stereoVisionEn = !(*vp).stereoVisionEn;
-	this->updateRendering();
+    (*vp).stereoVisionEn = !(*vp).stereoVisionEn;
+    this->updateRendering();
 
-	// Adjust button settings
-	this->adjustButtons();
+    // Adjust button settings
+    this->adjustButtons();
 }
 
 
 // Respond to eye separaion plus button click
-void GLCanvasFrame::eyeSeparationPlus( void )
+void GLCanvasFrame::eyeSeparationPlus()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-        (*vp).eyeSeparation += 0.01;
-	this->updateRendering();
+    (*vp).eyeSeparation += 0.01;
+    this->updateRendering();
 }
 
 // Respond to eye separaion minus button click
-void GLCanvasFrame::eyeSeparationMinus( void )
+void GLCanvasFrame::eyeSeparationMinus()
 {	
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-	if ((*vp).eyeSeparation > 0.01)
-        	(*vp).eyeSeparation -= 0.01;
-	else
-		(*vp).eyeSeparation = 0.01;
-	this->updateRendering();
+    if ((*vp).eyeSeparation > 0.01)
+        (*vp).eyeSeparation -= 0.01;
+    else
+        (*vp).eyeSeparation = 0.01;
+    this->updateRendering();
 }
 
 
 // Prepare auto mode
-void GLCanvasFrame::autoButtonCB( void )
+void GLCanvasFrame::autoButtonCB()
 {
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-	// Set a flag
-	if (autoMode) 
-		autoMode = FALSE;
-	else 
-		autoMode = TRUE;
+    // Set a flag
+    if (autoMode)
+        autoMode = FALSE;
+    else
+        autoMode = TRUE;
 
-	// Set default pixmaps when switching off auto mode;
-	// release control buttons
-	if (!autoMode) {
-		autoButton->setPixmap( autoPixmap );
-		if (autoButton->isOn()) 
-			autoButton->toggle();
-	
-		if (x1Button->isOn()) {
-			x1Button->toggle();
-			x1Button->setPixmap( x1Pixmap );
-		}
-		if (x2Button->isOn()) { 
-			x2Button->toggle();
-			x2Button->setPixmap( x2Pixmap );
-		}
-		if (y1Button->isOn()) { 
-			y1Button->toggle();
-			y1Button->setPixmap( y1Pixmap );
-		}
-		if (y2Button->isOn()) { 
-			y2Button->toggle();
-			y2Button->setPixmap( y2Pixmap );
-		}
-		if (z1Button->isOn()) { 
-			z1Button->toggle();
-			z1Button->setPixmap( z1Pixmap );
-		}
-		if (z2Button->isOn()) { 
-			z2Button->toggle();
-			z2Button->setPixmap( z2Pixmap );
-		}
-		if (dolly1Button->isOn()) { 
-			dolly1Button->toggle();
-			dolly1Button->setPixmap( dolly1Pixmap );
-		}
-		if (dolly2Button->isOn()) { 
-			dolly2Button->toggle();
-			dolly2Button->setPixmap( dolly2Pixmap );
-		}
+    // Set default pixmaps when switching off auto mode;
+    // release control buttons
+    if (!autoMode) {
+        autoButton->setIcon( autoPixmap );
+        if (autoButton->isChecked())
+            autoButton->toggle();
 
-		// Stop all timers
-		rotTimer1->stop();
-	        (*vp).autoRot1 = FALSE;
-		rotTimer2->stop();
-	        (*vp).autoRot2 = FALSE;
-		tiltTimer1->stop();
-	        (*vp).autoTilt1 = FALSE;
-		tiltTimer2->stop();
-	        (*vp).autoTilt2 = FALSE;
-		spinTimer1->stop();
-	        (*vp).autoSpin1 = FALSE;
-		spinTimer2->stop();
-	        (*vp).autoSpin2 = FALSE;
-		zoomTimer1->stop();
-	        (*vp).autoZoom1 = FALSE;
-		zoomTimer2->stop();
-	        (*vp).autoZoom2 = FALSE;
-	}
-	else {
-		// Indicate auto mode by coloring the auto mode button
-		autoButton->setPixmap( autoRedPixmap );
-	}
+        if (x1Button->isChecked()) {
+            x1Button->toggle();
+            x1Button->setIcon( x1Pixmap );
+        }
+        if (x2Button->isChecked()) {
+            x2Button->toggle();
+            x2Button->setIcon( x2Pixmap );
+        }
+        if (y1Button->isChecked()) {
+            y1Button->toggle();
+            y1Button->setIcon( y1Pixmap );
+        }
+        if (y2Button->isChecked()) {
+            y2Button->toggle();
+            y2Button->setIcon( y2Pixmap );
+        }
+        if (z1Button->isChecked()) {
+            z1Button->toggle();
+            z1Button->setIcon( z1Pixmap );
+        }
+        if (z2Button->isChecked()) {
+            z2Button->toggle();
+            z2Button->setIcon( z2Pixmap );
+        }
+        if (dolly1Button->isChecked()) {
+            dolly1Button->toggle();
+            dolly1Button->setIcon( dolly1Pixmap );
+        }
+        if (dolly2Button->isChecked()) {
+            dolly2Button->toggle();
+            dolly2Button->setIcon( dolly2Pixmap );
+        }
 
-	// Lock or unlock all control buttons
-	x1Button->setToggleButton( autoMode );
-	x2Button->setToggleButton( autoMode );
-	y1Button->setToggleButton( autoMode );
-	y2Button->setToggleButton( autoMode );
-	z1Button->setToggleButton( autoMode );
-	z2Button->setToggleButton( autoMode );
-	dolly1Button->setToggleButton( autoMode );
-	dolly2Button->setToggleButton( autoMode );
+        // Stop all timers
+        rotTimer1->stop();
+        (*vp).autoRot1 = FALSE;
+        rotTimer2->stop();
+        (*vp).autoRot2 = FALSE;
+        tiltTimer1->stop();
+        (*vp).autoTilt1 = FALSE;
+        tiltTimer2->stop();
+        (*vp).autoTilt2 = FALSE;
+        spinTimer1->stop();
+        (*vp).autoSpin1 = FALSE;
+        spinTimer2->stop();
+        (*vp).autoSpin2 = FALSE;
+        zoomTimer1->stop();
+        (*vp).autoZoom1 = FALSE;
+        zoomTimer2->stop();
+        (*vp).autoZoom2 = FALSE;
+    }
+    else {
+        // Indicate auto mode by coloring the auto mode button
+        autoButton->setIcon( autoRedPixmap );
+    }
+
+    // Lock or unlock all control buttons
+    x1Button->setCheckable(autoMode);
+    x2Button->setCheckable(autoMode);
+    y1Button->setCheckable(autoMode);
+    y2Button->setCheckable(autoMode);
+    z1Button->setCheckable(autoMode);
+    z2Button->setCheckable(autoMode);
+    dolly1Button->setCheckable(autoMode);
+    dolly2Button->setCheckable(autoMode);
 }
 
 
@@ -1366,169 +1430,167 @@ void GLCanvasFrame::autoButtonCB( void )
 // command line arguments
 void GLCanvasFrame::setAuto( viewParam vp )
 {
-	if (vp.autoRot1 == TRUE) {
-		this->autoButtonCB();
-		x1Button->setOn( TRUE );
-    		x1Button->setPixmap( x1RedPixmap );
-	}
-	if (vp.autoRot2 == TRUE) {
-		this->autoButtonCB();
-		x2Button->setOn( TRUE );
-    		x2Button->setPixmap( x2RedPixmap );
-	}
-	if (vp.autoTilt1 == TRUE) {
-		this->autoButtonCB();
-		y1Button->setOn( TRUE );
-    		y1Button->setPixmap( y1RedPixmap );
-	}
-	if (vp.autoTilt2 == TRUE) {
-		this->autoButtonCB();
-		y2Button->setOn( TRUE );
-    		y2Button->setPixmap( y2RedPixmap );
-	}
-	if (vp.autoSpin1 == TRUE) {
-		this->autoButtonCB();
-		z1Button->setOn( TRUE );
-    		z1Button->setPixmap( z1RedPixmap );
-	}
-	if (vp.autoSpin2 == TRUE) {
-		this->autoButtonCB();
-		z2Button->setOn( TRUE );
-    		z2Button->setPixmap( z2RedPixmap );
-	}
-	if (vp.autoZoom1 == TRUE) {
-		this->autoButtonCB();
-		dolly1Button->setOn( TRUE );
-    		dolly1Button->setPixmap( dolly1RedPixmap );
-	}
-	if (vp.autoZoom2 == TRUE) {
-		this->autoButtonCB();
-		dolly2Button->setOn( TRUE );
-    		dolly2Button->setPixmap( dolly2RedPixmap );
-	}
+    if (vp.autoRot1 == TRUE) {
+        this->autoButtonCB();
+        x1Button->setChecked(true);
+        x1Button->setIcon( x1RedPixmap );
+    }
+    if (vp.autoRot2 == TRUE) {
+        this->autoButtonCB();
+        x2Button->setChecked(true);
+        x2Button->setIcon( x2RedPixmap );
+    }
+    if (vp.autoTilt1 == TRUE) {
+        this->autoButtonCB();
+        y1Button->setChecked(true);
+        y1Button->setIcon( y1RedPixmap );
+    }
+    if (vp.autoTilt2 == TRUE) {
+        this->autoButtonCB();
+        y2Button->setChecked(true);
+        y2Button->setIcon( y2RedPixmap );
+    }
+    if (vp.autoSpin1 == TRUE) {
+        this->autoButtonCB();
+        z1Button->setChecked(true);
+        z1Button->setIcon( z1RedPixmap );
+    }
+    if (vp.autoSpin2 == TRUE) {
+        this->autoButtonCB();
+        z2Button->setChecked(true);
+        z2Button->setIcon( z2RedPixmap );
+    }
+    if (vp.autoZoom1 == TRUE) {
+        this->autoButtonCB();
+        dolly1Button->setChecked(true);
+        dolly1Button->setIcon( dolly1RedPixmap );
+    }
+    if (vp.autoZoom2 == TRUE) {
+        this->autoButtonCB();
+        dolly2Button->setChecked(true);
+        dolly2Button->setIcon( dolly2RedPixmap );
+    }
 }
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoRot1( void )
+void GLCanvasFrame::startAutoRot1()
 {
-	// Start the rotation
-        connect(rotTimer1, SIGNAL(timeout()), this, SLOT(rot1SingleStep()) );
-        rotTimer1->start( 40 );
+    // Start the rotation
+    connect(rotTimer1, SIGNAL(timeout()), this, SLOT(rot1SingleStep()) );
+    rotTimer1->start( 40 );
 }
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoRot2( void )
+void GLCanvasFrame::startAutoRot2()
 {
-	// Start the rotation
-        connect(rotTimer2, SIGNAL(timeout()), this, SLOT(rot2SingleStep()) );
-        rotTimer2->start( 40 );
+    // Start the rotation
+    connect(rotTimer2, SIGNAL(timeout()), this, SLOT(rot2SingleStep()) );
+    rotTimer2->start( 40 );
 }
 
 // Start auto motion state
-void GLCanvasFrame::startAutoTilt1( void )
+void GLCanvasFrame::startAutoTilt1()
 {
-	// Start the tilting
-        connect(tiltTimer1, SIGNAL(timeout()), this, SLOT(tilt1SingleStep()) );
-        tiltTimer1->start( 40 );
-}
-
-
-// Start auto motion state
-void GLCanvasFrame::startAutoTilt2( void )
-{
-	// Start the tilting
-        connect(tiltTimer2, SIGNAL(timeout()), this, SLOT(tilt2SingleStep()) );
-        tiltTimer2->start( 40 );
+    // Start the tilting
+    connect(tiltTimer1, SIGNAL(timeout()), this, SLOT(tilt1SingleStep()) );
+    tiltTimer1->start( 40 );
 }
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoSpin1( void )
+void GLCanvasFrame::startAutoTilt2()
 {
-	// Start the spinning
-        connect(spinTimer1, SIGNAL(timeout()), this, SLOT(spin1SingleStep()) );
-        spinTimer1->start( 40 );
+    // Start the tilting
+    connect(tiltTimer2, SIGNAL(timeout()), this, SLOT(tilt2SingleStep()) );
+    tiltTimer2->start( 40 );
 }
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoSpin2( void )
+void GLCanvasFrame::startAutoSpin1()
 {
-	// Start the spinning
-        connect(spinTimer2, SIGNAL(timeout()), this, SLOT(spin1SingleStep()) );
-        spinTimer2->start( 40 );
+    // Start the spinning
+    connect(spinTimer1, SIGNAL(timeout()), this, SLOT(spin1SingleStep()) );
+    spinTimer1->start( 40 );
 }
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoZoom1( void )
+void GLCanvasFrame::startAutoSpin2()
 {
-	// Start the zooming
-        connect(zoomTimer1, SIGNAL(timeout()), this, SLOT(dolly1SingelStep()) );
-        zoomTimer1->start( 40 );
+    // Start the spinning
+    connect(spinTimer2, SIGNAL(timeout()), this, SLOT(spin1SingleStep()) );
+    spinTimer2->start( 40 );
 }
 
 
 // Start auto motion state
-void GLCanvasFrame::startAutoZoom2( void )
+void GLCanvasFrame::startAutoZoom1()
 {
-	// Start the zooming
-        connect(zoomTimer2, SIGNAL(timeout()), this, SLOT(dolly2SingleStep()) );
-        zoomTimer2->start( 40 );
+    // Start the zooming
+    connect(zoomTimer1, SIGNAL(timeout()), this, SLOT(dolly1SingelStep()) );
+    zoomTimer1->start( 40 );
+}
+
+
+// Start auto motion state
+void GLCanvasFrame::startAutoZoom2()
+{
+    // Start the zooming
+    connect(zoomTimer2, SIGNAL(timeout()), this, SLOT(dolly2SingleStep()) );
+    zoomTimer2->start( 40 );
 }
 
 
 // Adjust the button settings
 void GLCanvasFrame::adjustButtons()
 {
-	viewParam * vp = this->getViewParam();
+    viewParam * vp = this->getViewParam();
 
-	switch ((*vp).viewMode) {
-		case PERSPECTIVE:
-			perspectiveButton->setOn( TRUE );
-			parallelButton->setOn( FALSE );
-		break;
-		case ORTHO:
-			perspectiveButton->setOn( FALSE );
-			parallelButton->setOn( TRUE );
-		break;
-	}
+    switch ((*vp).viewMode) {
+    case PERSPECTIVE:
+        perspectiveButton->setChecked(true);
+        parallelButton->setChecked(false);
+        break;
+    case ORTHO:
+        perspectiveButton->setChecked(false);
+        parallelButton->setChecked(true);
+        break;
+    }
 
-	switch ((*vp).background) {
-		case BGBLACK:
-			blackBackgroundButton->setOn( TRUE );
-			whiteBackgroundButton->setOn( FALSE );
-		break;
-		case BGWHITE:
-			blackBackgroundButton->setOn( FALSE );
-			whiteBackgroundButton->setOn( TRUE );
-		break;
-	}
+    switch ((*vp).background) {
+    case BGBLACK:
+        blackBackgroundButton->setChecked(true);
+        whiteBackgroundButton->setChecked(false);
+        break;
+    case BGWHITE:
+        blackBackgroundButton->setChecked(false);
+        whiteBackgroundButton->setChecked(true);
+        break;
+    }
 
-	switch ((*vp).stereoVisionEn) {
-		case TRUE:
-			stereoVisionButton->setOn( TRUE );
-		break;
-		case FALSE:
-			stereoVisionButton->setOn( FALSE );
-		break;
-	}
+    switch ((*vp).stereoVisionEn) {
+    case TRUE:
+        stereoVisionButton->setChecked(true);
+        break;
+    case FALSE:
+        stereoVisionButton->setChecked(false);
+        break;
+    }
 
 }
 
 
 // Update the drawing without recompiling
-void GLCanvasFrame::updateRendering( void )
+void GLCanvasFrame::updateRendering()
 {
-	// Refresh the graphics
-	if (drawArea) 
-	        drawArea->updateGL();
+    // Refresh the graphics
+    drawArea->updateGL();
 
-	// Update boards
-	if (mainForm)
-		mainForm->updateExplicitBoard();
+    // Update boards
+    mainForm->updateExplicitBoard();
 }
 
 
@@ -1536,24 +1598,21 @@ void GLCanvasFrame::updateRendering( void )
 // drawing
 void GLCanvasFrame::setViewParam( viewParam vp )
 {
-	if (drawArea) 
-		drawArea->setViewParam( vp );
+    drawArea->setViewParam( vp );
 
-	// Adjust button settings
-	this->adjustButtons();
+    // Adjust button settings
+    this->adjustButtons();
 
-	// Update boards
-	if (mainForm)
-		mainForm->updateExplicitBoard();
+    // Update boards
+    mainForm->updateExplicitBoard();
 }
 
 
 // Create an image file from the current rendering
 // (overloaded function)
-void GLCanvasFrame::snapRendering( void )
+void GLCanvasFrame::snapRendering()
 {
-	if (drawArea) 
-		drawArea->snapRendering();
+    drawArea->snapRendering();
 }
 
 
@@ -1561,56 +1620,37 @@ void GLCanvasFrame::snapRendering( void )
 // (overloaded function)
 void GLCanvasFrame::snapRendering( const char * filename )
 {
-	if (drawArea) 
-		drawArea->snapRendering( filename );
+    drawArea->snapRendering( filename );
 }
 
 
 // Return a pointer to the current aggregate data 
-aggregateData * GLCanvasFrame::getAggregateData( void )
+aggregateData * GLCanvasFrame::getAggregateData()
 {
-	if (drawArea) 
-		return drawArea->getAggregateData();
-	else 
-		return NULL;
+    return drawArea->getAggregateData();
 }
 
 
 // Return a pointer to the view parameters currently used
-viewParam * GLCanvasFrame::getViewParam( void ) 
-{
-	if (drawArea)
-		return drawArea->getViewParam();
-	else
-		return NULL;
+viewParam * GLCanvasFrame::getViewParam() {
+   return drawArea->getViewParam();
 }
 
 
 // Return a pointer to the view object structure currently used
-viewObject * GLCanvasFrame::getViewObject( void ) 
-{
-	if (drawArea)
-		return drawArea->getViewObject();
-	else 
-		return NULL;
+viewObject * GLCanvasFrame::getViewObject() {
+    return drawArea->getViewObject();
 }
 
 
 // Return a pointer to the particle data currently used 
-particleData * GLCanvasFrame::getParticleData( void )
-{
-	if (drawArea)
-		return drawArea->getParticleData();
-	else 
-		return NULL;
+particleData * GLCanvasFrame::getParticleData() {
+    return drawArea->getParticleData();
 }
 
 
 // Return a pointer to the track data currently used 
-trackData * GLCanvasFrame::getTrackData( void )
+trackData * GLCanvasFrame::getTrackData()
 {
-	if (drawArea)
-		return drawArea->getTrackData();
-	else 
-		return NULL;
+    return drawArea->getTrackData();
 }

@@ -30,54 +30,43 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "mainForm.h"
 #include "data.h"
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qdialog.h>
-#include <qgrid.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qslider.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
 
-#include <stdio.h>
-#include <math.h>
+class QCheckBox;
+class QSlider;
+class QComboBox;
 
 // Lights board dialog widget
 class LightsBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	LightsBoard( QWidget * parent=0, const char * name=0 );
+    LightsBoard(MainForm *, QWidget * parent=0);
 
-public slots:
-	void setMainFormAddress( MainForm * );
-	void setLights( viewParam );
+public:
+    void setLights( viewParam );
 
 private slots:
-	void registerSettings();
-	void setLightDepth( int );
-	void bdone();
-	void bapply();
-	void bcancel();
+    void registerSettings();
+    void setLightDepth( int );
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	MainForm * mainForm;
-	QCheckBox * light0;
-	QCheckBox * light1;
-	QCheckBox * light2;
-	QCheckBox * light3;
-	QCheckBox * light4;
-	QCheckBox * light5;
-	QCheckBox * light6;
-	QCheckBox * light7;
-	QComboBox * lightCob;
-	QSlider * depthS;
-	QSlider * ambientS;
-	QSlider * shininessS;
-	QLabel * depthL0;
-	QLabel * depthL1;
+    MainForm * m_mainForm;
+    QCheckBox * light0;
+    QCheckBox * light1;
+    QCheckBox * light2;
+    QCheckBox * light3;
+    QCheckBox * light4;
+    QCheckBox * light5;
+    QCheckBox * light6;
+    QCheckBox * light7;
+    QComboBox * lightCob;
+    QSlider * depthS;
+    QSlider * ambientS;
+    QSlider * shininessS;
 };
 
 #endif // LIGHTB_H

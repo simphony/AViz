@@ -24,41 +24,33 @@ Contact address: Computational Physics Group, Dept. of Physics,
                  gery@tx.technion.ac.il
 ***********************************************************************/
 
-#ifndef PROPBO_H
-#define PROPBO_H 
+#ifndef PROPERTY_BOX_H
+#define PROPERTY_BOX_H
 
 #include "data.h"
 
-#include <qbuttongroup.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
+#include <QWidget>
 
+class QRadioButton;
 
 // Property box widget
-class PropertyBox: public QHBox
+class PropertyBox: public QWidget
 {
-	Q_OBJECT
 public:
-        PropertyBox( QWidget * parent=0, const char * name=0 );
+    PropertyBox(QWidget * parent=0);
 
-public slots:
-        void setParticle( particleData *, int );
-        void readToggles( particleData *, int );
-
-private slots:
+    void setParticle( particleData *, int );
+    void readToggles( particleData *, int );
 
 private:
-	QButtonGroup * property;
-	QRadioButton * prop1;
-        QRadioButton * prop2;
-        QRadioButton * prop3;
-        QRadioButton * prop4;
-        QRadioButton * prop5;
-        QRadioButton * prop6;
-        QRadioButton * prop7;
-        QRadioButton * prop8;
-
+    QRadioButton * prop1;
+    QRadioButton * prop2;
+    QRadioButton * prop3;
+    QRadioButton * prop4;
+    QRadioButton * prop5;
+    QRadioButton * prop6;
+    QRadioButton * prop7;
+    QRadioButton * prop8;
 };
 
 #endif // PROPBO_H

@@ -26,26 +26,28 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "floatSpin.h"
 
-// Define a floating-point spin box
-QFSpinBox::QFSpinBox( QWidget* parent, const char *name )
-    : QSpinBox( parent, name )
+QFSpinBox::QFSpinBox( QWidget* parent)
+    : QSpinBox( parent )
 {
+    m_validator = new QDoubleValidator(this);
 }
 
 
 // This is used to build a floating-point spin box
-QString QFSpinBox::mapValueToText( int value )
-{
-	if (value >= 0)
-		return QString("%1.%2").arg(value/10).arg(value%10);
-	else 
-		return QString("-%1.%2").arg(-value/10).arg(-value%10);
+/*virtual*/ QString QFSpinBox::textFromValue( int value ) const {
+    if (value >= 0)
+        return QString("%1.%2").arg(value/10).arg(value%10);
+    else
+        return QString("-%1.%2").arg(-value/10).arg(-value%10);
 }
 
 
 // This is used to build a floating-point spin box
-int QFSpinBox::mapTextToValue( bool* ok )
-{
-	(*ok) = TRUE;
-	return int(text().toFloat()*10);
+/*virtual*/ int QFSpinBox::valueFromText(const QString &text) const {
+    return int(text.toFloat()*10);
+}
+
+/*virtual*/ QValidator::State QFSpinBox::validate(QString & text, int &pos) const {
+    QValidator::State state =  m_validator->validate(text, pos);
+    return state;
 }

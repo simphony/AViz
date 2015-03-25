@@ -29,31 +29,26 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "data.h"
 
-#include <qbuttongroup.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
+#include <QWidget>
+
+class QRadioButton;
 
 // TypeColorNumberBox box widget
-class TypeColorNumberBox: public QHBox
+class TypeColorNumberBox: public QWidget
 {
-	Q_OBJECT
 public:
-        TypeColorNumberBox( QWidget * parent=0, const char * name=0, int thisMaxNumberOfColors=2 );
+    TypeColorNumberBox( QWidget * parent=0, int thisMaxNumberOfColors=2 );
 
-public slots:
-        void setParticle( particleData *, int );
-        void readToggles( particleData *, int );
-
-private slots:
+public:
+    void setParticle( particleData *, int );
+    void readToggles( particleData *, int );
 
 private:
-	QButtonGroup * number;
-	QRadioButton * one;
-	QRadioButton * two;
-	QRadioButton * three;
+    QRadioButton *one;
+    QRadioButton *two;
+    QRadioButton *three;
 
-	int maxNumberOfColors;
+    int maxNumberOfColors;
 };
 
 #endif // TYPECOLORNUBO_H

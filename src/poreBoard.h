@@ -27,115 +27,101 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef POREB_H
 #define POREB_H 
 
-#include "codeBox.h"
-#include "colorBoard.h"
-#include "colorLabel.h"
+
 #include "data.h"
-#include "defaultParticles.h"
-#include "defaults.h"
-#include "fileFunctions.h"
-#include "floatSpin.h"
-#include "lineTypeBox.h"
-#include "mainForm.h"
-#include "memoryFunctions.h"
-#include "positionBox.h"
-#include "propertyBox.h"
-#include "sizeBox.h"
-#include "typeColorNumberBox.h"
 
-#include <qbuttongroup.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qgrid.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qsizepolicy.h>
-#include <qspinbox.h>
-#include <qwidget.h>
+#include <QDialog>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <sys/stat.h>
-#include <unistd.h>
+class MainForm;
+class ColorBoard;
+class ColorLabel;
+class CodeBox;
+class LineTypeBox;
+class PositionBox;
+class PropertyBox;
+class SizeBox;
+class TypeColorNumberBox;
+
+class QGridLayout;
+class QPushButton;
+class QLabel;
+class QComboBox;
+class QCheckBox;
+class QRadioButton;
+class QGroupBox;
+class QWidget;
 
 // Pore board dialog widget
 class PoreBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	PoreBoard( QWidget * parent=0, const char * name=0 );
+    PoreBoard(QWidget * parent=0);
 
 public slots:
-	void setMainFormAddress( MainForm * );
-	void setData();
-	void getColors( float, float, float, float, float, float, float, float, float );
-	void getColorBoardPos( int, int );
-	void setDotStyle();
-        void setLineStyle();
-        void setCubeStyle();
-        void setCylinderStyle();
-        void setConeStyle();
-        void setSphereStyle();
-        void setLowQuality();
-        void setHighQuality();
-        void setFinalQuality();
-        void closeColorBoard();
+    void setMainFormAddress( MainForm * );
+    void setData();
+    void getColors( float, float, float, float, float, float, float, float, float );
+    void getColorBoardPos( int, int );
+    void setDotStyle();
+    void setLineStyle();
+    void setCubeStyle();
+    void setCylinderStyle();
+    void setConeStyle();
+    void setSphereStyle();
+    void setLowQuality();
+    void setHighQuality();
+    void setFinalQuality();
+    void closeColorBoard();
 
 private slots:
-	void buildLayout( colorCriterion );
-	void setPore();
-        void adjustPore();
-        void adjustCriterion( void );
-	void setColorCb();
-	void setColors();
-	void readToggles();
-	void bdone();
-	void bapply();
-	void bcancel();
+    void buildLayout( colorCriterion );
+    void setPore();
+    void adjustPore();
+    void adjustCriterion();
+    void setColorCb();
+    void setColors();
+    void readToggles();
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	MainForm * mainForm;
-	CodeBox * codeBox;
-	LineTypeBox * lineTypeBox;
-	PositionBox * positionBox;
-        PropertyBox * propertyBox;
-        SizeBox * sizeBox;
-        TypeColorNumberBox * typeColorNumberBox;
-	QHBox * hb1;
-	QHBox * hb2;
-	QHBox * hb4;
-	QHBox * hb5;
-	QGridLayout * poreBox;
-	QComboBox * poreCob;
-	QCheckBox * showPoreCb;
-        QLabel * modeL;
-        QLabel * colorL;
-	ColorLabel * colorLabel0;
-        ColorLabel * colorLabel1;
-        ColorLabel * colorLabel2;
-        ColorLabel * colorLabel3;
-        ColorLabel * colorLabel4;
-        ColorLabel * colorLabel5;
-	QPushButton * colorButton;
-        QButtonGroup * colorMode;
-        QRadioButton * colorMode0;
-        QRadioButton * colorMode1;
-        QRadioButton * colorMode2;
-        QRadioButton * colorMode3;
-	ColorBoard * cb;
-        particleData * thisPd;
-        int thisPoreIndex;
-	char colors;
-        int colorPosX, colorPosY;
-        bool showColorBoard;
-	poreRStyle poreRenderStyle;
-        quality renderQuality;
+    MainForm * mainForm;
+    CodeBox * codeBox;
+    LineTypeBox * lineTypeBox;
+    PositionBox * positionBox;
+    PropertyBox * propertyBox;
+    SizeBox * sizeBox;
+    TypeColorNumberBox * typeColorNumberBox;
+    QWidget * hb1;
+    QWidget * hb2;
+    QWidget * hb4;
+    QWidget * hb5;
+    QGridLayout * poreBox;
+    QComboBox * poreCob;
+    QCheckBox * showPoreCb;
+    QLabel * modeL;
+    ColorLabel * colorLabel0;
+    ColorLabel * colorLabel1;
+    ColorLabel * colorLabel2;
+    ColorLabel * colorLabel3;
+    ColorLabel * colorLabel4;
+    ColorLabel * colorLabel5;
+    QPushButton * colorButton;
+    QGroupBox * colorMode;
+    QRadioButton * colorMode0;
+    QRadioButton * colorMode1;
+    QRadioButton * colorMode2;
+    QRadioButton * colorMode3;
+    ColorBoard * cb;
+    particleData * thisPd;
+    int thisPoreIndex;
+    char colors;
+    int colorPosX, colorPosY;
+    bool showColorBoard;
+    poreRStyle poreRenderStyle;
+    quality renderQuality;
 };
 
 #endif // POREB_H

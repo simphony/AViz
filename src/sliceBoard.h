@@ -27,59 +27,49 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef SLICEB_H
 #define SLICEB_H 
 
-#include "data.h"
-#include "floatSpin.h"
-#include "mainForm.h"
-#include "parameterLimits.h"
+#include <QDialog>
 
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qgrid.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qwidget.h>
+#include <data.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+class MainForm;
+class QLabel;
+class QCheckBox;
+class QFSpinBox;
 
 // Slice board dialog widget
 class SliceBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	SliceBoard( QWidget * parent=0, const char * name=0 );
+    SliceBoard(MainForm *, QWidget * parent=0);
+
+public:
+    void setSlice( viewParam );
 
 public slots:
-	void setMainFormAddress( MainForm * );
-	void setSlice( viewParam );
-	void autoSlice( void );
+    void autoSlice();
 
 private slots:
-	void sliceChanged( void );
-	void sliceChangedX( void );
-	void sliceChangedY( void );
-	void sliceChangedZ( void );
-	void registerSettings( void );
-	void bdone();
-	void bapply();
-	void bcancel();
+    void sliceChanged();
+    void sliceChangedX();
+    void sliceChangedY();
+    void sliceChangedZ();
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	MainForm * mainForm;
-        QCheckBox * sliceCb; 
-	QCheckBox * indicateXCb;
-	QCheckBox * indicateYCb;
-	QCheckBox * indicateZCb;
-	QLabel * sliceLX1, * sliceLX2;
-	QLabel * sliceLY1, * sliceLY2;
-	QLabel * sliceLZ1, * sliceLZ2;
-        QFSpinBox * sliceSbX1, * sliceSbX2;
-        QFSpinBox * sliceSbY1, * sliceSbY2;
-        QFSpinBox * sliceSbZ1, * sliceSbZ2;
+    void registerSettings();
+
+private:
+    MainForm * mainForm;
+    QCheckBox * sliceCb;
+    QCheckBox * indicateXCb;
+    QCheckBox * indicateYCb;
+    QCheckBox * indicateZCb;
+    QFSpinBox * sliceSbX1, * sliceSbX2;
+    QFSpinBox * sliceSbY1, * sliceSbY2;
+    QFSpinBox * sliceSbZ1, * sliceSbZ2;
 };
 
 #endif // SLICEB_H

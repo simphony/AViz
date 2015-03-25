@@ -27,6 +27,12 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "defaultParticles.h"
 
+#include "defaults.h"
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
 // Set particle defaults
 void useDefaultParticleData( particleData * pd )
 {
@@ -153,8 +159,8 @@ void setColorAndDefaults( particleData * pd, char * buffer, int index )
 		(*pd).particleColors[index].blueThree = 0.0;
 	
 		// Use defaults for the remaining settings
-		(*pd).showParticle[index] = TRUE;
-		(*pd).showTrack[index] = TRUE;
+        (*pd).showParticle[index] = true;
+        (*pd).showTrack[index] = true;
 		(*pd).colorCrit[index] = TYPE;
 		(*pd).colorCritPos[index] = XPOS;
 		(*pd).colorCritProp[index] = PROP1;
@@ -165,19 +171,19 @@ void setColorAndDefaults( particleData * pd, char * buffer, int index )
 		(*pd).line[index].fThickness = THIN;
 		(*pd).line[index].fEmission = 0;
 		(*pd).line[index].typeColorNumber = 1;
-		(*pd).line[index].fAntiAlias = TRUE;
+        (*pd).line[index].fAntiAlias = true;
 
 		// Assume zero bonding as default
 		(*pd).particleBonds[index].numberOfNeighborBonds = 0;
 		for (i=0;i<BONDS_MAX;i++) {
-			(*pd).particleBonds[index].bShowBond[i] = FALSE;
+            (*pd).particleBonds[index].bShowBond[i] = false;
 			(*pd).particleBonds[index].bColor[i] = RED;
 			(*pd).particleBonds[index].bThickness[i] = LINE;
 			(*pd).particleBonds[index].bEmission[i] = 0.0;
 			(*pd).particleBonds[index].bMinLength[i] = (float)BOND_MINLENGTH;
 			(*pd).particleBonds[index].bMaxLength[i] = (float)BOND_MAXLENGTH;
-			(*pd).particleBonds[index].bAntiAlias[i] = TRUE;
-			(*pd).particleBonds[index].bSeqBond[i] = FALSE;
+            (*pd).particleBonds[index].bAntiAlias[i] = true;
+            (*pd).particleBonds[index].bSeqBond[i] = false;
 		}		
 	}
 	else {
@@ -203,19 +209,7 @@ void setUnidentColor( particleData * pd, int index )
 	free(buffer);
 }
 
-
-// Copy a type string (overloaded function)
-void typeCopy( char * typeSrc, char * typeDest )
-{
-	if (typeSrc && typeDest) {
-		typeDest[0] = typeSrc[0];
-		typeDest[1] = typeSrc[1];
-		typeDest[2] = 0;
-	}
-}
-
-
-// Copy a type string (overloaded function)
+// Copy a type string
 void typeCopy( const char * typeSrc, char * typeDest )
 {
 	if (typeSrc && typeDest) {
@@ -228,21 +222,21 @@ void typeCopy( const char * typeSrc, char * typeDest )
 
 // Compare two type strings denoting particle types -- 
 // these can contain either one or two chars
-bool typeCmp( char * type, char * referenceType )
+bool typeCmp(const char * type, const char * referenceType )
 {
 	if (!type || !referenceType) 
-		return FALSE;
+        return false;
 
 	if (type[0] != referenceType[0]) 
-		return FALSE;
+        return false;
 
 	if (type[1] != referenceType[1]) {
 		if (type[1] == SPACE_CHAR && referenceType[1] == 0)
-			return TRUE;
+            return true;
 		if (type[1] == 0 && referenceType[1] == SPACE_CHAR)
-			return TRUE;
-		return FALSE;
+            return true;
+        return false;
 	}
 		
-	return TRUE;
+    return true;
 }

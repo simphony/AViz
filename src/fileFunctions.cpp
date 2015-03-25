@@ -25,6 +25,13 @@ Contact address: Computational Physics Group, Dept. of Physics,
 ***********************************************************************/
 
 #include "fileFunctions.h"
+#include "memoryFunctions.h"
+#include "version.h"
+#include "defaultParticles.h"
+
+#include <sys/stat.h>
+#include <cstring>
+#include <cstdlib>
 
 // Check the suffix in a file name
 void checkSuffix( const char * filename, const char * suffix )
@@ -51,11 +58,11 @@ void checkSuffix( const char * filename, const char * suffix )
 bool fileExists( const char * filename )
 {
 	struct stat * buf = (struct stat *)malloc( sizeof(struct stat) );
-	bool exists = FALSE;
+    bool exists = false;
 
 	  if (!stat( (const char *)filename, buf )) {
 		  // File exists...
-		  exists = TRUE;
+          exists = true;
 	}
 
 	free( buf );
@@ -146,16 +153,16 @@ bool openCoordinateFunction( const char * filename, aggregateData * ad )
 
 		if (i != (*ad).numberOfParticles) {
 			printf("The coordinate file is corrupted (number of lines mismatch) -- reading failed.\n");
-		       return FALSE;	
+               return false;
 		}	
 		else {
-			return TRUE;
+            return true;
 		}
         }
         else {
 		free(buffer);
 
-		return FALSE;
+        return false;
         }
 }
 
@@ -226,13 +233,13 @@ bool openFileListFunction( const char * filename, fileList * fl )
 		free(fileroot);
 		free(buffer);
 
-		return TRUE;
+        return true;
 	}
         else {
 		free(fileroot);
 		free(buffer);
 
-		return FALSE;
+        return false;
         }
 }
 
@@ -262,7 +269,7 @@ bool generateTrackDataFunction( fileList * fl, aggregateData * ad,
 			(*td).z[i] = (float *)malloc( (*td).numberOfStages*sizeof(float) );
 		}
 	
-		(*td).haveMemoryAllocated = TRUE;
+        (*td).haveMemoryAllocated = true;
 
 		// Read the files and fill in the data
 		for (int stage=0;stage<(*td).numberOfStages;stage++) {
@@ -282,16 +289,16 @@ bool generateTrackDataFunction( fileList * fl, aggregateData * ad,
 			}
 			else {
 				printf("Could not read list entry %s -- abort\n", (*fl).filename[stage] );
-				return FALSE;
+                return false;
 			}
 		}
 	}
 	else {
 		printf("Could not read first list entry -- abort\n");
-		return FALSE;
+        return false;
 	}
 
-	return TRUE;
+    return true;
 }
 
 
@@ -320,7 +327,7 @@ bool openViewParamFunction( const char * filename, viewParam * vp )
 			free(buffer);
 			free(version);
 	
-			return TRUE;
+            return true;
 		}
 		else {
 			// Version strings do not agree: do not read
@@ -329,14 +336,14 @@ bool openViewParamFunction( const char * filename, viewParam * vp )
 			free(buffer);
 			free(version);
 	
-			return FALSE;
+            return false;
 		}
         }
         else {
 		free(buffer);
 		free(version);
 
-		return FALSE;
+        return false;
         }
 }
 
@@ -364,11 +371,11 @@ bool saveViewParamFunction( const char * filename, viewParam * vp )
 		fclose( out );
 
 		free(buffer);
-		return TRUE;
+        return true;
 	}
 	else {
 		free(buffer);
-		return FALSE;
+        return false;
 	}
 }
 
@@ -414,12 +421,12 @@ bool saveParticleDataFunction( const char * filename, particleData * pd )
 
 		free(buffer);
 
-		return TRUE;
+        return true;
 	}
 	else {
 		free(buffer);
 
-		return FALSE;
+        return false;
 	}
 }
 
@@ -468,7 +475,7 @@ bool openParticleDataFunction( const char * filename, particleData * pd )
 			free(buffer);
 			free(version);
 
-			return TRUE;
+            return true;
 		}
 		else {
 			// Version strings do not agree: do not read
@@ -477,13 +484,13 @@ bool openParticleDataFunction( const char * filename, particleData * pd )
 			free(buffer);
 			free(version);
 	
-			return FALSE;
+            return false;
 		}
         }
         else {
 		free(buffer);
 		free(version);
 
-		return FALSE;
+        return false;
         }
 }

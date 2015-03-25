@@ -26,12 +26,13 @@ static const char rcsid[] =
 #include <assert.h>
 #include <stdio.h>
 
-#include <qpainter.h>
-#include <qdrawutil.h>
-#include <qimage.h>
-#include <qpixmap.h>
+#include <QPainter>
+#include <QImage>
+#include <QPaintEvent>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QPalette>
 
-#include "soqtdefs.h"
 #include "SoAnyThumbWheel.h"
 #include "SoQtThumbWheel.h"
 
@@ -40,18 +41,16 @@ static const char rcsid[] =
 static const int SHADEBORDERWIDTH = 2;
 
 SoQtThumbWheel::SoQtThumbWheel(
-  QWidget * parent,
-  const char * name )
-: QWidget( parent, name )
+  QWidget * parent)
+: QWidget( parent )
 {
   this->constructor( SoQtThumbWheel::Vertical );
 } // SoQtThumbWheel()
 
 SoQtThumbWheel::SoQtThumbWheel(
   Orientation orientation,
-  QWidget * parent,
-  const char * name )
-: QWidget( parent, name )
+  QWidget * parent)
+: QWidget( parent )
 {
   this->constructor( orientation );
 } // SoQtThumbWheel()
@@ -88,7 +87,7 @@ SoQtThumbWheel::setOrientation(
   Orientation orientation )
 {
   this->orient = orientation;
-  this->repaint( FALSE );
+  this->repaint();
 } // setOrientation()
 
 void
@@ -98,7 +97,6 @@ SoQtThumbWheel::paintEvent(
   QPainter p( this );
   QRect paintRect = event->rect();
   p.setClipRect(paintRect);
-  QColorGroup g = this->colorGroup();
 
   int w, d;
   if ( this->orient == SoQtThumbWheel::Vertical ) {
@@ -123,8 +121,8 @@ SoQtThumbWheel::paintEvent(
                    this->width() - 2*SHADEBORDERWIDTH,
                    this->height() - 2*SHADEBORDERWIDTH );
 
-  qDrawShadePanel( &p, 0, 0, this->width(), this->height(),
-                   g, FALSE, SHADEBORDERWIDTH, NULL );
+  qDrawShadePanel(&p, 0, 0, this->width(), this->height(),
+                  palette(), false, SHADEBORDERWIDTH);
 
   if ( this->orient == Vertical ) {
     wheelrect.setTop(    wheelrect.top() + 5 );
@@ -148,11 +146,11 @@ SoQtThumbWheel::paintEvent(
   // wheelrect is now wheel-only
 
   if ( this->orient == Vertical )
-    bitBlt( this, wheelrect.left(), wheelrect.top(), this->pixmaps[pixmap],
-            0, 0, w, d, CopyROP );
+    p.drawPixmap(wheelrect.left(), wheelrect.top(), *this->pixmaps[pixmap],
+            0, 0, w, d);
   else
-    bitBlt( this, wheelrect.left(), wheelrect.top(), this->pixmaps[pixmap],
-            0, 0, d, w, CopyROP );
+    p.drawPixmap(wheelrect.left(), wheelrect.top(), *this->pixmaps[pixmap],
+            0, 0, d, w);
   this->currentPixmap = pixmap;
 } // paintEvent()
 
@@ -167,7 +165,7 @@ SoQtThumbWheel::mousePressEvent(
   if ( this->state != SoQtThumbWheel::Idle )
     return;
 
-  if ( event->button() != LeftButton )
+  if ( event->button() != Qt::LeftButton )
     return;
 
   QRect wheel;
@@ -220,7 +218,7 @@ SoQtThumbWheel::mouseMoveEvent(
 
   emit wheelMoved( this->tempWheelValue );
 
-  this->repaint( FALSE );
+  this->repaint();
 } // mouseMoveEvent()
 
 /*!
@@ -234,7 +232,7 @@ SoQtThumbWheel::mouseReleaseEvent(
   if ( this->state != SoQtThumbWheel::Dragging )
     return;
 
-  if ( event->button() != LeftButton )
+  if ( event->button() != Qt::LeftButton )
     return;
 
   this->wheelValue = this->tempWheelValue;
@@ -254,7 +252,7 @@ SoQtThumbWheel::getNormalizedValue(int pos) const
 
 /*
 int
-SoQtThumbWheel::getWheelLength(void) const
+SoQtThumbWheel::getWheelLength() const
 {
   return this->orient == SoQtThumbWheel::Vertical ?
     this->height() : this->width();
@@ -270,7 +268,7 @@ SoQtThumbWheel::orientedCoord(const QPoint &p) const
 */
 
 QSize
-SoQtThumbWheel::sizeHint(void) const
+SoQtThumbWheel::sizeHint() const
 {
   const int length = 88;
   int thick = 24;
@@ -282,13 +280,13 @@ SoQtThumbWheel::sizeHint(void) const
 } // sizeHint()
 
 SoQtThumbWheel::Orientation
-SoQtThumbWheel::orientation(void) const
+SoQtThumbWheel::orientation() const
 {
   return this->orient;
 } // orientation()
 
 float
-SoQtThumbWheel::value(void) const
+SoQtThumbWheel::value() const
 {
   return this->wheelValue;
 } // value()
@@ -321,7 +319,7 @@ SoQtThumbWheel::initWheel(
 
   this->numPixmaps = this->wheel->BitmapsRequired();
   this->pixmaps = new QPixmap * [this->numPixmaps];
-  QImage image( pwidth, pheight, 32, 0 );
+  QImage image( pwidth, pheight, QImage::Format_RGB32);
   for ( int i = 0; i < this->numPixmaps; i++ ) {
     this->wheel->DrawBitmap( i, image.bits(), (this->orient == Vertical) ?
       SoAnyThumbWheel::VERTICAL : SoAnyThumbWheel::HORIZONTAL );
@@ -340,7 +338,7 @@ SoQtThumbWheel::setEnabled(
     this->state = SoQtThumbWheel::Idle;
   else
     this->state = SoQtThumbWheel::Disabled;
-  this->repaint( FALSE );
+  this->repaint();
 } // setEnabled()
 
 bool
@@ -356,7 +354,7 @@ SoQtThumbWheel::setValue(
 {
   this->wheelValue = this->tempWheelValue = value;
   this->mouseDownPos = this->mouseLastPos;
-  this->repaint( FALSE );
+  this->repaint();
 } // setValue()
 
 // *************************************************************************

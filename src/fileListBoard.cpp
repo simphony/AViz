@@ -26,140 +26,131 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "fileListBoard.h"
 
+#include <QGridLayout>
+#include <QPushButton>
+#include <QButtonGroup>
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QTimer>
+#include <QLabel>
+
+#include "mainForm.h"
+
 // Make a popup dialog box 
-FileListBoard::FileListBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+FileListBoard::FileListBoard(MainForm * mainForm, QWidget * parent)
+    : QDialog(parent), mainForm(mainForm),
+      thisDirection(FORWARD), cycleMode(false), haveFileList(false)
 {
-	this->setCaption( "AViz: File List Control" );
+    setWindowTitle( "AViz: File List Control" );
 
-	// Insert a grid that will hold control buttons
-	const int numCols = 5;
-        const int numRows = 4;
-        QGridLayout * fileListBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "fileListBox" );
+    // Insert a grid that will hold control buttons
+    QGridLayout * fileListBox = new QGridLayout(this);
+    fileListBox->setHorizontalSpacing(SPACE);
+    fileListBox->setVerticalSpacing(SPACE);
 
-	// Create buttons
-	QPushButton * singleStepPb = new QPushButton( this, "singleStep" );
-	singleStepPb->setText( "SingleStep" );
-	fileListBox->addWidget( singleStepPb, 0, 0);
+    // Create buttons
+    QPushButton * singleStepPb = new QPushButton("SingleStep");
+    fileListBox->addWidget( singleStepPb, 0, 0);
 
-	QPushButton * fastStepPb = new QPushButton( this, "fastStep" );
-	fastStepPb->setText( "FastStep" );
-	fileListBox->addWidget( fastStepPb, 0, 1);
+    QPushButton * fastStepPb = new QPushButton("FastStep");
+    fileListBox->addWidget( fastStepPb, 0, 1);
 
-	QPushButton * cyclePb = new QPushButton( this, "cycle" );
-	cyclePb->setText( "Cycle" );
-	cyclePb->setToggleButton( TRUE );
-	fileListBox->addWidget( cyclePb, 0, 2);
+    QPushButton * cyclePb = new QPushButton("Cycle");
+    cyclePb->setCheckable(true);
+    fileListBox->addWidget( cyclePb, 0, 2);
 
-	// Construct the cycle timer
-	cycleTimer = new QTimer( this );
+    // Construct the cycle timer
+    cycleTimer = new QTimer( this );
 
-	// Define a callback for these pushbuttons
-        connect( singleStepPb, SIGNAL(clicked()), SLOT(bsingleStep()) );
-        connect( fastStepPb, SIGNAL(clicked()), SLOT(bfastStep()) );
-        connect( cyclePb, SIGNAL(clicked()), SLOT(bcycle()) );
+    // Define a callback for these pushbuttons
+    connect( singleStepPb, SIGNAL(clicked()), SLOT(bsingleStep()) );
+    connect( fastStepPb, SIGNAL(clicked()), SLOT(bfastStep()) );
+    connect( cyclePb, SIGNAL(clicked()), SLOT(bcycle()) );
 
-	// Create radio buttons to choose direction
-	direction = new QButtonGroup( 2, QGroupBox::Horizontal, this, "direction" );
-	fileListBox->addMultiCellWidget( direction, 0, 0, 3, 4 );
-	forwardRb = new QRadioButton( direction, "forward" );
-	forwardRb->setText( "Forward" );
-	backwardRb = new QRadioButton( direction, "backward" );
-	backwardRb->setText( "Backward" );
+    // Create radio buttons to choose direction
+    QGroupBox *direction = new QGroupBox();
+    QHBoxLayout *directionLayout = new QHBoxLayout(direction);
+    fileListBox->addWidget(direction, 0 /*fromRow*/, 3 /*fromCol*/, 1 /*rowSpan*/, 1/*colSpan*/);
+    forwardRb = new QRadioButton("Forward" , direction);
+    directionLayout->addWidget(forwardRb);
+    QRadioButton *backwardRb = new QRadioButton("Backward", direction);
+    directionLayout->addWidget(backwardRb);
 
-	// Define a callback for these radio buttons
-        connect( direction, SIGNAL(clicked(int)), this, SLOT(bdirection(int)) );
+    // Define a callback for these radio buttons
+    QButtonGroup *directionButtonGroup = new QButtonGroup(this);
+    directionButtonGroup->addButton(forwardRb, 0);
+    directionButtonGroup->addButton(backwardRb, 1);
+    connect(directionButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(bdirection(int)) );
 
-	// Create pushbuttons to jump to start 
-	QPushButton * startPb = new QPushButton( this, "start" );
-	startPb->setText( "Jump To Start" );
-	fileListBox->addWidget( startPb, 1, 0);
+    // Create pushbuttons to jump to start
+    QPushButton *startPb = new QPushButton("Jump To Start");
+    fileListBox->addWidget(startPb, 1, 0);
 
-        // Define a callback for that button
-	QObject::connect( startPb, SIGNAL(clicked()), this, SLOT(start()) );
+    // Define a callback for that button
+    QObject::connect( startPb, SIGNAL(clicked()), this, SLOT(start()) );
 
-	// Create pushbuttons to jump to end
-	QPushButton * endPb = new QPushButton( this, "end" );
-	endPb->setText( "Jump To End" );
-	fileListBox->addWidget( endPb, 1, 1);
+    // Create pushbuttons to jump to end
+    QPushButton * endPb = new QPushButton("Jump To End");
+    fileListBox->addWidget( endPb, 1, 1);
 
-        // Define a callback for that button
-	QObject::connect( endPb, SIGNAL(clicked()), this, SLOT(end()) );
+    // Define a callback for that button
+    QObject::connect( endPb, SIGNAL(clicked()), this, SLOT(end()) );
 
-	// Create a checkbox
-	keepViewScaleCb = new QCheckBox( this, "keepViewScale" );
-	fileListBox->addWidget( keepViewScaleCb, 1, 4);
-	keepViewScaleCb->setText( "Keep ViewScale" );
-	this->resetKeepViewScale();
+    // Create a checkbox
+    keepViewScaleCb = new QCheckBox("Keep ViewScale");
 
-        // Define a callback for that check box 
-	QObject::connect( keepViewScaleCb, SIGNAL(clicked()), this, SLOT(keepViewScaleChanged()) );
+    fileListBox->addWidget( keepViewScaleCb, 1, 3);
+    this->resetKeepViewScale();
 
-	// Create a label
-	QLabel * lineL = new QLabel( this, "lineL ");
-	lineL->setText( " File List: " );
-	fileListBox->addWidget( lineL, 2, 0 );
+    // Define a callback for that check box
+    QObject::connect( keepViewScaleCb, SIGNAL(clicked()), this, SLOT(keepViewScaleChanged()) );
 
-	// Create a text window
-	fileLine = new QLineEdit( this, "fileLine" );
-	fileLine->setText("--");
-	fileLine->setReadOnly( TRUE );
-	fileListBox->addMultiCellWidget( fileLine, 2, 2, 1, 4 );
+    // Create a label
+    QLabel * lineL = new QLabel(" File List: ");
+    fileListBox->addWidget( lineL, 2, 0 );
 
-	// Create a pushbutton
-	QPushButton * tracksPb = new QPushButton( this, "tracks" );
-	tracksPb->setText( "Tracks..." );
-	fileListBox->addWidget( tracksPb, 3, 0);
+    // Create a text window
+    fileLine = new QLineEdit("--");
+    fileLine->setReadOnly(true);
+    fileListBox->addWidget(fileLine, 2 /*fromRow*/, 1 /*fromCol*/, 1 /*rowSpan*/, 3/*colSpan*/);
 
-        // Define a callback for that button
-	QObject::connect( tracksPb, SIGNAL(clicked()), this, SLOT(launchTrack()) );
+    // Create a pushbutton
+    QPushButton * tracksPb = new QPushButton("Tracks...");
+    fileListBox->addWidget( tracksPb, 3, 0);
 
-	// Create more pushbuttons that will go into the lowest row
-	QPushButton * done = new QPushButton( this, "done" );
-	fileListBox->addWidget( done, 3, 4);
-	done->setText( "Done" ); 
+    // Define a callback for that button
+    connect( tracksPb, SIGNAL(clicked()), this, SLOT(launchTrack()) );
 
-	 // Define a callback for that button
-        QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
+    // Create more pushbuttons that will go into the lowest row
+    QPushButton * done = new QPushButton("Done");
+    fileListBox->addWidget( done, 3, 3);
 
-	// Set defaults
-	cycleMode = FALSE;
-	thisDirection = FORWARD;
-	forwardRb->setChecked (TRUE );	
+    // Define a callback for that button
+    connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
 
-	// Reset the pointers
-	mainForm = NULL;
-
-	// Set a flag
-	haveFileList = FALSE;
+    forwardRb->setChecked (thisDirection == FORWARD);
 }
-
-
-// Set a pointer to the main form
-void FileListBoard::setMainFormAddress( MainForm * thisMF )
-{
-	mainForm = thisMF;
-}
-
 
 // Receive the current file list parameters 
 void FileListBoard::setFileListParam( int thisCurrentFile, 
-		int thisNumberOfFiles, const QString &fn )
+                                      int thisNumberOfFiles, const QString &fn )
 {
-        numberOfFiles = thisNumberOfFiles;
-	currentFile = thisCurrentFile;
-	fileListName = fn;
+    numberOfFiles = thisNumberOfFiles;
+    currentFile = thisCurrentFile;
+    fileListName = fn;
 
-	// Adjust the caption of the board
-	QString caption =  "AViz: File List Control ";
-	caption.append(fn);
-	this->setCaption( caption );
+    // Adjust the caption of the board
+    QString caption =  "AViz: File List Control ";
+    caption.append(fn);
+    setWindowTitle( caption );
 
-	// Show the current file
-	this->showCurrentFile();
+    // Show the current file
+    this->showCurrentFile();
 
-	// Set a flag
-	haveFileList = TRUE;
+    // Set a flag
+    haveFileList = true;
 }
 
 
@@ -167,23 +158,23 @@ void FileListBoard::setFileListParam( int thisCurrentFile,
 // next file
 void FileListBoard::bsingleStep()
 {
-	switch (this->getDirection()) {
-		case FORWARD:
-			currentFile++;
-		break;
-		case BACKWARD:
-			currentFile--;
-		break;
-	}
+    switch (this->getDirection()) {
+    case FORWARD:
+        currentFile++;
+        break;
+    case BACKWARD:
+        currentFile--;
+        break;
+    }
 
-	if (currentFile >= numberOfFiles)
-		currentFile = 0;
+    if (currentFile >= numberOfFiles)
+        currentFile = 0;
 
-	if (currentFile < 0)
-		currentFile = numberOfFiles-1;
+    if (currentFile < 0)
+        currentFile = numberOfFiles-1;
 
-	// Show this file
-	this->showCurrentFile();
+    // Show this file
+    this->showCurrentFile();
 }
 
 
@@ -191,81 +182,80 @@ void FileListBoard::bsingleStep()
 // next file
 void FileListBoard::bfastStep()
 {
-	switch (this->getDirection()) {
-		case FORWARD:
-			currentFile+=10;
-		break;
-		case BACKWARD:
-			currentFile-=10;
-		break;
-	}
+    switch (this->getDirection()) {
+    case FORWARD:
+        currentFile+=10;
+        break;
+    case BACKWARD:
+        currentFile-=10;
+        break;
+    }
 
-	if (currentFile >= numberOfFiles)
-		currentFile = 0;
+    if (currentFile >= numberOfFiles)
+        currentFile = 0;
 
-	if (currentFile < 0)
-		currentFile = numberOfFiles-1;
+    if (currentFile < 0)
+        currentFile = numberOfFiles-1;
 
-	// Show this file
-	this->showCurrentFile();
+    // Show this file
+    this->showCurrentFile();
 }
 
 
 // Start or stop the cycling
 void FileListBoard::bcycle()
 {
-	if (cycleMode == TRUE) {
-		// End the cycling
-		cycleTimer->stop();
-		cycleMode = FALSE;
-	}
-	else { 
-		// Start the timer
-		connect(cycleTimer, SIGNAL(timeout()), this, SLOT(bsingleStep()) );
-		cycleTimer->start( 40 );
-		cycleMode = TRUE;
-	}
+    if (cycleMode) {
+        // End the cycling
+        cycleTimer->stop();
+        cycleMode = false;
+    } else {
+        // Start the timer
+        connect(cycleTimer, SIGNAL(timeout()), this, SLOT(bsingleStep()) );
+        cycleTimer->start( 40 );
+        cycleMode = true;
+    }
 }
 
 
 // Jump to start of cycle
 void FileListBoard::start()
 {
-	currentFile = 0;
+    currentFile = 0;
 
-	// Show this file
-	this->showCurrentFile();
+    // Show this file
+    this->showCurrentFile();
 }
 
 
 // Jump to end of cycle
 void FileListBoard::end()
 {
-	currentFile = numberOfFiles-1;
+    currentFile = numberOfFiles-1;
 
-	// Show this file
-	this->showCurrentFile();
+    // Show this file
+    this->showCurrentFile();
 }
 
 
 // Adjust the direction
 void FileListBoard::bdirection( int radio )
 {
-	switch (radio) {
-		case 0: 
-			thisDirection = FORWARD;
-		break;
-		case 1: 
-			thisDirection = BACKWARD;
-		break;
-	}
+    switch (radio) {
+    case 0:
+        thisDirection = FORWARD;
+        break;
+    case 1:
+        thisDirection = BACKWARD;
+        break;
+    }
 }
 
 
 // Return the current direction 
 FileListBoard::listDirection FileListBoard::getDirection( )
 {
-	return thisDirection;
+    return thisDirection;
 }
 
 
@@ -274,49 +264,47 @@ FileListBoard::listDirection FileListBoard::getDirection( )
 // visible at all!)
 void FileListBoard::resetKeepViewScale( )
 {
-	keepViewScaleCb->setChecked( FALSE );
+    keepViewScaleCb->setChecked( false );
 }
 
 
 // Callback function to launch track board
 void FileListBoard::launchTrack( )
 {
-	if (mainForm)
-		mainForm->launchTrack( fileListName );
+    mainForm->launchTrack( fileListName );
 }
 
 
 // Callback function to control view freezing
 void FileListBoard::keepViewScaleChanged( )
 {
-	// Do nothing
+    // Do nothing
 }
 
 
 // Show the current file in the file list
 void FileListBoard::showCurrentFile( )
 {
-	if (mainForm && haveFileList) {
+    if (haveFileList) {
 
-		// Read the data; control the freezing of the view object data
-		QString file = mainForm->readFileFromList( currentFile, keepViewScaleCb->isChecked() );
+        // Read the data; control the freezing of the view object data
+        QString file = mainForm->readFileFromList( currentFile, keepViewScaleCb->isChecked() );
 
-		// Update the graphics, with or without track display
-		mainForm->updateRendering();
+        // Update the graphics, with or without track display
+        mainForm->updateRendering();
 
-		// Update text window
-		fileLine->setText( file );
-	}
+        // Update text window
+        fileLine->setText( file );
+    }
 }
 
 
 // Hide the board
 void FileListBoard::bdone()
 {
-	// Hide now
-        hide();
+    // Hide now
+    hide();
 
-	// Also hide the track board
-	if (mainForm)
-		mainForm->hideTrack();
+    // Also hide the track board
+    mainForm->hideTrack();
 }

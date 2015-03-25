@@ -28,170 +28,160 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define GLCANVFR_H
 
 #include "data.h"
-#include "defaults.h"
-#include "glCanvasArea.h"
-#include "mainForm.h"
-#include "parameterLimits.h"
-#include "SoQtThumbWheel.h"
 
-#include <qhbox.h>
-#include <qgl.h>
-#include <qpixmap.h>
-#include <qtoolbutton.h>
-#include <qtimer.h>
-#include <qvbox.h>
+#include <QWidget>
+#include <QPixmap>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <sys/time.h>
+class QTimer;
+class QToolButton;
+class GLCanvasArea;
+class QFrame;
 
-
+class MainForm;
+class SoQtThumbWheel;
 
 // Frame widget containing the Open GL drawing area
-class GLCanvasFrame: public QVBox
+class GLCanvasFrame: public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	GLCanvasFrame( QWidget* parent, const char* name );
-	~GLCanvasFrame();
-
-        void setFormAddress( MainForm * );
+    GLCanvasFrame(MainForm *, QWidget* parent);
+    ~GLCanvasFrame();
 
 public slots:
-	void updateView();
-	void updateViewWithoutViewObjectChange();
-	void setViewParam( viewParam );
+    void updateView();
+    void updateViewWithoutViewObjectChange();
+    void setViewParam( viewParam );
 
-	void updateRendering();
-	void snapRendering();
-	void snapRendering( const char * );
+    void updateRendering();
+    void snapRendering();
+    void snapRendering( const char * );
 
-        void setAuto( viewParam );
-        void startAutoRot1( void );
-        void startAutoRot2( void );
-        void startAutoTilt1( void );
-        void startAutoTilt2( void );
-        void startAutoSpin1( void );
-        void startAutoSpin2( void );
-        void startAutoZoom1( void );
-        void startAutoZoom2( void );
-	void computeTransformation( double, double, double, double, double *, double *, double * );
+    void setAuto( viewParam );
+    void startAutoRot1();
+    void startAutoRot2();
+    void startAutoTilt1();
+    void startAutoTilt2();
+    void startAutoSpin1();
+    void startAutoSpin2();
+    void startAutoZoom1();
+    void startAutoZoom2();
+    void computeTransformation( double, double, double, double, double *, double *, double * );
 
-	aggregateData * getAggregateData();
-	viewParam * getViewParam( void );
-	viewObject * getViewObject();
-	particleData * getParticleData();
-	trackData * getTrackData();
+    aggregateData * getAggregateData();
+    viewParam * getViewParam();
+    viewObject * getViewObject();
+    particleData * getParticleData();
+    trackData * getTrackData();
 
 private slots:
-	viewObject getObjectData( void );
+    viewObject getObjectData();
 
-	void rotWheelMoved( float );
-	void rot1( void );
-	void rot1SingleStep( void );
-	void rot2( void );
-	void rot2SingleStep( void );
-	void tiltWheelMoved( float );
-	void tilt1( void );
-	void tilt1SingleStep( void );
-	void tilt2( void );
-	void tilt2SingleStep( void );
-	void spinWheelMoved( float );
-	void spin1( void );
-	void spin1SingleStep( void );
-	void spin2( void );
-	void spin2SingleStep( void );
-	void dollyWheelMoved( float );
-	void dolly1( void );
-	void dolly1SingleStep( void );
-	void dolly2( void );
-	void dolly2SingleStep( void );
+    void rotWheelMoved( float );
+    void rot1();
+    void rot1SingleStep();
+    void rot2();
+    void rot2SingleStep();
+    void tiltWheelMoved( float );
+    void tilt1();
+    void tilt1SingleStep();
+    void tilt2();
+    void tilt2SingleStep();
+    void spinWheelMoved( float );
+    void spin1();
+    void spin1SingleStep();
+    void spin2();
+    void spin2SingleStep();
+    void dollyWheelMoved( float );
+    void dolly1();
+    void dolly1SingleStep();
+    void dolly2();
+    void dolly2SingleStep();
 
-        void rotStep( char );
-        void rotStep( char, int );
-        void tiltStep( char );
-        void tiltStep( char, int );
-        void spinStep( char );
-        void spinStep( char, int );
-        void zoomStep( char );
-        void zoomStep( char, int );
+    void rotStep( char );
+    void rotStep( char, int );
+    void tiltStep( char );
+    void tiltStep( char, int );
+    void spinStep( char );
+    void spinStep( char, int );
+    void zoomStep( char );
+    void zoomStep( char, int );
 
-	void setHome( void );
-	void setNewHome( void );
-	void setParallel( void );
-	void setPerspective( void );
-	void setBlackBackground( void );
-	void setWhiteBackground( void );
-	void toggleStereoVision( void );
-	void eyeSeparationPlus( void );
-	void eyeSeparationMinus( void );
-	void adjustButtons( void );
-	void autoButtonCB( void );
+    void setHome();
+    void setNewHome();
+    void setParallel();
+    void setPerspective();
+    void setBlackBackground();
+    void setWhiteBackground();
+    void toggleStereoVision();
+    void eyeSeparationPlus();
+    void eyeSeparationMinus();
+    void adjustButtons();
+    void autoButtonCB();
 
 private:
-	MainForm * mainForm;
-	GLCanvasArea * drawArea;
-	QVBox * drawFrame;
-	SoQtThumbWheel * tiltWheel;
-	SoQtThumbWheel * rotWheel;
-	SoQtThumbWheel * spinWheel;
-	SoQtThumbWheel * dollyWheel;
-	QToolButton * x1Button;
-	QToolButton * x2Button;
-	QToolButton * y1Button;
-	QToolButton * y2Button;
-	QToolButton * z1Button;
-	QToolButton * z2Button;
-	QToolButton * autoButton;
-	QToolButton * setHomeButton;
-	QToolButton * setNewHomeButton;
-	QToolButton * perspectiveButton;
-	QToolButton * parallelButton;
-	QToolButton * blackBackgroundButton;
-	QToolButton * whiteBackgroundButton;
-	QToolButton * stereoVisionButton;
-	QToolButton * eyeSeparationPlusButton;
-	QToolButton * eyeSeparationMinusButton;
-	QToolButton * dolly1Button;
-	QToolButton * dolly2Button;
-	QPixmap x1Pixmap;
-	QPixmap x1RedPixmap;
-	QPixmap x2Pixmap;
-	QPixmap x2RedPixmap;
-	QPixmap y1Pixmap;
-	QPixmap y1RedPixmap;
-	QPixmap y2Pixmap;
-	QPixmap y2RedPixmap;
-	QPixmap z1Pixmap;
-	QPixmap z1RedPixmap;
-	QPixmap z2Pixmap;
-	QPixmap z2RedPixmap;
-	QPixmap autoPixmap;
-	QPixmap autoRedPixmap;
-	QPixmap setHomePixmap;
-	QPixmap setNewHomePixmap;
-	QPixmap parallelPixmap;
-	QPixmap perspectivePixmap;
-	QPixmap blackBackgroundPixmap;
-	QPixmap whiteBackgroundPixmap;
-	QPixmap stereoVisionPixmap;
-	QPixmap eyeSeparationPlusPixmap;
-	QPixmap eyeSeparationMinusPixmap;
-	QPixmap dolly1Pixmap;
-	QPixmap dolly1RedPixmap;
-	QPixmap dolly2Pixmap;
-	QPixmap dolly2RedPixmap;
-	QTimer * rotTimer1;
-        QTimer * rotTimer2;
-        QTimer * tiltTimer1;
-        QTimer * tiltTimer2;
-        QTimer * spinTimer1;
-        QTimer * spinTimer2;
-        QTimer * zoomTimer1;
-        QTimer * zoomTimer2;
-	bool autoMode;
+    MainForm * mainForm;
+    GLCanvasArea * drawArea;
+    QFrame * drawFrame;
+    SoQtThumbWheel * tiltWheel;
+    SoQtThumbWheel * rotWheel;
+    SoQtThumbWheel * spinWheel;
+    SoQtThumbWheel * dollyWheel;
+    QToolButton * x1Button;
+    QToolButton * x2Button;
+    QToolButton * y1Button;
+    QToolButton * y2Button;
+    QToolButton * z1Button;
+    QToolButton * z2Button;
+    QToolButton * autoButton;
+    QToolButton * setHomeButton;
+    QToolButton * setNewHomeButton;
+    QToolButton * perspectiveButton;
+    QToolButton * parallelButton;
+    QToolButton * blackBackgroundButton;
+    QToolButton * whiteBackgroundButton;
+    QToolButton * stereoVisionButton;
+    QToolButton * eyeSeparationPlusButton;
+    QToolButton * eyeSeparationMinusButton;
+    QToolButton * dolly1Button;
+    QToolButton * dolly2Button;
+    QPixmap x1Pixmap;
+    QPixmap x1RedPixmap;
+    QPixmap x2Pixmap;
+    QPixmap x2RedPixmap;
+    QPixmap y1Pixmap;
+    QPixmap y1RedPixmap;
+    QPixmap y2Pixmap;
+    QPixmap y2RedPixmap;
+    QPixmap z1Pixmap;
+    QPixmap z1RedPixmap;
+    QPixmap z2Pixmap;
+    QPixmap z2RedPixmap;
+    QPixmap autoPixmap;
+    QPixmap autoRedPixmap;
+    QPixmap setHomePixmap;
+    QPixmap setNewHomePixmap;
+    QPixmap parallelPixmap;
+    QPixmap perspectivePixmap;
+    QPixmap blackBackgroundPixmap;
+    QPixmap whiteBackgroundPixmap;
+    QPixmap stereoVisionPixmap;
+    QPixmap eyeSeparationPlusPixmap;
+    QPixmap eyeSeparationMinusPixmap;
+    QPixmap dolly1Pixmap;
+    QPixmap dolly1RedPixmap;
+    QPixmap dolly2Pixmap;
+    QPixmap dolly2RedPixmap;
+    QTimer * rotTimer1;
+    QTimer * rotTimer2;
+    QTimer * tiltTimer1;
+    QTimer * tiltTimer2;
+    QTimer * spinTimer1;
+    QTimer * spinTimer2;
+    QTimer * zoomTimer1;
+    QTimer * zoomTimer2;
+    bool autoMode;
 };
 
 #endif // GLCANVFR_H

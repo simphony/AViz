@@ -28,54 +28,43 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define RENBOX_H
 
 #include "data.h"
-#include "defaults.h"
-#include "mainForm.h"
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qspinbox.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QWidget>
 
-#include <stdio.h>
-#include <math.h>
+class QComboBox;
+class QSpinBox;
+
+class MainForm;
 
 // Render quality box in main form
-class RenderBox: public QVBox
+class RenderBox: public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	RenderBox( QWidget * parent=0, const char * name=0 );
+    RenderBox(MainForm * mainForm, QWidget * parent=0);
 
-        void setFormAddress( MainForm * );
-	void setValue( viewParam );
-
-private slots:
-	void getRenderMode( viewParam * );
-	void getRenderStyle( viewParam * );
-	float getRenderSize( void );
-	void getRenderQuality( viewParam * );
-        void renderModeCb();
-        void renderStyleCb();
-        void renderQualityCb();
-        void updateRendering();
+    void setValue( viewParam );
 
 private:
-        MainForm * mainForm;
-	QLabel * modeL;
-	QLabel * styleL;
-	QLabel * sizeL;
-	QLabel * qualL;
-	QComboBox * modeCob;
-	QComboBox * styleCob;
-	QComboBox * qualityCob;
-	QSpinBox * renderSSb;
-	QSizePolicy sizePolicy() const;
-	bool setValueFlag;
+    void getRenderMode( viewParam * );
+    void getRenderStyle( viewParam * );
+    float getRenderSize() const;
+    void getRenderQuality( viewParam * );
+
+private slots:
+    void renderModeCb();
+    void renderStyleCb();
+    void renderQualityCb();
+    void updateRendering();
+
+private:
+    MainForm * mainForm;
+    QComboBox * modeCob;
+    QComboBox * styleCob;
+    QComboBox * qualityCob;
+    QSpinBox * renderSSb;
+    QSizePolicy sizePolicy() const;
+    bool setValueFlag;
 };
 
 

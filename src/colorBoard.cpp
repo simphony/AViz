@@ -26,593 +26,508 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "colorBoard.h"
 
+#include <QFrame>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QSlider>
+#include <QPushButton>
+
+#include "defaults.h"
 #include "atomBoard.h"
 #include "lcBoard.h"
 #include "polymerBoard.h"
 #include "poreBoard.h"
 #include "spinBoard.h"
+#include "colorLabel.h"
+#include "data.h"
+#include "widgets/doneapplycancelwidget.h"
 
-// Private pointers are defined in colorBoard.h, but the corresponding
-// header files cannot be included there -- it causes problems regarding
-// the mutual inclusion of  header files.  Here the pointers are of
-// the general class QWiget and must be cast into the specific
-// class
+namespace {
+
+QHBoxLayout* createHboxLayout(QWidget *widget) {
+    QHBoxLayout *box = new QHBoxLayout(widget);
+    box->setSpacing(SPACE);
+    return box;
+}
+
+QVBoxLayout* createVboxLayout(QWidget *widget) {
+    QVBoxLayout *box = new QVBoxLayout(widget);
+    box->setSpacing(SPACE);
+    return box;
+}
+
+// creates widget containing Red, Green and Blue
+// labels in a vertical layout
+QWidget* createRedGreenBlueLabels() {
+    QWidget *w = new QWidget();
+    QVBoxLayout *layout = createVboxLayout(w);
+    layout->addWidget(new QLabel(" Red: "));
+    layout->addWidget(new QLabel(" Green: "));
+    layout->addWidget(new QLabel(" Blue: "));
+    return w;
+}
+
+QFrame* createFrame() {
+    QFrame *frame = new QFrame();
+    frame->setFrameStyle(QFrame::Box | QFrame::Sunken);
+    frame->setContentsMargins(SPACE, SPACE, SPACE, SPACE );
+    frame->setMinimumWidth( COLOR_MIN_WIDTH );
+    return frame;
+}
+
+QSlider* createHorizontalSlider() {
+    QSlider *s = new QSlider(Qt::Horizontal);
+    s->setMinimum( COLOR_MIN );
+    s->setMaximum( COLOR_MAX );
+    s->setTickInterval( 10 );
+    s->setTickPosition( QSlider::TicksAbove );
+    s->setValue( COLOR_MAX );
+    s->setFixedWidth( SLIDER_WIDTH );
+    return s;
+}
+
+}
 
 // Make a popup dialog box. Note:
 // It is the responsibility of the calling widget 
 // (atomBoard, etc.) to build the layout by calling
 // buildLayout.  The argument indicates how many 
 // colors should be specified (1, 2, or 3)	
-ColorBoard::ColorBoard( QWidget * parent, const char * name )
-    : QDialog( parent, name, FALSE, WType_TopLevel )
+ColorBoard::ColorBoard(QWidget * parent)
+    : QDialog(parent)
 {
-	this->setCaption( "AViz: Set Colors" );
+    setWindowTitle( "AViz: Set Colors" );
 
-	// Create a hboxlayout that will contain the top
-	// set of color sliders
-	numCols = 6;
-	canvCol = 5;
-	hb0 = new QHBox( this, "hb0" );
-	hb0->setFrameStyle( QFrame::Box | QFrame::Sunken );
-	hb0->setMargin( SPACE );
-	hb0->setSpacing( SPACE );
-	hb0->setMinimumWidth( COLOR_MIN_WIDTH );
-	hb0->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
-		
-	// Create a hboxlayout that will contain the center 
-	// set of color sliders
-	hb1 = new QHBox( this, "hb1" );
-	hb1->setFrameStyle( QFrame::Box | QFrame::Sunken );
-	hb1->setMargin( SPACE );
-	hb1->setSpacing( SPACE );
-	hb1->setMinimumWidth( COLOR_MIN_WIDTH );
-	hb1->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
-	
-	// Create a hboxlayout that will contain the center 
-	// set of color sliders
-	hb2 = new QHBox( this, "hb2" );
-	hb2->setFrameStyle( QFrame::Box | QFrame::Sunken );
-	hb2->setMargin( SPACE );
-	hb2->setSpacing( SPACE );
-	hb2->setMinimumWidth( COLOR_MIN_WIDTH );
-	hb2->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
+    // Create three widgets to contain the center,
+    // middle and bottom set of color sliders
+    hb0 = createFrame();
+    hb1 = createFrame();
+    hb2 = createFrame();
 
-	// Create labels that are shown when
-	// color ramps are being specified
-	topL = new QLabel( hb0, "topL" );
-	centerL = new QLabel( hb1, "topL" );
-	bottomL = new QLabel( hb2, "bottomL" );
+    QHBoxLayout *hb0Layout = createHboxLayout(hb0);
+    QHBoxLayout *hb1Layout = createHboxLayout(hb1);
+    QHBoxLayout *hb2Layout = createHboxLayout(hb2);
 
-	// Create a vertical box to contain the top set of 
-	// slider labels
-	QVBox * vb0 = new QVBox( hb0, "vb0" );
-	
-	// Create a vertical box to contain the center set of 
-	// slider labels
-	QVBox * vb3 = new QVBox( hb1, "vb3" );
-	
-	// Create a vertical box to contain the bottom set of 
-	// slider labels
-	QVBox * vb6 = new QVBox( hb2, "vb6" );
-	
-	// Create three labels in the next column
-	QLabel * redL0 = new QLabel( vb0, "redL0" );
-	redL0->setText( " Red: ");	
+    // Create labels that are shown when
+    // color ramps are being specified
+    topL = new QLabel();
+    centerL = new QLabel();
+    bottomL = new QLabel();
 
-	QLabel * greenL0 = new QLabel( vb0, "greenL0" );
-	greenL0->setText( " Green: ");	
+    hb0Layout->addWidget(topL);
+    hb1Layout->addWidget(centerL);
+    hb2Layout->addWidget(bottomL);
 
-	QLabel * blueL0 = new QLabel( vb0, "blueL0" );
-	blueL0->setText( " Blue: ");	
-	
-	// Create again three labels in the next column
-	QLabel * redL1 = new QLabel( vb3, "redL1" );
-	redL1->setText( " Red: ");	
+    // Create a vertical box to contain the top set of
+    // slider labels
+    QWidget *vb0 = createRedGreenBlueLabels();
+    // Create a vertical box to contain the center set of
+    // slider labels
+    QWidget *vb3 = createRedGreenBlueLabels();
 
-	QLabel * greenL1 = new QLabel( vb3, "greenL1" );
-	greenL1->setText( " Green: ");	
+    // Create a vertical box to contain the bottom set of
+    // slider labels
+    QWidget *vb6 = createRedGreenBlueLabels();
 
-	QLabel * blueL1 = new QLabel( vb3, "blueL1" );
-	blueL1->setText( " Blue: ");	
-	
-	// Create again three labels in the next column
-	QLabel * redL2 = new QLabel( vb6, "redL2" );
-	redL2->setText( " Red: ");	
+    hb0Layout->addWidget(vb0);
+    hb1Layout->addWidget(vb3);
+    hb2Layout->addWidget(vb6);
 
-	QLabel * greenL2 = new QLabel( vb6, "greenL2" );
-	greenL2->setText( " Green: ");	
+    // Create a vertical box to contain the top set of color
+    // sliders
+    QWidget *vb1 = new QWidget();
+    QVBoxLayout *vb1Layout = createVboxLayout(vb1);
 
-	QLabel * blueL2 = new QLabel( vb6, "blueL2" );
-	blueL2->setText( " Blue: ");	
-	
-	// Create a vertical box to contain the top set of color
-	// sliders 
-	QVBox * vb1 = new QVBox( hb0, "vb1" );
+    // Create a vertical box to contain the center set of color
+    // sliders
+    QWidget *vb4 = new QWidget();
+    QVBoxLayout *vb4Layout = createVboxLayout(vb4);
 
-	// Create a vertical box to contain the center set of color
-	// sliders
-	QVBox * vb4 = new QVBox( hb1, "vb4" );
+    // Create a vertical box to contain the bottom set of color
+    // sliders
+    QWidget *vb7 = new QWidget();
+    QVBoxLayout *vb7Layout = createVboxLayout(vb7);
 
-	// Create a vertical box to contain the bottom set of color
-	// sliders
-	QVBox * vb7 = new QVBox( hb2, "vb7" );\
+    hb0Layout->addWidget(vb1);
+    hb1Layout->addWidget(vb4);
+    hb2Layout->addWidget(vb7);
 
-	// Create three sliders
-	redS0 = new QSlider( QSlider::Horizontal, vb1, "redS" );
-	redS0->setMinValue( COLOR_MIN );
-        redS0->setMaxValue( COLOR_MAX );
-        redS0->setTickInterval( 10 );
-        redS0->setTickmarks( QSlider::Above );
-	redS0->setValue( COLOR_MAX );
-	redS0->setFixedWidth( SLIDER_WIDTH );
-        redS0->setFixedHeight( SLIDER_HEIGHT );
+    // Create three sliders
+    redS0 = createHorizontalSlider();
+    greenS0 = createHorizontalSlider();
+    blueS0 = createHorizontalSlider();
 
-	greenS0 = new QSlider(  QSlider::Horizontal, vb1, "greenS" );
-	greenS0->setMinValue( COLOR_MIN );
-        greenS0->setMaxValue( COLOR_MAX );
-        greenS0->setTickInterval( 10 );
-        greenS0->setTickmarks( QSlider::Above );
-	greenS0->setValue( COLOR_MAX );
-	greenS0->setFixedWidth( SLIDER_WIDTH );
-        greenS0->setFixedHeight( SLIDER_HEIGHT );
+    vb1Layout->addWidget(redS0);
+    vb1Layout->addWidget(greenS0);
+    vb1Layout->addWidget(blueS0);
 
-	blueS0 = new QSlider( QSlider::Horizontal, vb1, "blueS" );
-	blueS0->setMinValue( COLOR_MIN );
-        blueS0->setMaxValue( COLOR_MAX );
-        blueS0->setTickInterval( 10 );
-        blueS0->setTickmarks( QSlider::Above );
-	blueS0->setValue( COLOR_MAX );
-	blueS0->setFixedWidth( SLIDER_WIDTH );
-        blueS0->setFixedHeight( SLIDER_HEIGHT );
+    // Connect the sliders to callbacks
+    connect(redS0, SIGNAL(valueChanged(int)), this, SLOT(adjustColor0( )) );
+    connect(greenS0, SIGNAL(valueChanged(int)), this, SLOT(adjustColor0( )) );
+    connect(blueS0, SIGNAL(valueChanged(int)), this, SLOT(adjustColor0( )) );
 
-	// Connect the sliders to callbacks 
-	connect( redS0, SIGNAL(valueChanged(int)), this, SLOT(adjustColor0( )) );
-	connect( greenS0, SIGNAL(valueChanged(int)), this, SLOT(adjustColor0( )) );
-	connect( blueS0, SIGNAL(valueChanged(int)), this, SLOT(adjustColor0( )) );
+    // Create again three sliders
+    redS1 = createHorizontalSlider();
+    greenS1 = createHorizontalSlider();
+    blueS1 = createHorizontalSlider();
 
-	// Create again three sliders
-	redS1 = new QSlider( QSlider::Horizontal, vb4, "redS" );
-	redS1->setMinValue( COLOR_MIN );
-        redS1->setMaxValue( COLOR_MAX );
-        redS1->setTickInterval( 10 );
-        redS1->setTickmarks( QSlider::Above );
-	redS1->setValue( COLOR_MAX );
-	redS1->setFixedWidth( SLIDER_WIDTH );
-        redS1->setFixedHeight( SLIDER_HEIGHT );
+    vb4Layout->addWidget(redS1);
+    vb4Layout->addWidget(greenS1);
+    vb4Layout->addWidget(blueS1);
 
-	greenS1 = new QSlider(  QSlider::Horizontal, vb4, "greenS" );
-	greenS1->setMinValue( COLOR_MIN );
-        greenS1->setMaxValue( COLOR_MAX );
-        greenS1->setTickInterval( 10 );
-        greenS1->setTickmarks( QSlider::Above );
-	greenS1->setValue( COLOR_MAX );
-	greenS1->setFixedWidth( SLIDER_WIDTH );
-        greenS1->setFixedHeight( SLIDER_HEIGHT );
+    // Connect the sliders to callbacks
+    connect(redS1, SIGNAL(valueChanged(int)), this, SLOT(adjustColor1( )) );
+    connect(greenS1, SIGNAL(valueChanged(int)), this, SLOT(adjustColor1( )) );
+    connect(blueS1, SIGNAL(valueChanged(int)), this, SLOT(adjustColor1( )) );
 
-	blueS1 = new QSlider( QSlider::Horizontal, vb4, "blueS" );
-	blueS1->setMinValue( COLOR_MIN );
-        blueS1->setMaxValue( COLOR_MAX );
-        blueS1->setTickInterval( 10 );
-        blueS1->setTickmarks( QSlider::Above );
-	blueS1->setValue( COLOR_MAX );
-	blueS1->setFixedWidth( SLIDER_WIDTH );
-        blueS1->setFixedHeight( SLIDER_HEIGHT );
+    // Create again three sliders
+    redS2 = createHorizontalSlider();
+    greenS2 = createHorizontalSlider();
+    blueS2 = createHorizontalSlider();
 
-	// Connect the sliders to callbacks 
-	connect( redS1, SIGNAL(valueChanged(int)), this, SLOT(adjustColor1( )) );
-	connect( greenS1, SIGNAL(valueChanged(int)), this, SLOT(adjustColor1( )) );
-	connect( blueS1, SIGNAL(valueChanged(int)), this, SLOT(adjustColor1( )) );
+    vb7Layout->addWidget(redS2);
+    vb7Layout->addWidget(greenS2);
+    vb7Layout->addWidget(blueS2);
 
-	// Create again three sliders
-	redS2 = new QSlider( QSlider::Horizontal, vb7, "redS" );
-	redS2->setMinValue( COLOR_MIN );
-        redS2->setMaxValue( COLOR_MAX );
-        redS2->setTickInterval( 10 );
-        redS2->setTickmarks( QSlider::Above );
-	redS2->setValue( COLOR_MAX );
-	redS2->setFixedWidth( SLIDER_WIDTH );
-        redS2->setFixedHeight( SLIDER_HEIGHT );
+    // Connect the sliders to callbacks
+    connect(redS2, SIGNAL(valueChanged(int)), this, SLOT(adjustColor2( )) );
+    connect(greenS2, SIGNAL(valueChanged(int)), this, SLOT(adjustColor2( )) );
+    connect(blueS2, SIGNAL(valueChanged(int)), this, SLOT(adjustColor2( )) );
 
-	greenS2 = new QSlider(  QSlider::Horizontal, vb7, "greenS" );
-	greenS2->setMinValue( COLOR_MIN );
-        greenS2->setMaxValue( COLOR_MAX );
-        greenS2->setTickInterval( 10 );
-        greenS2->setTickmarks( QSlider::Above );
-	greenS2->setValue( COLOR_MAX );
-	greenS2->setFixedWidth( SLIDER_WIDTH );
-        greenS2->setFixedHeight( SLIDER_HEIGHT );
+    // Create the top color label canvas
+    colorLabel0 = new ColorLabel();
+    colorLabel0->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
+    hb0Layout->addWidget(colorLabel0);
 
-	blueS2 = new QSlider( QSlider::Horizontal, vb7, "blueS" );
-	blueS2->setMinValue( COLOR_MIN );
-        blueS2->setMaxValue( COLOR_MAX );
-        blueS2->setTickInterval( 10 );
-        blueS2->setTickmarks( QSlider::Above );
-	blueS2->setValue( COLOR_MAX );
-	blueS2->setFixedWidth( SLIDER_WIDTH );
-        blueS2->setFixedHeight( SLIDER_HEIGHT );
+    // Create the bottom color label canvas
+    colorLabel1 = new ColorLabel();
+    colorLabel1->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
+    hb1Layout->addWidget(colorLabel1);
 
-	// Connect the sliders to callbacks 
-	connect( redS2, SIGNAL(valueChanged(int)), this, SLOT(adjustColor2( )) );
-	connect( greenS2, SIGNAL(valueChanged(int)), this, SLOT(adjustColor2( )) );
-	connect( blueS2, SIGNAL(valueChanged(int)), this, SLOT(adjustColor2( )) );
+    // Create the bottom color label canvas
+    colorLabel2 = new ColorLabel();
+    colorLabel2->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
+    hb2Layout->addWidget(colorLabel2);
 
-	// Create a vertical box to contain the top color canvas
-	QVBox * vb2 = new QVBox( hb0, "vb2" );
-	vb2->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    // Create a hboxlayout that will fill the lowest row
+    DoneApplyCancelWidget *doneApplyCancelW = new DoneApplyCancelWidget(this);
+    connect(doneApplyCancelW, SIGNAL(done()), this, SLOT(bdone()) );
+    connect(doneApplyCancelW, SIGNAL(applied()), this, SLOT(bapply()) );
+    connect(doneApplyCancelW, SIGNAL(canceled()), this, SLOT(bcancel()));
 
-	// Create a vertical box to contain the bottom color canvas
-	QVBox * vb5 = new QVBox( hb1, "vb5" );
-	vb5->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    QVBoxLayout *colorBox = new QVBoxLayout(this);
+    colorBox->setSpacing(SPACE);
+    colorBox->addWidget(hb0);
+    colorBox->addWidget(hb1);
+    colorBox->addWidget(hb2);
+    colorBox->addWidget(doneApplyCancelW);
 
-	// Create a vertical box to contain the bottom color canvas
-	QVBox * vb8 = new QVBox( hb2, "vb8" );
-	vb5->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    // Set defaults
+    red0 = red1 = red2 = red0Org = red1Org = red2Org = 1.0;
+    green0 = green1 = green2 = green0Org = green1Org = green2Org = 1.0;
+    blue0 = blue1 = blue2 = blue0Org = blue1Org = blue2Org = 1.0;
 
-	// Create the top color label canvas 
-	colorLabel0 = new ColorLabel( vb2, "colorLabel0" );	
-	colorLabel0->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
-
-	// Create the bottom color label canvas 
-	colorLabel1 = new ColorLabel( vb5, "colorLabel1" );	
-	colorLabel1->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
-
-	// Create the bottom color label canvas 
-	colorLabel2 = new ColorLabel( vb8, "colorLabel2" );	
-	colorLabel2->setFixedHeight( COLOR_MIN_HEIGHT_ROW );
-
-	// Create a hboxlayout that will fill the lowest row
-	hb9 = new QHBox( this, "hb9" );
-
-	// Create a placeholder 
-	QLabel * emptyL = new QLabel( hb9, "emptyL" );
-
-	// Create pushbuttons that will go into the lowest row
-	QPushButton * done = new QPushButton( hb9, "done" );
-	done->setText( "Done" ); 
-
-	 // Define a callback for that button
-        QObject::connect( done, SIGNAL(clicked()), this, SLOT(bdone()) );
-
-	QPushButton * apply = new QPushButton( hb9, "apply" );
-	apply->setText( "Apply" ); 
-
-	 // Define a callback for that button
-        QObject::connect( apply, SIGNAL(clicked()), this, SLOT(bapply()) );
-
-	QPushButton * cancel = new QPushButton( hb9, "cancel" );
-	cancel->setText( "Cancel" ); 
-
-	 // Define a callback for that button
-        QObject::connect( cancel, SIGNAL(clicked()), this, SLOT(bcancel()) );
-
-	hb2->setStretchFactor( emptyL, 10 );
-
-	// Set defaults
-	red0 = red1 = red2 = red0Org = red1Org = red2Org = 1.0;
-	green0 = green1 = green2 = green0Org = green1Org = green2Org = 1.0;
-	blue0 = blue1 = blue2 = blue0Org = blue1Org = blue2Org = 1.0;	
-
-	// Clear pointers
-	ab = NULL;
-	sb = NULL;
-	lcb = NULL;
-	pb = NULL;
-	pob = NULL;
+    // Clear pointers
+    ab = NULL;
+    sb = NULL;
+    lcb = NULL;
+    pb = NULL;
+    pob = NULL;
 }
 
 
 // Set a pointer to the calling class
-void ColorBoard::setAtomBoardAddress( char * thisAB )
+void ColorBoard::setAtomBoardAddress( AtomBoard * thisAB )
 {
-	ab = (AtomBoard * )thisAB;
+    ab = thisAB;
 }
 
 // Set a pointer to the calling class
-void ColorBoard::setSpinBoardAddress( char * thisSB )
+void ColorBoard::setSpinBoardAddress( SpinBoard * thisSB )
 {
-	sb = (SpinBoard * )thisSB;
+    sb = thisSB;
 }
 
 
 // Set a pointer to the calling class
-void ColorBoard::setLcBoardAddress( char * thisLcB )
+void ColorBoard::setLcBoardAddress( LcBoard * thisLcB )
 {	
-	lcb = (LcBoard * )thisLcB;
+    lcb = thisLcB;
 }
 
 
 // Set a pointer to the calling class
-void ColorBoard::setPolymerBoardAddress( char * thisPoB )
+void ColorBoard::setPolymerBoardAddress( PolymerBoard * thisPoB )
 {	
-	pob = (PolymerBoard * )thisPoB;
+    pob = thisPoB;
 }
 
 // Set a pointer to the calling class
-void ColorBoard::setPoreBoardAddress( char * thisPB )
+void ColorBoard::setPoreBoardAddress( PoreBoard * thisPB )
 {	
-	pb = (PoreBoard * )thisPB;
+    pb = thisPB;
 }
 
 
 // Build the layout of color labels and slider elements
 void ColorBoard::buildLayout( char colors ) 
 {
-	numRows = colors+1; 
-
-	switch (colors) {
-		case 1:
-	        	colorBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "colorBox" );
-
-			colorBox->addMultiCellWidget( hb0, 0, 0, 1, -1);
-			hb1->hide();
-			hb2->hide();
-		break;
-		case 2:
-	        	colorBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "colorBox" );
-
-			colorBox->addMultiCellWidget( hb0, 0, 0, 1, -1);
-			colorBox->addMultiCellWidget( hb1, 1, 1, 1, -1);
-			hb1->show();
-			hb2->hide();
-		break;
-		case 3:
-	        	colorBox = new QGridLayout( this, numCols, numRows, SPACE, SPACE, "colorBox" );
-
-			colorBox->addMultiCellWidget( hb0, 0, 0, 1, -1);
-			colorBox->addMultiCellWidget( hb1, 1, 1, 1, -1);
-			colorBox->addMultiCellWidget( hb2, 2, 2, 1, -1);
-			hb1->show();
-			hb2->show();
-		break;
-	}
-
-	colorBox->addMultiCellWidget( hb9, numRows-1, numRows-1, 0, -1);
-       	colorBox->setColStretch( canvCol, 10 );
-	this->adjustSize( );	
+    switch (colors) {
+    case 1:
+        hb1->hide();
+        hb2->hide();
+        break;
+    case 2:
+        hb1->show();
+        hb2->hide();
+        break;
+    case 3:
+        hb1->show();
+        hb2->show();
+        break;
+    }
 }
 
 
 // Set the current color (overloaded function)
 void ColorBoard::setColor( float r, float g, float b )
 {
-	// Adjust the sliders and the color labels
-	redS0->setValue( (int)(100.0*r) );
-	greenS0->setValue( (int)(100.0*g) );
-	blueS0->setValue( (int)(100.0*b) );
+    // Adjust the sliders and the color labels
+    redS0->setValue( (int)(100.0*r) );
+    greenS0->setValue( (int)(100.0*g) );
+    blueS0->setValue( (int)(100.0*b) );
 
-	colorLabel0->setColor( r, g, b);
+    colorLabel0->setColor( r, g, b);
 
-	// Save the values in the global variables
-	red0 = red1 = red2 = r;
-	green0 = green1 = green2 = g;
-	blue0 = blue1 = blue2 = b;
+    // Save the values in the global variables
+    red0 = red1 = red2 = r;
+    green0 = green1 = green2 = g;
+    blue0 = blue1 = blue2 = b;
 
-	// Save these values in case the setting is cancelled
-	red0Org = red1Org = red2Org = r;
-	green0Org = green1Org = green2Org = g;
-	blue0Org = blue1Org = blue2Org = b;
+    // Save these values in case the setting is cancelled
+    red0Org = red1Org = red2Org = r;
+    green0Org = green1Org = green2Org = g;
+    blue0Org = blue1Org = blue2Org = b;
 }
 
 
 // Set the current color (overloaded function)
 void ColorBoard::setColor( float r0, float g0, float b0, float r1, float g1, float b1 )
 {
-	// Adjust the sliders and the color labels
-	redS0->setValue( (int)(100.0*r0) );
-	greenS0->setValue( (int)(100.0*g0) );
-	blueS0->setValue( (int)(100.0*b0) );
-	redS1->setValue( (int)(100.0*r1) );
-	greenS1->setValue( (int)(100.0*g1) );
-	blueS1->setValue( (int)(100.0*b1) );
+    // Adjust the sliders and the color labels
+    redS0->setValue( (int)(100.0*r0) );
+    greenS0->setValue( (int)(100.0*g0) );
+    blueS0->setValue( (int)(100.0*b0) );
+    redS1->setValue( (int)(100.0*r1) );
+    greenS1->setValue( (int)(100.0*g1) );
+    blueS1->setValue( (int)(100.0*b1) );
 
-	colorLabel0->setColor( r0, g0, b0 );
-	colorLabel1->setColor( r1, g1, b1 );
+    colorLabel0->setColor( r0, g0, b0 );
+    colorLabel1->setColor( r1, g1, b1 );
 
-	// Save the values in the global variables
-	red0 = r0;
-	green0 = g0;
-	blue0 = b0;
-	red1 = red2 = r1;
-	green1 = green2 = g1;
-	blue1 = blue2 = b1;
+    // Save the values in the global variables
+    red0 = r0;
+    green0 = g0;
+    blue0 = b0;
+    red1 = red2 = r1;
+    green1 = green2 = g1;
+    blue1 = blue2 = b1;
 
-	// Save these values in case the setting is cancelled
-	red0Org = r0;
-	green0Org = g0;
-	blue0Org = b0;
-	red1Org = red2Org = r1;
-	green1Org = green2Org = g1;
-	blue1Org = blue2Org = b1;
+    // Save these values in case the setting is cancelled
+    red0Org = r0;
+    green0Org = g0;
+    blue0Org = b0;
+    red1Org = red2Org = r1;
+    green1Org = green2Org = g1;
+    blue1Org = blue2Org = b1;
 }
 
 
 // Set the current color (overloaded function)
 void ColorBoard::setColor( float r0, float g0, float b0, float r1, float g1, float b1, float r2, float g2, float b2 )
 {
-	// Adjust the sliders and the color labels
-	redS0->setValue( (int)(100.0*r0) );
-	greenS0->setValue( (int)(100.0*g0) );
-	blueS0->setValue( (int)(100.0*b0) );
-	redS1->setValue( (int)(100.0*r1) );
-	greenS1->setValue( (int)(100.0*g1) );
-	blueS1->setValue( (int)(100.0*b1) );
-	redS2->setValue( (int)(100.0*r2) );
-	greenS2->setValue( (int)(100.0*g2) );
-	blueS2->setValue( (int)(100.0*b2) );
+    // Adjust the sliders and the color labels
+    redS0->setValue( (int)(100.0*r0) );
+    greenS0->setValue( (int)(100.0*g0) );
+    blueS0->setValue( (int)(100.0*b0) );
+    redS1->setValue( (int)(100.0*r1) );
+    greenS1->setValue( (int)(100.0*g1) );
+    blueS1->setValue( (int)(100.0*b1) );
+    redS2->setValue( (int)(100.0*r2) );
+    greenS2->setValue( (int)(100.0*g2) );
+    blueS2->setValue( (int)(100.0*b2) );
 
-	colorLabel0->setColor( r0, g0, b0 );
-	colorLabel1->setColor( r1, g1, b1 );
-	colorLabel2->setColor( r2, g2, b2 );
+    colorLabel0->setColor( r0, g0, b0 );
+    colorLabel1->setColor( r1, g1, b1 );
+    colorLabel2->setColor( r2, g2, b2 );
 
-	// Save the values in the global variables
-	red0 = r0;
-	green0 = g0;
-	blue0 = b0;
-	red1 = r1;
-	green1 = g1;
-	blue1 = b1;
-	red2 = r2;
-	green2 = g2;
-	blue2 = b2;
+    // Save the values in the global variables
+    red0 = r0;
+    green0 = g0;
+    blue0 = b0;
+    red1 = r1;
+    green1 = g1;
+    blue1 = b1;
+    red2 = r2;
+    green2 = g2;
+    blue2 = b2;
 
-	// Save these values in case the setting is cancelled
-	red0Org = r0;
-	green0Org = g0;
-	blue0Org = b0;
-	red1Org = r1;
-	green1Org = g1;
-	blue1Org = b1;
-	red2Org = r2;
-	green2Org = g2;
-	blue2Org = b2;
+    // Save these values in case the setting is cancelled
+    red0Org = r0;
+    green0Org = g0;
+    blue0Org = b0;
+    red1Org = r1;
+    green1Org = g1;
+    blue1Org = b1;
+    red2Org = r2;
+    green2Org = g2;
+    blue2Org = b2;
 }
 
 
 // Set the current labels (overloaded function)
-void ColorBoard::setLabel( char * label1 )
-{
-	topL->setText( label1 );
+void ColorBoard::setLabel(const QString& label1) {
+    topL->setText(label1);
 }
 
 
 // Set the current labels (overloaded function)
-void ColorBoard::setLabel( char * label1, char * label2 )
-{
-	topL->setText( label1 );
-	centerL->setText( label2 );
+void ColorBoard::setLabel(const QString& label1, const QString& label2) {
+    topL->setText(label1);
+    centerL->setText(label2);
 }
 
 
 // Set the current labels (overloaded function)
-void ColorBoard::setLabel( char * label1, char * label2, char * label3 )
-{
-	topL->setText( label1 );
-	centerL->setText( label2 );
-	bottomL->setText( label3 );
+void ColorBoard::setLabel(const QString& label1, const QString& label2, const QString& label3) {
+    topL->setText(label1);
+    centerL->setText(label2);
+    bottomL->setText(label3);
 }
 
 
 // Adjust the color settings
-void ColorBoard::adjustColor0( void )
+void ColorBoard::adjustColor0()
 {
-	int redi, greeni, bluei;
-	
-	// Read the slider values
-	if (redS0) 
-		redi = (int)redS0->value( );
-	else 
-		redi = 0;
-	if (greenS0) 
-		greeni = (int)greenS0->value( );
-	else 
-		greeni = 0;
-	if (blueS0) 
-		bluei = (int)blueS0->value( );
-	else 
-		bluei = 0;
+    int redi, greeni, bluei;
 
-	// Update the color data entry
-	red0 = redi/100.0;
-	green0 = greeni/100.0;
-	blue0 = bluei/100.0;
+    // Read the slider values
+    if (redS0)
+        redi = (int)redS0->value( );
+    else
+        redi = 0;
+    if (greenS0)
+        greeni = (int)greenS0->value( );
+    else
+        greeni = 0;
+    if (blueS0)
+        bluei = (int)blueS0->value( );
+    else
+        bluei = 0;
 
-	colorLabel0->setColor( red0, green0, blue0 );
+    // Update the color data entry
+    red0 = redi/100.0;
+    green0 = greeni/100.0;
+    blue0 = bluei/100.0;
+
+    colorLabel0->setColor( red0, green0, blue0 );
 }
 
 
 // Adjust the color settings, using the local
 // copy of the atom/spin color data structure
-void ColorBoard::adjustColor1( void )
+void ColorBoard::adjustColor1()
 {
-        int redi, greeni, bluei;
+    int redi, greeni, bluei;
 
-        // Read the slider values
-        if (redS1)
-                redi = (int)redS1->value( );
-	else
-		redi = 0;
-        if (greenS1)
-                greeni = (int)greenS1->value( );
-	else
-		greeni = 0;
-        if (blueS1)
-                bluei = (int)blueS1->value( );
-	else
-		bluei = 0;
+    // Read the slider values
+    if (redS1)
+        redi = (int)redS1->value( );
+    else
+        redi = 0;
+    if (greenS1)
+        greeni = (int)greenS1->value( );
+    else
+        greeni = 0;
+    if (blueS1)
+        bluei = (int)blueS1->value( );
+    else
+        bluei = 0;
 
-	// Update the color data entry
-	red1 = redi/100.0;
-	green1 = greeni/100.0;
-	blue1 = bluei/100.0;
+    // Update the color data entry
+    red1 = redi/100.0;
+    green1 = greeni/100.0;
+    blue1 = bluei/100.0;
 
-	colorLabel1->setColor( red1, green1, blue1 );
+    colorLabel1->setColor( red1, green1, blue1 );
 }
 
 
 // Adjust the color settings, using the local
 // copy of the atom/spin color data structure
-void ColorBoard::adjustColor2( void )
+void ColorBoard::adjustColor2()
 {
-        int redi, greeni, bluei;
+    int redi, greeni, bluei;
 
-        // Read the slider values
-        if (redS2)
-                redi = (int)redS2->value( );
-	else
-		redi = 0;
-        if (greenS2)
-                greeni = (int)greenS2->value( );
-	else
-		greeni = 0;
-        if (blueS2)
-                bluei = (int)blueS2->value( );
-	else
-		bluei = 0;
+    // Read the slider values
+    if (redS2)
+        redi = (int)redS2->value( );
+    else
+        redi = 0;
+    if (greenS2)
+        greeni = (int)greenS2->value( );
+    else
+        greeni = 0;
+    if (blueS2)
+        bluei = (int)blueS2->value( );
+    else
+        bluei = 0;
 
-	// Update the color data entry
-	red2 = redi/100.0;
-	green2 = greeni/100.0;
-	blue2 = bluei/100.0;
+    // Update the color data entry
+    red2 = redi/100.0;
+    green2 = greeni/100.0;
+    blue2 = bluei/100.0;
 
-	colorLabel2->setColor( red2, green2, blue2 );
+    colorLabel2->setColor( red2, green2, blue2 );
 }
 
 
 // Complete the color setting: save the atom/spin data and hide the board
 void ColorBoard::bdone()
 {
-	this->bapply();
+    this->bapply();
 
-	if (ab) {
-		((AtomBoard *)ab)->getColorBoardPos( this->pos().x(), this->pos().y() );
-	}
-	if (sb) {
-		((SpinBoard *)sb)->getColorBoardPos( this->pos().x(), this->pos().y() );
-	}
-	if (lcb) {
-		((LcBoard *)lcb)->getColorBoardPos( this->pos().x(), this->pos().y() );
-	}
-	if (pb) {
-		((PoreBoard *)pb)->getColorBoardPos( this->pos().x(), this->pos().y() );
-	}
-	if (pob) {
-		((PolymerBoard *)pob)->getColorBoardPos( this->pos().x(), this->pos().y() );
-	}
+    if (ab) {
+        ab->getColorBoardPos( this->pos().x(), this->pos().y() );
+    }
+    if (sb) {
+        sb->getColorBoardPos( this->pos().x(), this->pos().y() );
+    }
+    if (lcb) {
+        lcb->getColorBoardPos( this->pos().x(), this->pos().y() );
+    }
+    if (pb) {
+        pb->getColorBoardPos( this->pos().x(), this->pos().y() );
+    }
+    if (pob) {
+        pob->getColorBoardPos( this->pos().x(), this->pos().y() );
+    }
 
-	// Hide now
-        hide();
+    // Hide now
+    hide();
 
-	// Close yourself
-	if (ab) 
-		((AtomBoard *)ab)->closeColorBoard();
-	if (sb) 
-		((SpinBoard *)sb)->closeColorBoard();
-	if (lcb) 
-		((LcBoard *)lcb)->closeColorBoard();
-	if (pb) 
-		((PoreBoard *)pb)->closeColorBoard();
-	if (pb) 
-		((PolymerBoard *)pob)->closeColorBoard();
+    // Close yourself
+    if (ab)
+        ab->closeColorBoard();
+    if (sb)
+        sb->closeColorBoard();
+    if (lcb)
+        lcb->closeColorBoard();
+    if (pb)
+        pb->closeColorBoard();
+    if (pob)
+        pob->closeColorBoard();
 }
 
 
@@ -620,60 +535,60 @@ void ColorBoard::bdone()
 // save the color data
 void ColorBoard::bapply()
 {
-	if (ab) {
-		((AtomBoard *)ab)->getColors( red0, green0, blue0, red1, green1, blue1 );
-	}
-	if (sb) {
-		((SpinBoard *)sb)->getColors( red0, green0, blue0, red1, green1, blue1 );
-	}
-	if (lcb) {
-		((LcBoard *)lcb)->getColors( red0, green0, blue0, red1, green1, blue1, red2, green2, blue2 );
-	}
-	if (pb) {
-		((PoreBoard *)pb)->getColors( red0, green0, blue0, red1, green1, blue1, red2, green2, blue2 );
-	}
-	if (pob) {
-		((PolymerBoard *)pob)->getColors( red0, green0, blue0, red1, green1, blue1 );
-	}
+    if (ab) {
+        ab->getColors( red0, green0, blue0, red1, green1, blue1 );
+    }
+    if (sb) {
+        sb->getColors( red0, green0, blue0, red1, green1, blue1 );
+    }
+    if (lcb) {
+        lcb->getColors( red0, green0, blue0, red1, green1, blue1, red2, green2, blue2 );
+    }
+    if (pb) {
+        pb->getColors( red0, green0, blue0, red1, green1, blue1, red2, green2, blue2 );
+    }
+    if (pob) {
+        pob->getColors( red0, green0, blue0, red1, green1, blue1 );
+    }
 }
 
 
 // Cancel the color setting: hide the board
 void ColorBoard::bcancel()
 {
-	if (ab) {
-		((AtomBoard *)ab)->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org );
-		((AtomBoard *)ab)->getColorBoardPos( this->pos().x(), this->pos().y() );
-	}
-	if (sb) {
-		((SpinBoard *)sb)->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org );
-		((SpinBoard *)sb)->getColorBoardPos( this->pos().x(), this->pos().y() );
-	}
-	if (lcb) {
-		((LcBoard *)lcb)->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org, red2Org, green2Org, blue2Org );
-		((LcBoard *)lcb)->getColorBoardPos( this->pos().x(), this->pos().y() );
-	}
-	if (pb) {
-		((PoreBoard *)pb)->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org, red2Org, green2Org, blue2Org );
-		((PoreBoard *)pb)->getColorBoardPos( this->pos().x(), this->pos().y() );
-	}
-	if (pob) {
-		((PolymerBoard *)pob)->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org );
-		((PolymerBoard *)pob)->getColorBoardPos( this->pos().x(), this->pos().y() );
-	}
+    if (ab) {
+        ab->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org );
+        ab->getColorBoardPos( this->pos().x(), this->pos().y() );
+    }
+    if (sb) {
+        sb->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org );
+        sb->getColorBoardPos( this->pos().x(), this->pos().y() );
+    }
+    if (lcb) {
+        lcb->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org, red2Org, green2Org, blue2Org );
+        lcb->getColorBoardPos( this->pos().x(), this->pos().y() );
+    }
+    if (pb) {
+        pb->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org, red2Org, green2Org, blue2Org );
+        pb->getColorBoardPos( this->pos().x(), this->pos().y() );
+    }
+    if (pob) {
+        pob->getColors( red0Org, green0Org, blue0Org, red1Org, green1Org, blue1Org );
+        pob->getColorBoardPos( this->pos().x(), this->pos().y() );
+    }
 
-	// Hide now
-	hide();
+    // Hide now
+    hide();
 
-	// Close yourself
-	if (ab) 
-		((AtomBoard *)ab)->closeColorBoard();
-	if (sb) 
-		((SpinBoard *)sb)->closeColorBoard();
-	if (lcb) 
-		((LcBoard *)lcb)->closeColorBoard();
-	if (pb) 
-		((PoreBoard *)pb)->closeColorBoard();
-	if (pob) 
-		((PolymerBoard *)pob)->closeColorBoard();
+    // Close yourself
+    if (ab)
+        ab->closeColorBoard();
+    if (sb)
+        sb->closeColorBoard();
+    if (lcb)
+        lcb->closeColorBoard();
+    if (pb)
+        pb->closeColorBoard();
+    if (pob)
+        pob->closeColorBoard();
 }

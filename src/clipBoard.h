@@ -28,47 +28,35 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define CLIPB_H 
 
 #include "data.h"
-#include "floatSpin.h"
-#include "mainForm.h"
-#include "parameterLimits.h"
 
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qgrid.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qwidget.h>
+#include <QDialog>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+class QFSpinBox;
+class QLabel;
+class MainForm;
+class QCheckBox;
 
 // Clip board dialog widget
 class ClipBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ClipBoard( QWidget * parent=0, const char * name=0 );
+    ClipBoard(MainForm*, QWidget * parent=0);
 
-public slots:
-	void setMainFormAddress( MainForm * );
-	void setClip( viewParam );
+    void setClip( viewParam );
 
 private slots:
-	void registerSettings();
-	void autoClip();
-	void bdone();
-	void bapply();
-	void bcancel();
+    void registerSettings();
+    void autoClip();
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	MainForm * mainForm;
-        QFSpinBox * clipNearSb, * clipFarSb;
-        QLabel * clipNearL, * clipFarL;
-	QCheckBox * autoNearCb, *autoFarCb;
+    MainForm * mainForm;
+    QFSpinBox * clipNearSb, * clipFarSb;
+    QLabel * clipNearL, * clipFarL;
+    QCheckBox * autoNearCb, *autoFarCb;
 };
 
 #endif // CLIPB_H

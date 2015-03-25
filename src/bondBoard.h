@@ -28,89 +28,76 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define BONDB_H 
 
 #include "data.h"
-#include "defaultParticles.h"
-#include "defaults.h"
-#include "mainForm.h"
-#include "fileFunctions.h"
-#include "floatSpin.h"
 
-#include <qbuttongroup.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qgrid.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qsizepolicy.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QDialog>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+class MainForm;
+class QFSpinBox;
+
+class QRadioButton;
+class QSpinBox;
+class QLabel;
+class QCheckBox;
+class QComboBox;
+class QGroupBox;
 
 // Bond board dialog widget
 class BondBoard: public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	BondBoard( QWidget * parent=0, const char * name=0 );
+    BondBoard(MainForm *, QWidget * parent=0);
 
-public slots:
-	void setMainFormAddress( MainForm * );
-	void setData();
+public:
+    void setData();
 
 private slots:
-	void setFAtom();
-	void setTAtom();
-	void setBond( int );
-	void bdone();
-	void bapply();
-	void bcancel();
+    void setFAtom();
+    void setTAtom();
+    void setBond( int );
+    void bdone();
+    void bapply();
+    void bcancel();
 
 private:
-	void setToggles( int, int );
-	void readToggles();
+    void setToggles( int, int );
+    void readToggles();
 
-	MainForm * mainForm;
-	QComboBox * fParticleCob;
-	QComboBox * tParticleCob;
-	QButtonGroup * bondMode;
-	QButtonGroup * bondColor;
-	QButtonGroup * bondThickness;
-	QRadioButton * bondMode0;
-	QRadioButton * bondMode1;
-	QRadioButton * bondColor0;
-	QRadioButton * bondColor1;
-	QRadioButton * bondColor2;
-	QRadioButton * bondColor3;
-	QRadioButton * bondColor4;
-	QRadioButton * bondColor5;
-	QRadioButton * bondColor6;
-	QRadioButton * bondColor7;
-	QRadioButton * bondColor8;
-	QRadioButton * bondThickness0;
-	QRadioButton * bondThickness1;
-	QRadioButton * bondThickness2;
-	QRadioButton * bondThickness3;
-	QRadioButton * bondThickness4;
-	QRadioButton * bondThickness5;
-	QSpinBox * bondEmissionSb;
-	QCheckBox * antiAliasCb;
-        QCheckBox *seqBondCb;
-	QFSpinBox * bondMinLengthSb;
-	QFSpinBox * bondMaxLengthSb;
-	QLabel * colorL, * thickL, * minLengthL, * maxLengthL; 
-	QLabel * antiAlL, * bondEmL;
-	QLabel * seqBond;
-        particleData * thisPd;
-	tag thisFParticle, thisTParticle;
-	bool haveFEntry;
-	bool haveTEntry;
+    MainForm * mainForm;
+    QComboBox * fParticleCob;
+    QComboBox * tParticleCob;
+    QGroupBox * bondMode;
+    QGroupBox * bondColor;
+    QGroupBox * bondThickness;
+    QRadioButton * bondMode0;
+    QRadioButton * bondMode1;
+    QRadioButton * bondColor0;
+    QRadioButton * bondColor1;
+    QRadioButton * bondColor2;
+    QRadioButton * bondColor3;
+    QRadioButton * bondColor4;
+    QRadioButton * bondColor5;
+    QRadioButton * bondColor6;
+    QRadioButton * bondColor7;
+    QRadioButton * bondColor8;
+    QRadioButton * bondThickness0;
+    QRadioButton * bondThickness1;
+    QRadioButton * bondThickness2;
+    QRadioButton * bondThickness3;
+    QRadioButton * bondThickness4;
+    QRadioButton * bondThickness5;
+    QSpinBox * bondEmissionSb;
+    QCheckBox * antiAliasCb;
+    QCheckBox *seqBondCb;
+    QFSpinBox * bondMinLengthSb;
+    QFSpinBox * bondMaxLengthSb;
+    QLabel * colorL, * thickL, * minLengthL, * maxLengthL;
+    QLabel * antiAlL, * bondEmL;
+    QLabel * seqBond;
+    particleData * thisPd;
+    tag thisFParticle, thisTParticle;
+    bool haveFEntry;
+    bool haveTEntry;
 };
 
 #endif // BONDB_H

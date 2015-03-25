@@ -27,45 +27,39 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef LINETBO_H
 #define LINETBO_H 
 
+#include <QWidget>
+
 #include "data.h"
 
-#include <qbuttongroup.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qspinbox.h>
-#include <qvbox.h>
-#include <qwidget.h>
-
-#include <stdio.h>
-#include <math.h>
+class QLabel;
+class QRadioButton;
+class QSpinBox;
+class QGroupBox;
 
 // Line type box widget
-class LineTypeBox: public QHBox
+class LineTypeBox: public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	LineTypeBox( QWidget * parent=0, const char * name=0 );
+    LineTypeBox( QWidget * parent);
 
-public slots:
-	void setParticle( particleData *, int );
-	void readToggles( particleData *, int );
-	void setDisabled( bool );
-	void setDisabled( bool, bool );
-
-private slots:
+public:
+    void setParticle( particleData *, int );
+    void readToggles( particleData *, int );
+    void setDisabled( bool );
+    void setDisabled( bool, bool );
 
 private:
-	QLabel * thickL;
-	QButtonGroup * footThickness;
-        QRadioButton * footThickness0;
-        QRadioButton * footThickness1;
-        QRadioButton * footThickness2;
-        QRadioButton * footThickness3;
-        QRadioButton * footThickness4;
-        QRadioButton * footThickness5;
-	QLabel * footEmL;
-	QSpinBox * footEmSb;
+    QLabel * thickL;
+    QGroupBox * footThickness;
+    QRadioButton * footThickness0;
+    QRadioButton * footThickness1;
+    QRadioButton * footThickness2;
+    QRadioButton * footThickness3;
+    QRadioButton * footThickness4;
+    QRadioButton * footThickness5;
+    QLabel * footEmL;
+    QSpinBox * footEmSb;
 };
 
 #endif // LINETBO_H

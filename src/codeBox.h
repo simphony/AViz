@@ -27,33 +27,24 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef CODEBO_H
 #define CODEBO_H 
 
+#include <QFrame>
+
 #include "data.h"
 
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qvbox.h>
-#include <qwidget.h>
-
-#include <stdio.h>
+class QLabel;
+class QSpinBox;
 
 // Code box widget
-class CodeBox: public QHBox
+class CodeBox: public QFrame
 {
 	Q_OBJECT
 public:
-	CodeBox( QWidget * parent=0, const char * name=0 );
+    CodeBox(QWidget *parent=0);
 
-public slots:
-	void setParticle( particleData *, int );
-	void readToggles( particleData *, int );
-
-private slots:
+    void setParticle(particleData *, int);
+    void readToggles(particleData *, int);
 
 private:
-	QLabel * codeRedL;
-	QLabel * codeGreenL;
-	QLabel * codeBlueL;
 	QSpinBox * codeRedSb;
 	QSpinBox * codeGreenSb;
 	QSpinBox * codeBlueSb;

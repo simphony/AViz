@@ -1,8 +1,8 @@
 TEMPLATE        = app
 TARGET          = aviz
-CONFIG          += qt opengl warn_on release thread
+CONFIG          += qt opengl warn_on thread debug
 QMAKE_CXXFLAGS  = -O2
-QT +=  opengl 
+QT +=  opengl
 LIBS += -lX11 -lpng -lGLU
 
 GIT_REVISION = $$system($$quote(git describe))

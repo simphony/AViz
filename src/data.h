@@ -28,8 +28,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define DATA_H
 
 #include "defaults.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio> // BUFSIZ
 
 // Define view modes
 enum vMode{ PERSPECTIVE, ORTHO };
@@ -237,9 +236,9 @@ typedef struct {
 // Definition of a color structure, associated with a given 
 // particle type
 typedef struct{
-	float red;	// Used if coloring according to particle type
-	float green;	
-	float blue;	
+    float red;	// Used if coloring according to particle type
+    float green;
+    float blue;
 	float redMin; 	// Used if coloring according to particle position/property
 	float greenMin;
 	float blueMin;

@@ -29,29 +29,22 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "data.h"
 
-#include <qbuttongroup.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
+#include <QWidget>
+
+class QRadioButton;
 
 // Position box widget
-class PositionBox: public QHBox
+class PositionBox: public QWidget
 {
-	Q_OBJECT
 public:
-        PositionBox( QWidget * parent=0, const char * name=0 );
-
-public slots:
-        void setParticle( particleData *, int );
-        void readToggles( particleData *, int );
-
-private slots:
+    PositionBox(QWidget *parent=0);
+    void setParticle( particleData *, int );
+    void readToggles( particleData *, int );
 
 private:
-	QButtonGroup * coordinate;
-	QRadioButton * xcoord;
-	QRadioButton * ycoord;
-	QRadioButton * zcoord;
+    QRadioButton *xcoord;
+    QRadioButton *ycoord;
+    QRadioButton *zcoord;
 };
 
 #endif // POSBO_H

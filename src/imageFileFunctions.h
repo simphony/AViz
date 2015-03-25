@@ -27,16 +27,6 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef IMFILE_H
 #define IMFILE_H
 
-#include "data.h"
-#include "defaults.h"
-#include "version.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <unistd.h>
-
 void getImageFilename( char *, char * );
 void modifyImageFilename( char * );
 bool writePNGImage( const char *, char *, int, int, char *, char *, char * );
