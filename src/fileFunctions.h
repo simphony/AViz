@@ -33,7 +33,7 @@ void checkSuffix( const char *, const char * );
 bool fileExists( const char * );
 bool openCoordinateFunction( const char *, aggregateData * );
 bool openFileListFunction( const char *, fileList * );
-bool generateTrackDataFunction( fileList *, aggregateData *, trackData * );
+bool generateTrackDataFunction(const fileList&, aggregateData *, trackData * );
 bool saveViewParamFunction( const char *, viewParam * );
 bool openViewParamFunction( const char *, viewParam * );
 bool openParticleDataFunction( const char *, particleData * );

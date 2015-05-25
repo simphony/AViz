@@ -245,58 +245,58 @@ bool openFileListFunction( const char * filename, fileList * fl )
 
 
 // Generate track file data based on a file list
-bool generateTrackDataFunction( fileList * fl, aggregateData * ad, 
-							trackData * td )
+bool generateTrackDataFunction(const fileList &fl, aggregateData * ad,
+                               trackData * td )
 {
-	// Read first file and find the number of particles
-	if (openCoordinateFunction( (*fl).filename[0], ad )) {
+    // Read first file and find the number of particles
+    if (fl.numberOfFiles > 0 && openCoordinateFunction( fl.filename[0], ad )) {
 
-		// Prepare track data
-		(*td).numberOfTracks = (*ad).numberOfParticles;
-		(*td).numberOfStages = (*fl).numberOfFiles;
+        // Prepare track data
+        (*td).numberOfTracks = (*ad).numberOfParticles;
+        (*td).numberOfStages = fl.numberOfFiles;
 
-		// Free track memory
-		freeTrackData( td );
+        // Free track memory
+        freeTrackData( td );
 
-		// Allocate memory for the track lists
-		(*td).type  = (tag *)malloc( (*td).numberOfTracks*sizeof(tag) );
-		(*td).x = (float **)malloc( (*td).numberOfTracks*sizeof(float *) );
-		(*td).y = (float **)malloc( (*td).numberOfTracks*sizeof(float *) );
-		(*td).z = (float **)malloc( (*td).numberOfTracks*sizeof(float *) );
-		for (int i=0;i<(*td).numberOfTracks;i++) {
-			(*td).x[i] = (float *)malloc( (*td).numberOfStages*sizeof(float) );
-			(*td).y[i] = (float *)malloc( (*td).numberOfStages*sizeof(float) );
-			(*td).z[i] = (float *)malloc( (*td).numberOfStages*sizeof(float) );
-		}
-	
+        // Allocate memory for the track lists
+        (*td).type  = (tag *)malloc( (*td).numberOfTracks*sizeof(tag) );
+        (*td).x = (float **)malloc( (*td).numberOfTracks*sizeof(float *) );
+        (*td).y = (float **)malloc( (*td).numberOfTracks*sizeof(float *) );
+        (*td).z = (float **)malloc( (*td).numberOfTracks*sizeof(float *) );
+        for (int i=0;i<(*td).numberOfTracks;i++) {
+            (*td).x[i] = (float *)malloc( (*td).numberOfStages*sizeof(float) );
+            (*td).y[i] = (float *)malloc( (*td).numberOfStages*sizeof(float) );
+            (*td).z[i] = (float *)malloc( (*td).numberOfStages*sizeof(float) );
+        }
+
         (*td).haveMemoryAllocated = true;
 
-		// Read the files and fill in the data
-		for (int stage=0;stage<(*td).numberOfStages;stage++) {
-			if (openCoordinateFunction( (*fl).filename[stage], ad )) {
-	
-				for (int i=0;i<(*td).numberOfTracks;i++) {
+        // Read the files and fill in the data
+        for (int stage=0;stage<(*td).numberOfStages;stage++) {
+            if (openCoordinateFunction(fl.filename[stage], ad )) {
 
-					// Fill in types at first pass
-					if (stage == 0) 
-						typeCopy( (char *)&(*ad).particles[i].type, (char *)&(*td).type[i] );
-					
-					// Fill in coordinates
-					(*td).x[i][stage] = (*ad).particles[i].x;
-					(*td).y[i][stage] = (*ad).particles[i].y;
-					(*td).z[i][stage] = (*ad).particles[i].z;
-				}
-			}
-			else {
-				printf("Could not read list entry %s -- abort\n", (*fl).filename[stage] );
+                for (int i=0;i<(*td).numberOfTracks;i++) {
+
+                    // Fill in types at first pass
+                    if (stage == 0)
+                        typeCopy( (char *)&(*ad).particles[i].type, (char *)&(*td).type[i] );
+
+                    // Fill in coordinates
+                    (*td).x[i][stage] = (*ad).particles[i].x;
+                    (*td).y[i][stage] = (*ad).particles[i].y;
+                    (*td).z[i][stage] = (*ad).particles[i].z;
+                }
+            }
+            else {
+                printf("Could not read list entry %s -- abort\n", fl.filename[stage] );
                 return false;
-			}
-		}
-	}
-	else {
-		printf("Could not read first list entry -- abort\n");
+            }
+        }
+    }
+    else {
+        printf("Could not read first list entry -- abort\n");
         return false;
-	}
+    }
 
     return true;
 }
