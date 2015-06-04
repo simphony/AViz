@@ -1,7 +1,3 @@
-//
-// Implementation of animation board dialog widget class
-//
-
 /**********************************************************************
 Copyright (C) 2001 - 2003  Geri Wagner
 
@@ -34,6 +30,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QLabel>
 #include <QDir>
 #include <QFileDialog>
+#include <QProgressBar>
+#include <QProcess>
 
 const int MIN_FILE_LINE_WIDTH = 500;
 
@@ -49,7 +47,7 @@ AnimationBoard::AnimationBoard(QWidget * parent)
     m_fileLine->setReadOnly(true);
 
     // Create a pushbutton
-    QPushButton * browsePb = new QPushButton("Browse...");
+    m_browsePb = new QPushButton("Browse...");
 
     // Create a label
     m_numberL = new QLabel("Note: Image files in target directory must be named abc.0001.png, abc.0002.png, etc");
@@ -58,33 +56,58 @@ AnimationBoard::AnimationBoard(QWidget * parent)
     m_animGIF = new QPushButton("Create AnimatedGIF");
     m_animGIF->setEnabled(false);
 
+    // Create a progress bar to be displayed when animation is being created
+    m_progressBar = new QProgressBar();
+    //show as "busy" as we don't know how much time animation
+    m_progressBar->setMinimum(0);
+    m_progressBar->setMaximum(0);
+    m_progressBar->hide();
+
     QPushButton *done = new QPushButton("Done");
 
     // layout widgets
     QGridLayout *grid = new QGridLayout(this);
     grid->addWidget(new QLabel(" Target Directory: "), 0 /*row*/, 0 /*col*/);
     grid->addWidget(m_fileLine, 0 /*row*/, 1 /*col*/);
-    grid->addWidget(browsePb, 0 /*row*/, 2 /*col*/);
+    grid->addWidget(m_browsePb, 0 /*row*/, 2 /*col*/);
     grid->addWidget(m_numberL, 1 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, 3/*colSpan*/);
-    grid->addWidget(m_animGIF, 2 /*row*/, 0 /*col*/);
-    grid->addWidget(done, 2 /*row*/, 2 /*col*/);
+    grid->addWidget(m_progressBar, 2 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, 3/*colSpan*/);
+    grid->addWidget(m_animGIF, 3 /*row*/, 0 /*col*/);
+    grid->addWidget(done, 3 /*row*/, 2 /*col*/);
 
     // create connections
-    QObject::connect(browsePb, SIGNAL(clicked()), this, SLOT(selectImageDirectory()) );
-    QObject::connect(m_animGIF, SIGNAL(clicked()), this, SLOT(createAGIF()) );
-    QObject::connect(done, SIGNAL(clicked()), this, SLOT(close()) );
+    connect(m_browsePb, SIGNAL(clicked()), this, SLOT(selectImageDirectory()) );
+    connect(m_animGIF, SIGNAL(clicked()), this, SLOT(startAnimationCreation()) );
+    connect(done, SIGNAL(clicked()), this, SLOT(close()) );
 
     this->setMinimumWidth(MIN_FILE_LINE_WIDTH);
 }
 
 
 // Create animatedGIF
-void AnimationBoard::createAGIF() {
-    // Create an animated GIF
+void AnimationBoard::startAnimationCreation() {
+    QProcess *process = new QProcess();
+    process->setWorkingDirectory (m_targetDir);
+
+    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(handleFinishedAnimation(int)));
+    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), process, SLOT(deleteLater()));
+
+    m_progressBar->show();
+    m_numberL->setText("anim.gif is being created");
+    m_animGIF->setEnabled(false);
+    m_browsePb->setEnabled(false);
+
+    process->start("convert", QStringList() << "*.png" << "anim.gif");
+
+    //output information to console
     QString command  = QString("cd %1; convert *.png* anim.gif").arg(m_targetDir);
-    QString msg = QString("Executing command %1\n").arg(command);
-    std::cout << msg.toStdString();
-    int exitCode = system(qPrintable(command));
+    std::cout << qPrintable(QString("Executing command %1\n").arg(command));
+}
+
+void AnimationBoard::handleFinishedAnimation(int exitCode){
+    m_progressBar->hide();
+    m_animGIF->setEnabled(true);
+    m_browsePb->setEnabled(true);
 
     if(exitCode == 0) {
         m_numberL->setText(QString("anim.gif has been created"));
