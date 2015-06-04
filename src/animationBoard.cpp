@@ -26,55 +26,52 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "animationBoard.h"
 
-#include <dirent.h>
 #include <iostream>
 
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QLabel>
+#include <QDir>
 #include <QFileDialog>
-
-#include "defaults.h"
 
 const int MIN_FILE_LINE_WIDTH = 500;
 
 // Make a popup dialog box
 AnimationBoard::AnimationBoard(QWidget * parent)
-    : QDialog(parent),
-      haveTarget(false) {
+    : QDialog(parent) {
     setWindowTitle("AViz: Animation Generator");
 
-    // Create a label
-    QLabel *targetL = new QLabel(" Target Directory: ");
+    setModal(true);
 
     // Create a text window
-    fileLine = new QLineEdit("--");
+    m_fileLine = new QLineEdit("--");
+    m_fileLine->setReadOnly(true);
 
     // Create a pushbutton
     QPushButton * browsePb = new QPushButton("Browse...");
 
     // Create a label
-    numberL = new QLabel(" Note: Image files in target directory must be named abc.0001.png, abc.0002.png, etc");
+    m_numberL = new QLabel("Note: Image files in target directory must be named abc.0001.png, abc.0002.png, etc");
 
     // Create more pushbuttons that will go into the lowest row
-    animGIF = new QPushButton("Create AnimatedGIF");
-    animGIF->setEnabled(haveTarget);
+    m_animGIF = new QPushButton("Create AnimatedGIF");
+    m_animGIF->setEnabled(false);
 
     QPushButton *done = new QPushButton("Done");
 
     // layout widgets
     QGridLayout *grid = new QGridLayout(this);
-    grid->addWidget(targetL, 0 /*row*/, 0 /*col*/);
-    grid->addWidget(fileLine, 0 /*row*/, 1 /*col*/);
+    grid->addWidget(new QLabel(" Target Directory: "), 0 /*row*/, 0 /*col*/);
+    grid->addWidget(m_fileLine, 0 /*row*/, 1 /*col*/);
     grid->addWidget(browsePb, 0 /*row*/, 2 /*col*/);
-    grid->addWidget(numberL, 1 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, 3/*colSpan*/);
-    grid->addWidget(animGIF, 2 /*row*/, 0 /*col*/);
+    grid->addWidget(m_numberL, 1 /*fromRow*/, 0 /*fromCol*/, 1 /*rowSpan*/, 3/*colSpan*/);
+    grid->addWidget(m_animGIF, 2 /*row*/, 0 /*col*/);
     grid->addWidget(done, 2 /*row*/, 2 /*col*/);
 
     // create connections
-    QObject::connect(browsePb, SIGNAL(clicked()), this, SLOT(browseCB()) );
-    QObject::connect(animGIF, SIGNAL(clicked()), this, SLOT(createAGIF()) );
+    QObject::connect(browsePb, SIGNAL(clicked()), this, SLOT(selectImageDirectory()) );
+    QObject::connect(m_animGIF, SIGNAL(clicked()), this, SLOT(createAGIF()) );
     QObject::connect(done, SIGNAL(clicked()), this, SLOT(close()) );
 
     this->setMinimumWidth(MIN_FILE_LINE_WIDTH);
@@ -83,47 +80,50 @@ AnimationBoard::AnimationBoard(QWidget * parent)
 
 // Create animatedGIF
 void AnimationBoard::createAGIF() {
-    if (haveTarget) {
-        // Create an animated GIF
-        QString command  = QString("cd %1; convert *.png* anim.gif").arg(targetDir);
-        QString msg = QString("Executing command %1\n").arg(command);
-        std::cout << msg.toStdString();
-        system(qPrintable(command));
+    // Create an animated GIF
+    QString command  = QString("cd %1; convert *.png* anim.gif").arg(m_targetDir);
+    QString msg = QString("Executing command %1\n").arg(command);
+    std::cout << msg.toStdString();
+    int exitCode = system(qPrintable(command));
+
+    if(exitCode == 0) {
+        m_numberL->setText(QString("anim.gif has been created"));
+    } else {
+        m_numberL->setText(QString("Error occured when trying to create anim.gif (Return code %1)").arg(exitCode));
     }
 }
 
+namespace {
 
-// Launch a file browser
-void AnimationBoard::browseCB() {
-    DIR *dirp;
-    struct dirent *direntp;
-    char * filename = (char *)malloc(BUFSIZ);
+// count number of png files in the directory
+int getNumberOfPngFiles(const QString& directoryName) {
 
-    QString fn (QFileDialog::getExistingDirectory(this, QString(), "./") );
-    // Register the selection
-    if ( !fn.isEmpty() ) {
-        targetDir = fn;
-        fileLine->setText( targetDir );
+    QDir directory(directoryName);
+    QStringList namedFilter;
+    namedFilter << "*.png";
+    QStringList pngFileNames = directory.entryList(namedFilter,
+                                               QDir::Files /*filter: only files*/
+                                               );
+    return pngFileNames.size();
+}
+}
 
-        // Set a flag
-        haveTarget = true;
-        animGIF->setEnabled( true );
+void AnimationBoard::selectImageDirectory() {
+    QFileDialog fd(this,
+                   QString("Select target directory containing image files"));
+    fd.setFileMode(QFileDialog::Directory);
+    fd.setOption(QFileDialog::ReadOnly);
+
+    if (fd.exec()) {
+        QString directoryName = fd.selectedFiles()[0];
+
+        m_targetDir = directoryName;
+        m_fileLine->setText( m_targetDir );
+
+        int nFiles = getNumberOfPngFiles(m_targetDir);
+        m_animGIF->setEnabled(nFiles > 0  ? true : false);
+
+        m_numberL->setText(QString("Number of PNG files in target directory: %1").arg(nFiles));
     }
-
-    // Count number of PNG files
-    int fileNumber = 0;
-    dirp = opendir(qPrintable(targetDir));
-    while ( (direntp = readdir( dirp )) != NULL ) {
-        sprintf(filename, "%s", direntp->d_name );
-        if (strstr(filename, ".png"))
-            fileNumber++;
-    }
-
-    closedir( dirp );
-
-    // Update the label
-    numberL->setText(QString("Number of PNG files in target directory: %1").arg(fileNumber));
-
-    free(filename);
 }
 

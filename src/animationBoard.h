@@ -33,6 +33,14 @@ class QLineEdit;
 class QPushButton;
 class QLabel;
 
+/*! @class AnimationBoard
+    @brief Dialog for user to create animation for directory of images
+
+    User selects directory of images and then can create an animation
+    from these images.
+
+    @todo user should have feedback that the animation is being created (progressbar)
+*/
 // File list board dialog widget
 class AnimationBoard: public QDialog
 {
@@ -41,15 +49,17 @@ public:
     AnimationBoard( QWidget * parent=0 );
 
 private slots:
+    /// create animation from images in selected directory
     void createAGIF();
-    void browseCB();
+
+    /// select directory containing images for animation
+    void selectImageDirectory();
 
 private:
-    QLineEdit * fileLine;
-    QPushButton * animGIF;
-    QLabel * numberL;
-    QString targetDir;
-    bool haveTarget;
+    QLineEdit *m_fileLine;
+    QPushButton *m_animGIF;
+    QLabel *m_numberL;
+    QString m_targetDir;
 };
 
 #endif // ANIMB_H

@@ -435,8 +435,8 @@ void AViz::launchFileList() {
 // Show the animation panel -- a convenience function
 void AViz::launchAnimation()
 {
-    AnimationBoard * ab = new AnimationBoard();
-    ab->show();
+    AnimationBoard ab;
+    ab.exec();
 }
 
 
