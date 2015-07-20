@@ -1,0 +1,8 @@
+language: cpp
+install:
+        - sudo apt-get -qq update
+        - sudo apt-get -qq install libqt4-dev qt4-qmake libpng-dev
+script:
+        - cd src
+        - qmake aviz.pro
+        - make
