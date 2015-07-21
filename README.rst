@@ -23,7 +23,7 @@ AViz is developed at the Computational Physics Group, Technion, Haifa (Israel).
 Building
 --------
 
-Aviz requires the following:
+AViz requires the following:
   - Qt >= 4.8  (with opengl support)
   - X11
   - PNG development library (i.e. libpng-dev)
@@ -58,4 +58,4 @@ Group, Technion, Haifa Israel.  For questions and suggestions, and if
 you would like to contribute to the development, please contact 
 Joan Adler at phr76ja@tx.technion.ac.il
 
-The repository of Aviz is hosted at https://github.com/simphony/AViz
+The repository of AViz is hosted at https://github.com/simphony/AViz
