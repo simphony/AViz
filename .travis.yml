@@ -1,0 +1,17 @@
+sudo: false
+language: cpp
+
+compiler:
+  - gcc
+  - clang
+
+addons:
+  apt:
+    packages:
+      - qt4-qmake
+      - qt4-dev-tools
+      - libpng-dev
+script:
+  - cd src
+  - qmake aviz.pro
+  - make
