@@ -16,6 +16,9 @@ does not use Coin's alternative implementation of the Inventor 3D graphics libra
 
 AViz is developed at the Computational Physics Group, Technion, Haifa (Israel).
 
+.. image:: https://travis-ci.org/simphony/AViz.svg?branch=master
+   :target: https://travis-ci.org/simphony/AViz
+   :alt: Build status
 
 Building
 --------
@@ -23,7 +26,7 @@ Building
 Aviz requires the following:
   - Qt >= 4.8  (with opengl support)
   - X11
-  - PNG development library (i.e. libpng12-dev)
+  - PNG development library (i.e. libpng-dev)
 
 To build avis, run::
 
@@ -54,3 +57,5 @@ Adham Hashibon (adham.hashibon@iwm.fraunhofer.de) at the Computational Physics
 Group, Technion, Haifa Israel.  For questions and suggestions, and if 
 you would like to contribute to the development, please contact 
 Joan Adler at phr76ja@tx.technion.ac.il
+
+The repository of Aviz is hosted at https://github.com/simphony/AViz
