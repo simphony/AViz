@@ -185,7 +185,7 @@ AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
     // Clear internal variables
     colors = 1;
     colorPosX = colorPosY = 0;
-    showColorBoard = FALSE;
+    showColorBoard = false;
     atomRenderStyle = ADOT;
     renderQuality = LOW;
 
@@ -272,18 +272,12 @@ void AtomBoard::setData()
             atomCob->clear();
             for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 // Check: is this particle type really needed?
-                bool needed = FALSE;
                 for (int j=0;j<(*ad).numberOfParticles;j++) {
-                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i]) == TRUE) {
-                        // Yes it is needed: set a flag
-                        needed = TRUE;
+                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
+                        // Add the item to the list
+                        atomCob->addItem(QString( (char *)&(*thisPd).type[i]));
                         break;
                     }
-                }
-
-                // Add the item to the list
-                if (needed) {
-                    atomCob->addItem(QString( (char *)&(*thisPd).type[i]));
                 }
             }
             atomCob->setMinimumSize( atomCob->sizeHint() );
@@ -322,7 +316,7 @@ void AtomBoard::setAtom()
     typeCopy( qPrintable(atomCob->currentText()), (char *)&thisAtom);
 
     for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
-        if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisAtom) == TRUE) {
+        if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisAtom)) {
             // Found the correct entry
             thisAtomIndex = i;
 
@@ -333,16 +327,14 @@ void AtomBoard::setAtom()
             bool thisShowParticle = (*thisPd).showParticle[thisAtomIndex];
             showAtomCb->setChecked( thisShowParticle );
 
-            switch( thisShowParticle) {
-            case TRUE:
+            if( thisShowParticle) {
                 if (thisAtomIndex >= 0) {
                     m_colorCriterionWidget->setDisabled(false);
                 }
                 else {
                     m_colorCriterionWidget->setDisabled(true);
                 }
-                break;
-            case FALSE:
+	    } else {
                 sizeBox->setDisabled(true);
                 m_colorCriterionWidget->setDisabled(true);
                 break;
@@ -406,8 +398,7 @@ void AtomBoard::adjustAtom() {
     if (thisAtomIndex >= 0)
         (*thisPd).showParticle[thisAtomIndex] = showAtomCb->isChecked();
 
-    switch ( showAtomCb->isChecked() ) {
-    case TRUE:
+    if ( showAtomCb->isChecked() ) {
         if (thisAtomIndex >= 0) {
             this->buildLayout( (*thisPd).colorCrit[thisAtomIndex] );
             colorButton->setDisabled(false);
@@ -416,11 +407,9 @@ void AtomBoard::adjustAtom() {
             this->buildLayout( TYPE );
             colorButton->setDisabled(true);
         }
-        break;
-    case FALSE:
+    } else {
         this->buildLayout( TYPE );
         colorButton->setDisabled(true);
-        break;
     }
 }
 
@@ -442,16 +431,16 @@ void AtomBoard::readToggles()
         // update the particle data entry
         sizeBox->readToggles( thisPd, thisAtomIndex );
 
-        if (colorMode0->isChecked() == TRUE) {
+        if (colorMode0->isChecked()) {
             (*thisPd).colorCrit[thisAtomIndex] = TYPE;
         }
-        if (colorMode1->isChecked() == TRUE) {
+        if (colorMode1->isChecked()) {
             (*thisPd).colorCrit[thisAtomIndex] = POSITION;
         }
-        if (colorMode2->isChecked() == TRUE) {
+        if (colorMode2->isChecked()) {
             (*thisPd).colorCrit[thisAtomIndex] = PROPERTY;
         }
-        if (colorMode3->isChecked() == TRUE) {
+        if (colorMode3->isChecked()) {
             (*thisPd).colorCrit[thisAtomIndex] = COLORCODE;
         }
     }
@@ -468,7 +457,7 @@ void AtomBoard::readToggles()
 void AtomBoard::setColorCb()
 {
     // Set a flag
-    showColorBoard = TRUE;
+    showColorBoard = true;
 
     // Adjust the color board
     this->setColors();
@@ -712,7 +701,7 @@ void AtomBoard::setFinalQuality()
 // Set a flag when the color board is closed
 void AtomBoard::closeColorBoard()
 {
-    showColorBoard = FALSE;
+    showColorBoard = false;
 
     if (cb)
         cb->~ColorBoard();

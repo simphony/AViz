@@ -92,22 +92,22 @@ void LineTypeBox::setParticle( particleData * thisPd, int thisIndex )
         fixedThickness fThickness = (*thisPd).line[thisIndex].fThickness;
         switch (fThickness) {
         case THIN:
-            footThickness0->setChecked( TRUE );
+            footThickness0->setChecked(true);
             break;
         case MEDIUM:
-            footThickness1->setChecked( TRUE );
+            footThickness1->setChecked(true);
             break;
         case THICK:
-            footThickness2->setChecked( TRUE );
+            footThickness2->setChecked(true);
             break;
         case FAT:
-            footThickness3->setChecked( TRUE );
+            footThickness3->setChecked(true);
             break;
         case VARYING_LINEAR:
-            footThickness4->setChecked( TRUE );
+            footThickness4->setChecked(true);
             break;
         case VARYING_QUADRATIC:
-            footThickness5->setChecked( TRUE );
+            footThickness5->setChecked(true);
             break;
         }
 
@@ -122,22 +122,22 @@ void LineTypeBox::readToggles( particleData * thisPd, int thisIndex )
     if (thisIndex >= 0 && thisPd) {
         // Read the settings and
         // update the particle data entry
-        if (footThickness0->isChecked() == TRUE) {
+        if (footThickness0->isChecked()) {
             (*thisPd).line[thisIndex].fThickness = THIN;
         }
-        if (footThickness1->isChecked() == TRUE) {
+        if (footThickness1->isChecked()) {
             (*thisPd).line[thisIndex].fThickness = MEDIUM;
         }
-        if (footThickness2->isChecked() == TRUE) {
+        if (footThickness2->isChecked()) {
             (*thisPd).line[thisIndex].fThickness = THICK;
         }
-        if (footThickness3->isChecked() == TRUE) {
+        if (footThickness3->isChecked()) {
             (*thisPd).line[thisIndex].fThickness = FAT;
         }
-        if (footThickness4->isChecked() == TRUE) {
+        if (footThickness4->isChecked()) {
             (*thisPd).line[thisIndex].fThickness = VARYING_LINEAR;
         }
-        if (footThickness5->isChecked() == TRUE) {
+        if (footThickness5->isChecked()) {
             (*thisPd).line[thisIndex].fThickness = VARYING_QUADRATIC;
         }
 

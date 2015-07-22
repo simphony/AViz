@@ -69,7 +69,7 @@ PoreBoard::PoreBoard(QWidget * parent)
 
         // Add a check box button
         showPoreCb = new QCheckBox("Show Pores");
-        showPoreCb->setChecked( TRUE );
+        showPoreCb->setChecked(true);
 
         // Define a callback for this toggle switch
         connect( showPoreCb, SIGNAL(clicked()), this, SLOT(adjustPore()) );
@@ -180,16 +180,16 @@ PoreBoard::PoreBoard(QWidget * parent)
     // Clear internal variables
     colors = 1;
     colorPosX = colorPosY = 0;
-    showColorBoard = FALSE;
+    showColorBoard = false;
     poreRenderStyle = PLINE;
     renderQuality = LOW;
 
     // Set defaults appropriate for startup without data
-    colorButton->setDisabled( TRUE );
-    sizeBox->setDisabled( TRUE );
-    modeL->setDisabled( TRUE );
-    colorMode->setDisabled( TRUE );
-    colorMode0->setChecked( TRUE );
+    colorButton->setDisabled(true);
+    sizeBox->setDisabled(true);
+    modeL->setDisabled(true);
+    colorMode->setDisabled(true);
+    colorMode0->setChecked(true);
 
     // Build default layout
     this->buildLayout( TYPE );
@@ -284,18 +284,12 @@ void PoreBoard::setData()
             poreCob->clear();
             for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 // Check: is this particle type really needed?
-                bool needed = FALSE;
                 for (int j=0;j<(*ad).numberOfParticles;j++) {
-                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i]) == TRUE) {
-                        // Yes it is needed: set a flag
-                        needed = TRUE;
+                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
+                        // Add the item to the list
+                        poreCob->addItem( QString( (char *)&(*thisPd).type[i]));
                         break;
                     }
-                }
-
-                // Add the item to the list
-                if (needed) {
-                    poreCob->addItem( QString( (char *)&(*thisPd).type[i]));
                 }
             }
             poreCob->setMinimumSize( poreCob->sizeHint() );
@@ -334,7 +328,7 @@ void PoreBoard::setPore()
     typeCopy( qPrintable(poreCob->currentText()), (char *)&thisPore );
 
     for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
-        if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisPore ) == TRUE) {
+        if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisPore )) {
             // Found the correct entry
             thisPoreIndex = i;
 
@@ -345,30 +339,24 @@ void PoreBoard::setPore()
             bool thisShowParticle = (*thisPd).showParticle[thisPoreIndex];
             showPoreCb->setChecked( thisShowParticle);
 
-            switch( thisShowParticle) {
-            case TRUE:
+            if( thisShowParticle) {
                 if (thisPoreIndex >= 0) {
-                    modeL->setDisabled( FALSE );
-                    colorMode->setDisabled( FALSE );
+                    modeL->setDisabled(false );
+                    colorMode->setDisabled(false);
+                } else {
+                    modeL->setDisabled(true );
+                    colorMode->setDisabled(true);
                 }
-                else {
-                    modeL->setDisabled( TRUE );
-                    colorMode->setDisabled( TRUE );
-                }
-                break;
-            case FALSE:
-                sizeBox->setDisabled( TRUE );
-                modeL->setDisabled( TRUE );
-                colorMode->setDisabled( TRUE );
-                break;
+            } else {
+                modeL->setDisabled(true);
+                colorMode->setDisabled(true);
             }
 
             // Adjust the toggles
             if (poreRenderStyle != PDOT && poreRenderStyle != PLINE && thisShowParticle) {
-                sizeBox->setDisabled( FALSE );
-            }
-            else {
-                sizeBox->setDisabled( TRUE );
+                sizeBox->setDisabled(false);
+            } else {
+                sizeBox->setDisabled(true);
             }
 
             // Adjust size settings
@@ -378,23 +366,23 @@ void PoreBoard::setPore()
             switch (colorCrit) {
             case TYPE:
                 this->buildLayout( TYPE );
-                colorMode0->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode0->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case POSITION:
                 this->buildLayout( POSITION );
-                colorMode1->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode1->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case PROPERTY:
                 this->buildLayout( PROPERTY );
-                colorMode2->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode2->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case COLORCODE:
                 this->buildLayout( COLORCODE );
-                colorMode3->setChecked( TRUE );
-                colorButton->setDisabled( TRUE );
+                colorMode3->setChecked(true);
+                colorButton->setDisabled(true);
                 colorLabel0->switchOff();
                 colorLabel1->switchOff();
                 colorLabel2->switchOff();
@@ -423,20 +411,17 @@ void PoreBoard::adjustPore()
     (*thisPd).showParticle[thisPoreIndex] = showPoreCb->isChecked();
 
     // Activate or deactivate the remaining radio buttons
-    switch ((*thisPd).showParticle[thisPoreIndex]) {
-    case TRUE:
+    if ((*thisPd).showParticle[thisPoreIndex]) {
         if (thisPoreIndex >= 0) {
             this->buildLayout( (*thisPd).colorCrit[thisPoreIndex] );
         }
         else {
             this->buildLayout( TYPE );
-            colorButton->setDisabled( FALSE );
+            colorButton->setDisabled(false);
         }
-        break;
-    case FALSE:
+    } else {
         this->buildLayout( TYPE );
-        colorButton->setDisabled( FALSE );
-        break;
+        colorButton->setDisabled(false);
     }
 }
 
@@ -458,16 +443,16 @@ void PoreBoard::readToggles()
         // update the particle data entry
         sizeBox->readToggles( thisPd, thisPoreIndex );
 
-        if (colorMode0->isChecked() == TRUE) {
+        if (colorMode0->isChecked()) {
             (*thisPd).colorCrit[thisPoreIndex] = TYPE;
         }
-        if (colorMode1->isChecked() == TRUE) {
+        if (colorMode1->isChecked()) {
             (*thisPd).colorCrit[thisPoreIndex] = POSITION;
         }
-        if (colorMode2->isChecked() == TRUE) {
+        if (colorMode2->isChecked()) {
             (*thisPd).colorCrit[thisPoreIndex] = PROPERTY;
         }
-        if (colorMode3->isChecked() == TRUE) {
+        if (colorMode3->isChecked()) {
             (*thisPd).colorCrit[thisPoreIndex] = COLORCODE;
         }
     }
@@ -490,7 +475,7 @@ void PoreBoard::readToggles()
 void PoreBoard::setColorCb()
 {
     // Set a flag
-    showColorBoard = TRUE;
+    showColorBoard = true;
 
     // Adjust the color board
     this->setColors();
@@ -757,7 +742,7 @@ void PoreBoard::getColors( float r0, float g0, float b0, float r1, float g1, flo
 void PoreBoard::setDotStyle()
 {
     poreRenderStyle = PDOT;
-    sizeBox->setDisabled( TRUE );
+    sizeBox->setDisabled(true);
 }
 
 
@@ -765,8 +750,8 @@ void PoreBoard::setDotStyle()
 void PoreBoard::setLineStyle()
 {
     poreRenderStyle = PLINE;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -774,8 +759,8 @@ void PoreBoard::setLineStyle()
 void PoreBoard::setCubeStyle()
 {
     poreRenderStyle = PCUBE;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -783,8 +768,8 @@ void PoreBoard::setCubeStyle()
 void PoreBoard::setCylinderStyle()
 {
     poreRenderStyle = PCYLINDER;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -792,8 +777,8 @@ void PoreBoard::setCylinderStyle()
 void PoreBoard::setConeStyle()
 {
     poreRenderStyle = PCONE;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -801,8 +786,8 @@ void PoreBoard::setConeStyle()
 void PoreBoard::setSphereStyle()
 {
     poreRenderStyle = PSPHERE;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -830,7 +815,7 @@ void PoreBoard::setFinalQuality()
 // Set a flag when the color board is closed
 void PoreBoard::closeColorBoard()
 {
-    showColorBoard = FALSE;
+    showColorBoard = false;
 
     if (cb)
         cb->~ColorBoard();

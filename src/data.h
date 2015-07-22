@@ -85,13 +85,13 @@ enum trackRenderMode{ ALL_STAGES, UP_TO_CURRENT };
 // specifying the rendering that do not depend on the particular
 // data set to be rendered
 typedef struct{
-        double fovy;
-	double phi;
-	double theta;
-	double chi;
-	double dolly;
-	double phiHome;
-	double thetaHome;
+    double fovy;
+    double phi;
+    double theta;
+    double chi;
+    double dolly;
+    double phiHome;
+    double thetaHome;
 	double chiHome;
 	double dollyHome;
 	double fovyHome;
@@ -136,7 +136,7 @@ typedef struct{
 	bool showSlicePlaneX;
 	bool showSlicePlaneY;
 	bool showSlicePlaneZ;
-	char showTracks;
+    bool showTracks;
 	int trackRenderFromStage;
 	int trackRenderToStage;
 	trackRenderMode tRenderMode;

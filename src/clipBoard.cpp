@@ -96,29 +96,12 @@ void ClipBoard::setClip( viewParam vp ) {
 
 
 // Callback function to respond to auto clipping
-void ClipBoard::autoClip()
-{
-    switch( autoNearCb->isChecked() ) {
-    case TRUE:
-        clipNearL->setDisabled( TRUE );
-        clipNearSb->setDisabled( TRUE );
-        break;
-    case FALSE:
-        clipNearL->setDisabled( FALSE );
-        clipNearSb->setDisabled( FALSE );
-        break;
-    }
+void ClipBoard::autoClip() {
+    clipNearL->setDisabled( autoNearCb->isChecked() );
+    clipNearSb->setDisabled( autoNearCb->isChecked() );
 
-    switch( autoFarCb->isChecked() ) {
-    case TRUE:
-        clipFarL->setDisabled( TRUE );
-        clipFarSb->setDisabled( TRUE );
-        break;
-    case FALSE:
-        clipFarL->setDisabled( FALSE );
-        clipFarSb->setDisabled( FALSE );
-        break;
-    }
+    clipFarL->setDisabled( autoFarCb->isChecked() );
+    clipFarSb->setDisabled( autoFarCb->isChecked() );
 }
 
 

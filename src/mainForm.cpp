@@ -277,7 +277,7 @@ QString MainForm::readFileFromList( int current, bool thisKeepViewObject ) {
         readFile( file );
 
         // Set freezing of the view object data back to default
-        setKeepViewObject( FALSE );
+        setKeepViewObject(false);
 
         return file;
     }
@@ -297,16 +297,16 @@ void MainForm::setDefaults()
 
     // Assume auto clip and set clip and slice
     // parameter values
-    vp.autoClipNear = TRUE;
-    vp.autoClipFar = TRUE;
+    vp.autoClipNear = true;
+    vp.autoClipFar = true;
     vp.clipNear = 0.0;
     vp.clipFar = 0.0;
-    vp.slicing = FALSE;
-    vp.slicingSet = FALSE;
-    vp.showSlicePlaneX = FALSE;
-    vp.showSlicePlaneY = FALSE;
-    vp.showSlicePlaneZ = FALSE;
-    vp.showTracks = FALSE;
+    vp.slicing = false;
+    vp.slicingSet = false;
+    vp.showSlicePlaneX = false;
+    vp.showSlicePlaneY = false;
+    vp.showSlicePlaneZ = false;
+    vp.showTracks = false;
     vp.sliceXMin = 0.0;
     vp.sliceXMax = 0.0;
     vp.sliceYMin = 0.0;
@@ -334,36 +334,36 @@ void MainForm::setDefaults()
     vp.panRight = vp.panTop = vp.panForward = 0.0;
 
     // No auto motion to start with
-    vp.autoRot1 = FALSE;
-    vp.autoRot2 = FALSE;
-    vp.autoTilt1 = FALSE;
-    vp.autoTilt2 = FALSE;
-    vp.autoSpin1 = FALSE;
-    vp.autoSpin2 = FALSE;
-    vp.autoZoom1 = FALSE;
-    vp.autoZoom2 = FALSE;
+    vp.autoRot1 = false;
+    vp.autoRot2 = false;
+    vp.autoTilt1 = false;
+    vp.autoTilt2 = false;
+    vp.autoSpin1 = false;
+    vp.autoSpin2 = false;
+    vp.autoZoom1 = false;
+    vp.autoZoom2 = false;
 
     // Set render parameters
     vp.renderMode = ATOMS;
     vp.renderSize = SIZE;
     vp.renderQuality = LOW;
-    vp.showAxes = TRUE;
-    vp.showContour = TRUE;
-    vp.onlyContour = FALSE;
+    vp.showAxes = true;
+    vp.showContour = true;
+    vp.onlyContour = false;
     vp.atomRenderStyle = ADOT;
     vp.spinRenderStyle = SLINE;
     vp.lcRenderStyle = LLINE;
     vp.poreRenderStyle = PLINE;
 
     // Set annotation parameters
-    vp.showAnnotation = TRUE;
+    vp.showAnnotation = true;
     vp.annotationSize = 1;
     vp.annotationCoordX = 100;
     vp.annotationCoordY = 100;
     sprintf(vp.annotationText, " " );
 
     // Set stereo vision patemeters
-    vp.stereoVisionEn = FALSE;
+    vp.stereoVisionEn = false;
     vp.eyeSeparation = 0.4;
 
     // Set more settings
@@ -371,29 +371,29 @@ void MainForm::setDefaults()
     vp.viewMode = PERSPECTIVE;
 
     for (int i=0;i<8;i++) {
-        vp.light[i] = FALSE;
+        vp.light[i] = false;
         vp.lightDepth[i] = 0.4;
     }
-    vp.light[5] = TRUE;
+    vp.light[5] = true;
     vp.ambientLight = 0.2;
     vp.shininess = 100.0;
 
     // Prevent immediate updating
-    vp.enableUpdate = FALSE;
+    vp.enableUpdate = false;
 
     renderBox->setValue( vp );
 
     glCanvasFrame->setAuto( vp );
 
     // Enable updating
-    vp.enableUpdate = TRUE;
+    vp.enableUpdate = true;
 
     // Refresh the drawing now
     setViewParam( vp );
     updateRendering();
 
     // Always update the view object data
-    setKeepViewObject( FALSE );
+    setKeepViewObject( false );
 }
 
 
@@ -433,29 +433,25 @@ void MainForm::setDefaults( viewParam vp, const char * filename )
     }
 
     // Enable updating
-    vp.enableUpdate = TRUE;
+    vp.enableUpdate = true;
 
     // Refresh the drawing now
     setViewParam( vp );
     updateRendering();
 
     // Always update the view object data
-    setKeepViewObject( FALSE );
+    setKeepViewObject( false );
 }
 
 
 // Accept new data sent from the main panel 
-void MainForm::updateView()
-{
-    switch (isKeepViewObject()) {
-    case FALSE:
-        // Update the view object
-        glCanvasFrame->updateView();
-        break;
-    case TRUE:
+void MainForm::updateView() {
+    if (isKeepViewObject()) {
         // Update the view object
         glCanvasFrame->updateViewWithoutViewObjectChange();
-        break;
+    } else {
+        // Update the view object
+        glCanvasFrame->updateView();
     }
 }
 
@@ -478,34 +474,34 @@ void MainForm::setViewParam( viewParam vp )
 // Set the auto buttons according to settings sent from 
 // the main panel and trigger auto rot/tilt/spin
 void MainForm::setAutoAndStart( viewParam vp ) {
-    if (vp.autoRot1 == TRUE) {
+    if (vp.autoRot1) {
         glCanvasFrame->startAutoRot1( );
     }
-    if (vp.autoRot2 == TRUE) {
+    if (vp.autoRot2) {
         glCanvasFrame->startAutoRot2( );
     }
-    if (vp.autoTilt1 == TRUE) {
+    if (vp.autoTilt1) {
         glCanvasFrame->startAutoTilt1( );
     }
-    if (vp.autoTilt2 == TRUE) {
+    if (vp.autoTilt2) {
         glCanvasFrame->startAutoTilt2( );
     }
-    if (vp.autoSpin1 == TRUE) {
+    if (vp.autoSpin1) {
         glCanvasFrame->startAutoSpin1( );
     }
-    if (vp.autoSpin2 == TRUE) {
+    if (vp.autoSpin2) {
         glCanvasFrame->startAutoSpin2( );
     }
-    if (vp.autoZoom1 == TRUE) {
+    if (vp.autoZoom1) {
         glCanvasFrame->startAutoZoom1( );
     }
-    if (vp.autoZoom2 == TRUE) {
+    if (vp.autoZoom2) {
         glCanvasFrame->startAutoZoom2( );
     }
 
     glCanvasFrame->setAuto( vp );
 
-    if (vp.autoSnap == TRUE) {
+    if (vp.autoSnap) {
         ((LiveBox *)m_liveBox)->startAutoSnap( );
     }
 

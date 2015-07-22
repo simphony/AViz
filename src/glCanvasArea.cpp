@@ -54,10 +54,10 @@ GLCanvasArea::GLCanvasArea(QWidget* parent)
     // Init the data structures
     allocateParticleData( &pd );
 
-    ad.haveMemoryAllocated = FALSE;
+    ad.haveMemoryAllocated = false;
     ad.numberOfParticles = 0;
 
-    td.haveMemoryAllocated = FALSE;
+    td.haveMemoryAllocated = false;
     td.numberOfTracks = 0;
     td.numberOfStages = 0;
 
@@ -89,7 +89,7 @@ GLCanvasArea::GLCanvasArea(QWidget* parent)
     vp.poreRenderStyle = PLINE;
 
     // Reset a flag
-    mouseOn = FALSE;
+    mouseOn = false;
 }
 
 
@@ -147,10 +147,10 @@ void GLCanvasArea::recompileObjects()
     if (ad.numberOfParticles) {
         // Compile the drawing procedures: first the bonds...
         if (vp.renderMode == ATOMS)
-            atomBonds = this->makeBondsObject( FALSE );
+            atomBonds = makeBondsObject(false);
 
         if (vp.renderMode == POLYMERS)
-            polymerBonds = this->makeBondsObject( TRUE );
+            polymerBonds = makeBondsObject(true);
 
         // Do the particles
         switch (vp.renderMode) {
@@ -173,16 +173,16 @@ void GLCanvasArea::recompileObjects()
         case SPINS:
             switch (vp.spinRenderStyle) {
             case SLINE:
-                spins = this->makeLinesObject( TRUE );
+                spins = makeLinesObject(true);
                 break;
             case SCONE:
-                spins = this->makeConesObject( TRUE );
+                spins = makeConesObject(true);
                 break;
             case SSPHERE:
-                spins = this->makePinsObject();
+                spins = makePinsObject();
                 break;
             default:
-                spins = this->makeLinesObject( TRUE );
+                spins = makeLinesObject(true);
                 break;
             }
             break;
@@ -192,16 +192,16 @@ void GLCanvasArea::recompileObjects()
                 lcs = this->makeDotsObject();
                 break;
             case LLINE:
-                lcs = this->makeLinesObject( FALSE );
+                lcs = this->makeLinesObject(false);
                 break;
             case LCYLINDER:
-                lcs = this->makeCylindersObject( FALSE );
+                lcs = this->makeCylindersObject(false);
                 break;
             case LCONE:
-                lcs = this->makeConesObject( FALSE );
+                lcs = this->makeConesObject(false);
                 break;
             default:
-                lcs = this->makeLinesObject( FALSE );
+                lcs = this->makeLinesObject(false);
                 break;
             }
             break;
@@ -227,13 +227,13 @@ void GLCanvasArea::recompileObjects()
                 pores = this->makeDotsObject();
                 break;
             case PLINE:
-                pores = this->makeLinesObject( FALSE );
+                pores = this->makeLinesObject(false);
                 break;
             case PCYLINDER:
-                pores = this->makeCylindersObject( FALSE );
+                pores = this->makeCylindersObject(false);
                 break;
             default:
-                pores = this->makeLinesObject( FALSE );
+                pores = this->makeLinesObject(false);
                 break;
             }
             break;
@@ -241,7 +241,7 @@ void GLCanvasArea::recompileObjects()
     }
 
     // Also compile drawing lists for particle tracks, if needed
-    if (vp.showTracks == TRUE)
+    if (vp.showTracks)
         tracks = this->makeTracksObject();
 }
 
@@ -283,7 +283,7 @@ void GLCanvasArea::snapRendering( const char * filename ) {
     glReadPixels( 0, 0, width, height, GL_RED, GL_UNSIGNED_BYTE, imageRed );
     glReadPixels( 0, 0, width, height, GL_GREEN, GL_UNSIGNED_BYTE, imageGreen );
     glReadPixels( 0, 0, width, height, GL_BLUE, GL_UNSIGNED_BYTE, imageBlue );
-    if (writePNGImage( filename, ad.IDstring, width, height, imageRed, imageGreen, imageBlue ) == TRUE) {
+    if (writePNGImage( filename, ad.IDstring, width, height, imageRed, imageGreen, imageBlue)) {
         if (mainForm)
             mainForm->statusMessage( "Created PNG image file ", filename);
     }
@@ -344,7 +344,7 @@ void GLCanvasArea::completeParticleData()
     // types with known color types
     for (int i=0;i<ad.numberOfParticles;i++) {
         int j = 0;
-        while (typeCmp( (char *)&ad.particles[i].type, (char *)&pd.type[j] ) != TRUE && j < pd.numberOfParticleTypes-1) {
+        while (!typeCmp( (char *)&ad.particles[i].type, (char *)&pd.type[j] ) && j < pd.numberOfParticleTypes-1) {
             j++;
         }
 
@@ -426,7 +426,7 @@ void GLCanvasArea::mouseReleaseEvent( QMouseEvent * qme )
     mouseY = qme->y();
 
     // Reset a flag
-    mouseOn = FALSE;
+    mouseOn = false;
 }
 
 
@@ -590,7 +590,7 @@ void GLCanvasArea::mouseMoveEvent( QMouseEvent * qme )
         // Set a flag to enable mouse-controlled transformations --
         // this can be done only after the mouse button have been
         // pressed and the mouse moved a bit
-        mouseOn = TRUE;
+        mouseOn = true;
     }
 
     // Redraw
@@ -701,13 +701,13 @@ void GLCanvasArea::paintGL()
         // settings
         GLfloat minDist = vp.minDist;
         GLfloat maxDist = vp.maxDist;
-        if (vp.autoClipNear == FALSE) {
+        if (!vp.autoClipNear) {
             minDist = vp.clipNear;
         }
         else {
             vp.clipNear = minDist;
         }
-        if (vp.autoClipFar == FALSE) {
+        if (!vp.autoClipFar) {
             maxDist = vp.clipFar;
         }
         else {
@@ -756,7 +756,7 @@ void GLCanvasArea::paintGL()
         makeLights();
 
         // First draw the slicing planes, if needed
-        if (vp.slicing == TRUE)
+        if (vp.slicing)
             drawSlicingPlanes();
 
         // Set common material properties -- here shininess and
@@ -769,10 +769,10 @@ void GLCanvasArea::paintGL()
 
         // Render now
         glPushMatrix();
-        if (vp.onlyContour == FALSE) {
+        if (!vp.onlyContour) {
 
             // Begin by rendering the tracks
-            if (vp.showTracks == TRUE && glIsList(tracks)) {
+            if (vp.showTracks && glIsList(tracks)) {
                 glCallList( tracks );
             }
 
@@ -811,29 +811,29 @@ void GLCanvasArea::paintGL()
         glPopMatrix();
 
         // Switch on antialiasing
-        this->antiAliasing( TRUE );
+        this->antiAliasing(true);
 
         // Switch off lighting for the remaining part
         glDisable( GL_LIGHTING );
 
         // Draw contours
-        if (vp.showContour == TRUE)
+        if (vp.showContour)
             drawContourBox();
 
         // Draw axes if needed
-        if (vp.showAxes == TRUE) {
+        if (vp.showAxes) {
             drawAxes();
             // Clear the matrix stack while drawing the labels
             drawAxesAnnotation();
         }
 
         // Draw annotation text if needed
-        if (vp.showAnnotation == TRUE) {
+        if (vp.showAnnotation) {
             drawAnnotation();
         }
 
         // Switch off antialiasing
-        this->antiAliasing( FALSE );
+        this->antiAliasing(false);
     } // Both eyes iterations
 
     // Restore (disable) color mask
@@ -841,7 +841,7 @@ void GLCanvasArea::paintGL()
         glColorMask(true, true, true, true);
 
     // Automatically take a snapshot, if desired
-    if (vp.autoSnap == TRUE) {
+    if (vp.autoSnap) {
         this->snapRendering();
     }
 }
@@ -855,12 +855,12 @@ void GLCanvasArea::initializeGL()
         // Double-buffering is usually set already by default...
         // this is just to be sure
         QGLFormat format = this->format();
-        format.setDoubleBuffer( TRUE );
+        format.setDoubleBuffer(true);
         this->setFormat(format);
 
         if (!this->isValid()) {
             printf("Double-buffering not supported: Falling back on single buffer\n");
-            format.setDoubleBuffer( FALSE );
+            format.setDoubleBuffer(false);
             this->setFormat(format);
         }
     }
@@ -1052,17 +1052,14 @@ void GLCanvasArea::makeLights()
 // Switch on or off antialiasing
 void GLCanvasArea::antiAliasing( bool antiAlias )
 {
-    switch (antiAlias) {
-    case TRUE:
+    if (antiAlias) {
         glEnable( GL_LINE_SMOOTH );
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
         glHint( GL_LINE_SMOOTH_HINT, GL_DONT_CARE );
-        break;
-    case FALSE:
+    } else {
         glDisable( GL_LINE_SMOOTH );
         glDisable( GL_BLEND );
-        break;
     }
 }
 
@@ -1418,26 +1415,14 @@ void GLCanvasArea::drawSlicingPlanes()
 
 // Find out if the scene is simple, involving only lines and dots, 
 // or complex
-bool GLCanvasArea::simpleRendering()
-{
-    bool simple = FALSE;
-
-    if (vp.renderMode == ATOMS && vp.atomRenderStyle == ADOT)
-        simple = TRUE;
-    if (vp.renderMode == SPINS && vp.spinRenderStyle == SLINE)
-        simple = TRUE;
-    if (vp.renderMode == SPINS && vp.lcRenderStyle == LLINE)
-        simple = TRUE;
-    if (vp.renderMode == LIQUID_CRYSTALS && vp.lcRenderStyle == LDOT)
-        simple = TRUE;
-    if (vp.renderMode == LIQUID_CRYSTALS && vp.lcRenderStyle == LLINE)
-        simple = TRUE;
-    if (vp.renderMode == PORES && vp.poreRenderStyle == PLINE)
-        simple = TRUE;
-    if (vp.renderMode == PORES && vp.poreRenderStyle == PDOT)
-        simple = TRUE;
-
-    return simple;
+bool GLCanvasArea::simpleRendering() {
+    return ( (vp.renderMode == ATOMS && vp.atomRenderStyle == ADOT) ||
+             (vp.renderMode == SPINS && vp.spinRenderStyle == SLINE) ||
+             (vp.renderMode == SPINS && vp.lcRenderStyle == LLINE) ||
+             (vp.renderMode == LIQUID_CRYSTALS && vp.lcRenderStyle == LDOT) ||
+             (vp.renderMode == LIQUID_CRYSTALS && vp.lcRenderStyle == LLINE) ||
+             (vp.renderMode == PORES && vp.poreRenderStyle == PLINE) ||
+             (vp.renderMode == PORES && vp.poreRenderStyle == PDOT));
 }
 
 
@@ -1523,14 +1508,14 @@ GLuint GLCanvasArea::makeBondsObject( bool onlyWithinMolecule )
     int numberOfParticleTypes = 0;
     for (i=0;i<ad.numberOfParticles;i++) {
         if (this->particleIsInSlice(i)) {
-            isInList = FALSE;
+            isInList = false;
             for (int j=0;j<numberOfParticleTypes;j++) {
-                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type ) == TRUE) {
-                    isInList = TRUE;
+                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type )) {
+                    isInList = true;
                     j = numberOfParticleTypes;
                 }
             }
-            if (isInList == FALSE) {
+            if (!isInList) {
                 // Found a new particle -- add it to the list
                 if (numberOfParticleTypes < MAX_PARTICLE_TYPES) {
                     typeCopy( (char *)&ad.particles[i].type, (char *)&particleTypes[numberOfParticleTypes]);
@@ -1555,19 +1540,14 @@ GLuint GLCanvasArea::makeBondsObject( bool onlyWithinMolecule )
 
             // Is this a new combination of bonds?  And
             // if yes, should the bond be rendered?
-            if (bondCombinationNew( fParticleTypes, tParticleTypes, &combCount, (char *)&particleTypes[i], (char *)&neighborParticleType) == TRUE && pd.particleBonds[pdIndex].bShowBond[j] == TRUE) {
+            if (bondCombinationNew( fParticleTypes, tParticleTypes, &combCount, (char *)&particleTypes[i], (char *)&neighborParticleType) && pd.particleBonds[pdIndex].bShowBond[j]) {
                 emission = (GLfloat)pd.particleBonds[pdIndex].bEmission[j];
                 minLength = pd.particleBonds[pdIndex].bMinLength[j];
                 maxLength = pd.particleBonds[pdIndex].bMaxLength[j];
                 isSeqBond = pd.particleBonds[pdIndex].bSeqBond[j];
                 color = pd.particleBonds[pdIndex].bColor[j];
                 thickness = pd.particleBonds[pdIndex].bThickness[j];
-                if (pd.particleBonds[pdIndex].bAntiAlias[j]) {
-                    this->antiAliasing( TRUE );
-                }
-                else {
-                    this->antiAliasing( FALSE );
-                }
+                this->antiAliasing(pd.particleBonds[pdIndex].bAntiAlias[j]);
 
                 // Go through all particle types and look at
                 // bonding neighbors; draw the corresponding
@@ -1583,8 +1563,8 @@ GLuint GLCanvasArea::makeBondsObject( bool onlyWithinMolecule )
                             // and from
                             // destination to
                             // target
-                            if ( (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[k].type ) == TRUE && typeCmp( (char *)&neighborParticleType, (char *)&ad.particles[l].type ) == TRUE) || (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[l].type ) == TRUE && typeCmp( (char *)&neighborParticleType, (char *)&ad.particles[k].type ) == TRUE) ) {
-                                if (this->isBond(k, l, minLength, maxLength, onlyWithinMolecule,isSeqBond, &dCurrentBondLength) == TRUE) {
+                            if ( (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[k].type ) && typeCmp( (char *)&neighborParticleType, (char *)&ad.particles[l].type )) || (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[l].type ) && typeCmp( (char *)&neighborParticleType, (char *)&ad.particles[k].type )) ) {
+                                if (this->isBond(k, l, minLength, maxLength, onlyWithinMolecule,isSeqBond, &dCurrentBondLength)) {
 
                                     // Set
                                     // color,
@@ -1627,7 +1607,7 @@ GLuint GLCanvasArea::makeBondsObject( bool onlyWithinMolecule )
     glEnable( GL_LIGHTING );
 
     // Switch off antialiasing
-    this->antiAliasing( FALSE );
+    this->antiAliasing(false);
 
     // No more glowing from now on
     glMaterialfv( GL_FRONT, GL_EMISSION, black_mat );
@@ -1661,14 +1641,14 @@ GLuint GLCanvasArea::makeDotsObject()
     int numberOfParticleTypes = 0;
     for (i=0;i<ad.numberOfParticles;i++) {
         if (this->particleIsInSlice(i)) {
-            isInList = FALSE;
+            isInList = false;
             for (int j=0;j<numberOfParticleTypes;j++) {
-                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type ) == TRUE) {
-                    isInList = TRUE;
+                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type )) {
+                    isInList = true;
                     j=numberOfParticleTypes;
                 }
             }
-            if (isInList == FALSE) {
+            if (!isInList) {
                 // Found a new particle -- add it to the list
                 if (numberOfParticleTypes < MAX_PARTICLE_TYPES) {
                     typeCopy( (char *)&ad.particles[i].type, (char *)&particleTypes[numberOfParticleTypes]);
@@ -1693,7 +1673,7 @@ GLuint GLCanvasArea::makeDotsObject()
         // Draw the particles that are of the given type
         for (int j=0;j<ad.numberOfParticles;j++) {
             if (this->particleIsInSlice(j) && pd.showParticle[pdIndex]) {
-                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type ) == TRUE) {
+                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type )) {
                     // This one is of the right
                     // type: render it
                     this->renderDot(j, pdIndex);
@@ -1760,14 +1740,14 @@ GLuint GLCanvasArea::makeSpheresObject()
     int numberOfParticleTypes = 0;
     for (i=0;i<ad.numberOfParticles;i++) {
         if (this->particleIsInSlice(i)) {
-            isInList = FALSE;
+            isInList = false;
             for (int j=0;j<numberOfParticleTypes;j++) {
-                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type ) == TRUE) {
-                    isInList = TRUE;
+                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type )) {
+                    isInList = true;
                     j=numberOfParticleTypes;
                 }
             }
-            if (isInList == FALSE) {
+            if (!isInList) {
                 // Found a new particle -- add it to the list
                 if (numberOfParticleTypes < MAX_PARTICLE_TYPES) {
                     typeCopy( (char *)&ad.particles[i].type, (char *)&particleTypes[numberOfParticleTypes]);
@@ -1796,7 +1776,7 @@ GLuint GLCanvasArea::makeSpheresObject()
         for (int j=0;j<ad.numberOfParticles;j++) {
             if (this->particleIsInSlice(j) && pd.showParticle[pdIndex]) {
 
-                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type ) == TRUE) {
+                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type )) {
                     // This one is of the right type:
                     // render it
                     this->renderSphere( j, pdIndex, qobj, qual, relSize );
@@ -1833,14 +1813,14 @@ GLuint GLCanvasArea::makeCubesObject()
     int numberOfParticleTypes = 0;
     for (i=0;i<ad.numberOfParticles;i++) {
         if (this->particleIsInSlice(i)) {
-            isInList = FALSE;
+            isInList = false;
             for (int j=0;j<numberOfParticleTypes;j++) {
-                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type ) == TRUE) {
-                    isInList = TRUE;
+                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type )) {
+                    isInList = true;
                     j=numberOfParticleTypes;
                 }
             }
-            if (isInList == FALSE) {
+            if (!isInList) {
                 // Found a new particle -- add it to the list
                 if (numberOfParticleTypes < MAX_PARTICLE_TYPES) {
                     typeCopy( (char *)&ad.particles[i].type, (char *)&particleTypes[numberOfParticleTypes]);
@@ -1869,7 +1849,7 @@ GLuint GLCanvasArea::makeCubesObject()
         for (int j=0;j<ad.numberOfParticles;j++) {
             if (this->particleIsInSlice(j) && pd.showParticle[pdIndex]) {
 
-                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type ) == TRUE) {
+                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type )) {
                     // This one is of the right type: render it
                     this->renderCube( j, pdIndex, relSize );
                 }
@@ -1918,14 +1898,14 @@ GLuint GLCanvasArea::makePinsObject()
     int numberOfParticleTypes = 0;
     for (i=0;i<ad.numberOfParticles;i++) {
         if (this->particleIsInSlice(i)) {
-            isInList = FALSE;
+            isInList = false;
             for (int j=0;j<numberOfParticleTypes;j++) {
-                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type ) == TRUE) {
-                    isInList = TRUE;
+                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type )) {
+                    isInList = true;
                     j = numberOfParticleTypes;
                 }
             }
-            if (isInList == FALSE) {
+            if (!isInList) {
                 // Found a new particle -- add it to the list
                 if (numberOfParticleTypes < MAX_PARTICLE_TYPES) {
                     typeCopy( (char *)&ad.particles[i].type, (char *)&particleTypes[numberOfParticleTypes]);
@@ -1954,17 +1934,17 @@ GLuint GLCanvasArea::makePinsObject()
         emission = (GLfloat)pd.line[pdIndex].fEmission;
         thickness = pd.line[pdIndex].fThickness;
         if (pd.line[pdIndex].fAntiAlias) {
-            this->antiAliasing( TRUE );
+            this->antiAliasing(true);
         }
         else {
-            this->antiAliasing( FALSE );
+            this->antiAliasing(false);
         }
 
         // Draw the particles that are of the given type
         for (int j=0;j<ad.numberOfParticles;j++) {
             if (this->particleIsInSlice(j) && pd.showParticle[pdIndex]) {
 
-                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type ) == TRUE) {
+                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type )) {
                     // This one is of the right type: render it
                     posx = ad.particles[j].x*vp.stretchX;
                     posy = ad.particles[j].y*vp.stretchY;
@@ -2015,7 +1995,7 @@ GLuint GLCanvasArea::makePinsObject()
                     }
 
                     // Render the body first
-                    this->renderLineCylinder( posx, posy, posz, n1, n2, n3, thisLen, qobj, qual, thisRadius, relSize, thickness, TRUE, FALSE );
+                    this->renderLineCylinder( posx, posy, posz, n1, n2, n3, thisLen, qobj, qual, thisRadius, relSize, thickness, true, false);
 
                     // Switch on lighting, in case it
                     // was switched off while rendering
@@ -2095,14 +2075,14 @@ GLuint GLCanvasArea::makeLinesObject( bool adjustLength )
     int numberOfParticleTypes = 0;
     for (i=0;i<ad.numberOfParticles;i++) {
         if (this->particleIsInSlice(i)) {
-            isInList = FALSE;
+            isInList = false;
             for (int j=0;j<numberOfParticleTypes;j++) {
-                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type ) == TRUE) {
-                    isInList = TRUE;
+                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type )) {
+                    isInList = true;
                     j = numberOfParticleTypes;
                 }
             }
-            if (isInList == FALSE) {
+            if (!isInList) {
                 // Found a new particle -- add it to the list
                 if (numberOfParticleTypes < MAX_PARTICLE_TYPES) {
                     typeCopy( (char *)&ad.particles[i].type, (char *)&particleTypes[numberOfParticleTypes]);
@@ -2128,16 +2108,16 @@ GLuint GLCanvasArea::makeLinesObject( bool adjustLength )
         emission = (GLfloat)pd.line[pdIndex].fEmission;
         thickness = pd.line[pdIndex].fThickness;
         if (pd.line[pdIndex].fAntiAlias) {
-            this->antiAliasing( TRUE );
+            this->antiAliasing(true);
         }
         else {
-            this->antiAliasing( FALSE );
+            this->antiAliasing(false);
         }
 
         // Draw the particles that are of the given type
         for (int j=0;j<ad.numberOfParticles;j++) {
             if (this->particleIsInSlice(j) && pd.showParticle[pdIndex]) {
-                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type ) == TRUE) {
+                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type )) {
                     // This one is of the right type: render it
                     posx = ad.particles[j].x*vp.stretchX;
                     posy = ad.particles[j].y*vp.stretchY;
@@ -2169,18 +2149,15 @@ GLuint GLCanvasArea::makeLinesObject( bool adjustLength )
                     // first 3 property entries
                     n = (GLfloat)sqrt( p1*p1 + p2*p2 + p3*p3 );
 
-                    switch (adjustLength) {
-                    case FALSE:
-                        thisLen = n;
-                        break;
-                    case TRUE:
+                    if (adjustLength) {
                         // Rather than using a unit vector
                         // length, use the spin data to
                         // modify the length (assuming that
                         // the spins are already properly
                         // normalized)
                         thisLen = length*n;
-                        break;
+                    } else {
+                        thisLen = n;
                     }
 
                     if (fabs(n) > 0.0) {
@@ -2198,38 +2175,38 @@ GLuint GLCanvasArea::makeLinesObject( bool adjustLength )
                     // Divide it into several small bites
                     // when neccessary
                     if (pd.colorCrit[pdIndex] != TYPE) {
-                        this->renderLineCylinder( posx, posy, posz, n1, n2, n3, thisLen, NULL, qual, thisRadius, REGULAR, LINE, FALSE, FALSE );
+                        this->renderLineCylinder( posx, posy, posz, n1, n2, n3, thisLen, NULL, qual, thisRadius, REGULAR, LINE, false,false);
                     }
                     else {
                         // Coloring according to types:
                         // Use one, two, or three colors
                         switch (pd.line[pdIndex].typeColorNumber) {
                         case 1:
-                            this->renderLineCylinder( posx, posy, posz, n1, n2, n3, thisLen, NULL, qual, thisRadius, REGULAR, LINE, FALSE, FALSE );
+                            this->renderLineCylinder( posx, posy, posz, n1, n2, n3, thisLen, NULL, qual, thisRadius, REGULAR, LINE, false,false);
                             break;
                         case 2:
                             glColor3f( red, green, blue);
-                            this->renderLineCylinder( posx, posy, posz, n1/2.0, n2/2.0, n3/2.0, thisLen, NULL, qual, thisRadius, REGULAR, LINE, FALSE, FALSE );
+                            this->renderLineCylinder( posx, posy, posz, n1/2.0, n2/2.0, n3/2.0, thisLen, NULL, qual, thisRadius, REGULAR, LINE, false,false);
                             posx += n1*thisLen/2.0;
                             posy += n2*thisLen/2.0;
                             posz += n3*thisLen/2.0;
 
                             glColor3f( redTwo, greenTwo, blueTwo );
-                            this->renderLineCylinder( posx, posy, posz, n1/2.0, n2/2.0, n3/2.0, thisLen, NULL, qual, thisRadius, REGULAR, LINE, FALSE, FALSE );
+                            this->renderLineCylinder( posx, posy, posz, n1/2.0, n2/2.0, n3/2.0, thisLen, NULL, qual, thisRadius, REGULAR, LINE, false,false);
                             break;
                         case 3:
                             glColor3f( red, green, blue);
-                            this->renderLineCylinder( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, NULL, qual, thisRadius, REGULAR, LINE, FALSE, FALSE );
+                            this->renderLineCylinder( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, NULL, qual, thisRadius, REGULAR, LINE, false,false);
                             posx += n1*thisLen/3.0;
                             posy += n2*thisLen/3.0;
                             posz += n3*thisLen/3.0;
                             glColor3f( redTwo, greenTwo, blueTwo );
-                            this->renderLineCylinder( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, NULL, qual, thisRadius, REGULAR, LINE, FALSE, FALSE );
+                            this->renderLineCylinder( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, NULL, qual, thisRadius, REGULAR, LINE, false,false);
                             posx += n1*thisLen/3.0;
                             posy += n2*thisLen/3.0;
                             posz += n3*thisLen/3.0;
                             glColor3f( redThree, greenThree, blueThree );
-                            this->renderLineCylinder( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, NULL, qual, thisRadius, REGULAR, LINE, FALSE, FALSE );
+                            this->renderLineCylinder( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, NULL, qual, thisRadius, REGULAR, LINE, false,false);
                             break;
                         }
                     }
@@ -2282,14 +2259,14 @@ GLuint GLCanvasArea::makeConesObject( bool adjustLength )
     int numberOfParticleTypes = 0;
     for (i=0;i<ad.numberOfParticles;i++) {
         if (this->particleIsInSlice(i)) {
-            isInList = FALSE;
+            isInList = false;
             for (int j=0;j<numberOfParticleTypes;j++) {
-                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type ) == TRUE) {
-                    isInList = TRUE;
+                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type )) {
+                    isInList = true;
                     j = numberOfParticleTypes;
                 }
             }
-            if (isInList == FALSE) {
+            if (!isInList) {
                 // Found a new particle -- add it to the list
                 if (numberOfParticleTypes < MAX_PARTICLE_TYPES) {
                     typeCopy( (char *)&ad.particles[i].type, (char *)&particleTypes[numberOfParticleTypes]);
@@ -2318,16 +2295,16 @@ GLuint GLCanvasArea::makeConesObject( bool adjustLength )
         emission = (GLfloat)pd.line[pdIndex].fEmission;
         thickness = pd.line[pdIndex].fThickness;
         if (pd.line[pdIndex].fAntiAlias) {
-            this->antiAliasing( TRUE );
+            this->antiAliasing(true);
         }
         else {
-            this->antiAliasing( FALSE );
+            this->antiAliasing(false);
         }
 
         // Draw the particles that are of the given type
         for (int j=0;j<ad.numberOfParticles;j++) {
             if (this->particleIsInSlice(j) && pd.showParticle[pdIndex]) {
-                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type ) == TRUE) {
+                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type )) {
                     // This one is of the right type: render it
                     posx = ad.particles[j].x*vp.stretchX;
                     posy = ad.particles[j].y*vp.stretchY;
@@ -2359,18 +2336,15 @@ GLuint GLCanvasArea::makeConesObject( bool adjustLength )
                     // is given by the
                     // first 3 property entries
                     n = (GLfloat)sqrt( p1*p1 + p2*p2 + p3*p3 );
-                    switch (adjustLength) {
-                    case FALSE:
-                        thisLen = n;
-                        break;
-                    case TRUE:
+                    if (adjustLength) {
                         // Rather than using a unit vector
                         // length, use the spin data to
                         // modify the length (assuming that
                         // the spins are already properly
                         // normalized)
                         thisLen = length*n;
-                        break;
+                    } else {
+                        thisLen = n;
                     }
 
                     if (fabs(n) > 0.0) {
@@ -2388,38 +2362,38 @@ GLuint GLCanvasArea::makeConesObject( bool adjustLength )
                     // Divide it into several small bites when
                     // neccessary
                     if (pd.colorCrit[pdIndex] != TYPE) {
-                        this->renderCone( posx, posy, posz, n1, n2, n3, thisLen, qobj, qual, thisRadius, relSize, thickness, TRUE );
+                        this->renderCone( posx, posy, posz, n1, n2, n3, thisLen, qobj, qual, thisRadius, relSize, thickness,true);
                     }
                     else {
                         // Coloring according to types:
                         // Use one, two, or three colors
                         switch (pd.line[pdIndex].typeColorNumber) {
                         case 1:
-                            this->renderCone( posx, posy, posz, n1, n2, n3, thisLen, qobj, qual, thisRadius, relSize, thickness, TRUE );
+                            this->renderCone( posx, posy, posz, n1, n2, n3, thisLen, qobj, qual, thisRadius, relSize, thickness,true);
                             break;
                         case 2:
                             glColor3f( red, green, blue);
-                            this->renderCone( posx, posy, posz, n1/2.0, n2/2.0, n3/2.0, thisLen, qobj, qual, thisRadius, thisRadius/2.0, relSize, thickness, TRUE );
+                            this->renderCone( posx, posy, posz, n1/2.0, n2/2.0, n3/2.0, thisLen, qobj, qual, thisRadius, thisRadius/2.0, relSize, thickness,true);
                             posx += n1*thisLen/2.0;
                             posy += n2*thisLen/2.0;
                             posz += n3*thisLen/2.0;
 
                             glColor3f( redTwo, greenTwo, blueTwo );
-                            this->renderCone( posx, posy, posz, n1/2.0, n2/2.0, n3/2.0, thisLen, qobj, qual, thisRadius/2.0, relSize, thickness, FALSE );
+                            this->renderCone( posx, posy, posz, n1/2.0, n2/2.0, n3/2.0, thisLen, qobj, qual, thisRadius/2.0, relSize, thickness,false);
                             break;
                         case 3:
                             glColor3f( red, green, blue);
-                            this->renderCone( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, qobj, qual, thisRadius, thisRadius*2.0/3.0, relSize, thickness, TRUE );
+                            this->renderCone( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, qobj, qual, thisRadius, thisRadius*2.0/3.0, relSize, thickness,true);
                             posx += n1*thisLen/3.0;
                             posy += n2*thisLen/3.0;
                             posz += n3*thisLen/3.0;
                             glColor3f( redTwo, greenTwo, blueTwo );
-                            this->renderCone( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, qobj, qual, thisRadius*2.0/3.0, thisRadius/3.0, relSize, thickness, FALSE );
+                            this->renderCone( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, qobj, qual, thisRadius*2.0/3.0, thisRadius/3.0, relSize, thickness,false);
                             posx += n1*thisLen/3.0;
                             posy += n2*thisLen/3.0;
                             posz += n3*thisLen/3.0;
                             glColor3f( redThree, greenThree, blueThree );
-                            this->renderCone( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, qobj, qual, thisRadius/3.0, relSize, thickness, FALSE );
+                            this->renderCone( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, qobj, qual, thisRadius/3.0, relSize, thickness,false);
                             break;
                         }
                     }
@@ -2474,14 +2448,14 @@ GLuint GLCanvasArea::makeCylindersObject( bool adjustLength )
     int numberOfParticleTypes = 0;
     for (i=0;i<ad.numberOfParticles;i++) {
         if (this->particleIsInSlice(i)) {
-            isInList = FALSE;
+            isInList = false;
             for (int j=0;j<numberOfParticleTypes;j++) {
-                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type ) == TRUE) {
-                    isInList = TRUE;
+                if (typeCmp( (char *)&particleTypes[j], (char *)&ad.particles[i].type )) {
+                    isInList = true;
                     j = numberOfParticleTypes;
                 }
             }
-            if (isInList == FALSE) {
+            if (!isInList) {
                 // Found a new particle -- add it to the list
                 if (numberOfParticleTypes < MAX_PARTICLE_TYPES) {
                     typeCopy( (char *)&ad.particles[i].type, (char *)&particleTypes[numberOfParticleTypes]);
@@ -2510,16 +2484,16 @@ GLuint GLCanvasArea::makeCylindersObject( bool adjustLength )
         emission = (GLfloat)pd.line[pdIndex].fEmission;
         thickness = pd.line[pdIndex].fThickness;
         if (pd.line[pdIndex].fAntiAlias) {
-            this->antiAliasing( TRUE );
+            this->antiAliasing(true);
         }
         else {
-            this->antiAliasing( FALSE );
+            this->antiAliasing(false);
         }
 
         // Draw the particles that are of the given type
         for (int j=0;j<ad.numberOfParticles;j++) {
             if (this->particleIsInSlice(j) && pd.showParticle[pdIndex]) {
-                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type ) == TRUE) {
+                if (typeCmp( (char *)&particleTypes[i], (char *)&ad.particles[j].type )) {
                     // This one is of the right type:
                     // render it
                     posx = ad.particles[j].x*vp.stretchX;
@@ -2552,18 +2526,15 @@ GLuint GLCanvasArea::makeCylindersObject( bool adjustLength )
                     // given by the
                     // first 3 property entries
                     n = (GLfloat)sqrt( p1*p1 + p2*p2 + p3*p3 );
-                    switch (adjustLength) {
-                    case FALSE:
-                        thisLen = n;
-                        break;
-                    case TRUE:
+                    if (adjustLength) {
                         // Rather than using a unit vector
                         // length, use the spin data to
                         // modify the length (assuming that
                         // the spins are already properly
                         // normalized)
                         thisLen = length*n;
-                        break;
+                    } else {
+                        thisLen = n;
                     }
 
                     if (fabs(n) > 0.0) {
@@ -2581,38 +2552,38 @@ GLuint GLCanvasArea::makeCylindersObject( bool adjustLength )
                     // Divide it into several small bites
                     // when neccessary
                     if (pd.colorCrit[pdIndex] != TYPE) {
-                        this->renderLineCylinder( posx, posy, posz, n1, n2, n3, thisLen, qobj, qual, thisRadius, relSize, thickness, TRUE, TRUE );
+                        this->renderLineCylinder( posx, posy, posz, n1, n2, n3, thisLen, qobj, qual, thisRadius, relSize, thickness, true, true);
                     }
                     else {
                         // Coloring according to types:
                         // Use one, two, or three colors
                         switch (pd.line[pdIndex].typeColorNumber) {
                         case 1:
-                            this->renderLineCylinder( posx, posy, posz, n1, n2, n3, thisLen, qobj, qual, thisRadius, relSize, thickness, TRUE, TRUE );
+                            this->renderLineCylinder( posx, posy, posz, n1, n2, n3, thisLen, qobj, qual, thisRadius, relSize, thickness, true, true);
                             break;
                         case 2:
                             glColor3f( red, green, blue);
-                            this->renderLineCylinder( posx, posy, posz, n1/2.0, n2/2.0, n3/2.0, thisLen, qobj, qual, thisRadius, relSize, thickness, TRUE, FALSE );
+                            this->renderLineCylinder( posx, posy, posz, n1/2.0, n2/2.0, n3/2.0, thisLen, qobj, qual, thisRadius, relSize, thickness, true, false);
                             posx += n1*thisLen/2.0;
                             posy += n2*thisLen/2.0;
                             posz += n3*thisLen/2.0;
 
                             glColor3f( redTwo, greenTwo, blueTwo );
-                            this->renderLineCylinder( posx, posy, posz, n1/2.0, n2/2.0, n3/2.0, thisLen, qobj, qual, thisRadius, relSize, thickness, FALSE, TRUE );
+                            this->renderLineCylinder( posx, posy, posz, n1/2.0, n2/2.0, n3/2.0, thisLen, qobj, qual, thisRadius, relSize, thickness, false, true);
                             break;
                         case 3:
                             glColor3f( red, green, blue);
-                            this->renderLineCylinder( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, qobj, qual, thisRadius, relSize, thickness, TRUE, FALSE );
+                            this->renderLineCylinder( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, qobj, qual, thisRadius, relSize, thickness, true,false);
                             posx += n1*thisLen/3.0;
                             posy += n2*thisLen/3.0;
                             posz += n3*thisLen/3.0;
                             glColor3f( redTwo, greenTwo, blueTwo );
-                            this->renderLineCylinder( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, qobj, qual, thisRadius, relSize, thickness, FALSE, FALSE );
+                            this->renderLineCylinder( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, qobj, qual, thisRadius, relSize, thickness, false,false);
                             posx += n1*thisLen/3.0;
                             posy += n2*thisLen/3.0;
                             posz += n3*thisLen/3.0;
                             glColor3f( redThree, greenThree, blueThree );
-                            this->renderLineCylinder( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, qobj, qual, thisRadius, relSize, thickness, FALSE, TRUE );
+                            this->renderLineCylinder( posx, posy, posz, n1/3.0, n2/3.0, n3/3.0, thisLen, qobj, qual, thisRadius, relSize, thickness, false, true);
                             break;
                         }
                     }
@@ -2655,14 +2626,14 @@ GLuint GLCanvasArea::makeTracksObject()
     int numberOfTrackTypes = 0;
     for (i=0;i<td.numberOfTracks;i++) {
         if (this->trackIsInSlice(i)) {
-            isInList = FALSE;
+            isInList = false;
             for (int j=0;j<numberOfTrackTypes;j++) {
-                if (typeCmp( (char *)&trackTypes[j], (char *)&td.type[i] ) == TRUE) {
-                    isInList = TRUE;
+                if (typeCmp( (char *)&trackTypes[j], (char *)&td.type[i] )) {
+                    isInList = true;
                     j = numberOfTrackTypes;
                 }
             }
-            if (isInList == FALSE) {
+            if (!isInList) {
                 // Found a new track -- add it to the list
                 if (numberOfTrackTypes < MAX_TRACK_TYPES) {
                     typeCopy( (char *)&td.type[i], (char *)&trackTypes[numberOfTrackTypes]);
@@ -2684,7 +2655,7 @@ GLuint GLCanvasArea::makeTracksObject()
 
         // Draw the tracks that are of the given type
         for (int j=0;j<td.numberOfTracks;j++) {
-            if (typeCmp( (char *)&trackTypes[i], (char *)&td.type[j]) == TRUE) {
+            if (typeCmp( (char *)&trackTypes[i], (char *)&td.type[j])) {
                 // This one is of the right type:
                 // render it if required
                 int pdIndex = findPdListIndex( (char *)&trackTypes[i] );
@@ -2969,27 +2940,27 @@ void GLCanvasArea::renderCube( int j, int pdIndex, relativeSize relSize )
 void GLCanvasArea::renderBondCylinder( int k, int l, GLUquadricObj * qobj, GLint qual, GLdouble thisRadius, fixedThickness thickness )
 {
     GLdouble dist, alpha, axex, axey;
-    bool lighting = TRUE;
-    bool drawFlag = FALSE;
+    bool lighting = true;
+    bool drawFlag = false;
 
     if (vp.renderQuality == LOW || thickness == LINE) {
         // Switch off lighting
-        if (lighting == TRUE) {
+        if (lighting) {
             glDisable( GL_LIGHTING );
-            lighting = FALSE;
+            lighting = false;
         }
 
         glBegin( GL_LINES );
         glVertex3f( ad.particles[k].x, ad.particles[k].y, ad.particles[k].z );
         glVertex3f( ad.particles[l].x, ad.particles[l].y, ad.particles[l].z );
         glEnd();
-        drawFlag = TRUE;
+        drawFlag = true;
     }
-    if ((vp.renderQuality == HIGH || vp.renderQuality == FINAL) && drawFlag == FALSE) {
+    if ((vp.renderQuality == HIGH || vp.renderQuality == FINAL) && !drawFlag) {
         // Switch on lighting
-        if (lighting == FALSE) {
+        if (!lighting) {
             glEnable( GL_LIGHTING );
-            lighting = TRUE;
+            lighting = true;
         }
 
         dist = findBondDistanceAngle( k, l, &alpha, &axex, &axey);
@@ -3014,8 +2985,8 @@ void GLCanvasArea::renderBondCylinder( int k, int l, GLUquadricObj * qobj, GLint
 void GLCanvasArea::renderLineCylinder( GLdouble posx, GLdouble posy, GLdouble posz, GLdouble n1, GLdouble n2, GLdouble n3, GLdouble thisLen, GLUquadricObj * qobj, GLint qual, GLdouble radius, relativeSize relSize, fixedThickness thickness, bool bottom, bool top)
 {
     GLdouble dist, alpha, axex, axey, thisRadius;
-    bool lighting = TRUE;
-    bool drawFlag = FALSE;
+    bool lighting = true;
+    bool drawFlag = false;
 
     // Modify size if required
     switch (relSize) {
@@ -3041,21 +3012,21 @@ void GLCanvasArea::renderLineCylinder( GLdouble posx, GLdouble posy, GLdouble po
 
     if (thickness == LINE) {
         // Switch off lighting
-        if (lighting == TRUE) {
+        if (lighting) {
             glDisable( GL_LIGHTING );
-            lighting = FALSE;
+            lighting = false;
         }
         glBegin( GL_LINES );
         glVertex3f( posx, posy, posz );
         glVertex3f( posx+n1*thisLen, posy+n2*thisLen, posz+n3*thisLen );
         glEnd();
-        drawFlag = TRUE;
+        drawFlag = true;
     }
-    if (drawFlag == FALSE) {
+    if (!drawFlag) {
         // Switch on lighting
-        if (lighting == FALSE) {
+        if (!lighting) {
             glEnable( GL_LIGHTING );
-            lighting = TRUE;
+            lighting = true;
         }
 
         dist = findSpinDistanceAngle( posx, posy, posz, posx+n1*thisLen, posy+n2*thisLen, posz+n3*thisLen, &alpha, &axex, &axey);
@@ -3106,8 +3077,8 @@ void GLCanvasArea::renderLineCylinder( GLdouble posx, GLdouble posy, GLdouble po
 void GLCanvasArea::renderCone( GLdouble posx, GLdouble posy, GLdouble posz, GLdouble n1, GLdouble n2, GLdouble n3, GLdouble thisLen, GLUquadricObj * qobj, GLint qual, GLdouble radius, relativeSize relSize, fixedThickness thickness, bool bottom )
 {
     GLdouble dist, alpha, axex, axey, thisRadius;
-    bool lighting = TRUE;
-    bool drawFlag = FALSE;
+    bool lighting = true;
+    bool drawFlag = false;
 
     // Modify size if required
     switch (relSize) {
@@ -3133,21 +3104,21 @@ void GLCanvasArea::renderCone( GLdouble posx, GLdouble posy, GLdouble posz, GLdo
 
     if (thickness == LINE) {
         // Switch off lighting
-        if (lighting == TRUE) {
+        if (lighting) {
             glDisable( GL_LIGHTING );
-            lighting = FALSE;
+            lighting = false;
         }
         glBegin( GL_LINES );
         glVertex3f( posx, posy, posz );
         glVertex3f( posx+n1*thisLen, posy+n2*thisLen, posz+n3*thisLen );
         glEnd();
-        drawFlag = TRUE;
+        drawFlag = true;
     }
-    if (drawFlag == FALSE) {
+    if (!drawFlag) {
         // Switch on lighting
-        if (lighting == FALSE) {
+        if (!lighting) {
             glEnable( GL_LIGHTING );
-            lighting = TRUE;
+            lighting = true;
         }
 
         dist = findSpinDistanceAngle( posx, posy, posz, posx+n1*thisLen, posy+n2*thisLen, posz+n3*thisLen, &alpha, &axex, &axey);
@@ -3192,8 +3163,8 @@ void GLCanvasArea::renderCone( GLdouble posx, GLdouble posy, GLdouble posz, GLdo
 void GLCanvasArea::renderCone( GLdouble posx, GLdouble posy, GLdouble posz, GLdouble n1, GLdouble n2, GLdouble n3, GLdouble thisLen, GLUquadricObj * qobj, GLint qual, GLdouble radius, GLdouble radius2, relativeSize relSize, fixedThickness thickness, bool bottom )
 {
     GLdouble dist, alpha, axex, axey, thisRadius, thisRadius2;
-    bool lighting = TRUE;
-    bool drawFlag = FALSE;
+    bool lighting = true;
+    bool drawFlag = false;
 
     // Modify size if required
     switch (relSize) {
@@ -3225,21 +3196,21 @@ void GLCanvasArea::renderCone( GLdouble posx, GLdouble posy, GLdouble posz, GLdo
 
     if (thickness == LINE) {
         // Switch off lighting
-        if (lighting == TRUE) {
+        if (lighting) {
             glDisable( GL_LIGHTING );
-            lighting = FALSE;
+            lighting = false;
         }
         glBegin( GL_LINES );
         glVertex3f( posx, posy, posz );
         glVertex3f( posx+n1*thisLen, posy+n2*thisLen, posz+n3*thisLen );
         glEnd();
-        drawFlag = TRUE;
+        drawFlag = true;
     }
-    if (drawFlag == FALSE) {
+    if (!drawFlag) {
         // Switch on lighting
-        if (lighting == FALSE) {
+        if (!lighting) {
             glEnable( GL_LIGHTING );
-            lighting = TRUE;
+            lighting = false;
         }
 
         dist = findSpinDistanceAngle( posx, posy, posz, posx+n1*thisLen, posy+n2*thisLen, posz+n3*thisLen, &alpha, &axex, &axey);
@@ -3283,14 +3254,14 @@ void GLCanvasArea::renderCone( GLdouble posx, GLdouble posy, GLdouble posz, GLdo
 // or a cone
 void GLCanvasArea::renderSpinTip( GLdouble posx, GLdouble posy, GLdouble posz, GLdouble n1, GLdouble n2, GLdouble n3, GLdouble thisLen, GLUquadricObj * qobj, GLint qual, GLdouble thisRadius )
 {
-    bool lighting = TRUE;
+    bool lighting = true;
 
     switch (vp.renderQuality) {
     case LOW:
         // Switch off lighting
-        if (lighting == TRUE) {
+        if (lighting) {
             glDisable( GL_LIGHTING );
-            lighting = FALSE;
+            lighting = false;
         }
         // Set line width
         glLineWidth(3.0);
@@ -3303,9 +3274,9 @@ void GLCanvasArea::renderSpinTip( GLdouble posx, GLdouble posy, GLdouble posz, G
         break;
     case HIGH:
         // Switch on lighting
-        if (lighting == FALSE) {
+        if (!lighting) {
             glEnable( GL_LIGHTING );
-            lighting = TRUE;
+            lighting = true;
         }
         glTranslatef( posx+n1*thisLen, posy+n2*thisLen, posz+n3*thisLen );
         gluSphere( qobj, (GLdouble)(thisRadius/2.0), qual, qual );
@@ -3313,9 +3284,9 @@ void GLCanvasArea::renderSpinTip( GLdouble posx, GLdouble posy, GLdouble posz, G
         break;
     case FINAL:
         // Switch on lighting
-        if (lighting == FALSE) {
+        if (!lighting) {
             glEnable( GL_LIGHTING );
-            lighting = TRUE;
+            lighting = true;
         }
         glTranslatef( posx+n1*thisLen, posy+n2*thisLen, posz+n3*thisLen );
         gluSphere( qobj, (GLdouble)(thisRadius/2.0), qual, qual );
@@ -3333,18 +3304,18 @@ bool GLCanvasArea::particleIsInSlice( int i )
     float posz = ad.particles[i].z;
 
     // Skip the test is slicing is not required
-    if (vp.slicing == FALSE)
-        return TRUE;
+    if (!vp.slicing )
+        return true;
 
-    if ( (vp.showSlicePlaneX == TRUE) || (posx >= vp.sliceXMin && posx <= vp.sliceXMax) ) {
-        if ( (vp.showSlicePlaneY == TRUE) || (posy >= vp.sliceYMin && posy <= vp.sliceYMax) ) {
-            if ( (vp.showSlicePlaneZ == TRUE) || (posz >= vp.sliceZMin && posz <= vp.sliceZMax) ) {
-                return TRUE;
+    if ( (vp.showSlicePlaneX) || (posx >= vp.sliceXMin && posx <= vp.sliceXMax) ) {
+        if ( (vp.showSlicePlaneY) || (posy >= vp.sliceYMin && posy <= vp.sliceYMax) ) {
+            if ( (vp.showSlicePlaneZ) || (posz >= vp.sliceZMin && posz <= vp.sliceZMax) ) {
+                return true;
             }
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -3357,18 +3328,18 @@ bool GLCanvasArea::trackIsInSlice( int i )
     float posz = td.z[i][0];
 
     // Skip the test is slicing is not required
-    if (vp.slicing == FALSE)
-        return TRUE;
+    if (!vp.slicing)
+        return true;
 
-    if ( (vp.showSlicePlaneX == TRUE) || (posx >= vp.sliceXMin && posx <= vp.sliceXMax) ) {
-        if ( (vp.showSlicePlaneY == TRUE) || (posy >= vp.sliceYMin && posy <= vp.sliceYMax) ) {
-            if ( (vp.showSlicePlaneZ == TRUE) || (posz >= vp.sliceZMin && posz <= vp.sliceZMax) ) {
-                return TRUE;
+    if ( (vp.showSlicePlaneX) || (posx >= vp.sliceXMin && posx <= vp.sliceXMax) ) {
+        if ( (vp.showSlicePlaneY) || (posy >= vp.sliceYMin && posy <= vp.sliceYMax) ) {
+            if ( (vp.showSlicePlaneZ) || (posz >= vp.sliceZMin && posz <= vp.sliceZMax) ) {
+                return true;
             }
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -3389,40 +3360,40 @@ bool GLCanvasArea::isBond( int i, int j, float minLength, float maxLength,
 
     // No bond between an atom and itself
     if (i == j)
-        return FALSE;
+        return false;
 
     // In polymer mode, no bond between atoms belonging to
     // different molecules (indicated by the first property
     // value)
 
     if (onlyWithinMolecule && (pi != pj))
-        return FALSE;
+        return false;
 
     // If "sequential Bonding" is checked, bonds can only be created
     // between atoms that are adjacent (inc. first<->last) in the coordinate file
     if (isSeqBond && !(j==i+1) && !(i==0 && j==ad.numberOfParticles-1))
-        return FALSE;
+        return false;
 
     // Check distancjes
     double distx = fabs((double)(posxi-posxj));
     if (distx > maxLength)
-        return FALSE;
+        return false;
     double disty = fabs((double)(posyi-posyj));
     if (disty > maxLength)
-        return FALSE;
+        return false;
     double distz = fabs((double)(poszi-poszj));
     if (distz > maxLength)
-        return FALSE;
+        return false;
 
     double dist2 = distx*distx + disty*disty + distz*distz;
     if (dist2 < minLength*minLength)
-        return FALSE;
+        return false;
     if (dist2 > maxLength*maxLength)
-        return FALSE;
+        return false;
 
     *pBondLength = sqrt(dist2);
 
-    return TRUE;
+    return true;
 }
 
 
@@ -3594,11 +3565,11 @@ bool GLCanvasArea::bondCombinationNew( tag * fParticleTypes, tag * tParticleType
 
     // Check all drawn particle type combinations so far
     for (int i=0;i<nb;i++) {
-        if (typeCmp( (char *)&fParticleTypes[i], fAtom ) == TRUE && typeCmp( (char *)&tParticleTypes[i], tAtom ) == TRUE) {
-            return FALSE;
+        if (typeCmp( (char *)&fParticleTypes[i], fAtom ) && typeCmp( (char *)&tParticleTypes[i], tAtom )) {
+            return false;
         }
-        if (typeCmp( (char *)&fParticleTypes[i], tAtom ) == TRUE && typeCmp( (char *)&tParticleTypes[i], fAtom ) == TRUE) {
-            return FALSE;
+        if (typeCmp( (char *)&fParticleTypes[i], tAtom ) && typeCmp( (char *)&tParticleTypes[i], fAtom )) {
+            return false;
         }
     }
 
@@ -3610,7 +3581,7 @@ bool GLCanvasArea::bondCombinationNew( tag * fParticleTypes, tag * tParticleType
 
     (*count) = nb;
 
-    return TRUE;
+    return true;
 }
 
 
@@ -3875,7 +3846,7 @@ int GLCanvasArea::findPdListIndex(  char * thisType )
     int j = 0;
 
     // Search for the specified type
-    while (typeCmp( thisType, (char *)&pd.type[j] ) != TRUE && j < pd.numberOfParticleTypes) {
+    while (!typeCmp( thisType, (char *)&pd.type[j] ) && j < pd.numberOfParticleTypes) {
         j++;
     }
     if (j >= pd.numberOfParticleTypes) {

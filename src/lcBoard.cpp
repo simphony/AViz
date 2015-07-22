@@ -177,16 +177,16 @@ LcBoard::LcBoard(QWidget * parent)
     // Clear internal variables
     colors = 1;
     colorPosX = colorPosY = 0;
-    showColorBoard = FALSE;
+    showColorBoard = false;
     lcRenderStyle = LDOT;
     renderQuality = LOW;
 
     // Set defaults appropriate for startup without data
-    colorButton->setDisabled( TRUE );
-    sizeBox->setDisabled( TRUE );
-    modeL->setDisabled( TRUE );
-    colorMode->setDisabled( TRUE );
-    colorMode0->setChecked( TRUE );
+    colorButton->setDisabled(true);
+    sizeBox->setDisabled(true);
+    modeL->setDisabled(true);
+    colorMode->setDisabled(true);
+    colorMode0->setChecked(true);
 
     // Build default layout
     this->buildLayout( TYPE );
@@ -280,19 +280,14 @@ void LcBoard::setData()
             lcCob->clear();
             for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 // Check: is this particle type really needed?
-                bool needed = FALSE;
                 for (int j=0;j<(*ad).numberOfParticles;j++) {
-                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i]) == TRUE) {
-                        // Yes it is needed: set a flag
-                        needed = TRUE;
+                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
+                        // Add the item to the list
+                        lcCob->addItem( QString( (char *)&(*thisPd).type[i]));
                         break;
                     }
                 }
 
-                // Add the item to the list
-                if (needed) {
-                    lcCob->addItem( QString( (char *)&(*thisPd).type[i]));
-                }
             }
             lcCob->setMinimumSize( lcCob->sizeHint() );
         }
@@ -330,7 +325,7 @@ void LcBoard::setLc()
     typeCopy( qPrintable(lcCob->currentText()), (char *)&thisLc );
 
     for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
-        if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisLc ) == TRUE) {
+        if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisLc )) {
             // Found the correct entry
             thisLcIndex = i;
 
@@ -341,53 +336,50 @@ void LcBoard::setLc()
             bool thisShowParticle = (*thisPd).showParticle[thisLcIndex];
             showLcCb->setChecked( thisShowParticle);
 
-            switch( thisShowParticle ) {
-            case TRUE:
+            if( thisShowParticle ) {
                 if (thisLcIndex >= 0) {
-                    modeL->setDisabled( FALSE );
-                    colorMode->setDisabled( FALSE );
+                    modeL->setDisabled(false);
+                    colorMode->setDisabled(false);
                 }
                 else {
-                    modeL->setDisabled( TRUE );
-                    colorMode->setDisabled( TRUE );
+                    modeL->setDisabled(true);
+                    colorMode->setDisabled(true);
                 }
-                break;
-            case FALSE:
-                modeL->setDisabled( TRUE );
-                colorMode->setDisabled( TRUE );
-                break;
+            } else {
+                modeL->setDisabled(true);
+                colorMode->setDisabled(true);
             }
 
             // Adjust the toggles
             if (lcRenderStyle != LDOT && lcRenderStyle != LLINE
                     && thisShowParticle) {
-                sizeBox->setDisabled( FALSE );
+                sizeBox->setDisabled(false);
             }
             else {
-                sizeBox->setDisabled( TRUE );
+                sizeBox->setDisabled(true);
             }
 
             colorCriterion colorCrit = (*thisPd).colorCrit[thisLcIndex];
             switch (colorCrit) {
             case TYPE:
                 this->buildLayout( TYPE );
-                colorMode0->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode0->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case POSITION:
                 this->buildLayout( POSITION );
-                colorMode1->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode1->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case PROPERTY:
                 this->buildLayout( PROPERTY );
-                colorMode2->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode2->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case COLORCODE:
                 this->buildLayout( COLORCODE );
-                colorMode3->setChecked( TRUE );
-                colorButton->setDisabled( TRUE );
+                colorMode3->setChecked(true);
+                colorButton->setDisabled(true);
                 colorLabel0->switchOff();
                 colorLabel1->switchOff();
                 colorLabel2->switchOff();
@@ -416,20 +408,17 @@ void LcBoard::adjustLc()
     (*thisPd).showParticle[thisLcIndex] = showLcCb->isChecked();
 
     // Activate or deactivate the remaining radio buttons
-    switch ( showLcCb->isChecked() ) {
-    case TRUE:
+    if ( showLcCb->isChecked() ) {
         if (thisLcIndex >= 0) {
             this->buildLayout( (*thisPd).colorCrit[thisLcIndex] );
         }
         else {
             this->buildLayout( TYPE );
-            colorButton->setDisabled( FALSE );
+            colorButton->setDisabled(false);
         }
-        break;
-    case FALSE:
+    } else {
         this->buildLayout( TYPE );
-        colorButton->setDisabled( FALSE );
-        break;
+        colorButton->setDisabled(false);
     }
 }
 
@@ -451,16 +440,16 @@ void LcBoard::readToggles()
         // update the particle data entry
         sizeBox->readToggles( thisPd, thisLcIndex );
 
-        if (colorMode0->isChecked() == TRUE) {
+        if (colorMode0->isChecked()) {
             (*thisPd).colorCrit[thisLcIndex] = TYPE;
         }
-        if (colorMode1->isChecked() == TRUE) {
+        if (colorMode1->isChecked()) {
             (*thisPd).colorCrit[thisLcIndex] = POSITION;
         }
-        if (colorMode2->isChecked() == TRUE) {
+        if (colorMode2->isChecked()) {
             (*thisPd).colorCrit[thisLcIndex] = PROPERTY;
         }
-        if (colorMode3->isChecked() == TRUE) {
+        if (colorMode3->isChecked()) {
             (*thisPd).colorCrit[thisLcIndex] = COLORCODE;
         }
     }
@@ -483,7 +472,7 @@ void LcBoard::readToggles()
 void LcBoard::setColorCb()
 {
     // Set a flag
-    showColorBoard = TRUE;
+    showColorBoard = true;
 
     // Adjust the color board
     this->setColors();
@@ -798,8 +787,8 @@ void LcBoard::getColors( float r0, float g0, float b0, float r1, float g1, float
 void LcBoard::setDotStyle()
 {
     lcRenderStyle = LDOT;
-    sizeBox->setDisabled( TRUE );
-    lineTypeBox->setDisabled( TRUE  );
+    sizeBox->setDisabled(true);
+    lineTypeBox->setDisabled(true );
 }
 
 
@@ -807,8 +796,8 @@ void LcBoard::setDotStyle()
 void LcBoard::setLineStyle()
 {
     lcRenderStyle = LLINE;
-    sizeBox->setDisabled( TRUE );
-    lineTypeBox->setDisabled( FALSE, TRUE  );
+    sizeBox->setDisabled(true);
+    lineTypeBox->setDisabled(false,true);
 }
 
 
@@ -816,8 +805,8 @@ void LcBoard::setLineStyle()
 void LcBoard::setCubeStyle()
 {
     lcRenderStyle = LCUBE;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -825,8 +814,8 @@ void LcBoard::setCubeStyle()
 void LcBoard::setCylinderStyle()
 {
     lcRenderStyle = LCYLINDER;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -834,8 +823,8 @@ void LcBoard::setCylinderStyle()
 void LcBoard::setConeStyle()
 {
     lcRenderStyle = LCONE;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -843,8 +832,8 @@ void LcBoard::setConeStyle()
 void LcBoard::setSphereStyle()
 {
     lcRenderStyle = LSPHERE;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -872,7 +861,7 @@ void LcBoard::setFinalQuality()
 // Set a flag when the color board is closed
 void LcBoard::closeColorBoard()
 {
-    showColorBoard = FALSE;
+    showColorBoard = false;
 
     if (cb)
         cb->~ColorBoard();
