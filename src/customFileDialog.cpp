@@ -26,10 +26,10 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "customFileDialog.h"
 
-#include <cstdio>
-
 #include <QPushButton>
 #include <QLayout>
+#include <QDir>
+#include <QTextStream>
 
 const QString generalFilter = "General (*)";
 const QString xyzFilter = "XYZ coordinate files (*.xyz)";
@@ -57,15 +57,25 @@ CustomFileDialog::CustomFileDialog( )
 CustomFileDialog::~CustomFileDialog() {
 }
 
+
+
 // Generate a file list
 void CustomFileDialog::generateFileList() {
-	// Get the current directory
-    const QString currentDir = directory().absolutePath();
+    QStringList xzyFileNames = directory().entryList(QStringList() << "*.xyz",
+                                                   QDir::Files, /*filter: only files*/
+                                                   QDir::QDir::Name /*sort*/
+                                                   );
 
-	// Generate a file list
-    const QString command = QString("cd %1; ls *xyz* |sort > filelist.dat").arg(currentDir);
-    system(qPrintable(command));
 
-	// Re-read the directory
-    selectNameFilter( generalFilter );
+    QFile file(directory().absoluteFilePath("filelist.dat"));
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QTextStream out(&file);
+        QStringList::const_iterator iter;
+        for (iter = xzyFileNames.constBegin(); iter != xzyFileNames.constEnd(); ++iter)
+            out << (*iter).toLocal8Bit().constData() << endl;
+        file.close();
+
+        // Re-read the directory
+        selectNameFilter( generalFilter );
+    }
 }
