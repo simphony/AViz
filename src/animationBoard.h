@@ -1,7 +1,3 @@
-//
-// Declaration of animation board class
-//
-
 /**********************************************************************
 Copyright (C) 2001 - 2003  Geri Wagner
 
@@ -32,8 +28,14 @@ Contact address: Computational Physics Group, Dept. of Physics,
 class QLineEdit;
 class QPushButton;
 class QLabel;
+class QProgressBar;
 
-// File list board dialog widget
+/*! @class AnimationBoard
+    @brief Dialog for user to create animation for directory of images
+
+    User selects directory of images and then can create an animation
+    from these images.
+*/
 class AnimationBoard: public QDialog
 {
     Q_OBJECT
@@ -41,15 +43,22 @@ public:
     AnimationBoard( QWidget * parent=0 );
 
 private slots:
-    void createAGIF();
-    void browseCB();
+    /// select directory containing images for animation
+    void selectImageDirectory();
+
+    /// start the animation creation (from images in selected directory)
+    void startAnimationCreation();
+
+    /// handle created animation
+    void handleFinishedAnimation(int exitCode);
 
 private:
-    QLineEdit * fileLine;
-    QPushButton * animGIF;
-    QLabel * numberL;
-    QString targetDir;
-    bool haveTarget;
+    QLineEdit *m_fileLine;
+    QPushButton *m_animGIF;
+    QPushButton *m_browsePb;
+    QLabel *m_numberL;
+    QString m_targetDir;
+    QProgressBar *m_progressBar;
 };
 
 #endif // ANIMB_H
