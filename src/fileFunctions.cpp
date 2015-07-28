@@ -303,46 +303,34 @@ bool generateTrackDataFunction(const fileList &fl, aggregateData * ad,
 
 
 // Read a view parameter file
-bool openViewParamFunction( const char * filename, viewParam * vp )
-{
-    int len;
-    char * buffer = (char *)malloc( BUFSIZ );
-    char * version = (char *)malloc( BUFSIZ );
-
-    sprintf(version, "%s", aviz::version);
-
+bool openViewParamFunction( const char * filename, viewParam * vp ) {
     // Open the file
     if (FILE * in = fopen( (char *)filename, "r" )) {
         // Read the length of the version string
-        fread( &len, sizeof( int ), 1, in );
+        int versionLength;
+        fread( &versionLength, sizeof( int ), 1, in );
 
         // Read the version string and make sure it matches
-        fread( buffer, sizeof( char ), len, in );
+        char * readVersion = new char[BUFSIZ];
+        fgets(readVersion, versionLength+1, in);
 
         // Compare version strings
-        if (strcmp( buffer, version ) == 0) {
+        const bool isMatchingVersion = (readVersion == aviz::version);
+
+        delete[] readVersion;
+
+        if (isMatchingVersion) {
             // Version strings agree: read this file.
             fread( vp, sizeof( viewParam ), 1, in );
-
-            free(buffer);
-            free(version);
-
             return true;
         }
         else {
             // Version strings do not agree: do not read
             // this file
             printf("Sorry, version strings do not agree -- cannot read the file.\n");
-            free(buffer);
-            free(version);
-
             return false;
         }
-    }
-    else {
-        free(buffer);
-        free(version);
-
+    } else {
         return false;
     }
 }
@@ -351,30 +339,23 @@ bool openViewParamFunction( const char * filename, viewParam * vp )
 // Save a view parameter file
 bool saveViewParamFunction( const char * filename, viewParam * vp )
 {
-    int len;
-    char * buffer = (char *)malloc( BUFSIZ );
-
-    sprintf(buffer, "%s", aviz::version);
-    len = strlen(buffer);
+    const int version_length = aviz::version.length();
 
     // Open and write the file
     if (FILE * out = fopen( filename, "w" )) {
         // Write out the length of the version string
-        fwrite( &len, sizeof( int ), 1, out );
+        fwrite( &version_length, sizeof( int ), 1, out );
 
         // Write out the version string
-        fwrite( buffer, sizeof( char ), len, out );
+        fwrite(qPrintable(aviz::version), sizeof( char ), version_length, out );
 
         // Print parameters
         fwrite( vp, sizeof( viewParam ), 1, out );
 
         fclose( out );
-
-        free(buffer);
         return true;
     }
     else {
-        free(buffer);
         return false;
     }
 }
@@ -383,20 +364,16 @@ bool saveViewParamFunction( const char * filename, viewParam * vp )
 // Write a particle data file -- if and how to color what kind of particle
 bool saveParticleDataFunction( const char * filename, particleData * pd )
 {
-    int nc = (*pd).numberOfParticleTypes;
-    int len;
-    char * buffer = (char *)malloc( BUFSIZ );
-
-    sprintf(buffer, "%s", aviz::version);
-    len = strlen(buffer);
+    const int nc = (*pd).numberOfParticleTypes;
+    const int version_length = aviz::version.length();
 
     // Open the file
     if (FILE * out = fopen( (char *)filename, "w" )) {
         // Write out the length of the version string
-        fwrite( &len, sizeof( int ), 1, out );
+        fwrite( &version_length, sizeof( int ), 1, out );
 
         // Write out the version string
-        fwrite( buffer, sizeof( char ), len, out );
+        fwrite(qPrintable(aviz::version), sizeof( char ), version_length, out );
 
         // Write out the number of entries
         fwrite( &nc, sizeof( int ), 1, out );
@@ -418,14 +395,9 @@ bool saveParticleDataFunction( const char * filename, particleData * pd )
         fwrite( (*pd).relSize , sizeof( relativeSize ), ATOMS_MAX, out );
 
         fclose(out);
-
-        free(buffer);
-
         return true;
     }
     else {
-        free(buffer);
-
         return false;
     }
 }
@@ -434,24 +406,25 @@ bool saveParticleDataFunction( const char * filename, particleData * pd )
 // Read a particle data file -- if and how to color what kind of particle
 bool openParticleDataFunction( const char * filename, particleData * pd )
 {
-    int nt, len;
-    char * buffer = (char *)malloc( BUFSIZ );
-    char * version = (char *)malloc( BUFSIZ );
-
-    sprintf(version, "%s", aviz::version);
-
     // Open the file
     if (FILE * in = fopen( (char *)filename, "r" )) {
+        bool result = false;
+
         // Read the length of the version string
-        fread( &len, sizeof( int ), 1, in );
+        int versionLength;
+        fread( &versionLength, sizeof( int ), 1, in );
 
         // Read the version string and make sure it matches
-        fread( buffer, sizeof( char ), len, in );
+        char * readVersion = new char[BUFSIZ];
+        fgets(readVersion, versionLength+1, in);
+        bool isMatchingVersion = (aviz::version == readVersion);
+        delete[] readVersion;
 
         // Compare version strings
-        if (strcmp( buffer, version ) == 0) {
+        if (isMatchingVersion) {
             // Version strings agree: read this file.
             // Read the number of entries
+            int nt;
             fread( &nt, sizeof( int ), 1, in );
             (*pd).numberOfParticleTypes = nt;
 
@@ -470,27 +443,16 @@ bool openParticleDataFunction( const char * filename, particleData * pd )
             fread( (*pd).particleBonds, sizeof( particleBond ), ATOMS_MAX, in );
             fread( (*pd).line, sizeof( lineType ), ATOMS_MAX, in );
             fread( (*pd).relSize, sizeof( relativeSize ), ATOMS_MAX, in );
-            fclose(in);
 
-            free(buffer);
-            free(version);
-
-            return true;
-        }
-        else {
+            result = true;
+        } else {
             // Version strings do not agree: do not read
             // this file
             printf("Sorry, version strings do not agree -- cannot read the file.\n");
-            free(buffer);
-            free(version);
-
-            return false;
         }
-    }
-    else {
-        free(buffer);
-        free(version);
-
+        fclose(in);
+        return result;
+    } else {
         return false;
     }
 }
