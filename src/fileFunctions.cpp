@@ -36,20 +36,20 @@ Contact address: Computational Physics Group, Dept. of Physics,
 // Check the suffix in a file name
 void checkSuffix( const char * filename, const char * suffix )
 {
-	char c = '.';
-	char * buffer = (char *)malloc(BUFSIZ);
+    char c = '.';
+    char * buffer = (char *)malloc(BUFSIZ);
 
-	// Append the suffix if not present
-        const char * ptr = strchr( filename, c );
-        if (!ptr)  
-		sprintf( buffer, "%s.%s", (char *)filename, (char *)suffix );
-        else 
-		sprintf( buffer, "%s", (char *)filename );
+    // Append the suffix if not present
+    const char * ptr = strchr( filename, c );
+    if (!ptr)
+        sprintf( buffer, "%s.%s", (char *)filename, (char *)suffix );
+    else
+        sprintf( buffer, "%s", (char *)filename );
 
-	// Copy the improved string back to the filename string
-	sprintf( (char *)filename, "%s", (char *)buffer);
+    // Copy the improved string back to the filename string
+    sprintf( (char *)filename, "%s", (char *)buffer);
 
-	free(buffer);
+    free(buffer);
 
 }
 
@@ -57,17 +57,17 @@ void checkSuffix( const char * filename, const char * suffix )
 // Check if a file exists
 bool fileExists( const char * filename )
 {
-	struct stat * buf = (struct stat *)malloc( sizeof(struct stat) );
+    struct stat * buf = (struct stat *)malloc( sizeof(struct stat) );
     bool exists = false;
 
-	  if (!stat( (const char *)filename, buf )) {
-		  // File exists...
-          exists = true;
-	}
+    if (!stat( (const char *)filename, buf )) {
+        // File exists...
+        exists = true;
+    }
 
-	free( buf );
+    free( buf );
 
-	return exists;
+    return exists;
 }
 
 
@@ -75,172 +75,172 @@ bool fileExists( const char * filename )
 // eight additional property columns per line
 bool openCoordinateFunction( const char * filename, aggregateData * ad )
 {
-	char type[3];
-	float thisRead[11];	
-	char * buffer = (char*)malloc(BUFSIZ);
+    char type[3];
+    float thisRead[11];
+    char * buffer = (char*)malloc(BUFSIZ);
 
-        // Open the file
-        if (FILE * in = fopen( (char *)filename, "r" )) {
-		// Register the filename
-		sprintf( (*ad).filename, "%s", filename );
-	
-		// Read the number of particles
-		fgets( buffer, BUFSIZ, in );
-		(*ad).numberOfParticles = atoi(buffer);
+    // Open the file
+    if (FILE * in = fopen( (char *)filename, "r" )) {
+        // Register the filename
+        sprintf( (*ad).filename, "%s", filename );
 
-		// Read the ID string 
-		fgets( (*ad).IDstring, BUFSIZ, in );
+        // Read the number of particles
+        fgets( buffer, BUFSIZ, in );
+        (*ad).numberOfParticles = atoi(buffer);
 
-		// Free particle data memory
-		freeAggregateData( ad );
+        // Read the ID string
+        fgets( (*ad).IDstring, BUFSIZ, in );
 
-		// Allocate memory for the particle positions 
-		allocateAggregateData( ad );
+        // Free particle data memory
+        freeAggregateData( ad );
 
-		// Read the atom positions and properties
-		int i = 0;
-		while (!feof(in)) {
+        // Allocate memory for the particle positions
+        allocateAggregateData( ad );
 
-			fgets( buffer, BUFSIZ, in );
+        // Read the atom positions and properties
+        int i = 0;
+        while (!feof(in)) {
 
-			if (i < (*ad).numberOfParticles) {
+            fgets( buffer, BUFSIZ, in );
 
-				// Replace all tabs by a blank
-				int k = 0;
-				while (buffer[k] != 0) {
-					if (buffer[k] == '\t')
-						buffer[k] = ' ';
-					k++;
-				}	
-				// Get the atom type
-				k = 0;
-				while (buffer[k] == ' ') k++;
-				type[0] = buffer[0+k]; buffer[0+k] = ' ';
-				type[1] = buffer[1+k]; buffer[1+k] = ' ';
-				type[2] = 0;
-	
-				// Read the rest
-				thisRead[0] = atof( strtok(buffer+2, " ") );
-				
-				for (int j=1;j<11;j++) {
-					char * ptr = strtok(NULL, " ");
-					if (ptr) {
-						thisRead[j] = atof( ptr );
-					}
-					else {
-						thisRead[j] = 0.0;
-					}
-				}
-	
-				sprintf( (char *)&(*ad).particles[i].type, "%s", type );
-				(*ad).particles[i].x = thisRead[0];
-				(*ad).particles[i].y = thisRead[1];
-				(*ad).particles[i].z = thisRead[2];
-				(*ad).particles[i].prop1 = thisRead[3];
-				(*ad).particles[i].prop2 = thisRead[4];
-				(*ad).particles[i].prop3 = thisRead[5];
-				(*ad).particles[i].prop4 = thisRead[6];
-				(*ad).particles[i].prop5 = thisRead[7];
-				(*ad).particles[i].prop6 = thisRead[8];
-				(*ad).particles[i].prop7 = thisRead[9];
-				(*ad).particles[i].prop8 = thisRead[10];
-				i++;
-			}
-		}
+            if (i < (*ad).numberOfParticles) {
 
-                fclose( in );
-		free(buffer);
+                // Replace all tabs by a blank
+                int k = 0;
+                while (buffer[k] != 0) {
+                    if (buffer[k] == '\t')
+                        buffer[k] = ' ';
+                    k++;
+                }
+                // Get the atom type
+                k = 0;
+                while (buffer[k] == ' ') k++;
+                type[0] = buffer[0+k]; buffer[0+k] = ' ';
+                type[1] = buffer[1+k]; buffer[1+k] = ' ';
+                type[2] = 0;
 
-		if (i != (*ad).numberOfParticles) {
-			printf("The coordinate file is corrupted (number of lines mismatch) -- reading failed.\n");
-               return false;
-		}	
-		else {
-            return true;
-		}
+                // Read the rest
+                thisRead[0] = atof( strtok(buffer+2, " ") );
+
+                for (int j=1;j<11;j++) {
+                    char * ptr = strtok(NULL, " ");
+                    if (ptr) {
+                        thisRead[j] = atof( ptr );
+                    }
+                    else {
+                        thisRead[j] = 0.0;
+                    }
+                }
+
+                sprintf( (char *)&(*ad).particles[i].type, "%s", type );
+                (*ad).particles[i].x = thisRead[0];
+                (*ad).particles[i].y = thisRead[1];
+                (*ad).particles[i].z = thisRead[2];
+                (*ad).particles[i].prop1 = thisRead[3];
+                (*ad).particles[i].prop2 = thisRead[4];
+                (*ad).particles[i].prop3 = thisRead[5];
+                (*ad).particles[i].prop4 = thisRead[6];
+                (*ad).particles[i].prop5 = thisRead[7];
+                (*ad).particles[i].prop6 = thisRead[8];
+                (*ad).particles[i].prop7 = thisRead[9];
+                (*ad).particles[i].prop8 = thisRead[10];
+                i++;
+            }
+        }
+
+        fclose( in );
+        free(buffer);
+
+        if (i != (*ad).numberOfParticles) {
+            printf("The coordinate file is corrupted (number of lines mismatch) -- reading failed.\n");
+            return false;
         }
         else {
-		free(buffer);
+            return true;
+        }
+    }
+    else {
+        free(buffer);
 
         return false;
-        }
+    }
 }
 
 
 // Read a file list
 bool openFileListFunction( const char * filename, fileList * fl )
 {
-	char * buffer = (char *)malloc( BUFSIZ );
-	char * fileroot = (char *)malloc( BUFSIZ );
-	int numberOfFiles = 0;
+    char * buffer = (char *)malloc( BUFSIZ );
+    char * fileroot = (char *)malloc( BUFSIZ );
+    int numberOfFiles = 0;
 
-	// Extract the fileroot
-	strcpy( fileroot, filename );
-	int i = strlen(filename);
-	while (fileroot[i] != '/')
-		i--;
-	fileroot[i+1] = 0;
+    // Extract the fileroot
+    strcpy( fileroot, filename );
+    int i = strlen(filename);
+    while (fileroot[i] != '/')
+        i--;
+    fileroot[i+1] = 0;
 
-        // Open the file; first simply count the number of lines
-        if (FILE * in = fopen( (char *)filename, "r" )) {
-		while (!feof(in)) {
-			fgets( buffer, BUFSIZ , in );
-			if (!feof(in)) {
-				numberOfFiles++;
-			}
-		}
+    // Open the file; first simply count the number of lines
+    if (FILE * in = fopen( (char *)filename, "r" )) {
+        while (!feof(in)) {
+            fgets( buffer, BUFSIZ , in );
+            if (!feof(in)) {
+                numberOfFiles++;
+            }
+        }
 
-		fclose(in);
-	}
+        fclose(in);
+    }
 
-	// Allocate memory for the file list
-	(*fl).filename = (char **)malloc( numberOfFiles*sizeof(char *) );	
-	for (int i=0;i<numberOfFiles;i++) 
-		(*fl).filename[i] = (char *)malloc( BUFSIZ );
+    // Allocate memory for the file list
+    (*fl).filename = (char **)malloc( numberOfFiles*sizeof(char *) );
+    for (int i=0;i<numberOfFiles;i++)
+        (*fl).filename[i] = (char *)malloc( BUFSIZ );
 
-	// Now re-read the file and copy the entries into the file list struct
-	numberOfFiles = 0;
-        if (FILE * in = fopen( (char *)filename, "r" )) {
-		while (!feof(in)) {
-			fgets( buffer, BUFSIZ , in );
-			if (!feof(in)) {
+    // Now re-read the file and copy the entries into the file list struct
+    numberOfFiles = 0;
+    if (FILE * in = fopen( (char *)filename, "r" )) {
+        while (!feof(in)) {
+            fgets( buffer, BUFSIZ , in );
+            if (!feof(in)) {
 
-				// Check if the files are given with 
-				// complete paths -- add fileroot otherwise
-				if (buffer[0] == '/')
-					sprintf( (*fl).filename[numberOfFiles], "%s", buffer);
-				else
-					sprintf( (*fl).filename[numberOfFiles], "%s/%s", fileroot, buffer);
-				
-				// Remove trailing \n signs
-				int j = 0;
-				while ((*fl).filename[numberOfFiles][j] != 0) {
-					if ((*fl).filename[numberOfFiles][j] == '\n') {	
-						(*fl).filename[numberOfFiles][j] = 0;
-					}
-					j++;
-				}
+                // Check if the files are given with
+                // complete paths -- add fileroot otherwise
+                if (buffer[0] == '/')
+                    sprintf( (*fl).filename[numberOfFiles], "%s", buffer);
+                else
+                    sprintf( (*fl).filename[numberOfFiles], "%s/%s", fileroot, buffer);
 
-				numberOfFiles++;
-			}
-		}
+                // Remove trailing \n signs
+                int j = 0;
+                while ((*fl).filename[numberOfFiles][j] != 0) {
+                    if ((*fl).filename[numberOfFiles][j] == '\n') {
+                        (*fl).filename[numberOfFiles][j] = 0;
+                    }
+                    j++;
+                }
 
-		// Complete the data
-		(*fl).numberOfFiles = numberOfFiles;;
-		(*fl).currentFile = -1;
+                numberOfFiles++;
+            }
+        }
 
-                fclose( in );
-		free(fileroot);
-		free(buffer);
+        // Complete the data
+        (*fl).numberOfFiles = numberOfFiles;;
+        (*fl).currentFile = -1;
+
+        fclose( in );
+        free(fileroot);
+        free(buffer);
 
         return true;
-	}
-        else {
-		free(fileroot);
-		free(buffer);
+    }
+    else {
+        free(fileroot);
+        free(buffer);
 
         return false;
-        }
+    }
 }
 
 
@@ -305,192 +305,192 @@ bool generateTrackDataFunction(const fileList &fl, aggregateData * ad,
 // Read a view parameter file
 bool openViewParamFunction( const char * filename, viewParam * vp )
 {
-	int len;
-	char * buffer = (char *)malloc( BUFSIZ );
-	char * version = (char *)malloc( BUFSIZ );
-	
-	sprintf(version, "%s", VERSION_STRING);
+    int len;
+    char * buffer = (char *)malloc( BUFSIZ );
+    char * version = (char *)malloc( BUFSIZ );
 
-        // Open the file
-        if (FILE * in = fopen( (char *)filename, "r" )) {
-		// Read the length of the version string
-		fread( &len, sizeof( int ), 1, in );
+    sprintf(version, "%s", aviz::version);
 
-		// Read the version string and make sure it matches
-		fread( buffer, sizeof( char ), len, in );
+    // Open the file
+    if (FILE * in = fopen( (char *)filename, "r" )) {
+        // Read the length of the version string
+        fread( &len, sizeof( int ), 1, in );
 
-		// Compare version strings
-		if (strcmp( buffer, version ) == 0) {
-			// Version strings agree: read this file.
-                	fread( vp, sizeof( viewParam ), 1, in );
+        // Read the version string and make sure it matches
+        fread( buffer, sizeof( char ), len, in );
 
-			free(buffer);
-			free(version);
-	
+        // Compare version strings
+        if (strcmp( buffer, version ) == 0) {
+            // Version strings agree: read this file.
+            fread( vp, sizeof( viewParam ), 1, in );
+
+            free(buffer);
+            free(version);
+
             return true;
-		}
-		else {
-			// Version strings do not agree: do not read
-			// this file
-			printf("Sorry, version strings do not agree -- cannot read the file.\n");
-			free(buffer);
-			free(version);
-	
-            return false;
-		}
         }
         else {
-		free(buffer);
-		free(version);
+            // Version strings do not agree: do not read
+            // this file
+            printf("Sorry, version strings do not agree -- cannot read the file.\n");
+            free(buffer);
+            free(version);
+
+            return false;
+        }
+    }
+    else {
+        free(buffer);
+        free(version);
 
         return false;
-        }
+    }
 }
 
 
 // Save a view parameter file
 bool saveViewParamFunction( const char * filename, viewParam * vp )
 {
-	int len;
-	char * buffer = (char *)malloc( BUFSIZ );
+    int len;
+    char * buffer = (char *)malloc( BUFSIZ );
 
-	sprintf(buffer, "%s", VERSION_STRING);
-	len = strlen(buffer);
+    sprintf(buffer, "%s", aviz::version);
+    len = strlen(buffer);
 
-	// Open and write the file
-	if (FILE * out = fopen( filename, "w" )) {
-		// Write out the length of the version string
-		fwrite( &len, sizeof( int ), 1, out );
+    // Open and write the file
+    if (FILE * out = fopen( filename, "w" )) {
+        // Write out the length of the version string
+        fwrite( &len, sizeof( int ), 1, out );
 
-		// Write out the version string
-		fwrite( buffer, sizeof( char ), len, out );
-	
-		// Print parameters
-		fwrite( vp, sizeof( viewParam ), 1, out );
+        // Write out the version string
+        fwrite( buffer, sizeof( char ), len, out );
 
-		fclose( out );
+        // Print parameters
+        fwrite( vp, sizeof( viewParam ), 1, out );
 
-		free(buffer);
+        fclose( out );
+
+        free(buffer);
         return true;
-	}
-	else {
-		free(buffer);
+    }
+    else {
+        free(buffer);
         return false;
-	}
+    }
 }
 
 
 // Write a particle data file -- if and how to color what kind of particle
 bool saveParticleDataFunction( const char * filename, particleData * pd )
 {
-	int nc = (*pd).numberOfParticleTypes;
-	int len;
-	char * buffer = (char *)malloc( BUFSIZ );
+    int nc = (*pd).numberOfParticleTypes;
+    int len;
+    char * buffer = (char *)malloc( BUFSIZ );
 
-	sprintf(buffer, "%s", VERSION_STRING);
-	len = strlen(buffer);
+    sprintf(buffer, "%s", aviz::version);
+    len = strlen(buffer);
 
-        // Open the file
-        if (FILE * out = fopen( (char *)filename, "w" )) {
-		// Write out the length of the version string
-		fwrite( &len, sizeof( int ), 1, out );
+    // Open the file
+    if (FILE * out = fopen( (char *)filename, "w" )) {
+        // Write out the length of the version string
+        fwrite( &len, sizeof( int ), 1, out );
 
-		// Write out the version string
-		fwrite( buffer, sizeof( char ), len, out );
-	
-		// Write out the number of entries
-		fwrite( &nc, sizeof( int ), 1, out );
+        // Write out the version string
+        fwrite( buffer, sizeof( char ), len, out );
 
-		// Write out the entries
-		fwrite( (*pd).showParticle, sizeof( bool ), ATOMS_MAX, out );
-		fwrite( (*pd).showTrack, sizeof( bool ), ATOMS_MAX, out );
-		fwrite( (*pd).type, sizeof( tag ), ATOMS_MAX, out );
-		fwrite( (*pd).relSize, sizeof( relativeSize ), ATOMS_MAX, out );
-		fwrite( (*pd).colorCrit, sizeof( colorCriterion ), ATOMS_MAX, out );
-		fwrite( (*pd).colorCritPos, sizeof( colorCriterionPos ), ATOMS_MAX, out );
-		fwrite( (*pd).colorCritProp, sizeof( colorCriterionColumn ), ATOMS_MAX, out );
-		fwrite( (*pd).colorCritCodeRed, sizeof( colorCriterionColumn ), ATOMS_MAX, out );
-		fwrite( (*pd).colorCritCodeGreen, sizeof( colorCriterionColumn ), ATOMS_MAX, out );
-		fwrite( (*pd).colorCritCodeBlue, sizeof( colorCriterionColumn ), ATOMS_MAX, out );
-		fwrite( (*pd).particleColors, sizeof( particleColor ), ATOMS_MAX, out );
-		fwrite( (*pd).particleBonds, sizeof( particleBond ), ATOMS_MAX, out );
-		fwrite( (*pd).line, sizeof( lineType ), ATOMS_MAX, out );
-		fwrite( (*pd).relSize , sizeof( relativeSize ), ATOMS_MAX, out );
+        // Write out the number of entries
+        fwrite( &nc, sizeof( int ), 1, out );
 
-		fclose(out);
+        // Write out the entries
+        fwrite( (*pd).showParticle, sizeof( bool ), ATOMS_MAX, out );
+        fwrite( (*pd).showTrack, sizeof( bool ), ATOMS_MAX, out );
+        fwrite( (*pd).type, sizeof( tag ), ATOMS_MAX, out );
+        fwrite( (*pd).relSize, sizeof( relativeSize ), ATOMS_MAX, out );
+        fwrite( (*pd).colorCrit, sizeof( colorCriterion ), ATOMS_MAX, out );
+        fwrite( (*pd).colorCritPos, sizeof( colorCriterionPos ), ATOMS_MAX, out );
+        fwrite( (*pd).colorCritProp, sizeof( colorCriterionColumn ), ATOMS_MAX, out );
+        fwrite( (*pd).colorCritCodeRed, sizeof( colorCriterionColumn ), ATOMS_MAX, out );
+        fwrite( (*pd).colorCritCodeGreen, sizeof( colorCriterionColumn ), ATOMS_MAX, out );
+        fwrite( (*pd).colorCritCodeBlue, sizeof( colorCriterionColumn ), ATOMS_MAX, out );
+        fwrite( (*pd).particleColors, sizeof( particleColor ), ATOMS_MAX, out );
+        fwrite( (*pd).particleBonds, sizeof( particleBond ), ATOMS_MAX, out );
+        fwrite( (*pd).line, sizeof( lineType ), ATOMS_MAX, out );
+        fwrite( (*pd).relSize , sizeof( relativeSize ), ATOMS_MAX, out );
 
-		free(buffer);
+        fclose(out);
+
+        free(buffer);
 
         return true;
-	}
-	else {
-		free(buffer);
+    }
+    else {
+        free(buffer);
 
         return false;
-	}
+    }
 }
 
 
 // Read a particle data file -- if and how to color what kind of particle
 bool openParticleDataFunction( const char * filename, particleData * pd )
 {
-	int nt, len;
-	char * buffer = (char *)malloc( BUFSIZ );
-	char * version = (char *)malloc( BUFSIZ );
+    int nt, len;
+    char * buffer = (char *)malloc( BUFSIZ );
+    char * version = (char *)malloc( BUFSIZ );
 
-	sprintf(version, "%s", VERSION_STRING);
+    sprintf(version, "%s", aviz::version);
 
-        // Open the file
-        if (FILE * in = fopen( (char *)filename, "r" )) {
-		// Read the length of the version string
-		fread( &len, sizeof( int ), 1, in );
+    // Open the file
+    if (FILE * in = fopen( (char *)filename, "r" )) {
+        // Read the length of the version string
+        fread( &len, sizeof( int ), 1, in );
 
-		// Read the version string and make sure it matches
-		fread( buffer, sizeof( char ), len, in );
+        // Read the version string and make sure it matches
+        fread( buffer, sizeof( char ), len, in );
 
-		// Compare version strings
-		if (strcmp( buffer, version ) == 0) {
-			// Version strings agree: read this file.
-			// Read the number of entries
-			fread( &nt, sizeof( int ), 1, in );
-			(*pd).numberOfParticleTypes = nt;
+        // Compare version strings
+        if (strcmp( buffer, version ) == 0) {
+            // Version strings agree: read this file.
+            // Read the number of entries
+            fread( &nt, sizeof( int ), 1, in );
+            (*pd).numberOfParticleTypes = nt;
 
-			// Read the entries 
-			fread( (*pd).showParticle, sizeof( bool ), ATOMS_MAX, in );
-			fread( (*pd).showTrack, sizeof( bool ), ATOMS_MAX, in );
-			fread( (*pd).type, sizeof( tag ), ATOMS_MAX, in );
-			fread( (*pd).relSize, sizeof( relativeSize ), ATOMS_MAX, in );
-			fread( (*pd).colorCrit, sizeof( colorCriterion ), ATOMS_MAX, in );
-			fread( (*pd).colorCritPos, sizeof( colorCriterionPos ), ATOMS_MAX, in );
-			fread( (*pd).colorCritProp, sizeof( colorCriterionColumn ), ATOMS_MAX, in );
-			fread( (*pd).colorCritCodeRed, sizeof( colorCriterionColumn ), ATOMS_MAX, in );
-			fread( (*pd).colorCritCodeGreen, sizeof( colorCriterionColumn ), ATOMS_MAX, in );
-			fread( (*pd).colorCritCodeBlue, sizeof( colorCriterionColumn ), ATOMS_MAX, in );
-			fread( (*pd).particleColors, sizeof( particleColor ), ATOMS_MAX, in );
-			fread( (*pd).particleBonds, sizeof( particleBond ), ATOMS_MAX, in );
-			fread( (*pd).line, sizeof( lineType ), ATOMS_MAX, in );
-			fread( (*pd).relSize, sizeof( relativeSize ), ATOMS_MAX, in );
-			fclose(in);	
+            // Read the entries
+            fread( (*pd).showParticle, sizeof( bool ), ATOMS_MAX, in );
+            fread( (*pd).showTrack, sizeof( bool ), ATOMS_MAX, in );
+            fread( (*pd).type, sizeof( tag ), ATOMS_MAX, in );
+            fread( (*pd).relSize, sizeof( relativeSize ), ATOMS_MAX, in );
+            fread( (*pd).colorCrit, sizeof( colorCriterion ), ATOMS_MAX, in );
+            fread( (*pd).colorCritPos, sizeof( colorCriterionPos ), ATOMS_MAX, in );
+            fread( (*pd).colorCritProp, sizeof( colorCriterionColumn ), ATOMS_MAX, in );
+            fread( (*pd).colorCritCodeRed, sizeof( colorCriterionColumn ), ATOMS_MAX, in );
+            fread( (*pd).colorCritCodeGreen, sizeof( colorCriterionColumn ), ATOMS_MAX, in );
+            fread( (*pd).colorCritCodeBlue, sizeof( colorCriterionColumn ), ATOMS_MAX, in );
+            fread( (*pd).particleColors, sizeof( particleColor ), ATOMS_MAX, in );
+            fread( (*pd).particleBonds, sizeof( particleBond ), ATOMS_MAX, in );
+            fread( (*pd).line, sizeof( lineType ), ATOMS_MAX, in );
+            fread( (*pd).relSize, sizeof( relativeSize ), ATOMS_MAX, in );
+            fclose(in);
 
-			free(buffer);
-			free(version);
+            free(buffer);
+            free(version);
 
             return true;
-		}
-		else {
-			// Version strings do not agree: do not read
-			// this file
-			printf("Sorry, version strings do not agree -- cannot read the file.\n");
-			free(buffer);
-			free(version);
-	
-            return false;
-		}
         }
         else {
-		free(buffer);
-		free(version);
+            // Version strings do not agree: do not read
+            // this file
+            printf("Sorry, version strings do not agree -- cannot read the file.\n");
+            free(buffer);
+            free(version);
+
+            return false;
+        }
+    }
+    else {
+        free(buffer);
+        free(version);
 
         return false;
-        }
+    }
 }

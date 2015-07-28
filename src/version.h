@@ -27,30 +27,37 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef VERSION_H
 #define VERSION_H
 
-#define THIS_VERSION "AViz AtomicVizualization version 6.1\n"
+#include <QString>
 
-#define START_STRING \
-THIS_VERSION\
-"From revision " GIT_REVISION "\n"\
-"(C) 2001 - 2003\nComputational Physics Group Technion, Haifa Israel\n"\
-"\n"\
-"AViz comes with ABSOLUTELY NO WARRANTY; for details click on Help/License\n"\
-"or start with the command line argument -license.   This is free software,\n"\
-"and you are welcome to redistribute it under certain conditions; click on\n"\
-"Help/Distribution or start with `aviz -distribution' for details."
+namespace aviz {
 
-#define VERSION_STRING \
-THIS_VERSION\
-"(C) 2001 - 2003 Computational Physics Group Israel Institute of Technology\n"\
-"Technion, 32000 Haifa Israel\n"\
-"Geri Wagner, Adham Hashibon"
+const QString version = "6.1";
 
-#define VERSION_INFO_STRING \
-THIS_VERSION\
-"From revision " GIT_REVISION "\n"\
-"(C) 2001 - 2003 Computational Physics Group Israel Institute of Technology\n"\
-"Technion, 32000 Haifa Israel\n"\
-"Geri Wagner, Adham Hashibon"
+const QString short_version_string = "AViz AtomicVizualization version " + version + "\n";
 
-#endif // VERSION_H 
+#ifdef GIT_REVISION
+const QString revision_information = "(revision " + QString(GIT_REVISION) + ")\n";
+#else
+const QString revision_information = "";
+#endif
+
+const QString start_string = short_version_string + \
+        revision_information + \
+        "(C) 2001 - 2003\nComputational Physics Group Technion, Haifa Israel\n"\
+        "\n"\
+        "AViz comes with ABSOLUTELY NO WARRANTY; for details click on Help/License\n"\
+        "or start with the command line argument -license.   This is free software,\n"\
+        "and you are welcome to redistribute it under certain conditions; click on\n"\
+        "Help/Distribution or start with `aviz -distribution' for details.";
+
+const QString version_info_string = short_version_string + \
+        revision_information +
+        "(C) 2001 - 2003 Computational Physics Group Israel Institute of Technology\n"\
+        "Technion, 32000 Haifa Israel\n"\
+        "Geri Wagner, Adham Hashibon";
+
+}
+
+
+#endif // VERSION_H
 
