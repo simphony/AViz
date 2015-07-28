@@ -1,17 +1,22 @@
 sudo: false
 language: cpp
-
 compiler:
   - gcc
   - clang
-
 addons:
   apt:
     packages:
       - qt4-qmake
       - qt4-dev-tools
       - libpng-dev
+before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+install:
+  - pip install subprocess32 click --user
 script:
   - cd src
   - qmake aviz.pro
   - make
+  - export PATH=$PATH:$PWD
+  - python ../util/start_application.py aviz
