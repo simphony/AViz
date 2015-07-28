@@ -18,4 +18,5 @@ script:
   - cd src
   - qmake aviz.pro
   - make
+  - export PATH=$PATH:$PWD
   - python ../util/start_application.py aviz
