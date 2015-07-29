@@ -34,6 +34,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <cstdlib>
 
 #include <QString>
+#include <QStringList>
 
 // Check the suffix in a file name
 void checkSuffix( const char * filename, const char * suffix )
@@ -303,6 +304,15 @@ bool generateTrackDataFunction(const fileList &fl, aggregateData * ad,
     return true;
 }
 
+/// check version and return true if major and minor version
+/// matches current version (patch version is not considered)
+/// @param versionString version string (i.e. "6.1.0")
+bool isMatchingVersion(QString versionString) {
+    aviz::Version currentVersion;
+    QStringList version = versionString.split( "." );
+    return ((version[0].toInt() == currentVersion.getMajor())
+            && (version[0].toInt() == currentVersion.getMajor()));
+}
 
 // Read a view parameter file
 bool openViewParamFunction( const char * filename, viewParam * vp ) {
@@ -317,11 +327,11 @@ bool openViewParamFunction( const char * filename, viewParam * vp ) {
         fgets(readVersion, versionLength+1, in);
 
         // Compare version strings
-        const bool isMatchingVersion = (readVersion == aviz::Version::getVersionString());
+        const bool isMatching = isMatchingVersion(readVersion);
 
         delete[] readVersion;
 
-        if (isMatchingVersion) {
+        if (isMatching) {
             // Version strings agree: read this file.
             fread( vp, sizeof( viewParam ), 1, in );
             return true;
@@ -421,11 +431,11 @@ bool openParticleDataFunction( const char * filename, particleData * pd )
         // Read the version string and make sure it matches
         char * readVersion = new char[versionLength+1];
         fgets(readVersion, versionLength+1, in);
-        bool isMatchingVersion = (aviz::Version::getVersionString() == readVersion);
+        bool isMatching = isMatchingVersion(readVersion);
         delete[] readVersion;
 
         // Compare version strings
-        if (isMatchingVersion) {
+        if (isMatching) {
             // Version strings agree: read this file.
             // Read the number of entries
             int nt;
