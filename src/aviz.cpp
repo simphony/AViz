@@ -220,9 +220,11 @@ void AViz::saveViewParam() {
     setFileType( VP_FILE );
 
     // Launch a standard file selector
-    QFileDialog *fd = new QFileDialog();
+    QFileDialog *fd = new QFileDialog(0/*parent*/,
+                                      "Save ViewParam File.." /*caption*/);
     fd->setModal(true);
     fd->setFileMode(QFileDialog::AnyFile);
+    fd->setAcceptMode(QFileDialog::AcceptSave);
     fd->setNameFilter("AViz viewpoint files (*.vpm)");
 
     connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(writeFile(const QString&)) );
@@ -443,7 +445,7 @@ void AViz::launchAnimation()
 // Help callback function
 void AViz::about() {
     // Launch a message box
-    MessageBox *mb = new MessageBox(VERSION_INFO_STRING, this);
+    MessageBox *mb = new MessageBox(aviz::Version::getVersionInfo(), this);
     mb->show();
 }
 
@@ -703,6 +705,7 @@ void AViz::savePNGFile() {
     QFileDialog * fd = new QFileDialog();
     fd->setModal(true);
     fd->setFileMode(QFileDialog::AnyFile);
+    fd->setAcceptMode(QFileDialog::AcceptSave);
     fd->setNameFilter("PNG image files (*.png)");
     connect( fd, SIGNAL(fileSelected(const QString&)), this, SLOT(snapFile(const QString&)) );
     fd->show();
