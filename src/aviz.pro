@@ -5,8 +5,15 @@ QMAKE_CXXFLAGS  = -O2
 QT +=  opengl 
 LIBS += -lX11 -lpng -lGLU
 
-GIT_REVISION = $$system($$quote(git describe))
-DEFINES += $$quote(GIT_REVISION=\'\"$$GIT_REVISION\"\')
+message(testing for git descibe)
+system(git describe):HAS_GIT=TRUE
+equals(HAS_GIT,TRUE) {
+   message( git describe works. revision number will be used in AViz )
+   GIT_REVISION = $$system($$quote(git describe))
+   DEFINES += $$quote(GIT_REVISION=\'\"$$GIT_REVISION\"\')
+} else {
+   message( 'git describe' is missing. revision number will be not be used in AViz )
+}
 
 HEADERS		= SoAnyThumbWheel.h \
 		  SoQtThumbWheel.h \
