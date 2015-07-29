@@ -104,7 +104,7 @@ int main( int argc, char ** argv )
 			return 0;
 	        }
 		else if (strcmp( *ptr, "-version" ) == 0 || strcmp( *ptr, "-v" ) == 0) {
-            printf( "AViz version %s \n", qPrintable(aviz::version_info_string));
+            printf( "AViz version %s \n", qPrintable(aviz::Version::getVersionInfo()));
 			return 0;
         	}
 		else if (strcmp( *ptr, "-license" ) == 0) {
@@ -254,7 +254,7 @@ int main( int argc, char ** argv )
 
 
 	// Print disclaimer
-    printf( "%s \n", qPrintable(aviz::start_string) );
+    printf( "%s \n", qPrintable(aviz::Version::getStartVersionInfo()) );
 
 	// Manage the panel 
 	av->setGeometry(0, FRAME_SIZE+FRAME_WIDTH+3, av->sizeHint().width(), av->sizeHint().height()); 

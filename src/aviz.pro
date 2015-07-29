@@ -93,4 +93,5 @@ SOURCES         = SoAnyThumbWheel.cpp \
 		  trackBoard.cpp \
 		  translationBoard.cpp \
 		  typeColorNumberBox.cpp \
+		  version.cpp \
 		  widgets/doneapplycancelwidget.cpp

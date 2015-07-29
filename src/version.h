@@ -27,37 +27,40 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef VERSION_H
 #define VERSION_H
 
-#include <QString>
+class QString;
 
 namespace aviz {
 
-const QString version = "6.1";
+/*! @class Version
+    @brief Provides version information
 
-const QString short_version_string = "AViz AtomicVizualization version " + version + "\n";
+    Version provides version information (major, minor, patch) and
+    strings containing both version, author, and copyright information.
+*/
+class Version {
+public:
+    Version();
 
-#ifdef GIT_REVISION
-const QString revision_information = "(revision " + QString(GIT_REVISION) + ")\n";
-#else
-const QString revision_information = "";
-#endif
+    int getMajor() const;
+    int getMinor() const;
+    int getPatch() const;
 
-const QString start_string = short_version_string + \
-        revision_information + \
-        "(C) 2001 - 2003\nComputational Physics Group Technion, Haifa Israel\n"\
-        "\n"\
-        "AViz comes with ABSOLUTELY NO WARRANTY; for details click on Help/License\n"\
-        "or start with the command line argument -license.   This is free software,\n"\
-        "and you are welcome to redistribute it under certain conditions; click on\n"\
-        "Help/Distribution or start with `aviz -distribution' for details.";
+    //// get version as string (i.e "major.minor.patch")
+    static QString getVersionString();
 
-const QString version_info_string = short_version_string + \
-        revision_information +
-        "(C) 2001 - 2003 Computational Physics Group Israel Institute of Technology\n"\
-        "Technion, 32000 Haifa Israel\n"\
-        "Geri Wagner, Adham Hashibon";
+    //// get version information showed at program start
+    static QString getStartVersionInfo();
+
+    /// get version (and copyright) information
+    static QString getVersionInfo();
+
+private:
+    int m_major;
+    int m_minor;
+    int m_patch;
+};
 
 }
-
 
 #endif // VERSION_H
 

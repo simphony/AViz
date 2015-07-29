@@ -33,6 +33,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <cstring>
 #include <cstdlib>
 
+#include <QString>
+
 // Check the suffix in a file name
 void checkSuffix( const char * filename, const char * suffix )
 {
@@ -311,11 +313,11 @@ bool openViewParamFunction( const char * filename, viewParam * vp ) {
         fread( &versionLength, sizeof( int ), 1, in );
 
         // Read the version string and make sure it matches
-        char * readVersion = new char[BUFSIZ];
+        char * readVersion = new char[versionLength+1];
         fgets(readVersion, versionLength+1, in);
 
         // Compare version strings
-        const bool isMatchingVersion = (readVersion == aviz::version);
+        const bool isMatchingVersion = (readVersion == aviz::Version::getVersionString());
 
         delete[] readVersion;
 
@@ -339,7 +341,8 @@ bool openViewParamFunction( const char * filename, viewParam * vp ) {
 // Save a view parameter file
 bool saveViewParamFunction( const char * filename, viewParam * vp )
 {
-    const int version_length = aviz::version.length();
+    const QString version = aviz::Version::getVersionString();
+    const int version_length = version.length();
 
     // Open and write the file
     if (FILE * out = fopen( filename, "w" )) {
@@ -347,7 +350,7 @@ bool saveViewParamFunction( const char * filename, viewParam * vp )
         fwrite( &version_length, sizeof( int ), 1, out );
 
         // Write out the version string
-        fwrite(qPrintable(aviz::version), sizeof( char ), version_length, out );
+        fwrite(qPrintable(version), sizeof( char ), version_length, out );
 
         // Print parameters
         fwrite( vp, sizeof( viewParam ), 1, out );
@@ -365,7 +368,8 @@ bool saveViewParamFunction( const char * filename, viewParam * vp )
 bool saveParticleDataFunction( const char * filename, particleData * pd )
 {
     const int nc = (*pd).numberOfParticleTypes;
-    const int version_length = aviz::version.length();
+    const QString version = aviz::Version::getVersionString();
+    const int version_length = version.length();
 
     // Open the file
     if (FILE * out = fopen( (char *)filename, "w" )) {
@@ -373,7 +377,7 @@ bool saveParticleDataFunction( const char * filename, particleData * pd )
         fwrite( &version_length, sizeof( int ), 1, out );
 
         // Write out the version string
-        fwrite(qPrintable(aviz::version), sizeof( char ), version_length, out );
+        fwrite(qPrintable(version), sizeof( char ), version_length, out );
 
         // Write out the number of entries
         fwrite( &nc, sizeof( int ), 1, out );
@@ -415,9 +419,9 @@ bool openParticleDataFunction( const char * filename, particleData * pd )
         fread( &versionLength, sizeof( int ), 1, in );
 
         // Read the version string and make sure it matches
-        char * readVersion = new char[BUFSIZ];
+        char * readVersion = new char[versionLength+1];
         fgets(readVersion, versionLength+1, in);
-        bool isMatchingVersion = (aviz::version == readVersion);
+        bool isMatchingVersion = (aviz::Version::getVersionString() == readVersion);
         delete[] readVersion;
 
         // Compare version strings

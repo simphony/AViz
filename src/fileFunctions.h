@@ -30,13 +30,29 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "data.h"
 
 void checkSuffix( const char *, const char * );
-bool fileExists( const char * );
-bool openCoordinateFunction( const char *, aggregateData * );
-bool openFileListFunction( const char *, fileList * );
+bool fileExists( const char *);
+bool openCoordinateFunction( const char *filename, aggregateData * );
+bool openFileListFunction( const char *filename, fileList * );
 bool generateTrackDataFunction(const fileList&, aggregateData *, trackData * );
-bool saveViewParamFunction( const char *, viewParam * );
-bool openViewParamFunction( const char *, viewParam * );
-bool openParticleDataFunction( const char *, particleData * );
-bool saveParticleDataFunction( const char *, particleData * );
+
+/*! Save view parameters to file
+ *  @return true if saved, false if file could not be opened
+ */
+bool saveViewParamFunction( const char *filename, viewParam * );
+
+/*! Load view parameters from file
+ *  @return true if saved, false if file could not be opened or incorrect version
+ */
+bool openViewParamFunction( const char *filename, viewParam * );
+
+/*! Load particle data function (i.e. if and how to color what kind of particle) from file
+ *  @return true if saved, false if file could not be opened or incorrect version
+ */
+bool openParticleDataFunction( const char *filename, particleData * );
+
+/*! Save particle data function (i.e. if and how to color what kind of particle) to file
+ *  @return true if saved, false if file could not be opened
+*/
+bool saveParticleDataFunction( const char *filename, particleData * );
 
 #endif // FILE_H
