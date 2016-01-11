@@ -82,6 +82,8 @@ bool openCoordinateFunction( const char * filename, aggregateData * ad )
     float thisRead[11];
     char * buffer = (char*)malloc(BUFSIZ);
 
+    setlocale(LC_ALL,"C");
+
     // Open the file
     if (FILE * in = fopen( (char *)filename, "r" )) {
         // Register the filename
