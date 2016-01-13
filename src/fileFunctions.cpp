@@ -76,8 +76,6 @@ bool fileExists( const char * filename )
     return exists;
 }
 
-namespace {
-
 particle parseParticleLine(const QString& line) {
     particle p;
     QStringList list = line.split(' ', QString::SkipEmptyParts);
@@ -118,7 +116,6 @@ particle parseParticleLine(const QString& line) {
                 values[9],
                 values[10]};
     return p;
-}
 }
 
 

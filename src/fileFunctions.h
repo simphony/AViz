@@ -29,6 +29,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "data.h"
 
+class QString;
+
 void checkSuffix( const char *, const char * );
 bool fileExists( const char *);
 
@@ -60,5 +62,11 @@ bool openParticleDataFunction( const char *filename, particleData * );
  *  @return true if saved, false if file could not be opened
 */
 bool saveParticleDataFunction( const char *filename, particleData * );
+
+/*! Parse line of xzy file
+ * @return particle contained in that line
+ */
+particle parseParticleLine(const QString& line);
+
 
 #endif // FILE_H
