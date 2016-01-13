@@ -2,6 +2,7 @@ TEMPLATE        = app
 TARGET          = aviz
 CONFIG          += qt opengl warn_on release thread
 QMAKE_CXXFLAGS  = -O2
+QMAKE_CXXFLAGS += -std=c++11  # for qt4
 QT +=  opengl 
 LIBS += -lX11 -lpng -lGLU
 

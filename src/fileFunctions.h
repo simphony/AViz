@@ -31,8 +31,14 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 void checkSuffix( const char *, const char * );
 bool fileExists( const char *);
+
+/*! Read a coordinate file in XYZ format.
+ * There can be up to eight additional property columns per line
+ */
 bool openCoordinateFunction( const char *filename, aggregateData * );
+
 bool openFileListFunction( const char *filename, fileList * );
+
 bool generateTrackDataFunction(const fileList&, aggregateData *, trackData * );
 
 /*! Save view parameters to file
