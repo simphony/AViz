@@ -33,6 +33,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <iostream>
 #include <cstring>
 #include <exception>
+#include <stdexcept>
 
 #include <QString>
 #include <QStringList>

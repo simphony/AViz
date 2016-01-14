@@ -2,9 +2,20 @@ TEMPLATE        = app
 TARGET          = aviz
 CONFIG          += qt opengl warn_on release thread
 QMAKE_CXXFLAGS  = -O2
-QMAKE_CXXFLAGS += -std=c++11  # for qt4
 QT +=  opengl 
 LIBS += -lX11 -lpng -lGLU
+
+# use C++11
+greaterThan(QT_MAJOR_VERSION, 4) {
+        # in qt5 there is a flag
+	CONFIG += c++11
+} else {
+    linux-g++ | linux-g++-32 | linux-g++-64 {
+    	QMAKE_CXXFLAGS += -std=c++0x 
+        #  newer version of g++ (GCC >4.7) use
+    	# QMAKE_CXXFLAGS += -std=c++11
+    }
+}
 
 message(testing for git descibe)
 system(git describe):HAS_GIT=TRUE
