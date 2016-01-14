@@ -762,7 +762,7 @@ void GLCanvasArea::paintGL()
         // Set common material properties -- here shininess and
         // specular intensity are coupled
         GLfloat thisShininess[] = { vp.shininess };
-        GLfloat thisSpecular[] = {  (GLfloat)(vp.shininess)/128.0,  (GLfloat)(vp.shininess)/128.0,  (GLfloat)(vp.shininess)/128.0, 1.0 };
+        GLfloat thisSpecular[] = {  (GLfloat)(vp.shininess)/128.0f,  (GLfloat)(vp.shininess)/128.0f,  (GLfloat)(vp.shininess)/128.0f, 1.0f };
         glMaterialfv( GL_FRONT, GL_SHININESS, thisShininess );
         glMaterialfv( GL_FRONT, GL_SPECULAR, thisSpecular );
         glMaterialfv( GL_FRONT, GL_EMISSION, black_mat );
