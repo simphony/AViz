@@ -23,18 +23,21 @@ Contact address: Computational Physics Group, Dept. of Physics,
                  Technion. 32000 Haifa Israel
                  gery@tx.technion.ac.il
 ***********************************************************************/
+#include <sys/stat.h>
+#include <iostream>
+#include <cstring>
+
+#include <QString>
+#include <QStringList>
+#include <QTextStream>
+#include <QFile>
 
 #include "fileFunctions.h"
 #include "memoryFunctions.h"
 #include "version.h"
 #include "defaultParticles.h"
-
-#include <sys/stat.h>
-#include <cstring>
-#include <cstdlib>
-
-#include <QString>
-#include <QStringList>
+#include "version.h"
+#include "exceptions.h"
 
 // Check the suffix in a file name
 void checkSuffix( const char * filename, const char * suffix )
@@ -73,26 +76,69 @@ bool fileExists( const char * filename )
     return exists;
 }
 
+particle parseParticleLine(const QString& line) {
+    particle p;
+    QStringList list = line.split(' ', QString::SkipEmptyParts);
+    if (list.count() < 4 || list.count() > 12) {
+        throw aviz::parse_error("Incorrect number of values. Expecting type, x, y, z and 8 or less properties");
+    }
 
-// Read a coordinate file in XYZ format.  There can be up to 
-// eight additional property columns per line
-bool openCoordinateFunction( const char * filename, aggregateData * ad )
-{
-    char type[3];
-    float thisRead[11];
-    char * buffer = (char*)malloc(BUFSIZ);
+    // Get the atom type
+    QString type = list[0];
+    if(type.length()!=2) {
+        throw aviz::parse_error ("Incorrect format of type");
+    }
 
-    // Open the file
-    if (FILE * in = fopen( (char *)filename, "r" )) {
+    tag pTag;
+    pTag.type[0] = type.at(0).toLatin1();
+    pTag.type[1] = type.at(1).toLatin1();
+
+    float values[11] = {};
+    bool ok = true;
+    for(int index = 1; index < list.count(); index++) {
+        values[index-1] = QString(list[index]).toDouble(&ok);
+        if(!ok) {
+            QString msg = QString("Problem reading coordinate or property (%1:'%2')").arg(index).arg(list[index]);
+            throw aviz::parse_error (qPrintable(msg));
+        }
+    }
+
+    return particle {pTag,
+                values[0], // x
+                values[1], // y
+                values[2], // z
+                values[3], // prop1
+                values[4], // prop2 ..
+                values[5],
+                values[6],
+                values[7],
+                values[8],
+                values[9],
+                values[10]};
+    return p;
+}
+
+
+bool openCoordinateFunction(const char * filename, aggregateData * ad ){
+
+    QFile file(filename);
+    if (file.open(QFile::ReadOnly | QFile::Text)) {
+
         // Register the filename
         sprintf( (*ad).filename, "%s", filename );
 
+        QTextStream in(&file);
+
         // Read the number of particles
-        fgets( buffer, BUFSIZ, in );
-        (*ad).numberOfParticles = atoi(buffer);
+        bool ok = true;
+        (*ad).numberOfParticles = QString(in.readLine()).toInt(&ok);
+
+        if(!ok && in.atEnd()) {
+            return false;
+        }
 
         // Read the ID string
-        fgets( (*ad).IDstring, BUFSIZ, in );
+        std::strncpy((*ad).IDstring, in.readLine().toLatin1().constData(), BUFSIZ);
 
         // Free particle data memory
         freeAggregateData( ad );
@@ -102,73 +148,32 @@ bool openCoordinateFunction( const char * filename, aggregateData * ad )
 
         // Read the atom positions and properties
         int i = 0;
-        while (!feof(in)) {
-
-            fgets( buffer, BUFSIZ, in );
-
+        while (!in.atEnd()) {
+            QString line = in.readLine();
             if (i < (*ad).numberOfParticles) {
-
-                // Replace all tabs by a blank
-                int k = 0;
-                while (buffer[k] != 0) {
-                    if (buffer[k] == '\t')
-                        buffer[k] = ' ';
-                    k++;
+                try {
+                    (*ad).particles[i] = parseParticleLine(line);
                 }
-                // Get the atom type
-                k = 0;
-                while (buffer[k] == ' ') k++;
-                type[0] = buffer[0+k]; buffer[0+k] = ' ';
-                type[1] = buffer[1+k]; buffer[1+k] = ' ';
-                type[2] = 0;
-
-                // Read the rest
-                thisRead[0] = atof( strtok(buffer+2, " ") );
-
-                for (int j=1;j<11;j++) {
-                    char * ptr = strtok(NULL, " ");
-                    if (ptr) {
-                        thisRead[j] = atof( ptr );
-                    }
-                    else {
-                        thisRead[j] = 0.0;
-                    }
+                catch (const aviz::parse_error &e) {
+                    std::cout << "Problem reading line #" << i << ": " << e.what() << std::endl;
+                    return false;
                 }
-
-                sprintf( (char *)&(*ad).particles[i].type, "%s", type );
-                (*ad).particles[i].x = thisRead[0];
-                (*ad).particles[i].y = thisRead[1];
-                (*ad).particles[i].z = thisRead[2];
-                (*ad).particles[i].prop1 = thisRead[3];
-                (*ad).particles[i].prop2 = thisRead[4];
-                (*ad).particles[i].prop3 = thisRead[5];
-                (*ad).particles[i].prop4 = thisRead[6];
-                (*ad).particles[i].prop5 = thisRead[7];
-                (*ad).particles[i].prop6 = thisRead[8];
-                (*ad).particles[i].prop7 = thisRead[9];
-                (*ad).particles[i].prop8 = thisRead[10];
-                i++;
             }
+            i++;
         }
 
-        fclose( in );
-        free(buffer);
+        file.close();
 
         if (i != (*ad).numberOfParticles) {
             printf("The coordinate file is corrupted (number of lines mismatch) -- reading failed.\n");
             return false;
         }
-        else {
-            return true;
-        }
-    }
-    else {
-        free(buffer);
 
+        return true;
+    } else {
         return false;
     }
 }
-
 
 // Read a file list
 bool openFileListFunction( const char * filename, fileList * fl )
