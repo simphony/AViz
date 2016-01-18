@@ -10,6 +10,7 @@ HEADERS = ../fileFunctions.h \
           ../memoryFunctions.h \
           ../version.h \
           ../defaultParticles.h \
+          ../exceptions.h \
           verify_exception.h
 SOURCES = fileFunctionsTest.cpp \
           ../fileFunctions.cpp \

@@ -3,7 +3,7 @@
 #include <QtTest/QtTest>
 #include <QString>
 
-#include <exception>
+#include "../exceptions.h"
 
 #if QT_VERSION < 0x050300
 // Our test system uses Qt5.2 but QVERIFY_EXCEPTION_THROWN first appears in Qt5.3
@@ -46,15 +46,15 @@ private slots:
     }
 
     void parseParticleLineWrongType() {
-        QVERIFY_EXCEPTION_THROWN(parseParticleLine("X011 1.030e+04 1.040e+03 1.030e+04"), std::runtime_error);
+        QVERIFY_EXCEPTION_THROWN(parseParticleLine("X011 1.030e+04 1.040e+03 1.030e+04"), aviz::parse_error);
     }
 
     void parseParticleLineTooManyParameters() {
-        QVERIFY_EXCEPTION_THROWN(parseParticleLine("X0 1.030e+04 1.040e+03 1.030e+04 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0"), std::runtime_error);
+        QVERIFY_EXCEPTION_THROWN(parseParticleLine("X0 1.030e+04 1.040e+03 1.030e+04 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0"), aviz::parse_error);
     }
 
     void parseParticleLineMissingZ() {
-        QVERIFY_EXCEPTION_THROWN(parseParticleLine("X0 1.030e+04 1.040e+03"), std::runtime_error);
+        QVERIFY_EXCEPTION_THROWN(parseParticleLine("X0 1.030e+04 1.040e+03"), aviz::parse_error);
     }
 };
 

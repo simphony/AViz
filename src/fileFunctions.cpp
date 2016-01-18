@@ -23,22 +23,21 @@ Contact address: Computational Physics Group, Dept. of Physics,
                  Technion. 32000 Haifa Israel
                  gery@tx.technion.ac.il
 ***********************************************************************/
-
-#include "fileFunctions.h"
-#include "memoryFunctions.h"
-#include "version.h"
-#include "defaultParticles.h"
-
 #include <sys/stat.h>
 #include <iostream>
 #include <cstring>
-#include <exception>
-#include <stdexcept>
 
 #include <QString>
 #include <QStringList>
 #include <QTextStream>
 #include <QFile>
+
+#include "fileFunctions.h"
+#include "memoryFunctions.h"
+#include "version.h"
+#include "defaultParticles.h"
+#include "version.h"
+#include "exceptions.h"
 
 // Check the suffix in a file name
 void checkSuffix( const char * filename, const char * suffix )
@@ -81,13 +80,13 @@ particle parseParticleLine(const QString& line) {
     particle p;
     QStringList list = line.split(' ', QString::SkipEmptyParts);
     if (list.count() < 4 || list.count() > 12) {
-        throw std::runtime_error ("Incorrect number of values. Expecting type, x, y, z and 8 or less properties");
+        throw aviz::parse_error("Incorrect number of values. Expecting type, x, y, z and 8 or less properties");
     }
 
     // Get the atom type
     QString type = list[0];
     if(type.length()!=2) {
-        throw std::runtime_error ("Incorrect format of type");
+        throw aviz::parse_error ("Incorrect format of type");
     }
 
     tag pTag;
@@ -100,7 +99,7 @@ particle parseParticleLine(const QString& line) {
         values[index-1] = QString(list[index]).toDouble(&ok);
         if(!ok) {
             QString msg = QString("Problem reading coordinate or property (%1:'%2')").arg(index).arg(list[index]);
-            throw std::runtime_error (qPrintable(msg));
+            throw aviz::parse_error (qPrintable(msg));
         }
     }
 
@@ -155,7 +154,7 @@ bool openCoordinateFunction(const char * filename, aggregateData * ad ){
                 try {
                     (*ad).particles[i] = parseParticleLine(line);
                 }
-                catch (std::runtime_error &e) {
+                catch (const aviz::parse_error &e) {
                     std::cout << "Problem reading line #" << i << ": " << e.what() << std::endl;
                     return false;
                 }
