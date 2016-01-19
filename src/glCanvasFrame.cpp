@@ -456,9 +456,6 @@ viewObject GLCanvasFrame::getObjectData()
             
              if ((*ad).particles[i].prop1 < p1min)
                 p1min = (*ad).particles[i].prop1;
-           
-            
-            
             if ((*ad).particles[i].prop2 < p2min)
                 p2min = (*ad).particles[i].prop2;
             if ((*ad).particles[i].prop3 < p3min)
