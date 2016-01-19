@@ -414,9 +414,10 @@ viewObject GLCanvasFrame::getObjectData()
     float xmin = std::numeric_limits<float>::max();
     float ymin = std::numeric_limits<float>::max();
     float zmin = std::numeric_limits<float>::max();
-    float xmax = -std::numeric_limits<float>::max();
-    float ymax = -std::numeric_limits<float>::max();
-    float zmax = -std::numeric_limits<float>::max();
+
+    float xmax = std::numeric_limits<float>::lowest();
+    float ymax = std::numeric_limits<float>::lowest();
+    float zmax = std::numeric_limits<float>::lowest();
 
     float p1min = std::numeric_limits<float>::max();
     float p2min = std::numeric_limits<float>::max();
@@ -426,14 +427,15 @@ viewObject GLCanvasFrame::getObjectData()
     float p6min = std::numeric_limits<float>::max();
     float p7min = std::numeric_limits<float>::max();
     float p8min = std::numeric_limits<float>::max();
-    float p1max = -std::numeric_limits<float>::max();
-    float p2max = -std::numeric_limits<float>::max();
-    float p3max = -std::numeric_limits<float>::max();
-    float p4max = -std::numeric_limits<float>::max();
-    float p5max = -std::numeric_limits<float>::max();
-    float p6max = -std::numeric_limits<float>::max();
-    float p7max = -std::numeric_limits<float>::max();
-    float p8max = -std::numeric_limits<float>::max();
+
+    float p1max = std::numeric_limits<float>::lowest();
+    float p2max = std::numeric_limits<float>::lowest();
+    float p3max = std::numeric_limits<float>::lowest();
+    float p4max = std::numeric_limits<float>::lowest();
+    float p5max = std::numeric_limits<float>::lowest();
+    float p6max = std::numeric_limits<float>::lowest();
+    float p7max = std::numeric_limits<float>::lowest();
+    float p8max = std::numeric_limits<float>::lowest();
 
     // Get the current aggregate data
     if (drawArea) {
