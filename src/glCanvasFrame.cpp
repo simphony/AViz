@@ -372,8 +372,7 @@ GLCanvasFrame::GLCanvasFrame(MainForm *mainForm, QWidget* parent)
 }
 
 
-GLCanvasFrame::~GLCanvasFrame()
-{
+GLCanvasFrame::~GLCanvasFrame(){
 }
 
 
@@ -381,11 +380,7 @@ GLCanvasFrame::~GLCanvasFrame()
 void GLCanvasFrame::updateView()
 {
     viewObject thisVo = this->getObjectData();
-
-    // Cause a recompile of the drawing lists
-    if (drawArea) {
-        drawArea->setViewObjectAndRecompile( thisVo );
-    }
+    drawArea->setViewObjectAndRecompile( thisVo );
 }
 
 
@@ -393,16 +388,12 @@ void GLCanvasFrame::updateView()
 // (useful for sequences)
 void GLCanvasFrame::updateViewWithoutViewObjectChange()
 {
+    // Read current view object...
+    viewObject * thisVo = drawArea->getViewObject();
 
-    if (drawArea) {
-        // Read current view object...
-        viewObject * thisVo = drawArea->getViewObject();
-
-        // ..and cause a recompile of the drawing lists
-        drawArea->setViewObjectAndRecompile( (*thisVo) );
-    }
+    // ..and cause a recompile of the drawing lists
+    drawArea->setViewObjectAndRecompile( (*thisVo) );
 }
-
 
 // Produce information on the aggregate data that is useful 
 // for rendering: the extensions and the center location, 
@@ -438,58 +429,56 @@ viewObject GLCanvasFrame::getObjectData()
     float p8max = std::numeric_limits<float>::lowest();
 
     // Get the current aggregate data
-    if (drawArea) {
-        aggregateData * ad = drawArea->getAggregateData();
+    aggregateData * ad = drawArea->getAggregateData();
 
-        // Find the min and max extensions
-        for (int i=0;i<(*ad).numberOfParticles;i++) {
-            if ((*ad).particles[i].x < xmin)
-                xmin = (*ad).particles[i].x;
-            if ((*ad).particles[i].y < ymin)
-                ymin = (*ad).particles[i].y;
-            if ((*ad).particles[i].z < zmin)
-                zmin = (*ad).particles[i].z;
-            if ((*ad).particles[i].x > xmax)
-                xmax = (*ad).particles[i].x;
-            if ((*ad).particles[i].y > ymax)
-                ymax = (*ad).particles[i].y;
-            if ((*ad).particles[i].z > zmax)
-                zmax = (*ad).particles[i].z;
-            
-             if ((*ad).particles[i].prop1 < p1min)
-                p1min = (*ad).particles[i].prop1;
-            if ((*ad).particles[i].prop2 < p2min)
-                p2min = (*ad).particles[i].prop2;
-            if ((*ad).particles[i].prop3 < p3min)
-                p3min = (*ad).particles[i].prop3;
-            if ((*ad).particles[i].prop4 < p4min)
-                p4min = (*ad).particles[i].prop4;
-            if ((*ad).particles[i].prop5 < p5min)
-                p5min = (*ad).particles[i].prop5;
-            if ((*ad).particles[i].prop6 < p6min)
-                p6min = (*ad).particles[i].prop6;
-            if ((*ad).particles[i].prop7 < p7min)
-                p7min = (*ad).particles[i].prop7;
-            if ((*ad).particles[i].prop8 < p8min)
-                p8min = (*ad).particles[i].prop8;
+    // Find the min and max extensions
+    for (int i=0;i<(*ad).numberOfParticles;i++) {
+        if ((*ad).particles[i].x < xmin)
+            xmin = (*ad).particles[i].x;
+        if ((*ad).particles[i].y < ymin)
+            ymin = (*ad).particles[i].y;
+        if ((*ad).particles[i].z < zmin)
+            zmin = (*ad).particles[i].z;
+        if ((*ad).particles[i].x > xmax)
+            xmax = (*ad).particles[i].x;
+        if ((*ad).particles[i].y > ymax)
+            ymax = (*ad).particles[i].y;
+        if ((*ad).particles[i].z > zmax)
+            zmax = (*ad).particles[i].z;
 
-            if ((*ad).particles[i].prop1 > p1max)
-                p1max = (*ad).particles[i].prop1;
-            if ((*ad).particles[i].prop2 > p2max)
-                p2max = (*ad).particles[i].prop2;
-            if ((*ad).particles[i].prop3 > p3max)
-                p3max = (*ad).particles[i].prop3;
-            if ((*ad).particles[i].prop4 > p4max)
-                p4max = (*ad).particles[i].prop4;
-            if ((*ad).particles[i].prop5 > p5max)
-                p5max = (*ad).particles[i].prop5;
-            if ((*ad).particles[i].prop6 > p6max)
-                p6max = (*ad).particles[i].prop6;
-            if ((*ad).particles[i].prop7 > p7max)
-                p7max = (*ad).particles[i].prop7;
-            if ((*ad).particles[i].prop8 > p8max)
-                p8max = (*ad).particles[i].prop8;
-        }
+         if ((*ad).particles[i].prop1 < p1min)
+            p1min = (*ad).particles[i].prop1;
+        if ((*ad).particles[i].prop2 < p2min)
+            p2min = (*ad).particles[i].prop2;
+        if ((*ad).particles[i].prop3 < p3min)
+            p3min = (*ad).particles[i].prop3;
+        if ((*ad).particles[i].prop4 < p4min)
+            p4min = (*ad).particles[i].prop4;
+        if ((*ad).particles[i].prop5 < p5min)
+            p5min = (*ad).particles[i].prop5;
+        if ((*ad).particles[i].prop6 < p6min)
+            p6min = (*ad).particles[i].prop6;
+        if ((*ad).particles[i].prop7 < p7min)
+            p7min = (*ad).particles[i].prop7;
+        if ((*ad).particles[i].prop8 < p8min)
+            p8min = (*ad).particles[i].prop8;
+
+        if ((*ad).particles[i].prop1 > p1max)
+            p1max = (*ad).particles[i].prop1;
+        if ((*ad).particles[i].prop2 > p2max)
+            p2max = (*ad).particles[i].prop2;
+        if ((*ad).particles[i].prop3 > p3max)
+            p3max = (*ad).particles[i].prop3;
+        if ((*ad).particles[i].prop4 > p4max)
+            p4max = (*ad).particles[i].prop4;
+        if ((*ad).particles[i].prop5 > p5max)
+            p5max = (*ad).particles[i].prop5;
+        if ((*ad).particles[i].prop6 > p6max)
+            p6max = (*ad).particles[i].prop6;
+        if ((*ad).particles[i].prop7 > p7max)
+            p7max = (*ad).particles[i].prop7;
+        if ((*ad).particles[i].prop8 > p8max)
+            p8max = (*ad).particles[i].prop8;
     }
 
     vo.xmin = xmin;
