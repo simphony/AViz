@@ -106,6 +106,10 @@ MainForm::MainForm(QWidget *parent, AViz *aviz)
     // the above widgets are all kept small
     mainBox->setColumnStretch(1, 1/*stretch*/ );
     mainBox->setRowStretch(4, 1/*stretch*/ );
+
+    fl.currentFile = -1;
+    fl.numberOfFiles = 0;
+    fl.filename = NULL;
 }
 
 // Set the file type to be used during reading or writing files
@@ -1057,7 +1061,7 @@ void MainForm::generateTracks() {
     // the current aggregated structure (it will be necessary
     // to read in aggregated data over and over again) and
     // a pointer to the current track data structure
-    if (generateTrackDataFunction( &fl, getAggregateData(), glCanvasFrame->getTrackData() )) {
+    if (generateTrackDataFunction(fl, getAggregateData(), glCanvasFrame->getTrackData() )) {
 
         // Write a message to the m_status bar
         statusMessage( "Completed generation of tracks" );
