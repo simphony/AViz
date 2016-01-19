@@ -35,6 +35,7 @@ private slots:
         QCOMPARE(p.x, 1.030e+04);
         QCOMPARE(p.y, 1.040e+03);
         QCOMPARE(p.z, 1.030e+04);
+        QCOMPARE(p.type.type, "X0");
         QCOMPARE(p.prop1, 1.0);
         QCOMPARE(p.prop2, 2.0);
         QCOMPARE(p.prop3, 3.0);
@@ -43,6 +44,11 @@ private slots:
         QCOMPARE(p.prop6, 6.0);
         QCOMPARE(p.prop7, 7.0);
         QCOMPARE(p.prop8, 8.0);
+    }
+
+    void parseParticleLineOneCharType() {
+        auto p = parseParticleLine("O  4.025687 -1.261475 3.247500 3.470864");
+        QCOMPARE(p.type.type, "O "); //types are 2 chars
     }
 
     void parseParticleLineWrongType() {
