@@ -85,13 +85,15 @@ particle parseParticleLine(const QString& line) {
 
     // Get the atom type
     QString type = list[0];
-    if(type.length()!=2) {
+    if(type.length()>2) {
         throw aviz::parse_error ("Incorrect format of type");
     }
 
     tag pTag;
-    pTag.type[0] = type.at(0).toLatin1();
-    pTag.type[1] = type.at(1).toLatin1();
+    for(int i=0; i<2; i++) {
+        pTag.type[i] = i<type.length() ? type.at(i).toLatin1() : ' ';
+    }
+    pTag.type[3] = 0;
 
     float values[11] = {};
     bool ok = true;
