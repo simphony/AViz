@@ -39,6 +39,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "version.h"
 #include "exceptions.h"
 
+
 // Check the suffix in a file name
 void checkSuffix( const char * filename, const char * suffix )
 {
@@ -120,6 +121,42 @@ particle parseParticleLine(const QString& line) {
     return p;
 }
 
+struct PropertyInformation{
+    QString name;
+    /*QString description;*/
+};
+
+QList<PropertyInformation> parsePropertyInformation(QStringList propertyInformation) {
+    auto lineNumber = 1;
+    QList<PropertyInformation> information;
+    if(propertyInformation.empty() || propertyInformation.takeFirst() != "properties:") {
+        throw aviz::parse_error ("Property information section did not begin with 'properties:' as expected.");
+    }
+
+    while(!propertyInformation.empty()) {
+        lineNumber++;
+
+        QString line = propertyInformation.takeFirst();
+        line = line.trimmed();
+        if(line.startsWith("-name:")) {
+            line.remove(0, line.indexOf(":")+1);
+
+            PropertyInformation info;
+            info.name = line.trimmed();
+            information.push_back(info);
+
+            auto propertyNumber = lineNumber - 1;
+            QString msg = QString("Property (#%1): %2").arg(propertyNumber).arg(info.name);
+            std::cout << qPrintable(msg) <<std::endl;
+        } else {
+           QString msg = QString("Error parsing %1 line in property information section").arg(lineNumber);
+           throw aviz::parse_error (qPrintable(msg));
+        }
+    }
+
+
+    return information;
+}
 
 bool openCoordinateFunction(const char * filename, aggregateData * ad ){
 
@@ -150,25 +187,41 @@ bool openCoordinateFunction(const char * filename, aggregateData * ad ){
 
         // Read the atom positions and properties
         int i = 0;
-        while (!in.atEnd()) {
+        while (!in.atEnd() && i < (*ad).numberOfParticles) {
             QString line = in.readLine();
-            if (i < (*ad).numberOfParticles) {
-                try {
-                    (*ad).particles[i] = parseParticleLine(line);
-                }
-                catch (const aviz::parse_error &e) {
-                    std::cout << "Problem reading line #" << i << ": " << e.what() << std::endl;
-                    return false;
-                }
+            try {
+                (*ad).particles[i] = parseParticleLine(line);
+            }
+            catch (const aviz::parse_error &e) {
+                std::cout << "Problem reading line #" << i << ": " << e.what() << std::endl;
+                return false;
             }
             i++;
         }
 
-        file.close();
-
         if (i != (*ad).numberOfParticles) {
             printf("The coordinate file is corrupted (number of lines mismatch) -- reading failed.\n");
             return false;
+        }
+
+        // Read the possible property information
+        QStringList propertyInformationLines;
+        while (!in.atEnd()) {
+            propertyInformationLines.append(in.readLine());
+        }
+        file.close();
+
+
+        if(!propertyInformationLines.empty()) {
+            try {
+                QList<PropertyInformation> todo = parsePropertyInformation(propertyInformationLines);
+            }
+            catch (const aviz::parse_error &e) {
+                std::cout << "Problem reading property information (which first begins on line #)" << i+1 << ": " << e.what() << std::endl;
+                return false;
+            }
+        } else {
+            // there are no property information
         }
 
         return true;
