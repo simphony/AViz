@@ -47,7 +47,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "fileFunctions.h"
 #include "defaultParticles.h" // typeCopy, typeCmp
 #include "widgets/doneapplycancelwidget.h"
-
+#include "aggregateData.h"
 
 // Make a popup dialog box 
 SpinBoard::SpinBoard(QWidget * parent)
@@ -259,16 +259,15 @@ void SpinBoard::buildLayout( colorCriterion crit ) {
 // types; this function is called each time the board is launched
 void SpinBoard::setData()
 {
-    aggregateData * ad = NULL;
-    tag tmp;
+    // Get a list of particles that are currently rendered
+    AggregateData *ad = mainForm->getAggregateData();
 
     if (mainForm) {
         // Get the current switch settings and register
         // it using a local particle data structure
         thisPd = mainForm->getParticleData();
 
-        // Get a list of particles that are currently rendered
-        ad = mainForm->getAggregateData();
+
 
         // Make entries in the combo box -- use only particle
         // types that are really needed; otherwise the list
@@ -292,6 +291,7 @@ void SpinBoard::setData()
     for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
         for (int j=0;j<spinCob->count()-1;j++) {
             if (QString::compare(spinCob->itemText(j), spinCob->itemText(j+1)) > 0) {
+                tag tmp;
                 typeCopy( qPrintable(spinCob->itemText(j+1)), (char *)&tmp );
                 spinCob->insertItem(j, QString( (char *)&tmp));
                 spinCob->removeItem(j+2);

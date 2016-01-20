@@ -38,6 +38,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "defaultParticles.h"
 #include "version.h"
 #include "exceptions.h"
+#include "aggregateData.h"
 
 
 // Check the suffix in a file name
@@ -121,11 +122,6 @@ particle parseParticleLine(const QString& line) {
     return p;
 }
 
-struct PropertyInformation{
-    QString name;
-    /*QString description;*/
-};
-
 QList<PropertyInformation> parsePropertyInformation(QStringList propertyInformation) {
     auto lineNumber = 1;
     QList<PropertyInformation> information;
@@ -158,7 +154,7 @@ QList<PropertyInformation> parsePropertyInformation(QStringList propertyInformat
     return information;
 }
 
-bool openCoordinateFunction(const char * filename, aggregateData * ad ){
+bool openCoordinateFunction(const char * filename, AggregateData * ad ){
 
     QFile file(filename);
     if (file.open(QFile::ReadOnly | QFile::Text)) {
@@ -214,7 +210,7 @@ bool openCoordinateFunction(const char * filename, aggregateData * ad ){
 
         if(!propertyInformationLines.empty()) {
             try {
-                QList<PropertyInformation> todo = parsePropertyInformation(propertyInformationLines);
+                (*ad).propertiesInformation = parsePropertyInformation(propertyInformationLines);
             }
             catch (const aviz::parse_error &e) {
                 std::cout << "Problem reading property information (which first begins on line #)" << i+1 << ": " << e.what() << std::endl;
@@ -222,6 +218,7 @@ bool openCoordinateFunction(const char * filename, aggregateData * ad ){
             }
         } else {
             // there are no property information
+            (*ad).propertiesInformation = QList<PropertyInformation>();
         }
 
         return true;
@@ -308,7 +305,7 @@ bool openFileListFunction( const char * filename, fileList * fl )
 
 
 // Generate track file data based on a file list
-bool generateTrackDataFunction(const fileList &fl, aggregateData * ad,
+bool generateTrackDataFunction(const fileList &fl, AggregateData * ad,
                                trackData * td )
 {
     // Read first file and find the number of particles

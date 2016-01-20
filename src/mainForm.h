@@ -52,6 +52,7 @@ class SliceBoard;
 class StretchBoard;
 class TranslationBoard;
 class TrackBoard;
+class AggregateData;
 
 // MainForm is a composite widget that implements
 // the drawing canvas and associated control elements
@@ -75,7 +76,7 @@ public:
     void setAutoAndStart( viewParam );
     void updateView();
 
-    aggregateData * getAggregateData();
+    AggregateData * getAggregateData();
     viewParam * getViewParam();
     viewObject * getViewObject();
     particleData * getParticleData();

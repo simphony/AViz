@@ -49,6 +49,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "fileFunctions.h"
 #include "defaultParticles.h" // typeCopy, typeCmp
 #include "widgets/doneapplycancelwidget.h"
+#include "aggregateData.h"
 
 
 // Make a popup dialog box 
@@ -266,8 +267,7 @@ void PoreBoard::buildLayout( colorCriterion crit ) {
 // types; this function is called each time the board is launched
 void PoreBoard::setData()
 {
-    aggregateData * ad = NULL;
-    tag tmp;
+    AggregateData *ad = mainForm->getAggregateData();
 
     if (mainForm) {
         // Get the current switch settings and register
@@ -275,7 +275,6 @@ void PoreBoard::setData()
         thisPd = mainForm->getParticleData();
 
         // Get a list of particles that are currently rendered
-        ad = mainForm->getAggregateData();
 
         // Make entries in the combo box -- use only particle
         // types that are really needed; otherwise the list
@@ -300,6 +299,7 @@ void PoreBoard::setData()
     for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
         for (int j=0;j<poreCob->count()-1;j++) {
             if (QString::compare(poreCob->itemText(j), poreCob->itemText(j+1)) > 0) {
+                tag tmp;
                 typeCopy( qPrintable(poreCob->itemText(j+1)), (char *)&tmp );
                 poreCob->insertItem(j, QString( (char *)&tmp));
                 poreCob->removeItem(j+2);

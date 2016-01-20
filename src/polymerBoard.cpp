@@ -47,6 +47,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "propertyBox.h"
 #include "sizeBox.h"
 #include "widgets/doneapplycancelwidget.h"
+#include "aggregateData.h"
 
 // Make a popup dialog box 
 PolymerBoard::PolymerBoard(QWidget * parent)
@@ -261,16 +262,15 @@ void PolymerBoard::buildLayout( colorCriterion crit ) {
 // types; this function is called each time the board is launched
 void PolymerBoard::setData()
 {
-    aggregateData * ad = NULL;
-    tag tmp;
+    // Get a list of particles that are currently rendered
+    AggregateData *ad = mainForm->getAggregateData();
 
     if (mainForm) {
         // Get the current settings and register
         // it using a local particle data structure
         thisPd = mainForm->getParticleData();
 
-        // Get a list of particles that are currently rendered
-        ad = mainForm->getAggregateData();
+
 
         // Make entries in the combo box -- use only particle
         // types that are really needed; otherwise the list
@@ -295,6 +295,7 @@ void PolymerBoard::setData()
     for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
         for (int j=0;j<atomCob->count()-1;j++) {
             if (QString::compare(atomCob->itemText(j), atomCob->itemText(j+1)) > 0) {
+                tag tmp;
                 typeCopy( qPrintable(atomCob->itemText(j+1)), (char *)&tmp );
                 atomCob->insertItem(j, QString( (char *)&tmp));
                 atomCob->removeItem(j+2);

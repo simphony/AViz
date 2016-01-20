@@ -35,7 +35,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QGroupBox>
 #include <QButtonGroup>
 
-
+#include "aggregateData.h"
 #include "defaultParticles.h" // typeCopy, typeCmp
 #include "mainForm.h"
 #include "colorBoard.h"
@@ -254,7 +254,7 @@ void AtomBoard::buildLayout( colorCriterion crit )  {
 // types; this function is called each time the board is launched
 void AtomBoard::setData()
 {
-    aggregateData * ad = NULL;
+    AggregateData * ad = NULL;
     tag tmp;
 
     if (mainForm) {

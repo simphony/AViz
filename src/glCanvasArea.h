@@ -27,15 +27,19 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef GLCANVAR_H
 #define GLCANVAR_H
 
-#include "data.h"
-
 #include <QGLWidget>
 #include <QMouseEvent>
 
 #include <GL/glx.h>
 #include <GL/glu.h>
 
+
+#include "data.h"
+#include "aggregateData.h"
+
+
 class MainForm;
+class AggregateData;
 
 //  Open GL drawing area
 class GLCanvasArea: public QGLWidget
@@ -55,7 +59,7 @@ public slots:
     void snapRendering();
     void snapRendering( const char * filename );
 
-    aggregateData * getAggregateData();
+    AggregateData * getAggregateData();
     viewParam * getViewParam();
     viewObject * getViewObject();
     particleData * getParticleData();
@@ -120,7 +124,7 @@ private:
     GLuint singleAtoms, spins, lcs, pores, polymerAtoms;
     GLuint atomBonds, polymerBonds;
     GLuint tracks;
-    aggregateData ad;
+    AggregateData ad;
     particleData pd;
     trackData td;
     viewObject vo;

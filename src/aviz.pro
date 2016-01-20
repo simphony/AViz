@@ -73,7 +73,8 @@ HEADERS		= SoAnyThumbWheel.h \
 		  typeColorNumberBox.h \
 		  version.h \
 		  widgets/doneapplycancelwidget.h \
-                  exceptions.h
+                  exceptions.h \
+                  aggregateData.h
 SOURCES         = SoAnyThumbWheel.cpp \
 		  SoQtThumbWheel.cpp \
 		  animationBoard.cpp \

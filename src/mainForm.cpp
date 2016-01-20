@@ -52,6 +52,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "glCanvasFrame.h"
 #include "renderStyleBox.h"
 #include "liveBox.h"
+#include "aggregateData.h"
 
 // 
 // Main form: implements drawing control elements
@@ -140,7 +141,7 @@ bool MainForm::isKeepViewObject() {
 
 // Read a file
 void MainForm::readFile( const QString &fn ) {
-    aggregateData * ad = getAggregateData();;
+    AggregateData * ad = getAggregateData();;
     viewParam thisVp;
 
     if ( !fn.isEmpty() ) {
@@ -461,7 +462,7 @@ void MainForm::updateView() {
 
 
 // Return a pointer to the current data to the main panel
-aggregateData * MainForm::getAggregateData()
+AggregateData * MainForm::getAggregateData()
 {
     return glCanvasFrame->getAggregateData();
 }

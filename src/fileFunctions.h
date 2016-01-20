@@ -30,6 +30,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "data.h"
 
 class QString;
+class AggregateData;
 
 void checkSuffix( const char *, const char * );
 bool fileExists( const char *);
@@ -39,11 +40,11 @@ bool fileExists( const char *);
  * There can be up to eight additional property columns per line
  *
  */
-bool openCoordinateFunction( const char *filename, aggregateData * );
+bool openCoordinateFunction( const char *filename, AggregateData * );
 
 bool openFileListFunction( const char *filename, fileList * );
 
-bool generateTrackDataFunction(const fileList&, aggregateData *, trackData * );
+bool generateTrackDataFunction(const fileList&, AggregateData *, trackData * );
 
 /*! Save view parameters to file
  *  \return true if saved, false if file could not be opened

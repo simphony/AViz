@@ -34,6 +34,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QApplication>
 #include <QTimer>
 
+#include "aggregateData.h"
 #include "animationBoard.h"
 #include "customFileDialog.h"
 #include "defaultParticles.h"
@@ -407,7 +408,7 @@ void AViz::watchFile() {
         setWatchMode();
 
         // Write a message
-        aggregateData * ad = m_mainForm->getAggregateData();
+        AggregateData * ad = m_mainForm->getAggregateData();
         m_mainForm->statusMessage( "Start watching file", (*ad).filename );
 
         // Adjust the menu entry
@@ -417,7 +418,7 @@ void AViz::watchFile() {
         m_watchTimer->stop();
 
         // Write a message
-        aggregateData * ad = m_mainForm->getAggregateData();
+        AggregateData * ad = m_mainForm->getAggregateData();
         m_mainForm->statusMessage( "Stop watching file", (*ad).filename );
 
         // Adjust the menu entry
@@ -812,7 +813,7 @@ void AViz::keepWatchNow() {
     time_t now = time( NULL );
 
     // Get the current data set and retrieve filename
-    aggregateData * ad = m_mainForm->getAggregateData();
+    AggregateData * ad = m_mainForm->getAggregateData();
 
     sprintf( filename, "./%s", (*ad).filename);
     if (!stat( (const char *)filename, buf ) ) {
@@ -980,7 +981,7 @@ void AViz::swapXY() {
     m_mainForm->statusMessage( "Swapping X <-> Y" );
 
     // Get local copy of the current data set
-    aggregateData * ad = m_mainForm->getAggregateData();
+    AggregateData * ad = m_mainForm->getAggregateData();
 
     // Swap now
     for (int i=0;i<(*ad).numberOfParticles;i++) {
@@ -1001,7 +1002,7 @@ void AViz::swapXZ() {
     m_mainForm->statusMessage( "Swapping X <-> Z" );
 
     // Get local copy of the current data set
-    aggregateData * ad = m_mainForm->getAggregateData();
+    AggregateData * ad = m_mainForm->getAggregateData();
 
     // Swap now
     for (int i=0;i<(*ad).numberOfParticles;i++) {
@@ -1022,7 +1023,7 @@ void AViz::swapYZ() {
     m_mainForm->statusMessage( "Swapping Y <-> Z" );
 
     // Get local copy of the current data set
-    aggregateData * ad = m_mainForm->getAggregateData();
+    AggregateData * ad = m_mainForm->getAggregateData();
 
     // Swap now
     for (int i=0;i<(*ad).numberOfParticles;i++) {
@@ -1043,7 +1044,7 @@ void AViz::mirrorX() {
     m_mainForm->statusMessage( "Mirroring X -> -X" );
 
     // Get local copy of the current data set
-    aggregateData * ad = m_mainForm->getAggregateData();
+    AggregateData * ad = m_mainForm->getAggregateData();
 
     // Mirror now
     for (int i=0;i<(*ad).numberOfParticles;i++) {
@@ -1062,7 +1063,7 @@ void AViz::mirrorY() {
     m_mainForm->statusMessage( "Mirroring Y -> -Y" );
 
     // Get local copy of the current data set
-    aggregateData * ad = m_mainForm->getAggregateData();
+    AggregateData * ad = m_mainForm->getAggregateData();
 
     // Mirror now
     for (int i=0;i<(*ad).numberOfParticles;i++) {
@@ -1082,7 +1083,7 @@ void AViz::mirrorZ() {
     m_mainForm->statusMessage( "Mirroring Z -> -Z" );
 
     // Get local copy of the current data set
-    aggregateData * ad = m_mainForm->getAggregateData();
+    AggregateData * ad = m_mainForm->getAggregateData();
 
     // Mirror now
     for (int i=0;i<(*ad).numberOfParticles;i++) {

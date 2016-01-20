@@ -48,6 +48,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "fileFunctions.h"
 #include "defaultParticles.h" // typeCopy, typeCmp
 #include "widgets/doneapplycancelwidget.h"
+#include "aggregateData.h"
 
 
 // Make a popup dialog box 
@@ -262,16 +263,15 @@ void LcBoard::buildLayout( colorCriterion crit ) {
 // types; this function is called each time the board is launched
 void LcBoard::setData()
 {
-    aggregateData * ad = NULL;
     tag tmp;
+
+    // Get a list of particles that are currently rendered
+    auto ad = mainForm->getAggregateData();
 
     if (mainForm) {
         // Get the current switch settings and register
         // it using a local particle data structure
         thisPd = mainForm->getParticleData();
-
-        // Get a list of particles that are currently rendered
-        ad = mainForm->getAggregateData();
 
         // Make entries in the combo box -- use only atoms
         // types that are really needed; otherwise the list

@@ -201,17 +201,6 @@ typedef struct{
 } particle;
 
 
-// Definition of an aggregate data struture -- a set of particles such as 
-// atoms, spins, liquid crystals, pores, ...
-typedef struct{
-	int numberOfParticles;
-	char IDstring[BUFSIZ];
-	char filename[BUFSIZ];
-	particle * particles;
-	bool haveMemoryAllocated;
-} aggregateData;
-
-
 // Definition of a file list, used to cycle through a set of aggregate
 // data files
 typedef struct {

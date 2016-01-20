@@ -27,6 +27,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "memoryFunctions.h"
 #include <cstdlib>
 
+#include "aggregateData.h"
+
 // Allocate memory 
 void allocateParticleData( particleData * pd )
 {
@@ -47,7 +49,7 @@ void allocateParticleData( particleData * pd )
 
 
 // Allocate memory
-void allocateAggregateData( aggregateData * ad ) 
+void allocateAggregateData( AggregateData * ad )
 {
 	// Allocate memory for the particle positions 
 	(*ad).particles = (particle *)malloc( (*ad).numberOfParticles*sizeof(particle) );
@@ -55,7 +57,7 @@ void allocateAggregateData( aggregateData * ad )
 }
 
 // Free memory
-void freeAggregateData( aggregateData * ad ) 
+void freeAggregateData( AggregateData * ad )
 {
 	if ((*ad).haveMemoryAllocated) {
 		free((*ad).particles);

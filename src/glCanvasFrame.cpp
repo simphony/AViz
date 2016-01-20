@@ -40,6 +40,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "mainForm.h"
 #include "glCanvasArea.h"
 #include "parameterLimits.h" //DOLLY_MAX, DOLLY_MIN
+#include "aggregateData.h"
 
 #include "./pixmaps/home.xpm"
 #include "./pixmaps/homenew.xpm"
@@ -429,7 +430,7 @@ viewObject GLCanvasFrame::getObjectData()
     float p8max = std::numeric_limits<float>::lowest();
 
     // Get the current aggregate data
-    aggregateData * ad = drawArea->getAggregateData();
+    AggregateData * ad = drawArea->getAggregateData();
 
     // Find the min and max extensions
     for (int i=0;i<(*ad).numberOfParticles;i++) {
@@ -1569,7 +1570,7 @@ void GLCanvasFrame::snapRendering( const char * filename )
 
 
 // Return a pointer to the current aggregate data 
-aggregateData * GLCanvasFrame::getAggregateData()
+AggregateData * GLCanvasFrame::getAggregateData()
 {
     return drawArea->getAggregateData();
 }
