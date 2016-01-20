@@ -176,7 +176,7 @@ void SliceBoard::autoSlice()
 void SliceBoard::sliceChanged()
 {
     // Always activate the slicing-on toggle when values change
-    sliceCb->setChecked( TRUE );
+    sliceCb->setChecked(true);
 }
 
 
@@ -184,7 +184,7 @@ void SliceBoard::sliceChanged()
 void SliceBoard::sliceChangedX()
 {
     // Always activate the slicing-on toggle when values change
-    sliceCb->setChecked( TRUE );
+    sliceCb->setChecked(true);
 }
 
 
@@ -192,7 +192,7 @@ void SliceBoard::sliceChangedX()
 void SliceBoard::sliceChangedY()
 {
     // Always activate the slicing-on toggle when values change
-    sliceCb->setChecked( TRUE );
+    sliceCb->setChecked(true);
 }
 
 
@@ -200,7 +200,7 @@ void SliceBoard::sliceChangedY()
 void SliceBoard::sliceChangedZ()
 {
     // Always activate the slicing-on toggle when values change
-    sliceCb->setChecked( TRUE );
+    sliceCb->setChecked(true);
 }
 
 
@@ -223,7 +223,7 @@ void SliceBoard::registerSettings()
     (*vp).sliceZMin = (float)sliceSbZ1->value()/10.0;
     (*vp).sliceZMax = (float)sliceSbZ2->value()/10.0;
 
-    (*vp).slicingSet = TRUE;
+    (*vp).slicingSet = true;
 }
 
 

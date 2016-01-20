@@ -177,19 +177,19 @@ SpinBoard::SpinBoard(QWidget * parent)
     // Clear internal variables
     colors = 1;
     colorPosX = colorPosY = 0;
-    showColorBoard = FALSE;
+    showColorBoard = false;
     spinRenderStyle = SLINE;
     renderQuality = LOW;
 
     // Set defaults
-    lineTypeBox->setDisabled( TRUE );
+    lineTypeBox->setDisabled(true);
 
     // Set defaults appropriate for startup without data
-    colorButton->setDisabled( TRUE );
-    sizeBox->setDisabled( TRUE );
-    modeL->setDisabled( TRUE );
-    colorMode->setDisabled( TRUE );
-    colorMode0->setChecked( TRUE );
+    colorButton->setDisabled(true);
+    sizeBox->setDisabled(true);
+    modeL->setDisabled(true);
+    colorMode->setDisabled(true);
+    colorMode0->setChecked(true);
 
     // Build default layout
     this->buildLayout( TYPE );
@@ -276,19 +276,12 @@ void SpinBoard::setData()
         if (spinCob) {
             spinCob->clear();
             for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
-                // Check: is this particle type really needed?
-                bool needed = FALSE;
                 for (int j=0;j<(*ad).numberOfParticles;j++) {
-                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i]) == TRUE) {
-                        // Yes it is needed: set a flag
-                        needed = TRUE;
+                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
+                        // Add the item to the list
+                        spinCob->addItem( QString( (char *)&(*thisPd).type[i]));
                         break;
                     }
-                }
-
-                // Add the item to the list
-                if (needed) {
-                    spinCob->addItem( QString( (char *)&(*thisPd).type[i]));
                 }
             }
             spinCob->setMinimumSize( spinCob->sizeHint() );
@@ -327,7 +320,7 @@ void SpinBoard::setSpin()
     typeCopy( qPrintable(spinCob->currentText()), (char *)&thisSpin );
 
     for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
-        if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisSpin ) == TRUE) {
+        if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisSpin )) {
             // Found the correct entry
             thisSpinIndex = i;
 
@@ -338,30 +331,20 @@ void SpinBoard::setSpin()
             bool thisShowParticle = (*thisPd).showParticle[thisSpinIndex];
             showSpinCb->setChecked( thisShowParticle);
 
-            switch( thisShowParticle) {
-            case TRUE:
-                if (thisSpinIndex >= 0) {
-                    modeL->setDisabled( FALSE );
-                    colorMode->setDisabled( FALSE );
-                }
-                else {
-                    modeL->setDisabled( TRUE );
-                    colorMode->setDisabled( TRUE );
-                }
-                break;
-            case FALSE:
-                sizeBox->setDisabled( TRUE );
-                modeL->setDisabled( TRUE );
-                colorMode->setDisabled( TRUE );
-                break;
+            if(thisShowParticle){
+                modeL->setDisabled(thisSpinIndex >= 0 ? false : true );
+                colorMode->setDisabled(thisSpinIndex >= 0 ? false : true );
+            } else {
+                sizeBox->setDisabled(true);
+                modeL->setDisabled(true);
+                colorMode->setDisabled(true);
             }
 
             // Adjust the toggles
             if (spinRenderStyle != SDOT && spinRenderStyle != SLINE && thisShowParticle) {
-                sizeBox->setDisabled( FALSE );
-            }
-            else {
-                sizeBox->setDisabled( TRUE );
+                sizeBox->setDisabled(false);
+            } else {
+                sizeBox->setDisabled(true);
             }
 
             // Adjust size settings
@@ -371,23 +354,23 @@ void SpinBoard::setSpin()
             switch (colorCrit) {
             case TYPE:
                 this->buildLayout( TYPE );
-                colorMode0->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode0->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case POSITION:
                 this->buildLayout( POSITION );
-                colorMode1->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode1->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case PROPERTY:
                 this->buildLayout( PROPERTY );
-                colorMode2->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode2->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case COLORCODE:
                 this->buildLayout( COLORCODE );
-                colorMode3->setChecked( TRUE );
-                colorButton->setDisabled( TRUE );
+                colorMode3->setChecked(true);
+                colorButton->setDisabled(true);
                 colorLabel0->switchOff();
                 colorLabel1->switchOff();
                 colorLabel2->switchOff();
@@ -415,20 +398,17 @@ void SpinBoard::adjustSpin()
     (*thisPd).showParticle[thisSpinIndex] = showSpinCb->isChecked();
 
     // Activate or deactivate the remaining radio buttons
-    switch ((*thisPd).showParticle[thisSpinIndex]) {
-    case TRUE:
+    if ((*thisPd).showParticle[thisSpinIndex]) {
         if (thisSpinIndex >= 0) {
             this->buildLayout( (*thisPd).colorCrit[thisSpinIndex] );
         }
         else {
             this->buildLayout( TYPE );
-            colorButton->setDisabled( FALSE );
+            colorButton->setDisabled(false);
         }
-        break;
-    case FALSE:
+    } else {
         this->buildLayout( TYPE );
-        colorButton->setDisabled( FALSE );
-        break;
+        colorButton->setDisabled(false);
     }
 }
 
@@ -450,16 +430,16 @@ void SpinBoard::readToggles()
         // update the particle data entry
         sizeBox->readToggles( thisPd, thisSpinIndex );
 
-        if (colorMode0->isChecked() == TRUE) {
+        if (colorMode0->isChecked()) {
             (*thisPd).colorCrit[thisSpinIndex] = TYPE;
         }
-        if (colorMode1->isChecked() == TRUE) {
+        if (colorMode1->isChecked()) {
             (*thisPd).colorCrit[thisSpinIndex] = POSITION;
         }
-        if (colorMode2->isChecked() == TRUE) {
+        if (colorMode2->isChecked()) {
             (*thisPd).colorCrit[thisSpinIndex] = PROPERTY;
         }
-        if (colorMode3->isChecked() == TRUE) {
+        if (colorMode3->isChecked()) {
             (*thisPd).colorCrit[thisSpinIndex] = COLORCODE;
         }
     }
@@ -480,7 +460,7 @@ void SpinBoard::readToggles()
 void SpinBoard::setColorCb()
 {
     // Set a flag
-    showColorBoard = TRUE;
+    showColorBoard = true;
 
     // Adjust the color board
     this->setColors();
@@ -653,7 +633,7 @@ void SpinBoard::getColors( float r0, float g0, float b0, float r1, float g1, flo
 void SpinBoard::setDotStyle()
 {
     spinRenderStyle = SDOT;
-    sizeBox->setDisabled( TRUE );
+    sizeBox->setDisabled(true);
 }
 
 
@@ -661,8 +641,8 @@ void SpinBoard::setDotStyle()
 void SpinBoard::setLineStyle()
 {
     spinRenderStyle = SLINE;
-    sizeBox->setDisabled( TRUE );
-    lineTypeBox->setDisabled( FALSE, TRUE );
+    sizeBox->setDisabled(true);
+    lineTypeBox->setDisabled(false, true);
 }
 
 
@@ -670,8 +650,8 @@ void SpinBoard::setLineStyle()
 void SpinBoard::setCubeStyle()
 {
     spinRenderStyle = SCUBE;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -679,8 +659,8 @@ void SpinBoard::setCubeStyle()
 void SpinBoard::setCylinderStyle()
 {
     spinRenderStyle = SCYLINDER;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -688,8 +668,8 @@ void SpinBoard::setCylinderStyle()
 void SpinBoard::setConeStyle()
 {
     spinRenderStyle = SCONE;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -697,8 +677,8 @@ void SpinBoard::setConeStyle()
 void SpinBoard::setSphereStyle()
 {
     spinRenderStyle = SSPHERE;
-    sizeBox->setDisabled( FALSE );
-    lineTypeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
+    lineTypeBox->setDisabled(false);
 }
 
 
@@ -726,7 +706,7 @@ void SpinBoard::setFinalQuality()
 // Set a flag when the color board is closed
 void SpinBoard::closeColorBoard()
 {
-    showColorBoard = FALSE;
+    showColorBoard = false;
 
     if (cb)
         cb->~ColorBoard();

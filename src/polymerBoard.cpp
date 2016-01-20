@@ -182,16 +182,16 @@ PolymerBoard::PolymerBoard(QWidget * parent)
     // Clear internal variables
     colors = 1;
     colorPosX = colorPosY = 0;
-    showColorBoard = FALSE;
+    showColorBoard = false;
     polymerAtomRenderStyle = PADOT;
     renderQuality = LOW;
 
     // Set defaults appropriate for startup without data
-    colorButton->setDisabled( TRUE );
-    sizeBox->setDisabled( TRUE );
-    modeL->setDisabled( TRUE );
-    colorMode->setDisabled( TRUE );
-    colorMode0->setChecked( TRUE );
+    colorButton->setDisabled(true);
+    sizeBox->setDisabled(true);
+    modeL->setDisabled(true);
+    colorMode->setDisabled(true);
+    colorMode0->setChecked(true);
 
     // Build default layout
     this->buildLayout( TYPE );
@@ -279,18 +279,12 @@ void PolymerBoard::setData()
             atomCob->clear();
             for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
                 // Check: is this particle type really needed?
-                bool needed = FALSE;
                 for (int j=0;j<(*ad).numberOfParticles;j++) {
-                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i]) == TRUE) {
-                        // Yes it is needed: set a flag
-                        needed = TRUE;
+                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
+                        // Add the item to the list
+                        atomCob->addItem( QString( (char *)&(*thisPd).type[i]));
                         break;
                     }
-                }
-
-                // Add the item to the list
-                if (needed) {
-                    atomCob->addItem( QString( (char *)&(*thisPd).type[i]));
                 }
             }
             atomCob->setMinimumSize( atomCob->sizeHint() );
@@ -329,7 +323,7 @@ void PolymerBoard::setPolymerAtom()
     typeCopy( qPrintable(atomCob->currentText()), (char *)&thisAtom);
 
     for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
-        if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisAtom) == TRUE) {
+        if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisAtom)) {
             // Found the correct entry
             thisPolymerAtomIndex = i;
 
@@ -340,30 +334,27 @@ void PolymerBoard::setPolymerAtom()
             bool thisShowParticle = (*thisPd).showParticle[thisPolymerAtomIndex];
             showPolymerAtomCb->setChecked( thisShowParticle );
 
-            switch( thisShowParticle) {
-            case TRUE:
+            if( thisShowParticle) {
                 if (thisPolymerAtomIndex >= 0) {
-                    modeL->setDisabled( FALSE );
-                    colorMode->setDisabled( FALSE );
+                    modeL->setDisabled(false);
+                    colorMode->setDisabled(false);
                 }
                 else {
-                    modeL->setDisabled( TRUE );
-                    colorMode->setDisabled( TRUE );
+                    modeL->setDisabled(true);
+                    colorMode->setDisabled(true);
                 }
-                break;
-            case FALSE:
-                sizeBox->setDisabled( TRUE );
-                modeL->setDisabled( TRUE );
-                colorMode->setDisabled( TRUE );
-                break;
+            } else {
+                sizeBox->setDisabled(true);
+                modeL->setDisabled(true);
+                colorMode->setDisabled(true);
             }
 
             // Adjust the toggles
             if (polymerAtomRenderStyle != PADOT && polymerAtomRenderStyle != PALINE && thisShowParticle) {
-                sizeBox->setDisabled( FALSE );
+                sizeBox->setDisabled(false);
             }
             else {
-                sizeBox->setDisabled( TRUE );
+                sizeBox->setDisabled(true);
             }
 
             // Adjust size settings
@@ -373,23 +364,23 @@ void PolymerBoard::setPolymerAtom()
             switch (colorCrit) {
             case TYPE:
                 this->buildLayout( TYPE );
-                colorMode0->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode0->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case POSITION:
                 this->buildLayout( POSITION );
-                colorMode1->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode1->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case PROPERTY:
                 this->buildLayout( PROPERTY );
-                colorMode2->setChecked( TRUE );
-                colorButton->setDisabled( FALSE );
+                colorMode2->setChecked(true);
+                colorButton->setDisabled(false);
                 break;
             case COLORCODE:
                 this->buildLayout( COLORCODE );
-                colorMode3->setChecked( TRUE );
-                colorButton->setDisabled( TRUE );
+                colorMode3->setChecked(true);
+                colorButton->setDisabled(true);
                 colorLabel0->switchOff();
                 colorLabel1->switchOff();
                 colorLabel2->switchOff();
@@ -416,20 +407,17 @@ void PolymerBoard::adjustPolymer()
     if (thisPolymerAtomIndex >= 0)
         (*thisPd).showParticle[thisPolymerAtomIndex] = showPolymerAtomCb->isChecked();
 
-    switch ( showPolymerAtomCb->isChecked() ) {
-    case TRUE:
+    if ( showPolymerAtomCb->isChecked() ) {
         if (thisPolymerAtomIndex >= 0) {
             this->buildLayout( (*thisPd).colorCrit[thisPolymerAtomIndex] );
         }
         else {
             this->buildLayout( TYPE );
-            colorButton->setDisabled( FALSE );
+            colorButton->setDisabled(false);
         }
-        break;
-    case FALSE:
+    } else {
         this->buildLayout( TYPE );
-        colorButton->setDisabled( TRUE );
-        break;
+        colorButton->setDisabled(true);
     }
 }
 
@@ -451,16 +439,16 @@ void PolymerBoard::readToggles()
         // update the particle data entry
         sizeBox->readToggles( thisPd, thisPolymerAtomIndex);
 
-        if (colorMode0->isChecked() == TRUE) {
+        if (colorMode0->isChecked()) {
             (*thisPd).colorCrit[thisPolymerAtomIndex] = TYPE;
         }
-        if (colorMode1->isChecked() == TRUE) {
+        if (colorMode1->isChecked()) {
             (*thisPd).colorCrit[thisPolymerAtomIndex] = POSITION;
         }
-        if (colorMode2->isChecked() == TRUE) {
+        if (colorMode2->isChecked()) {
             (*thisPd).colorCrit[thisPolymerAtomIndex] = PROPERTY;
         }
-        if (colorMode3->isChecked() == TRUE) {
+        if (colorMode3->isChecked()) {
             (*thisPd).colorCrit[thisPolymerAtomIndex] = COLORCODE;
         }
     }
@@ -477,7 +465,7 @@ void PolymerBoard::readToggles()
 void PolymerBoard::setColorCb()
 {
     // Set a flag
-    showColorBoard = TRUE;
+    showColorBoard = true;
 
     // Adjust the color board
     this->setColors();
@@ -652,7 +640,7 @@ void PolymerBoard::getColors( float r0, float g0, float b0, float r1, float g1, 
 void PolymerBoard::setDotStyle()
 {	
     polymerAtomRenderStyle = PADOT;
-    sizeBox->setDisabled( TRUE );
+    sizeBox->setDisabled(true);
 }
 
 
@@ -660,7 +648,7 @@ void PolymerBoard::setDotStyle()
 void PolymerBoard::setLineStyle()
 {	
     polymerAtomRenderStyle = PALINE;
-    sizeBox->setDisabled( TRUE );
+    sizeBox->setDisabled(true);
 }
 
 
@@ -668,7 +656,7 @@ void PolymerBoard::setLineStyle()
 void PolymerBoard::setCubeStyle()
 {	
     polymerAtomRenderStyle = PACUBE;
-    sizeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
 }
 
 
@@ -676,7 +664,7 @@ void PolymerBoard::setCubeStyle()
 void PolymerBoard::setCylinderStyle()
 {	
     polymerAtomRenderStyle = PACYLINDER;
-    sizeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
 }
 
 
@@ -684,7 +672,7 @@ void PolymerBoard::setCylinderStyle()
 void PolymerBoard::setConeStyle()
 {	
     polymerAtomRenderStyle = PACONE;
-    sizeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
 }
 
 
@@ -692,7 +680,7 @@ void PolymerBoard::setConeStyle()
 void PolymerBoard::setSphereStyle()
 {	
     polymerAtomRenderStyle = PASPHERE;
-    sizeBox->setDisabled( FALSE );
+    sizeBox->setDisabled(false);
 }
 
 
@@ -720,7 +708,7 @@ void PolymerBoard::setFinalQuality()
 // Set a flag when the color board is closed
 void PolymerBoard::closeColorBoard()
 {
-    showColorBoard = FALSE;
+    showColorBoard = false;
 
     if (cb)
         cb->~ColorBoard();

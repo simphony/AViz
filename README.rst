@@ -28,6 +28,8 @@ AViz requires the following:
   - X11
   - PNG development library (i.e. libpng-dev)
 
+For Qt > 5, `Qt X11 Extras` is needed (i.e. on Ubuntu, install `libqt5x11extras5-dev` package).
+
 To build avis, run::
 
   cd src

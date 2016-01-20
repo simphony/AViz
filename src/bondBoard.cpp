@@ -274,22 +274,16 @@ void BondBoard::setData()
 
         for (i=0;i<(*thisPd).numberOfParticleTypes;i++) {
             // Check: is this particle type really needed?
-            bool needed = false;
             for (int j=0;j<(*ad).numberOfParticles;j++) {
                 if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i]) == true) {
-                    // Yes it is needed: set a flag
-                    needed = true;
+                    // Add the item to the list
+                    fParticleCob->addItem(QString( (char *)&(*thisPd).type[i]));
+                    tParticleCob->addItem(QString( (char *)&(*thisPd).type[i]));
+                    // Set flags
+                    haveFEntry = true;
+                    haveTEntry = true;
                     break;
                 }
-            }
-
-            // Add the item to the list
-            if (needed) {
-                fParticleCob->addItem(QString( (char *)&(*thisPd).type[i]));
-                tParticleCob->addItem(QString( (char *)&(*thisPd).type[i]));
-                // Set flags
-                haveFEntry = true;
-                haveTEntry = true;
             }
         }
         fParticleCob->setMinimumSize( fParticleCob->sizeHint() );

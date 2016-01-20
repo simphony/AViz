@@ -72,19 +72,19 @@ void SizeBox::setParticle( particleData * thisPd, int thisIndex )
 
         switch (relSize) {
         case REGULAR:
-            rSize0->setChecked( TRUE );
+            rSize0->setChecked(true);
             break;
         case TINY:
-            rSize1->setChecked( TRUE );
+            rSize1->setChecked(true);
             break;
         case SMALL:
-            rSize2->setChecked( TRUE );
+            rSize2->setChecked(true);
             break;
         case LARGE:
-            rSize3->setChecked( TRUE );
+            rSize3->setChecked(true);
             break;
         case HHUGE:
-            rSize4->setChecked( TRUE );
+            rSize4->setChecked(true);
             break;
         }
     }

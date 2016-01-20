@@ -135,18 +135,12 @@ void TrackBoard::setData() {
         typeCob->clear();
         for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
             // Check: is this particle type really needed?
-            bool needed = FALSE;
             for (int j=0;j<(*ad).numberOfParticles;j++) {
-                if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i]) == TRUE) {
-                    // Yes it is needed: set a flag
-                    needed = TRUE;
+                if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
+                    // Add the item to the list
+                    typeCob->addItem(QString( (char *)&(*thisPd).type[i]));
                     break;
                 }
-            }
-
-            // Add the item to the list
-            if (needed) {
-                typeCob->addItem(QString( (char *)&(*thisPd).type[i]));
             }
         }
         typeCob->setMinimumSize( typeCob->sizeHint() );
@@ -183,7 +177,7 @@ void TrackBoard::setType() {
     typeCopy( qPrintable(typeCob->currentText()), (char *)&thisType);
 
     for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
-        if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisType) == TRUE) {
+        if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisType)) {
             // Found the correct entry
             thisTypeIndex = i;
 
@@ -213,7 +207,7 @@ void TrackBoard::showTracks()
 
         // Update the view parameters
         viewParam * vp = mainForm->getViewParam();
-        (*vp).showTracks = TRUE;
+        (*vp).showTracks = true;
 
         // Read the current settings (the button is similar
         // to the apply button)
@@ -232,7 +226,7 @@ void TrackBoard::showTracks()
 
         // Update the view parameters
         viewParam * vp = mainForm->getViewParam();
-        (*vp).showTracks = FALSE;
+        (*vp).showTracks = false;
 
         // Update the rendering
         mainForm->updateRendering();

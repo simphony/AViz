@@ -61,13 +61,13 @@ void PositionBox::setParticle( particleData * thisPd, int thisIndex )
         colorCriterionPos colorCritPos = (*thisPd).colorCritPos[thisIndex];
         switch (colorCritPos) {
         case XPOS:
-            xcoord->setChecked( TRUE );
+            xcoord->setChecked(true);
             break;
         case YPOS:
-            ycoord->setChecked( TRUE );
+            ycoord->setChecked(true);
             break;
         case ZPOS:
-            zcoord->setChecked( TRUE );
+            zcoord->setChecked(true);
             break;
         }
     }
@@ -78,13 +78,13 @@ void PositionBox::setParticle( particleData * thisPd, int thisIndex )
 void PositionBox::readToggles( particleData * thisPd, int thisIndex )
 {
     if (thisIndex >= 0 && thisPd) {
-        if (xcoord->isChecked() == TRUE) {
+        if (xcoord->isChecked()) {
             (*thisPd).colorCritPos[thisIndex] = XPOS;
         }
-        if (ycoord->isChecked() == TRUE) {
+        if (ycoord->isChecked()) {
             (*thisPd).colorCritPos[thisIndex] = YPOS;
         }
-        if (zcoord->isChecked() == TRUE) {
+        if (zcoord->isChecked()) {
             (*thisPd).colorCritPos[thisIndex] = ZPOS;
         }
     }

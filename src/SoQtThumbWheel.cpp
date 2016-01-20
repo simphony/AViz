@@ -32,6 +32,7 @@ static const char rcsid[] =
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QPalette>
+#include <qdrawutil.h>
 
 #include "SoAnyThumbWheel.h"
 #include "SoQtThumbWheel.h"
