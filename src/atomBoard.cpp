@@ -722,8 +722,7 @@ void AtomBoard::getColorBoardPos( int posX, int posY )
 // Launch the bond board
 void AtomBoard::bbonds()
 {
-    if (mainForm)
-        mainForm->launchBonds();
+    mainForm->launchBonds();
 }
 
 
@@ -738,16 +737,13 @@ void AtomBoard::bdone()
     char * filename = (char *)malloc(BUFSIZ);
     sprintf(filename, "%s/.aviz/%s", getenv("HOME"), particleDataFile);
     if (saveParticleDataFunction( filename, thisPd ) ) {
-        if (mainForm)
-            mainForm->statusMessage( "Saved particle data in ", filename );
+        mainForm->statusMessage( "Saved particle data in ", filename );
     }
     free(filename);
 
     // Re-do the graphics, using the new particle data
-    if (mainForm) {
-        mainForm->updateView();
-        mainForm->updateRendering();
-    }
+    mainForm->updateView();
+    mainForm->updateRendering();
 
     // Set a flag
     this->closeColorBoard();
@@ -767,16 +763,13 @@ void AtomBoard::bapply()
     char * filename = (char *)malloc(BUFSIZ);
     sprintf(filename, "%s/.aviz/%s", getenv("HOME"), particleDataFile);
     if (saveParticleDataFunction( filename, thisPd ) ) {
-        if (mainForm)
-            mainForm->statusMessage( "Saved particle data in ", filename );
+        mainForm->statusMessage( "Saved particle data in ", filename );
     }
     free(filename);
 
     // Re-do the graphics, using the new particle data
-    if (mainForm) {
-        mainForm->updateView();
-        mainForm->updateRendering();
-    }
+    mainForm->updateView();
+    mainForm->updateRendering();
 }
 
 
