@@ -257,31 +257,31 @@ void AtomBoard::setData()
     AggregateData * ad = NULL;
     tag tmp;
 
-    if (mainForm) {
-        // Get the current settings and register
-        // it using a local particle data structure
-        thisPd = mainForm->getParticleData();
+    // Get the current settings and register
+    // it using a local particle data structure
+    thisPd = mainForm->getParticleData();
 
-        // Get a list of particles that are currently rendered
-        ad = mainForm->getAggregateData();
+    // Get a list of particles that are currently rendered
+    ad = mainForm->getAggregateData();
 
-        // Make entries in the combo box -- use only particle
-        // types that are really needed; otherwise the list
-        // gets too long
-        if (atomCob) {
-            atomCob->clear();
-            for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
-                // Check: is this particle type really needed?
-                for (int j=0;j<(*ad).numberOfParticles;j++) {
-                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
-                        // Add the item to the list
-                        atomCob->addItem(QString( (char *)&(*thisPd).type[i]));
-                        break;
-                    }
+    propertyBox->setPropertyInformation(ad->propertiesInformation);
+
+    // Make entries in the combo box -- use only particle
+    // types that are really needed; otherwise the list
+    // gets too long
+    if (atomCob) {
+        atomCob->clear();
+        for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
+            // Check: is this particle type really needed?
+            for (int j=0;j<(*ad).numberOfParticles;j++) {
+                if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
+                    // Add the item to the list
+                    atomCob->addItem(QString( (char *)&(*thisPd).type[i]));
+                    break;
                 }
             }
-            atomCob->setMinimumSize( atomCob->sizeHint() );
         }
+        atomCob->setMinimumSize( atomCob->sizeHint() );
     }
 
     // Sort the entries alphabetically, at least approximately
@@ -334,7 +334,7 @@ void AtomBoard::setAtom()
                 else {
                     m_colorCriterionWidget->setDisabled(true);
                 }
-	    } else {
+            } else {
                 sizeBox->setDisabled(true);
                 m_colorCriterionWidget->setDisabled(true);
                 break;
