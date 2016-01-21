@@ -134,7 +134,7 @@ QList<PropertyInformation> parsePropertyInformation(QStringList propertyInformat
 
         QString line = propertyInformation.takeFirst();
         line = line.trimmed();
-        if(line.startsWith("-name:")) {
+        if(line.startsWith("- name:")) {
             line.remove(0, line.indexOf(":")+1);
 
             PropertyInformation info;
