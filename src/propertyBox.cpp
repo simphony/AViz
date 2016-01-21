@@ -52,7 +52,7 @@ PropertyBox::PropertyBox( QWidget * parent)
 
 void PropertyBox::setPropertyInformation(const QList<PropertyInformation>& propertyInformation){
     for(auto i=0; i<8; i++) {
-        QString info = (i<propertyInformation.size()) ? propertyInformation[0].name : "";
+        QString info = (i<propertyInformation.size()) ? propertyInformation[i].name : "";
         m_propertyRadioButtons[i]->setToolTip(info);
     }
 }

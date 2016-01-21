@@ -143,7 +143,6 @@ QList<PropertyInformation> parsePropertyInformation(QStringList propertyInformat
 
             auto propertyNumber = lineNumber - 1;
             QString msg = QString("Property (#%1): %2").arg(propertyNumber).arg(info.name);
-            std::cout << qPrintable(msg) <<std::endl;
         } else {
            QString msg = QString("Error parsing %1 line in property information section").arg(lineNumber);
            throw aviz::parse_error (qPrintable(msg));
