@@ -500,7 +500,7 @@ viewObject GLCanvasFrame::getObjectData()
     vo.p5min = p5min;
     vo.p6min = p6min;
     vo.p7min = p7min;
-    vo.p8min = p7min;
+    vo.p8min = p8min;
     vo.p1max = p1max;
     vo.p2max = p2max;
     vo.p3max = p3max;
