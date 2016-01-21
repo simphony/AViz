@@ -29,7 +29,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QRadioButton>
+#include <QComboBox>
 
 #include "aggregateData.h"
 
@@ -42,18 +42,23 @@ PropertyBox::PropertyBox( QWidget * parent)
     QGroupBox *property = new QGroupBox();
     propertyBox->addWidget(property);
 
+    m_propertyCB = new QComboBox(property);
+
     QHBoxLayout *hBox = new QHBoxLayout(property);
-    for(auto i=0; i<8; i++) {
-        QRadioButton *rb = new QRadioButton(QString::number(i));
-        m_propertyRadioButtons.push_back(rb);
-        hBox->addWidget(rb);
-    }
+    hBox->addWidget(m_propertyCB);
+
+    // initialize combo box with default entries
+    setPropertyInformation(QList<PropertyInformation>());
 }
 
 void PropertyBox::setPropertyInformation(const QList<PropertyInformation>& propertyInformation){
+    m_propertyCB->clear();
     for(auto i=0; i<8; i++) {
-        QString info = (i<propertyInformation.size()) ? propertyInformation[i].name : "";
-        m_propertyRadioButtons[i]->setToolTip(info);
+        QString info = QString("Property %1").arg(i);
+        if (i<propertyInformation.size()) {
+            info += QString(": %1").arg(propertyInformation[i].name);
+        }
+        m_propertyCB->addItem(info);
     }
 }
 
@@ -61,18 +66,13 @@ void PropertyBox::setPropertyInformation(const QList<PropertyInformation>& prope
 void PropertyBox::setParticle( particleData * thisPd, int thisIndex ) {
     if (thisIndex >= 0) {
         colorCriterionColumn colorCritProp = (*thisPd).colorCritProp[thisIndex];
-        m_propertyRadioButtons[colorCritProp]->setChecked(true);
+        m_propertyCB->setCurrentIndex(colorCritProp);
     }
 }
 
 // Read the controls
-void PropertyBox::readToggles( particleData * thisPd, int thisIndex )
-{
-    if (thisIndex >= 0 && thisPd) {
-        for(auto i=0; i<8; i++) {
-            if (m_propertyRadioButtons[i]->isChecked()) {
-                (*thisPd).colorCritProp[thisIndex] = colorCriterionColumn(i);
-            }
-        }
+void PropertyBox::readToggles( particleData * thisPd, int thisIndex ) {
+    if (thisIndex >= 0) {
+        (*thisPd).colorCritProp[thisIndex] = colorCriterionColumn(m_propertyCB->currentIndex());
     }
 }

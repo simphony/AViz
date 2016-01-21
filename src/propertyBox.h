@@ -31,7 +31,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 #include "data.h"
 
-class QRadioButton;
+class QComboBox;
 class PropertyInformation;
 
 /*! @class PropertyBox
@@ -50,7 +50,7 @@ public:
     void setPropertyInformation(const QList<PropertyInformation>& propertyInformation);
 
 private:
-    QList<QRadioButton*> m_propertyRadioButtons;
+    QComboBox *m_propertyCB;
 };
 
 #endif // PROPBO_H
