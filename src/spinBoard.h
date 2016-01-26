@@ -54,10 +54,9 @@ class SpinBoard: public QDialog
 {
     Q_OBJECT
 public:
-    SpinBoard(QWidget * parent=0);
+    SpinBoard(MainForm *mainForm, QWidget * parent=0);
 
 public slots:
-    void setMainFormAddress( MainForm * );
     void setData();
     void getColors( float, float, float, float, float, float );
     void getColorBoardPos( int, int );

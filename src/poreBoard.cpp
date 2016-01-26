@@ -53,8 +53,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 
 // Make a popup dialog box 
-PoreBoard::PoreBoard(QWidget * parent)
-    : QDialog(parent)
+PoreBoard::PoreBoard(MainForm *mainForm, QWidget * parent)
+    : QDialog(parent), mainForm(mainForm)
 {
     setWindowTitle( "AViz: Set Pores" );
 
@@ -196,15 +196,6 @@ PoreBoard::PoreBoard(QWidget * parent)
     this->buildLayout( TYPE );
 }
 
-
-// Set a pointer to the main form
-void PoreBoard::setMainFormAddress( MainForm * thisMF )
-{
-    mainForm = thisMF;
-}
-
-
-
 // Build the layout
 void PoreBoard::buildLayout( colorCriterion crit ) {
 
@@ -271,30 +262,28 @@ void PoreBoard::setData()
 
     propertyBox->setPropertyInformation(ad->propertiesInformation);
 
-    if (mainForm) {
-        // Get the current switch settings and register
-        // it using a local particle data structure
-        thisPd = mainForm->getParticleData();
+    // Get the current switch settings and register
+    // it using a local particle data structure
+    thisPd = mainForm->getParticleData();
 
-        // Get a list of particles that are currently rendered
+    // Get a list of particles that are currently rendered
 
-        // Make entries in the combo box -- use only particle
-        // types that are really needed; otherwise the list
-        // gets too long
-        if (poreCob) {
-            poreCob->clear();
-            for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
-                // Check: is this particle type really needed?
-                for (int j=0;j<(*ad).numberOfParticles;j++) {
-                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
-                        // Add the item to the list
-                        poreCob->addItem( QString( (char *)&(*thisPd).type[i]));
-                        break;
-                    }
+    // Make entries in the combo box -- use only particle
+    // types that are really needed; otherwise the list
+    // gets too long
+    if (poreCob) {
+        poreCob->clear();
+        for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
+            // Check: is this particle type really needed?
+            for (int j=0;j<(*ad).numberOfParticles;j++) {
+                if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
+                    // Add the item to the list
+                    poreCob->addItem( QString( (char *)&(*thisPd).type[i]));
+                    break;
                 }
             }
-            poreCob->setMinimumSize( poreCob->sizeHint() );
         }
+        poreCob->setMinimumSize( poreCob->sizeHint() );
     }
 
     // Sort the entries alphabetically, at least approximately
@@ -845,16 +834,13 @@ void PoreBoard::bdone()
     char * filename = (char *)malloc(BUFSIZ);
     sprintf(filename, "%s/.aviz/%s", getenv("HOME"), particleDataFile);
     if (saveParticleDataFunction( filename, thisPd ) ) {
-        if (mainForm)
-            mainForm->statusMessage( "Saved pore data in ", filename );
+        mainForm->statusMessage( "Saved pore data in ", filename );
     }
     free(filename);
 
     // Re-do the graphics, using the new particle data
-    if (mainForm) {
-        mainForm->updateView();
-        mainForm->updateRendering();
-    }
+    mainForm->updateView();
+    mainForm->updateRendering();
 
     // Hide now
     hide();
@@ -871,16 +857,13 @@ void PoreBoard::bapply()
     char * filename = (char *)malloc(BUFSIZ);
     sprintf(filename, "%s/.aviz/%s", getenv("HOME"), particleDataFile);
     if (saveParticleDataFunction( filename, thisPd ) ) {
-        if (mainForm)
             mainForm->statusMessage( "Saved pore data in ", filename );
     }
     free(filename);
 
     // Re-do the graphics, using the new particle data
-    if (mainForm) {
         mainForm->updateView();
         mainForm->updateRendering();
-    }
 }
 
 

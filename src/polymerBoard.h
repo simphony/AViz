@@ -53,10 +53,9 @@ class PolymerBoard: public QDialog
 {
     Q_OBJECT
 public:
-    PolymerBoard(QWidget * parent=0);
+    PolymerBoard(MainForm *mainForm, QWidget * parent=0);
 
 public slots:
-    void setMainFormAddress( MainForm * );
     void setData();
     void getColors( float, float, float, float, float, float );
     void getColorBoardPos( int, int );

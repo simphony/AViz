@@ -58,7 +58,7 @@ ColorLabel* createColorLabel(QHBoxLayout* layout, QWidget *parent) {
 }
 
 // Make a popup dialog box 
-AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent )
+AtomBoard::AtomBoard(MainForm *mainForm, QWidget * parent)
     : QDialog( parent ),
       mainForm(mainForm)
 {

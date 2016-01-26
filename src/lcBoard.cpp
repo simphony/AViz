@@ -52,8 +52,8 @@ Contact address: Computational Physics Group, Dept. of Physics,
 
 
 // Make a popup dialog box 
-LcBoard::LcBoard(QWidget * parent)
-    : QDialog(parent)
+LcBoard::LcBoard(MainForm *mainForm, QWidget * parent)
+    : QDialog(parent), mainForm(mainForm)
 {
     setWindowTitle( "AViz: Set Liquid Crystals" );
 
@@ -191,13 +191,6 @@ LcBoard::LcBoard(QWidget * parent)
 
     // Build default layout
     this->buildLayout( TYPE );
-}
-
-
-// Set a pointer to the main form
-void LcBoard::setMainFormAddress( MainForm * thisMF )
-{
-    mainForm = thisMF;
 }
 
 

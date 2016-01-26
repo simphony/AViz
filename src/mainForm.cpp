@@ -91,17 +91,13 @@ MainForm::MainForm(QWidget *parent, AViz *aviz)
     // Create some of the more important boards
     ab = new AtomBoard(this/*mainForm*/, this /*parent*/);
 
-    sb = new SpinBoard(this);
-    sb->setMainFormAddress(this);
+    sb = new SpinBoard(this/*mainForm*/, this /*parent*/);
 
-    lcb = new LcBoard(this);
-    lcb->setMainFormAddress(this);
+    lcb = new LcBoard(this/*mainForm*/, this /*parent*/);
 
-    plb = new PolymerBoard(this);
-    plb->setMainFormAddress(this);
+    plb = new PolymerBoard(this/*mainForm*/, this /*parent*/);
 
-    pb = new PoreBoard(this);
-    pb->setMainFormAddress(this);
+    pb = new PoreBoard(this/*mainForm*/, this /*parent*/);
 
     // Fix the geometry of this panel so that
     // the above widgets are all kept small
