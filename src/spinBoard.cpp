@@ -262,12 +262,12 @@ void SpinBoard::setData()
     // Get a list of particles that are currently rendered
     AggregateData *ad = mainForm->getAggregateData();
 
+    propertyBox->setPropertyInformation(ad->propertiesInformation);
+
     if (mainForm) {
         // Get the current switch settings and register
         // it using a local particle data structure
         thisPd = mainForm->getParticleData();
-
-
 
         // Make entries in the combo box -- use only particle
         // types that are really needed; otherwise the list

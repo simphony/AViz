@@ -265,6 +265,8 @@ void PolymerBoard::setData()
     // Get a list of particles that are currently rendered
     AggregateData *ad = mainForm->getAggregateData();
 
+    propertyBox->setPropertyInformation(ad->propertiesInformation);
+
     if (mainForm) {
         // Get the current settings and register
         // it using a local particle data structure

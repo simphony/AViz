@@ -269,6 +269,8 @@ void PoreBoard::setData()
 {
     AggregateData *ad = mainForm->getAggregateData();
 
+    propertyBox->setPropertyInformation(ad->propertiesInformation);
+
     if (mainForm) {
         // Get the current switch settings and register
         // it using a local particle data structure
