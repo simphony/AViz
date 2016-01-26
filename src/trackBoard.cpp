@@ -39,6 +39,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "mainForm.h"
 #include "fileFunctions.h"
 #include "widgets/doneapplycancelwidget.h"
+#include "aggregateData.h"
 
 // Make a popup dialog box 
 TrackBoard::TrackBoard(MainForm* mainForm, QWidget * parent)
@@ -126,7 +127,7 @@ void TrackBoard::setData() {
     thisPd = mainForm->getParticleData();
 
     // Get a list of particles that are currently rendered
-    aggregateData * ad = mainForm->getAggregateData();
+    AggregateData * ad = mainForm->getAggregateData();
 
     // Make entries in the combo box -- use only particle
     // types that are really needed; otherwise the list

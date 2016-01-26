@@ -27,13 +27,17 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #ifndef PROPERTY_BOX_H
 #define PROPERTY_BOX_H
 
-#include "data.h"
-
 #include <QWidget>
 
-class QRadioButton;
+#include "data.h"
 
-// Property box widget
+class QComboBox;
+class PropertyInformation;
+
+/*! @class PropertyBox
+    @brief Widget to select one of the 8 properties
+
+*/
 class PropertyBox: public QWidget
 {
 public:
@@ -42,15 +46,11 @@ public:
     void setParticle( particleData *, int );
     void readToggles( particleData *, int );
 
+    /// set property information
+    void setPropertyInformation(const QList<PropertyInformation>& propertyInformation);
+
 private:
-    QRadioButton * prop1;
-    QRadioButton * prop2;
-    QRadioButton * prop3;
-    QRadioButton * prop4;
-    QRadioButton * prop5;
-    QRadioButton * prop6;
-    QRadioButton * prop7;
-    QRadioButton * prop8;
+    QComboBox *m_propertyCB;
 };
 
 #endif // PROPBO_H

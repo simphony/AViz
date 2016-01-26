@@ -308,7 +308,7 @@ void GLCanvasArea::setViewParam( viewParam thisVp )
 
 
 // Return a pointer to the molecule data currently used in the rendering
-aggregateData * GLCanvasArea::getAggregateData() 
+AggregateData * GLCanvasArea::getAggregateData()
 {
     return &ad;
 }

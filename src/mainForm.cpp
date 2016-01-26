@@ -52,6 +52,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "glCanvasFrame.h"
 #include "renderStyleBox.h"
 #include "liveBox.h"
+#include "aggregateData.h"
 
 // 
 // Main form: implements drawing control elements
@@ -90,17 +91,13 @@ MainForm::MainForm(QWidget *parent, AViz *aviz)
     // Create some of the more important boards
     ab = new AtomBoard(this/*mainForm*/, this /*parent*/);
 
-    sb = new SpinBoard(this);
-    sb->setMainFormAddress(this);
+    sb = new SpinBoard(this/*mainForm*/, this /*parent*/);
 
-    lcb = new LcBoard(this);
-    lcb->setMainFormAddress(this);
+    lcb = new LcBoard(this/*mainForm*/, this /*parent*/);
 
-    plb = new PolymerBoard(this);
-    plb->setMainFormAddress(this);
+    plb = new PolymerBoard(this/*mainForm*/, this /*parent*/);
 
-    pb = new PoreBoard(this);
-    pb->setMainFormAddress(this);
+    pb = new PoreBoard(this/*mainForm*/, this /*parent*/);
 
     // Fix the geometry of this panel so that
     // the above widgets are all kept small
@@ -140,7 +137,7 @@ bool MainForm::isKeepViewObject() {
 
 // Read a file
 void MainForm::readFile( const QString &fn ) {
-    aggregateData * ad = getAggregateData();;
+    AggregateData * ad = getAggregateData();;
     viewParam thisVp;
 
     if ( !fn.isEmpty() ) {
@@ -461,7 +458,7 @@ void MainForm::updateView() {
 
 
 // Return a pointer to the current data to the main panel
-aggregateData * MainForm::getAggregateData()
+AggregateData * MainForm::getAggregateData()
 {
     return glCanvasFrame->getAggregateData();
 }

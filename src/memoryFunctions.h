@@ -28,11 +28,12 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #define MEM_H
 
 #include "data.h"
+class AggregateData;
 
 void allocateParticleData( particleData * );
-void allocateAggregateData( aggregateData * );
+void allocateAggregateData( AggregateData * );
 
-void freeAggregateData( aggregateData * );
+void freeAggregateData( AggregateData * );
 void freeTrackData( trackData * );
 
 #endif // MEM_H

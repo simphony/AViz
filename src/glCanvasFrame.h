@@ -40,6 +40,8 @@ class QFrame;
 class MainForm;
 class SoQtThumbWheel;
 
+class AggregateData;
+
 // Frame widget containing the Open GL drawing area
 class GLCanvasFrame: public QWidget
 {
@@ -69,7 +71,7 @@ public slots:
     void startAutoZoom2();
     void computeTransformation( double, double, double, double, double *, double *, double * );
 
-    aggregateData * getAggregateData();
+    AggregateData * getAggregateData();
     viewParam * getViewParam();
     viewObject * getViewObject();
     particleData * getParticleData();

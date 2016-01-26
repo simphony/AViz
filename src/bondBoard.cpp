@@ -49,6 +49,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "./pixmaps/silverSquare2.xpm"
 #include "./pixmaps/bronzeSquare2.xpm"
 
+#include "aggregateData.h"
 #include "floatSpin.h"
 #include "mainForm.h"
 #include "fileFunctions.h"
@@ -254,15 +255,12 @@ BondBoard::BondBoard(MainForm *mainForm, QWidget * parent)
 // board is launched
 void BondBoard::setData()
 {
-    int i;
-    aggregateData * ad = NULL;
-
     // Get the current settings and register
     // it using a local particle data structure
     thisPd = mainForm->getParticleData();
 
     // Get a list of particles that are currently rendered
-    ad = mainForm->getAggregateData();
+    AggregateData *ad = mainForm->getAggregateData();
 
     // Make entries in the combo box -- use only particle
     // types that are really needed; otherwise the list
@@ -272,7 +270,7 @@ void BondBoard::setData()
         fParticleCob->clear();
         tParticleCob->clear();
 
-        for (i=0;i<(*thisPd).numberOfParticleTypes;i++) {
+        for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
             // Check: is this particle type really needed?
             for (int j=0;j<(*ad).numberOfParticles;j++) {
                 if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i]) == true) {
@@ -292,7 +290,7 @@ void BondBoard::setData()
 
     // Sort the entries alphabetically, at least approximately
     if (haveFEntry && haveTEntry) {
-        for (i=0;i<(*thisPd).numberOfParticleTypes;i++) {
+        for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
             for (int j=0;j<fParticleCob->count()-1;j++) {
                 if (QString::compare(fParticleCob->itemText(j), fParticleCob->itemText(j+1)) > 0) {
                     fParticleCob->removeItem(j);
@@ -306,7 +304,7 @@ void BondBoard::setData()
 
     // Now go through the bond data structure and make new entries
     // if needed
-    for (i=0;i<(*thisPd).numberOfParticleTypes;i++) {
+    for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
         for (int j=0;j<(*thisPd).numberOfParticleTypes;j++) {
             bool flag = false;
             for (int k=0;k<(*thisPd).particleBonds[i].numberOfNeighborBonds;k++) {
@@ -354,7 +352,7 @@ void BondBoard::setData()
     if (haveTEntry)
         typeCopy( qPrintable(tParticleCob->currentText()), (char *)&thisTParticle );
 
-    for (i=0;i<(*thisPd).numberOfParticleTypes;i++) {
+    for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
         if (typeCmp( (char *)&(*thisPd).type[i], (char *)&thisTParticle ) == true) {
             for (int j=0;j<(*thisPd).particleBonds[i].numberOfNeighborBonds;j++) {
                 if (typeCmp( (char *)&(*thisPd).particleBonds[i].neighborParticleType[j], (char *)&thisFParticle ) == true) {

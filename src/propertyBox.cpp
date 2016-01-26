@@ -29,10 +29,10 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QRadioButton>
+#include <QComboBox>
 
+#include "aggregateData.h"
 
-// Make a box 
 PropertyBox::PropertyBox( QWidget * parent)
     : QWidget( parent ) {
     QHBoxLayout *propertyBox = new QHBoxLayout( this);
@@ -42,88 +42,37 @@ PropertyBox::PropertyBox( QWidget * parent)
     QGroupBox *property = new QGroupBox();
     propertyBox->addWidget(property);
 
-    prop1 = new QRadioButton("1");
-    prop2 = new QRadioButton("2");
-    prop3 = new QRadioButton("3");
-    prop4 = new QRadioButton("4");
-    prop5 = new QRadioButton("5");
-    prop6 = new QRadioButton("6");
-    prop7 = new QRadioButton("7");
-    prop8 = new QRadioButton("8");
+    m_propertyCB = new QComboBox(property);
 
     QHBoxLayout *hBox = new QHBoxLayout(property);
-    hBox->addWidget(prop1);
-    hBox->addWidget(prop2);
-    hBox->addWidget(prop3);
-    hBox->addWidget(prop4);
-    hBox->addWidget(prop5);
-    hBox->addWidget(prop6);
-    hBox->addWidget(prop7);
+    hBox->addWidget(m_propertyCB);
+
+    // initialize combo box with default entries
+    setPropertyInformation(QList<PropertyInformation>());
 }
 
-
-// Adjust the controls
-void PropertyBox::setParticle( particleData * thisPd, int thisIndex )
-{
-    if (thisIndex >= 0) {
-        colorCriterionColumn colorCritProp = (*thisPd).colorCritProp[thisIndex];
-        switch (colorCritProp) {
-        case PROP1:
-            prop1->setChecked(true);
-            break;
-        case PROP2:
-            prop2->setChecked(true);
-            break;
-        case PROP3:
-            prop3->setChecked(true);
-            break;
-        case PROP4:
-            prop4->setChecked(true);
-            break;
-        case PROP5:
-            prop5->setChecked(true);
-            break;
-        case PROP6:
-            prop6->setChecked(true);
-            break;
-        case PROP7:
-            prop7->setChecked(true);
-            break;
-        case PROP8:
-            prop8->setChecked(true);
-            break;
+void PropertyBox::setPropertyInformation(const QList<PropertyInformation>& propertyInformation){
+    m_propertyCB->clear();
+    for(auto i=0; i<8; i++) {
+        QString info = QString("Property %1").arg(i);
+        if (i<propertyInformation.size()) {
+            info += QString(": %1").arg(propertyInformation[i].name);
         }
+        m_propertyCB->addItem(info);
     }
 }
 
+// Adjust the controls
+void PropertyBox::setParticle( particleData * thisPd, int thisIndex ) {
+    if (thisIndex >= 0) {
+        colorCriterionColumn colorCritProp = (*thisPd).colorCritProp[thisIndex];
+        m_propertyCB->setCurrentIndex(colorCritProp);
+    }
+}
 
 // Read the controls
-void PropertyBox::readToggles( particleData * thisPd, int thisIndex )
-{
-    if (thisIndex >= 0 && thisPd) {
-        if (prop1->isChecked()) {
-            (*thisPd).colorCritProp[thisIndex] = PROP1;
-        }
-        if (prop2->isChecked()) {
-            (*thisPd).colorCritProp[thisIndex] = PROP2;
-        }
-        if (prop3->isChecked()) {
-            (*thisPd).colorCritProp[thisIndex] = PROP3;
-        }
-        if (prop4->isChecked()) {
-            (*thisPd).colorCritProp[thisIndex] = PROP4;
-        }
-        if (prop5->isChecked()) {
-            (*thisPd).colorCritProp[thisIndex] = PROP5;
-        }
-        if (prop6->isChecked()) {
-            (*thisPd).colorCritProp[thisIndex] = PROP6;
-        }
-        if (prop7->isChecked()) {
-            (*thisPd).colorCritProp[thisIndex] = PROP7;
-        }
-        if (prop8->isChecked()) {
-            (*thisPd).colorCritProp[thisIndex] = PROP8;
-        }
+void PropertyBox::readToggles( particleData * thisPd, int thisIndex ) {
+    if (thisIndex >= 0) {
+        (*thisPd).colorCritProp[thisIndex] = colorCriterionColumn(m_propertyCB->currentIndex());
     }
 }

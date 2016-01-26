@@ -48,11 +48,12 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "fileFunctions.h"
 #include "defaultParticles.h" // typeCopy, typeCmp
 #include "widgets/doneapplycancelwidget.h"
+#include "aggregateData.h"
 
 
 // Make a popup dialog box 
-LcBoard::LcBoard(QWidget * parent)
-    : QDialog(parent)
+LcBoard::LcBoard(MainForm *mainForm, QWidget * parent)
+    : QDialog(parent), mainForm(mainForm)
 {
     setWindowTitle( "AViz: Set Liquid Crystals" );
 
@@ -193,13 +194,6 @@ LcBoard::LcBoard(QWidget * parent)
 }
 
 
-// Set a pointer to the main form
-void LcBoard::setMainFormAddress( MainForm * thisMF )
-{
-    mainForm = thisMF;
-}
-
-
 // Build the layout
 void LcBoard::buildLayout( colorCriterion crit ) {
     // Destroy existing layout
@@ -262,16 +256,17 @@ void LcBoard::buildLayout( colorCriterion crit ) {
 // types; this function is called each time the board is launched
 void LcBoard::setData()
 {
-    aggregateData * ad = NULL;
     tag tmp;
+
+    // Get a list of particles that are currently rendered
+    auto ad = mainForm->getAggregateData();
+
+    propertyBox->setPropertyInformation(ad->propertiesInformation);
 
     if (mainForm) {
         // Get the current switch settings and register
         // it using a local particle data structure
         thisPd = mainForm->getParticleData();
-
-        // Get a list of particles that are currently rendered
-        ad = mainForm->getAggregateData();
 
         // Make entries in the combo box -- use only atoms
         // types that are really needed; otherwise the list

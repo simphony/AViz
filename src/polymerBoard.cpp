@@ -47,10 +47,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "propertyBox.h"
 #include "sizeBox.h"
 #include "widgets/doneapplycancelwidget.h"
+#include "aggregateData.h"
 
 // Make a popup dialog box 
-PolymerBoard::PolymerBoard(QWidget * parent)
-    : QDialog(parent)
+PolymerBoard::PolymerBoard(MainForm *mainForm, QWidget * parent)
+    : QDialog(parent), mainForm(mainForm)
 {
     setWindowTitle( "AViz: Set Polymer Atom Types" );
 
@@ -197,14 +198,6 @@ PolymerBoard::PolymerBoard(QWidget * parent)
     this->buildLayout( TYPE );
 }
 
-
-// Set a pointer to the main form
-void PolymerBoard::setMainFormAddress( MainForm * thisMF )
-{
-    mainForm = thisMF;
-}
-
-
 // Build the layout
 void PolymerBoard::buildLayout( colorCriterion crit ) {
 
@@ -261,40 +254,39 @@ void PolymerBoard::buildLayout( colorCriterion crit ) {
 // types; this function is called each time the board is launched
 void PolymerBoard::setData()
 {
-    aggregateData * ad = NULL;
-    tag tmp;
+    // Get a list of particles that are currently rendered
+    AggregateData *ad = mainForm->getAggregateData();
 
-    if (mainForm) {
-        // Get the current settings and register
-        // it using a local particle data structure
-        thisPd = mainForm->getParticleData();
+    propertyBox->setPropertyInformation(ad->propertiesInformation);
 
-        // Get a list of particles that are currently rendered
-        ad = mainForm->getAggregateData();
+    // Get the current settings and register
+    // it using a local particle data structure
+    thisPd = mainForm->getParticleData();
 
-        // Make entries in the combo box -- use only particle
-        // types that are really needed; otherwise the list
-        // gets too long
-        if (atomCob) {
-            atomCob->clear();
-            for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
-                // Check: is this particle type really needed?
-                for (int j=0;j<(*ad).numberOfParticles;j++) {
-                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
-                        // Add the item to the list
-                        atomCob->addItem( QString( (char *)&(*thisPd).type[i]));
-                        break;
-                    }
+    // Make entries in the combo box -- use only particle
+    // types that are really needed; otherwise the list
+    // gets too long
+    if (atomCob) {
+        atomCob->clear();
+        for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
+            // Check: is this particle type really needed?
+            for (int j=0;j<(*ad).numberOfParticles;j++) {
+                if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
+                    // Add the item to the list
+                    atomCob->addItem( QString( (char *)&(*thisPd).type[i]));
+                    break;
                 }
             }
-            atomCob->setMinimumSize( atomCob->sizeHint() );
         }
+        atomCob->setMinimumSize( atomCob->sizeHint() );
     }
+
 
     // Sort the entries alphabetically, at least approximately
     for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
         for (int j=0;j<atomCob->count()-1;j++) {
             if (QString::compare(atomCob->itemText(j), atomCob->itemText(j+1)) > 0) {
+                tag tmp;
                 typeCopy( qPrintable(atomCob->itemText(j+1)), (char *)&tmp );
                 atomCob->insertItem(j, QString( (char *)&tmp));
                 atomCob->removeItem(j+2);
@@ -398,8 +390,7 @@ void PolymerBoard::setPolymerAtom()
 }
 
 
-// Adjust the settings, using the local
-// copy of the particle data structure 
+// Adjust the settings, using the particle data structure
 void PolymerBoard::adjustPolymer()
 {
     // Read the toggle switch values and
@@ -727,10 +718,8 @@ void PolymerBoard::getColorBoardPos( int posX, int posY )
 
 
 // Launch the bond board
-void PolymerBoard::bbonds()
-{
-    if (mainForm)
-        mainForm->launchBonds();
+void PolymerBoard::bbonds() {
+    mainForm->launchBonds();
 }
 
 
@@ -745,16 +734,13 @@ void PolymerBoard::bdone()
     char * filename = (char *)malloc(BUFSIZ);
     sprintf(filename, "%s/.aviz/%s", getenv("HOME"), particleDataFile);
     if (saveParticleDataFunction( filename, thisPd ) ) {
-        if (mainForm)
-            mainForm->statusMessage( "Saved particle data in ", filename );
+        mainForm->statusMessage( "Saved particle data in ", filename );
     }
     free(filename);
 
     // Re-do the graphics, using the new particle data
-    if (mainForm) {
-        mainForm->updateView();
-        mainForm->updateRendering();
-    }
+    mainForm->updateView();
+    mainForm->updateRendering();
 
     // Set a flag
     this->closeColorBoard();
@@ -774,16 +760,13 @@ void PolymerBoard::bapply()
     char * filename = (char *)malloc(BUFSIZ);
     sprintf(filename, "%s/.aviz/%s", getenv("HOME"), particleDataFile);
     if (saveParticleDataFunction( filename, thisPd ) ) {
-        if (mainForm)
-            mainForm->statusMessage( "Saved particle data in ", filename );
+        mainForm->statusMessage( "Saved particle data in ", filename );
     }
     free(filename);
 
     // Re-do the graphics, using the new particle data
-    if (mainForm) {
-        mainForm->updateView();
-        mainForm->updateRendering();
-    }
+    mainForm->updateView();
+    mainForm->updateRendering();
 }
 
 

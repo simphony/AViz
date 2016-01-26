@@ -40,6 +40,7 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "mainForm.h"
 #include "glCanvasArea.h"
 #include "parameterLimits.h" //DOLLY_MAX, DOLLY_MIN
+#include "aggregateData.h"
 
 #include "./pixmaps/home.xpm"
 #include "./pixmaps/homenew.xpm"
@@ -402,112 +403,67 @@ viewObject GLCanvasFrame::getObjectData()
 {
     viewObject vo;
 
-    float xmin = std::numeric_limits<float>::max();
-    float ymin = std::numeric_limits<float>::max();
-    float zmin = std::numeric_limits<float>::max();
+    vo.xmin = std::numeric_limits<float>::max();
+    vo.ymin = std::numeric_limits<float>::max();
+    vo.zmin = std::numeric_limits<float>::max();
 
-    float xmax = std::numeric_limits<float>::lowest();
-    float ymax = std::numeric_limits<float>::lowest();
-    float zmax = std::numeric_limits<float>::lowest();
+    vo.xmax = std::numeric_limits<float>::lowest();
+    vo.ymax = std::numeric_limits<float>::lowest();
+    vo.zmax = std::numeric_limits<float>::lowest();
 
-    float p1min = std::numeric_limits<float>::max();
-    float p2min = std::numeric_limits<float>::max();
-    float p3min = std::numeric_limits<float>::max();
-    float p4min = std::numeric_limits<float>::max();
-    float p5min = std::numeric_limits<float>::max();
-    float p6min = std::numeric_limits<float>::max();
-    float p7min = std::numeric_limits<float>::max();
-    float p8min = std::numeric_limits<float>::max();
+    vo.p1min = std::numeric_limits<float>::max();
+    vo.p2min = std::numeric_limits<float>::max();
+    vo.p3min = std::numeric_limits<float>::max();
+    vo.p4min = std::numeric_limits<float>::max();
+    vo.p5min = std::numeric_limits<float>::max();
+    vo.p6min = std::numeric_limits<float>::max();
+    vo.p7min = std::numeric_limits<float>::max();
+    vo.p8min = std::numeric_limits<float>::max();
 
-    float p1max = std::numeric_limits<float>::lowest();
-    float p2max = std::numeric_limits<float>::lowest();
-    float p3max = std::numeric_limits<float>::lowest();
-    float p4max = std::numeric_limits<float>::lowest();
-    float p5max = std::numeric_limits<float>::lowest();
-    float p6max = std::numeric_limits<float>::lowest();
-    float p7max = std::numeric_limits<float>::lowest();
-    float p8max = std::numeric_limits<float>::lowest();
+    vo.p1max = std::numeric_limits<float>::lowest();
+    vo.p2max = std::numeric_limits<float>::lowest();
+    vo.p3max = std::numeric_limits<float>::lowest();
+    vo.p4max = std::numeric_limits<float>::lowest();
+    vo.p5max = std::numeric_limits<float>::lowest();
+    vo.p6max = std::numeric_limits<float>::lowest();
+    vo.p7max = std::numeric_limits<float>::lowest();
+    vo.p8max = std::numeric_limits<float>::lowest();
 
     // Get the current aggregate data
-    aggregateData * ad = drawArea->getAggregateData();
+    AggregateData * ad = drawArea->getAggregateData();
 
     // Find the min and max extensions
     for (int i=0;i<(*ad).numberOfParticles;i++) {
-        if ((*ad).particles[i].x < xmin)
-            xmin = (*ad).particles[i].x;
-        if ((*ad).particles[i].y < ymin)
-            ymin = (*ad).particles[i].y;
-        if ((*ad).particles[i].z < zmin)
-            zmin = (*ad).particles[i].z;
-        if ((*ad).particles[i].x > xmax)
-            xmax = (*ad).particles[i].x;
-        if ((*ad).particles[i].y > ymax)
-            ymax = (*ad).particles[i].y;
-        if ((*ad).particles[i].z > zmax)
-            zmax = (*ad).particles[i].z;
+        vo.xmin = qMin(vo.xmin, (*ad).particles[i].x);
+        vo.ymin = qMin(vo.ymin, (*ad).particles[i].y);
+        vo.zmin = qMin(vo.zmin, (*ad).particles[i].z);
 
-         if ((*ad).particles[i].prop1 < p1min)
-            p1min = (*ad).particles[i].prop1;
-        if ((*ad).particles[i].prop2 < p2min)
-            p2min = (*ad).particles[i].prop2;
-        if ((*ad).particles[i].prop3 < p3min)
-            p3min = (*ad).particles[i].prop3;
-        if ((*ad).particles[i].prop4 < p4min)
-            p4min = (*ad).particles[i].prop4;
-        if ((*ad).particles[i].prop5 < p5min)
-            p5min = (*ad).particles[i].prop5;
-        if ((*ad).particles[i].prop6 < p6min)
-            p6min = (*ad).particles[i].prop6;
-        if ((*ad).particles[i].prop7 < p7min)
-            p7min = (*ad).particles[i].prop7;
-        if ((*ad).particles[i].prop8 < p8min)
-            p8min = (*ad).particles[i].prop8;
+        vo.xmax = qMax(vo.xmax, (*ad).particles[i].x);
+        vo.ymax = qMax(vo.ymax, (*ad).particles[i].y);
+        vo.zmax = qMax(vo.zmax, (*ad).particles[i].z);
 
-        if ((*ad).particles[i].prop1 > p1max)
-            p1max = (*ad).particles[i].prop1;
-        if ((*ad).particles[i].prop2 > p2max)
-            p2max = (*ad).particles[i].prop2;
-        if ((*ad).particles[i].prop3 > p3max)
-            p3max = (*ad).particles[i].prop3;
-        if ((*ad).particles[i].prop4 > p4max)
-            p4max = (*ad).particles[i].prop4;
-        if ((*ad).particles[i].prop5 > p5max)
-            p5max = (*ad).particles[i].prop5;
-        if ((*ad).particles[i].prop6 > p6max)
-            p6max = (*ad).particles[i].prop6;
-        if ((*ad).particles[i].prop7 > p7max)
-            p7max = (*ad).particles[i].prop7;
-        if ((*ad).particles[i].prop8 > p8max)
-            p8max = (*ad).particles[i].prop8;
+        vo.p1min = qMin(vo.p1min, (*ad).particles[i].prop1);
+        vo.p2min = qMin(vo.p2min, (*ad).particles[i].prop2);
+        vo.p3min = qMin(vo.p3min, (*ad).particles[i].prop3);
+        vo.p4min = qMin(vo.p4min, (*ad).particles[i].prop4);
+        vo.p5min = qMin(vo.p5min, (*ad).particles[i].prop5);
+        vo.p6min = qMin(vo.p6min, (*ad).particles[i].prop6);
+        vo.p7min = qMin(vo.p7min, (*ad).particles[i].prop7);
+        vo.p8min = qMin(vo.p8min, (*ad).particles[i].prop8);
+
+        vo.p1max = qMax(vo.p1max, (*ad).particles[i].prop1);
+        vo.p2max = qMax(vo.p2max, (*ad).particles[i].prop2);
+        vo.p3max = qMax(vo.p3max, (*ad).particles[i].prop3);
+        vo.p4max = qMax(vo.p4max, (*ad).particles[i].prop4);
+        vo.p5max = qMax(vo.p5max, (*ad).particles[i].prop5);
+        vo.p6max = qMax(vo.p6max, (*ad).particles[i].prop6);
+        vo.p7max = qMax(vo.p7max, (*ad).particles[i].prop7);
+        vo.p8max = qMax(vo.p8max, (*ad).particles[i].prop8);
     }
-
-    vo.xmin = xmin;
-    vo.ymin = ymin;
-    vo.zmin = zmin;
-    vo.xmax = xmax;
-    vo.ymax = ymax;
-    vo.zmax = zmax;
 
     vo.deltax = vo.xmax-vo.xmin;
     vo.deltay = vo.ymax-vo.ymin;
     vo.deltaz = vo.zmax-vo.zmin;
-
-    vo.p1min = p1min;
-    vo.p2min = p2min;
-    vo.p3min = p3min;
-    vo.p4min = p4min;
-    vo.p5min = p5min;
-    vo.p6min = p6min;
-    vo.p7min = p7min;
-    vo.p8min = p7min;
-    vo.p1max = p1max;
-    vo.p2max = p2max;
-    vo.p3max = p3max;
-    vo.p4max = p4max;
-    vo.p5max = p5max;
-    vo.p6max = p6max;
-    vo.p7max = p7max;
-    vo.p8max = p8max;
 
     vo.deltap1 = vo.p1max-vo.p1min;
     vo.deltap2 = vo.p2max-vo.p2min;
@@ -1569,7 +1525,7 @@ void GLCanvasFrame::snapRendering( const char * filename )
 
 
 // Return a pointer to the current aggregate data 
-aggregateData * GLCanvasFrame::getAggregateData()
+AggregateData * GLCanvasFrame::getAggregateData()
 {
     return drawArea->getAggregateData();
 }

@@ -47,11 +47,11 @@ Contact address: Computational Physics Group, Dept. of Physics,
 #include "fileFunctions.h"
 #include "defaultParticles.h" // typeCopy, typeCmp
 #include "widgets/doneapplycancelwidget.h"
-
+#include "aggregateData.h"
 
 // Make a popup dialog box 
-SpinBoard::SpinBoard(QWidget * parent)
-    : QDialog(parent)
+SpinBoard::SpinBoard(MainForm *mainForm, QWidget * parent)
+    : QDialog(parent), mainForm(mainForm)
 {
     setWindowTitle( "AViz: Set Spins" );
 
@@ -195,14 +195,6 @@ SpinBoard::SpinBoard(QWidget * parent)
     this->buildLayout( TYPE );
 }
 
-
-// Set a pointer to the main form
-void SpinBoard::setMainFormAddress( MainForm * thisMF )
-{
-    mainForm = thisMF;
-}
-
-
 // Build the layout
 void SpinBoard::buildLayout( colorCriterion crit ) {
     // Destroy existing layout
@@ -259,39 +251,38 @@ void SpinBoard::buildLayout( colorCriterion crit ) {
 // types; this function is called each time the board is launched
 void SpinBoard::setData()
 {
-    aggregateData * ad = NULL;
-    tag tmp;
+    // Get a list of particles that are currently rendered
+    AggregateData *ad = mainForm->getAggregateData();
 
-    if (mainForm) {
-        // Get the current switch settings and register
-        // it using a local particle data structure
-        thisPd = mainForm->getParticleData();
+    propertyBox->setPropertyInformation(ad->propertiesInformation);
 
-        // Get a list of particles that are currently rendered
-        ad = mainForm->getAggregateData();
+    // Get the current switch settings and register
+    // it using a local particle data structure
+    thisPd = mainForm->getParticleData();
 
-        // Make entries in the combo box -- use only particle
-        // types that are really needed; otherwise the list
-        // gets too long
-        if (spinCob) {
-            spinCob->clear();
-            for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
-                for (int j=0;j<(*ad).numberOfParticles;j++) {
-                    if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
-                        // Add the item to the list
-                        spinCob->addItem( QString( (char *)&(*thisPd).type[i]));
-                        break;
-                    }
+    // Make entries in the combo box -- use only particle
+    // types that are really needed; otherwise the list
+    // gets too long
+    if (spinCob) {
+        spinCob->clear();
+        for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
+            for (int j=0;j<(*ad).numberOfParticles;j++) {
+                if (typeCmp( (char *)&(*ad).particles[j].type, (char *)&(*thisPd).type[i])) {
+                    // Add the item to the list
+                    spinCob->addItem( QString( (char *)&(*thisPd).type[i]));
+                    break;
                 }
             }
-            spinCob->setMinimumSize( spinCob->sizeHint() );
         }
+        spinCob->setMinimumSize( spinCob->sizeHint() );
     }
+
 
     // Sort the entries alphabetically, at least approximately
     for (int i=0;i<(*thisPd).numberOfParticleTypes;i++) {
         for (int j=0;j<spinCob->count()-1;j++) {
             if (QString::compare(spinCob->itemText(j), spinCob->itemText(j+1)) > 0) {
+                tag tmp;
                 typeCopy( qPrintable(spinCob->itemText(j+1)), (char *)&tmp );
                 spinCob->insertItem(j, QString( (char *)&tmp));
                 spinCob->removeItem(j+2);
@@ -734,16 +725,14 @@ void SpinBoard::bdone()
     char * filename = (char *)malloc(BUFSIZ);
     sprintf(filename, "%s/.aviz/%s", getenv("HOME"), particleDataFile);
     if (saveParticleDataFunction( filename, thisPd ) ) {
-        if (mainForm)
-            mainForm->statusMessage( "Saved spin data in ", filename );
+        mainForm->statusMessage( "Saved spin data in ", filename );
     }
     free(filename);
 
     // Re-do the graphics, using the new particle data
-    if (mainForm) {
-        mainForm->updateView();
-        mainForm->updateRendering();
-    }
+    mainForm->updateView();
+    mainForm->updateRendering();
+
 
     // Hide now
     hide();
@@ -760,16 +749,14 @@ void SpinBoard::bapply()
     char * filename = (char *)malloc(BUFSIZ);
     sprintf(filename, "%s/.aviz/%s", getenv("HOME"), particleDataFile);
     if (saveParticleDataFunction( filename, thisPd ) ) {
-        if (mainForm)
-            mainForm->statusMessage( "Saved spin data in ", filename );
+        mainForm->statusMessage( "Saved spin data in ", filename );
     }
     free(filename);
 
     // Re-do the graphics, using the new particle data
-    if (mainForm) {
-        mainForm->updateView();
-        mainForm->updateRendering();
-    }
+    mainForm->updateView();
+    mainForm->updateRendering();
+
 }
 
 

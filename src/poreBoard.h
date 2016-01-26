@@ -56,10 +56,9 @@ class PoreBoard: public QDialog
 {
     Q_OBJECT
 public:
-    PoreBoard(QWidget * parent=0);
+    PoreBoard(MainForm *mainForm, QWidget * parent=0);
 
 public slots:
-    void setMainFormAddress( MainForm * );
     void setData();
     void getColors( float, float, float, float, float, float, float, float, float );
     void getColorBoardPos( int, int );
