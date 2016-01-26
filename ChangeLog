@@ -1,11 +1,19 @@
-Version 0.6.5.0
+Version 6.6.0
+---------------
+- Support property descriptions in xyz files (#37)
+- Support Qt5 (#32)
+- Fix decimal-seperator locale  bug (#33)
+- Fix bugs in reading xyz files (#42, #35)
+- Improve handling version handling for files (#10)
+
+Version 6.5.0
 ---------------
 - Port from Qt3 to Qt4
 - Fix bugs in track render control and animation generator (#2, #3)
 - Use qmake instead of configure for installation (#9)
 - Use travis-ci for continuous integration (#13)
 
-Version 0.6.1.0
+Version 6.1.0
 ---------------
 (Missing)
 
