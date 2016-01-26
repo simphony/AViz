@@ -5,7 +5,7 @@
 namespace aviz {
 
 Version::Version()
-    :m_major(6), m_minor(5), m_patch(0) {
+    :m_major(6), m_minor(6), m_patch(0) {
 }
 
 int Version::getMajor() const {
